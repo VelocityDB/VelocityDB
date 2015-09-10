@@ -1,0 +1,224 @@
+﻿<Window x:Class="DatabaseLocking.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DatabaseLocking" Height="1000" Width="900">
+  <Grid>
+    <Grid HorizontalAlignment="Left" Margin="5,5,5,5" VerticalAlignment="Top" Width="Auto"/>
+    <GroupBox Header="Session 1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel Orientation="Horizontal">
+        <CheckBox Content="Use Optimistic Locking" Name="session1optimistic" IsChecked="True" Margin="10" Click="session1locking"/>
+        <CheckBox Content="Use Server" Name="session1server" Margin="10" Click="session1locking"/> 
+        </StackPanel>
+            <GroupBox Header="Transaction"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel>
+            <StackPanel Orientation="Horizontal">
+             <Label Content="Not In Transaction" Name="session1status" Margin="10" />
+              <Label Content="Lock Timeout:"  Margin="0, 10, 0, 10"/>
+                            <TextBox Name="session1LockTimeout" Width="50" Height="20" Margin="0, 10, 0, 10" Text="5555" TextChanged="session1locking"/>
+            </StackPanel>
+          <StackPanel Orientation="Horizontal">
+            <Button Content="BeginRead" Margin="10" Width="Auto" Height="20" Click="beginReadSession1_Click"/>
+            <Button Content="BeginUpdate" Margin="10" Width="Auto" Height="20" Click="beginUpdateSession1_Click"/>
+            <Button Content="Commit" Margin="10" Width="Auto" Height="20" Click="commitSession1_Click"/>
+            <Button Content="Abort" Margin="10" Width="Auto" Height="20" Click="abortSession1_Click"/>
+          </StackPanel>
+          </StackPanel>
+        </GroupBox>        
+        <GroupBox Header="Database 1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session1objectDb1" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20"  Click="add1db1Session1_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db1ReadSession1_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db1UpdateSession1_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Database 2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session1objectDb2" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20"  Click="add1db2Session1_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db2ReadSession1_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db2UpdateSession1_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Database 3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session1objectDb3" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20"  Click="add1db3Session1_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db3ReadSession1_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db3UpdateSession1_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Messages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Name="session1messages" Margin="10"/>
+          </StackPanel>
+        </GroupBox>
+      </StackPanel>
+    </GroupBox>
+    <GroupBox Header="Session 2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+          <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="Use Optimistic Locking" Name="session2optimistic" IsChecked="True" Margin="10" Click="session2locking"/>
+                    <CheckBox Content="Use Server" Name="session2server" Margin="10" Click="session2locking"/>
+                </StackPanel>
+                <GroupBox Header="Transaction" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel>
+            <StackPanel Orientation="Horizontal">
+              <Label Content="Not In Transaction" Name="session2status" Margin="10" />
+              <Label Content="Lock Timeout:"  Margin="0, 10, 0, 10" />
+               <TextBox Name="session2LockTimeout" Width="50" Height="20" Text="5555" Margin="0, 10, 0, 10" TextChanged="session2locking"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+            <Button Content="BeginRead" Margin="10" Width="Auto" Height="20" Click="beginReadSession2_Click"/>
+            <Button Content="BeginUpdate" Margin="10" Width="Auto" Height="20" Click="beginUpdateSession2_Click"/>
+            <Button Content="Commit" Margin="10" Width="Auto" Height="20" Click="commitSession2_Click"/>
+            <Button Content="Abort" Margin="10" Width="Auto" Height="20" Click="abortSession2_Click"/>
+            </StackPanel>
+          </StackPanel>
+        </GroupBox>        
+        <GroupBox Header="Database 1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session2objectDb1" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20"  Click="add1db1Session2_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db1ReadSession2_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db1UpdateSession2_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Database 2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session2objectDb2" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20"  Click="add1db2Session2_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db2ReadSession2_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db2UpdateSession2_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Database 3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session2objectDb3" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20"  Click="add1db3Session2_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db3ReadSession2_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db3UpdateSession2_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Messages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Name="session2messages" Margin="10"/>
+          </StackPanel>
+        </GroupBox>
+      </StackPanel>
+    </GroupBox>
+    <GroupBox Header="Session 3" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="Use Optimistic Locking" Name="session3optimistic" IsChecked="True" Margin="10" Click="session3locking"/>
+                    <CheckBox Content="Use Server" Name="session3server" Margin="10" Click="session3locking"/>
+                </StackPanel>
+                <GroupBox Header="Transaction" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel>
+            <StackPanel Orientation="Horizontal">
+              <Label Content="Not In Transaction" Name="session3status" Margin="10" />
+              <Label Content="Lock Timeout:"  Margin="0, 10, 0, 10" />
+                            <TextBox Name="session3LockTimeout" Width="50" Height="20" Margin="0, 10, 0, 10" Text="3000" TextChanged="session3locking"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+              <Button Content="BeginRead" Margin="10" Width="Auto" Height="20" Click="beginReadSession3_Click"/>
+              <Button Content="BeginUpdate" Margin="10" Width="Auto" Height="20" Click="beginUpdateSession3_Click"/>
+              <Button Content="Commit" Margin="10" Width="Auto" Height="20" Click="commitSession3_Click"/>
+              <Button Content="Abort" Margin="10" Width="Auto" Height="20" Click="abortSession3_Click"/>
+            </StackPanel>
+          </StackPanel>
+        </GroupBox>        
+        <GroupBox Header="Database 1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session3objectDb1" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20"  Click="add1db1Session3_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db1ReadSession3_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db1UpdateSession3_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Database 2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session3objectDb2" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20"  Click="add1db2Session3_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db2ReadSession3_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db2UpdateSession3_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Database 3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session3objectDb3" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20"  Click="add1db3Session3_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db3ReadSession3_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db3UpdateSession3_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Messages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Name="session3messages" Margin="10"/>
+          </StackPanel>
+        </GroupBox>
+      </StackPanel>
+    </GroupBox>
+    <GroupBox Header="Session 4" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="Use Optimistic Locking" Name="session4optimistic" IsChecked="True" Margin="10" Click="session4locking"/>
+                    <CheckBox Content="Use Server" Name="session4server" Margin="10" Click="session4locking"/>
+                </StackPanel>
+                <GroupBox Header="Transaction" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel>
+            <StackPanel Orientation="Horizontal">
+              <Label Content="Not In Transaction" Name="session4status" Margin="10" />
+              <Label Content="Lock Timeout:"  Margin="0, 10, 0, 10" />
+                            <TextBox Name="session4LockTimeout" Width="50" Height="20" Margin="0, 10, 0, 10" Text="1000" TextChanged="session4locking"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+              <Button Content="BeginRead" Margin="10" Width="Auto" Height="20" Click="beginReadSession4_Click"/>
+              <Button Content="BeginUpdate" Margin="10" Width="Auto" Height="20" Click="beginUpdateSession4_Click"/>
+              <Button Content="Commit" Margin="10" Width="Auto" Height="20" Click="commitSession4_Click"/>
+              <Button Content="Abort" Margin="10" Width="Auto" Height="20" Click="abortSession4_Click"/>
+            </StackPanel>
+      </StackPanel>
+    </GroupBox>        
+        <GroupBox Header="Database 1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session4objectDb1" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20" Click="add1db1Session4_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db1ReadSession4_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db1UpdateSession4_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Database 2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session4objectDb2" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20" Click="add1db2Session4_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db2ReadSession4_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db2UpdateSession4_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Database 3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Object 1" Name="session4objectDb3" Margin="10"/>
+            <Button Content="Add 1" Margin="10" Width="52" Height="20" Click="add1db3Session4_Click"/>
+            <Button Content="Read" Margin="10" Width="52" Height="20"  Click="db3ReadSession4_Click"/>
+            <Button Content="Update" Margin="10" Width="52" Height="20"  Click="db3UpdateSession4_Click"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Messages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+          <StackPanel Orientation="Horizontal">
+            <Label Name="session4messages" Margin="10"/>
+          </StackPanel>
+        </GroupBox>
+      </StackPanel>
+    </GroupBox>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+  </Grid>
+</Window>

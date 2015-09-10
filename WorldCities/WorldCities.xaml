@@ -1,0 +1,40 @@
+﻿<Window x:Class="WorldCities.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="World Cities" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignWidth="528" SizeToContent="WidthAndHeight" DataContext="{Binding ElementName=CityName}">
+  <StackPanel>
+   <TextBox Text="Download: http://www.maxmind.com/app/worldcities, decompress to c:\worldcitiespop.txt" Height="27" HorizontalAlignment="Left" Margin="2,5,0,0" Name="HelpLabel" VerticalAlignment="Top" Width="522" />
+   <StackPanel Orientation="Horizontal" Name="CreateDatabasePanel">
+      <Label  Margin="0,2,2,0" Padding="0" Content="File:" FontStyle="Normal" Name="FileLabel" />
+      <TextBox Margin="0,0,5,0" Padding="0"  Name="worldCitiesTextFile" Text="c:\worldcitiespop.txt" GotFocus="worldCitiesTextFile_GotFocus" Foreground="Black" Background="Yellow" FontWeight="Bold" Width="281" />
+      <Button Margin="0,0,5,0" Content="Load Data from Text File" Name="loadButton" Click="loadButton_Click" Height="29" Width="202" />
+    </StackPanel>
+    <Label  Name="errorMessage" Padding="0" Foreground="Red"/>
+    <StackPanel Orientation="Horizontal">
+      <StackPanel>
+        <Label Content="CityName"/>
+        <ListBox Name="CityName" ScrollViewer.ScrollChanged="CityName_ScrollChanged" DisplayMemberPath="CityName" MaxHeight="600" SelectionMode="Extended" MinWidth="100" SelectionChanged="CityName_SelectionChanged" />
+      </StackPanel>
+      <StackPanel>
+        <Label Content="Country"/>
+        <ListBox Name="Country" ScrollViewer.ScrollChanged="Country_ScrollChanged" DisplayMemberPath="CountryCode" MaxHeight="600" SelectionMode="Extended"  MinWidth="100" SelectionChanged="Country_SelectionChanged"/>
+      </StackPanel>
+      <!--<StackPanel>
+        <Label Content="State"/>
+        <ListBox Name="State" DisplayMemberPath="State" MaxHeight="500" SelectionMode="Extended" />
+      </StackPanel>
+      <StackPanel>
+        <Label Content="Population"/>
+        <ListBox Name="Population" DisplayMemberPath="Population" MaxHeight="500" SelectionMode="Extended" />
+      </StackPanel>-->
+      <StackPanel>
+        <Label Content="Latitude"/>
+        <ListBox Name="Latitude" ScrollViewer.ScrollChanged="Latitude_ScrollChanged" DisplayMemberPath="Latitude" MaxHeight="600" SelectionMode="Extended"  MinWidth="100" SelectionChanged="Latitude_SelectionChanged"/>
+      </StackPanel>
+      <StackPanel>
+        <Label Content="Longitude"/>
+        <ListBox Name="Longitude" ScrollViewer.ScrollChanged="Longitude_ScrollChanged" DisplayMemberPath="Longitude" MaxHeight="600" SelectionMode="Extended" MinWidth="100" SelectionChanged="Longitude_SelectionChanged"/>
+      </StackPanel>  
+    </StackPanel>
+  </StackPanel>
+</Window>

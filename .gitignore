@@ -1,0 +1,18 @@
+*.suo
+Debug/*
+Release/*
+Help/*
+obj/*
+bin/*
+*/bin/*
+*/obj/*
+VelocityWeb/Database
+packages
+pba
+*.dll
+*.exe
+*.Designer.cs
+*.psess
+packages - Copy
+Backup
+UpgradeLog.htm

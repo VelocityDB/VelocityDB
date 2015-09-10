@@ -1,0 +1,68 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="VelocityWeb.Site" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <meta http-equiv="X-UA-Compatible" content="IE=100"/> <!-- IE9 mode -->
+    <link href="~/CSS/Site.css" rel="stylesheet" type="text/css" />
+    <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <title></title>
+        <asp:literal id="description" runat="server"></asp:literal>
+        <asp:literal id="keywords" runat="server"></asp:literal>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+  <form id="masterForm" runat="server">
+  <div class="page" id="masterPage">
+    <div class="header">
+      <div class="title"><h1><asp:HyperLink ID="SiteName" runat="server" NavigateUrl="~/">VelocityWeb</asp:HyperLink><asp:Image ID="VelocityLogo" CssClass="marginleft10" runat="server" ImageUrl="~/Images/web.png"/></h1></div>
+      <div class="loginDisplay">
+        <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">
+          <AnonymousTemplate>[ <a href="Login.aspx" ID="HeadLoginStatus" runat="server" >Log In</a> ]</AnonymousTemplate>
+          <LoggedInTemplate>
+            <asp:LoginName ID="HeadLoginName" runat="server" />
+            <asp:HyperLink ID="editProfile" NavigateUrl="~/Register.aspx" runat="server">Edit Profile</asp:HyperLink>
+            [ <asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" LogoutText="Log Out" LogoutPageUrl="~/"/> ]
+          </LoggedInTemplate>
+        </asp:LoginView>
+      </div>
+      <div class="rightColumn">
+<div id="google_translate_element">
+    </div><script type="text/javascript">
+              function googleTranslateElementInit() {
+                  new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, gaTrack: true, gaId: 'UA-24937981-1' }, 'google_translate_element');
+              }
+</script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+      </div>
+      <div id="placemainmenu">
+		<ul id="mainmenu">
+			<li id="liHome" runat="server"><asp:HyperLink ID="homeHyperlink" NavigateUrl="~/" runat="server">Home</asp:HyperLink></li>
+      <li id="liIssues" runat="server"><a href="#">Issues</a>
+        <ul>
+          <li class="top"><asp:HyperLink ID="HyperLink7" NavigateUrl="~/Secure/Issues.aspx" runat="server">Issues</asp:HyperLink>
+            <ul>
+              <li class="top"><asp:HyperLink ID="HyperLink8" NavigateUrl="~/Secure/Issues.aspx?view=2" runat="server">Filter</asp:HyperLink></li>
+              <li class="bottom"><asp:HyperLink ID="HyperLink9" NavigateUrl="~/Secure/Issues.aspx?view=0" runat="server">New</asp:HyperLink></li>
+            </ul>
+          </li>
+          <li><asp:HyperLink ID="HyperLink10" NavigateUrl="~/Secure/Issues.aspx?view=3" runat="server">Projects</asp:HyperLink></li>
+          <li><asp:HyperLink ID="HyperLink11" NavigateUrl="~/Secure/Issues.aspx?view=4" runat="server">Components</asp:HyperLink></li>
+          <li><asp:HyperLink ID="HyperLink12" NavigateUrl="~/Secure/Issues.aspx?view=5" runat="server">Users</asp:HyperLink></li>
+          <li><asp:HyperLink ID="HyperLink13" NavigateUrl="~/Secure/Issues.aspx?view=6" runat="server">Versions</asp:HyperLink></li>
+          <li class="bottom"><asp:HyperLink ID="HyperLink14" NavigateUrl="~/Secure/Issues.aspx?view=7" runat="server">Permissions</asp:HyperLink></li>
+        </ul>
+      </li>
+      <li id="liContact" runat="server"><asp:HyperLink ID="HyperLink15" NavigateUrl="~/Contact.aspx" runat="server">Contact Us</asp:HyperLink></li>
+      <li id="liAbout" runat="server"><asp:HyperLink ID="HyperLink17" NavigateUrl="~/About.aspx" runat="server">About</asp:HyperLink></li>
+		</ul>
+	</div>
+    </div> 
+    <asp:ContentPlaceHolder ID="MainContent" runat="server">      
+    </asp:ContentPlaceHolder>
+   </div>
+ </form>
+</body>
+</html>
+

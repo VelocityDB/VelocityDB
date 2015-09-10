@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{623CA1D0-6E81-4EB0-A968-B194E8F79B67}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NUnitTests</RootNamespace>
+    <AssemblyName>NUnitTests</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Frontenac.Blueprints, Version=2.4.0.0, Culture=neutral, PublicKeyToken=f8f0b8cb1a55f367, processorArchitecture=MSIL">
+      <HintPath>..\packages\Frontenac.Blueprints.2.4\lib\net40\Frontenac.Blueprints.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Frontenac.Gremlinq, Version=2.4.0.0, Culture=neutral, PublicKeyToken=fe2d4176a64ca6d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\Frontenac.Blueprints.2.4\lib\net40\Frontenac.Gremlinq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="VelocityDb, Version=4.11.0.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.4.11\lib\net40\VelocityDb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BackupRestoreTests.cs" />
+    <Compile Include="BTreeCount.cs" />
+    <Compile Include="BTreeTest.cs" />
+    <Compile Include="CompareByFieldTest.cs" />
+    <Compile Include="ComplexClass.cs" />
+    <Compile Include="ADatabaseIteration.cs" />
+    <Compile Include="ConcurrentUpdaters.cs" />
+    <Compile Include="DatabaseLocationTest.cs" />
+    <Compile Include="DatabaseTest.cs" />
+    <Compile Include="ElectionTest.cs" />
+    <Compile Include="FixedSizeData.cs" />
+    <Compile Include="IndexingTest.cs" />
+    <Compile Include="LazyLoad.cs" />
+    <Compile Include="LinqTest.cs" />
+    <Compile Include="MoveDatabaseLocations.cs" />
+    <Compile Include="MultipleServers.cs" />
+    <Compile Include="MultipleSessions.cs" />
+    <Compile Include="MultipleUpdaters.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadersWithUpdater.cs" />
+    <Compile Include="RecoveryTests.cs" />
+    <Compile Include="RtreeTest.cs" />
+    <Compile Include="ASanityTests.cs" />
+    <Compile Include="SchemaTests.cs" />
+    <Compile Include="TrackerTests.cs" />
+    <Compile Include="VelocityDB.cs" />
+    <Compile Include="VelocityGraphTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VelocityDBExtensions\VelocityDBExtensions.csproj">
+      <Project>{a2e1e184-5303-4a75-9133-546631f4a63c}</Project>
+      <Name>VelocityDBExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VelocityDbSchema\VelocityDbSchema.csproj">
+      <Project>{5F615BD4-BF1A-4ED7-B6E2-10E7FA57205C}</Project>
+      <Name>VelocityDbSchema</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VelocityGraph\VelocityGraph.csproj">
+      <Project>{58699610-3670-4141-910c-cf827d3ad6b8}</Project>
+      <Name>VelocityGraph</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

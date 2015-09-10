@@ -1,0 +1,13 @@
+﻿<Application x:Class="WorldCities.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="WorldCities.xaml">
+    <Application.Resources>
+    <Style TargetType='ListBoxItem'>
+      <Style.Resources>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Green" />
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Green" />
+      </Style.Resources>
+    </Style>
+  </Application.Resources>
+</Application>

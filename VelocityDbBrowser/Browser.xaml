@@ -1,0 +1,98 @@
+﻿<Window x:Class="VelocityDbBrowser.Browser"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:VelocityDbBrowser.ViewModel"
+    Title="VelocityDbBrowser" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="401" d:DesignWidth="756.966" SizeToContent="WidthAndHeight" HorizontalAlignment="Left" VerticalAlignment="Top" Icon="/VelocityDbBrowser;component/Images/Earth.ico">
+  <Grid >
+    <Grid.RowDefinitions>
+      <RowDefinition Height="auto"></RowDefinition>
+      <RowDefinition></RowDefinition>
+    </Grid.RowDefinitions>
+    <StackPanel Orientation="Horizontal" >
+     <RadioButton Margin="0,2,5,0" Content="No Server" HorizontalAlignment="Left" Name="noServerButton" VerticalAlignment="Top" IsChecked="True" GroupName="SessionType" />
+     <RadioButton Margin="0,2,5,0" Content="Local Server" HorizontalAlignment="Left" Name="localServerButton" VerticalAlignment="Top" GroupName="SessionType"/>
+     <RadioButton Margin="0,2,8,0" Content="Remote Server" Name="remoteServerButton" VerticalAlignment="Top" GroupName="SessionType"/>
+     <Label  Margin="0,2,2,0" Padding="0" Content="Host:" />
+     <TextBox Margin="0,0,5,0" Padding="0" Name="systemDatabaseServer" FontWeight="Bold" Background="Yellow" BorderThickness="1" />
+     <Label  Margin="0,2,2,0" Padding="0" Content="Directory:" FontStyle="Normal" />
+     <TextBox Margin="0,0,5,0" Padding="0"  Name="systemDatabaseDirectory" Text="c:\dbs" GotFocus="systemDatabaseDirectory_GotFocus" Foreground="Black" Background="Yellow" FontWeight="Bold" />
+     <Label  Margin="0,2,5,0" Name="errorMessage" Padding="0" Foreground="Red"/>
+     <CheckBox Margin="0,0,5,0" Content="Optimistic Locking" Height="16" Name="OptimisticLocking" />
+     <CheckBox Margin="0,0,5,0" Content="Use Windows Authentication" Height="16" Name="UseWindowsAuthentication" />
+    <Button Margin="0,0,5,0" Content="Open" Name="browseButton" Click="browseButton_Click" />      
+    </StackPanel>
+    <TreeView Grid.Row="1" Name="treeView1" Margin="-5,0,0,0" BorderThickness="0" ItemsSource="{Binding Databases}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" >
+      <TreeView.ItemContainerStyle>
+        <!-- 
+        This Style binds a TreeViewItem to a TreeViewItemViewModel. 
+        -->
+        <Style TargetType="{x:Type TreeViewItem}">
+          <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+          <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+          <Setter Property="FontWeight" Value="Normal" />
+          <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter Property="FontWeight" Value="Bold" />
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </TreeView.ItemContainerStyle>
+
+      <TreeView.Resources>
+        <HierarchicalDataTemplate 
+          DataType="{x:Type local:DatabaseViewModel}"
+          ItemsSource="{Binding Children}"
+          >
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding DatabaseName}" />
+          </StackPanel>
+        </HierarchicalDataTemplate>
+        
+        <HierarchicalDataTemplate 
+          DataType="{x:Type local:PageViewModel}"
+          ItemsSource="{Binding Children}"
+          >
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding PageName}" />
+          </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate 
+          DataType="{x:Type local:ObjectViewModel}"
+          ItemsSource="{Binding Children}"
+          >
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding ObjectDisplay}" />
+          </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <DataTemplate DataType="{x:Type local:FieldViewModelNoExpansions}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding FieldDisplay}" />
+          </StackPanel>
+        </DataTemplate>
+        
+        <HierarchicalDataTemplate 
+          DataType="{x:Type local:FieldViewModel}"
+          ItemsSource="{Binding Children}"
+          >
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding FieldDisplay}" />
+          </StackPanel>
+        </HierarchicalDataTemplate>
+        
+        <DataTemplate DataType="{x:Type local:ArrayViewModel}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding ArrayDisplay}" />
+          </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:ListViewModel}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding ListDisplay}" />
+          </StackPanel>
+        </DataTemplate>
+      </TreeView.Resources>
+    </TreeView>
+  </Grid >
+</Window>
