@@ -330,7 +330,7 @@ namespace NUnitTests
     public void Simple()
     {
       UInt64 id;
-      //UInt64 autoIncrement = 0;
+     // UInt64 autoIncrement = 0;
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();

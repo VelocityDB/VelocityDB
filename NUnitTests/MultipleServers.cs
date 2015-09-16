@@ -20,8 +20,7 @@ namespace NUnitTests
     public const string copyDir = @"c:/NUnitTestDbs/copy";
     public const string systemDir2 = "c:/NUnitTestDbs2";
     public const string location2Dir = "c:/NUnitTestDbsLocation2";
-    public string systemHost2 = "Qlap-Tech0195";
-    //public string systemHost2 = "AcerLaptop";
+    public string systemHost2 = "AcerLaptop";
     public string systemHost = "Asus";
     //public string systemHost2 = "AcerLaptop";
     public string systemHost3 = "FindPriceBuy";
