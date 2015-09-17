@@ -61,8 +61,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=4.11.0.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.4.11\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=4.11.2.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.4.11.2\lib\net40\VelocityDb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="VelocityGraph, Version=2.4.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.2.5.5\lib\Net40\VelocityGraph.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -73,12 +77,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\VelocityGraph\VelocityGraph.csproj">
-      <Project>{58699610-3670-4141-910c-cf827d3ad6b8}</Project>
-      <Name>VelocityGraph</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
