@@ -342,7 +342,7 @@ namespace NUnitTests
     public void CreateCompareFields(int numberOfLoops, int comparisonByteArraySize)
     {
       GCLatencyMode gcLatencyMode = GCSettings.LatencyMode; 
-      Person.randGen = new Random(5);
+      Person.s_randGen = new Random(5);
       try
       {
         using (SessionNoServer session = new SessionNoServer(systemDir))
@@ -463,7 +463,7 @@ namespace NUnitTests
         {
           if (personPrior != null)
           {
-            Assert.LessOrEqual(personPrior.firstName, person.firstName);
+            Assert.LessOrEqual(personPrior.m_firstName, person.m_firstName);
           }
           ct++;
           personPrior = person;
@@ -474,7 +474,7 @@ namespace NUnitTests
         {
           if (personPrior != null)
           {
-            Assert.LessOrEqual(personPrior.firstName, pers.firstName);
+            Assert.LessOrEqual(personPrior.m_firstName, pers.m_firstName);
           }
           ct2++;
           personPrior = pers;

@@ -555,7 +555,7 @@ namespace NUnitTests
         Woman kinga = null;
         mats = new Man("Mats", "Persson", age++, ssn++, new DateTime(1960, 6, 13));
         Cat cat = new Cat("Boze", 8);
-        mats.pets.Add(cat);
+        mats.m_pets.Add(cat);
         Bird bird = new Bird("Pippi", 1);
         cat.friends.Add(bird);
         mats.Persist(place, session);

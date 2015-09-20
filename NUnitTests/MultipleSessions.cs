@@ -34,7 +34,7 @@ namespace NUnitTests
         session.Commit();
         session.BeginUpdate();
         Person person = new Person();
-        person.friends.Persist(place, session);
+        person.m_friends.Persist(place, session);
         person.Persist(place, session);
         session.FlushUpdates();
         person = new Person();
@@ -44,7 +44,7 @@ namespace NUnitTests
           Placement place2 = new Placement(7891);
           session2.BeginUpdate();
           Person person2 = new Person();
-          person2.friends.Persist(place2, session2);
+          person2.m_friends.Persist(place2, session2);
           person2.Persist(place2, session2);
           session2.FlushUpdates();
           person2 = new Person();
@@ -56,11 +56,11 @@ namespace NUnitTests
           Placement place2 = new Placement(7892);
           session2.BeginUpdate();
           Person person2 = new Person();
-          person2.friends.Persist(place2, session2);
+          person2.m_friends.Persist(place2, session2);
           person2.Persist(place2, session2);
           session2.FlushUpdates();
           person2 = new Person();
-          person2.friends.Persist(place2, session2);
+          person2.m_friends.Persist(place2, session2);
           person2.Persist(place2, session2);
           session2.Commit();
         }
@@ -69,7 +69,7 @@ namespace NUnitTests
           Placement place2 = new Placement(7893);
           session2.BeginUpdate();
           Person person2 = new Person();
-          person2.friends.Persist(place2, session2);
+          person2.m_friends.Persist(place2, session2);
           person2.Persist(place2, session2);
           session2.FlushUpdates();
           person2 = new Person();
@@ -79,11 +79,11 @@ namespace NUnitTests
             Placement place3 = new Placement(7894);
             session3.BeginUpdate();
             Person person3 = new Person();
-            person3.friends.Persist(place3, session3);
+            person3.m_friends.Persist(place3, session3);
             person3.Persist(place3, session3);
             session3.FlushUpdates();
             person3 = new Person();
-            person3.friends.Persist(place3, session3);
+            person3.m_friends.Persist(place3, session3);
             person3.Persist(place3, session3);
             session.Commit();
             session2.Commit();

@@ -52,7 +52,7 @@ namespace NUnitTests
             aMan.Persist(place, session);
             aWoman = new Woman(aMan, aWoman);
             aWoman.Persist(place, session);
-            aMan.spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
+            aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
             if (j % 1000 == 0)
             {
               session.FlushUpdates();
@@ -68,7 +68,7 @@ namespace NUnitTests
             aMan.Persist(place, session);
             aWoman = new Woman(aMan, aWoman); 
             aWoman.Persist(place, session);
-            aMan.spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);     
+            aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);     
             if (j % 1000 == 0)
             {
               session.FlushUpdates();
@@ -83,7 +83,7 @@ namespace NUnitTests
             aMan.Persist(place, session);
             aWoman = new Woman(aMan, aWoman);
             aWoman.Persist(place, session);
-            aMan.spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);          
+            aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);          
             if (j % 1000 == 0)
             {
               session.FlushUpdates();
@@ -131,7 +131,7 @@ namespace NUnitTests
           aMan.Persist(place, session);
           aWoman = new Woman(aMan, aWoman);
           aWoman.Persist(place, session);
-          aMan.spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
+          aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
           if (j % 1000 == 0)
           {
             session.FlushUpdates();
@@ -149,7 +149,7 @@ namespace NUnitTests
           aMan.Persist(place, session);
           aWoman = new Woman(aMan, aWoman);
           aWoman.Persist(place, session);
-          aMan.spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
+          aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
           if (j % 1000 == 0)
           {
             session.FlushUpdates();
@@ -166,7 +166,7 @@ namespace NUnitTests
           aMan.Persist(place, session);
           aWoman = new Woman(aMan, aWoman);
           aWoman.Persist(place, session);
-          aMan.spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
+          aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
           if (j % 1000 == 0)
           {
             session.FlushUpdates();
@@ -182,7 +182,7 @@ namespace NUnitTests
           aMan.Persist(place, session);
           aWoman = new Woman(aMan, aWoman);
           aWoman.Persist(place, session);
-          aMan.spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
+          aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
           if (j % 1000 == 0)
           {
             session.FlushUpdates();

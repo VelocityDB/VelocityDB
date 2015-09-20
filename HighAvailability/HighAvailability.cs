@@ -47,7 +47,7 @@ namespace BackupRestore
           session.Persist(aMan);
           aWoman = new Woman(aMan, aWoman);
           session.Persist(aWoman);
-          aMan.spouse = new VelocityDb.WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
+          aMan.m_spouse = new VelocityDb.WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
           if (j % 1000000 == 0)
             Console.WriteLine("Loop # " + j);
         }
@@ -72,7 +72,7 @@ namespace BackupRestore
           session.Persist(aMan);
           aWoman = new Woman(aMan, aWoman);
           session.Persist(aWoman);
-          aMan.spouse = new VelocityDb.WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
+          aMan.m_spouse = new VelocityDb.WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
           if (j % 1000000 == 0)
             Console.WriteLine("Loop # " + j);
         }

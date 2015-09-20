@@ -4,17 +4,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A2E1E184-5303-4A75-9133-546631F4A63C}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{8099E109-8C8B-4C03-B916-4EC28852DC6A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VelocityDBExtensions</RootNamespace>
-    <AssemblyName>VelocityDBExtensions</AssemblyName>
+    <RootNamespace>GeoHashSample</RootNamespace>
+    <AssemblyName>GeoHashSample</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,6 +25,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,27 +47,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GeoHash\BoundingBox.cs" />
-    <Compile Include="GeoHash\GeoHash.cs" />
-    <Compile Include="GeoHash\Query\GeoHashBoundingBoxQuery.cs" />
-    <Compile Include="GeoHash\Query\GeoHashCircleQuery.cs" />
-    <Compile Include="GeoHash\Query\GeoHashQuery.cs" />
-    <Compile Include="GeoHash\Util\BoundingBoxGeoHashIterator.cs" />
-    <Compile Include="GeoHash\Util\BoundingBoxSampler.cs" />
-    <Compile Include="GeoHash\Util\GeoHashSizeTable.cs" />
-    <Compile Include="GeoHash\Util\LongUtil.cs" />
-    <Compile Include="GeoHash\Util\TwoGeoHashBoundingBox.cs" />
-    <Compile Include="GeoHash\Util\VincentyGeodesy.cs" />
-    <Compile Include="GeoHash\WGS84Point.cs" />
-    <Compile Include="JsonImportExport.cs" />
+    <Compile Include="GeoHashQuery.cs" />
+    <Compile Include="GeoHashSample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Spatial\NodeBase.cs" />
-    <Compile Include="Spatial\NodeInternal.cs" />
-    <Compile Include="Spatial\NodeLeaf.cs" />
-    <Compile Include="Spatial\Point.cs" />
-    <Compile Include="Spatial\PriorityQueue.cs" />
-    <Compile Include="Spatial\Rectangle.cs" />
-    <Compile Include="Spatial\RTree.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VelocityDBExtensions\VelocityDBExtensions.csproj">
+      <Project>{a2e1e184-5303-4a75-9133-546631f4a63c}</Project>
+      <Name>VelocityDBExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VelocityDbSchema\VelocityDbSchema.csproj">
+      <Project>{5f615bd4-bf1a-4ed7-b6e2-10e7fa57205c}</Project>
+      <Name>VelocityDbSchema</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

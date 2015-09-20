@@ -89,6 +89,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTests", "NUnitTests\NU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickStartVelocityGraph", "QuickStartVelocityGraph\QuickStartVelocityGraph.csproj", "{FFD66DCC-D561-47E7-A9B1-EE2E779623D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoHashSample", "GeoHashSample\GeoHashSample.csproj", "{8099E109-8C8B-4C03-B916-4EC28852DC6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -911,6 +913,22 @@ Global
 		{FFD66DCC-D561-47E7-A9B1-EE2E779623D4}.Release|Win32.ActiveCfg = Release|Any CPU
 		{FFD66DCC-D561-47E7-A9B1-EE2E779623D4}.Release|x64.ActiveCfg = Release|Any CPU
 		{FFD66DCC-D561-47E7-A9B1-EE2E779623D4}.Release|x86.ActiveCfg = Release|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|Win32.ActiveCfg = Release|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|x64.ActiveCfg = Release|Any CPU
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -949,5 +967,6 @@ Global
 		{EF49B706-AA05-4274-A5A3-1E439304C8C4} = {8FA0E74A-D943-4E3B-B4A3-0A8B86897A25}
 		{8108F97B-7DC0-4FCD-82C0-01D003666D22} = {8FA0E74A-D943-4E3B-B4A3-0A8B86897A25}
 		{FFD66DCC-D561-47E7-A9B1-EE2E779623D4} = {CC6FEA94-0622-4F11-B3F5-3F20CBE37CE9}
+		{8099E109-8C8B-4C03-B916-4EC28852DC6A} = {8FA0E74A-D943-4E3B-B4A3-0A8B86897A25}
 	EndGlobalSection
 EndGlobal
