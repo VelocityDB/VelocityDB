@@ -28,7 +28,7 @@ namespace NUnitTests
     //public string systemHost2 = "192.168.1.75";
     //public string systemHost2 = "Vostro1720";
    //public string systemHost3 = "Gateway64bitPC";
-   // public string systemHost4 = "Lidia-PC";
+     //public string systemHost2 = "Lidia-PC";
 
     [Test]  
     [ExpectedException(typeof(InvalidChangeOfDefaultLocationException))]

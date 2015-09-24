@@ -13,6 +13,7 @@ using System.Diagnostics;
 using VelocityDbSchema.NUnit;
 using VelocityDb.Collection.Comparer;
 using VelocityDb.Collection.BTree;
+using System.Threading.Tasks;
 
 namespace NUnitTests
 {
@@ -100,7 +101,7 @@ namespace NUnitTests
       if (standalone)
         session = new SessionNoServer(systemDir);
       else
-        session = new ServerClientSession(systemDir);  
+        session = new ServerClientSession(systemDir);
       VelocityDbSchema.Samples.Sample1.Person person;
       session.BeginUpdate();
       //session.SetTraceDbActivity(7676);
@@ -330,7 +331,7 @@ namespace NUnitTests
     public void Simple()
     {
       UInt64 id;
-     // UInt64 autoIncrement = 0;
+      // UInt64 autoIncrement = 0;
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
@@ -343,7 +344,7 @@ namespace NUnitTests
         UnknownSex u2 = new UnknownSex();
         session.Persist(u2);
         //Assert.Greater(u2.AutoIncrement, u.AutoIncrement);
-       Man man = new Man();
+        Man man = new Man();
         session.Persist(man);
         //Assert.AreEqual(man.AutoIncrement, autoIncrement); // Man overrides PlacementDatabaseNumber so no AutoIncrement feature
         id = man.Id;
@@ -792,7 +793,7 @@ namespace NUnitTests
         }
         session.Commit();
       }
-      
+
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginRead();
@@ -817,14 +818,14 @@ namespace NUnitTests
         myId = session.Persist(doIntern);
         session.Commit();
       }
-      
+
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginRead();
         UInt32 dbNum = session.DatabaseNumberOf(typeof(StringInternArrayOfStrings));
         Database db = session.OpenDatabase(dbNum);
         long beforeRead = GC.GetTotalMemory(true);
-        StringInternArrayOfStrings myIntern = (StringInternArrayOfStrings) session.Open(myId);
+        StringInternArrayOfStrings myIntern = (StringInternArrayOfStrings)session.Open(myId);
         long afterRead = GC.GetTotalMemory(true);
         System.Console.WriteLine("Memory before reading large string array object: " + beforeRead + " After read: " + afterRead + " " + myIntern.ToString());
         session.Commit();
@@ -916,12 +917,76 @@ namespace NUnitTests
         session.Commit();
       }
     }
+
+    [Test]
+    public void sessionPoolTest()
+    {
+      const int numberOfSessions = 5;
+      SessionPool pool = new SessionPool(numberOfSessions, () => new SessionNoServer(systemDir));
+      {
+        int sessionId = -1;
+        SessionBase session = null;
+        try
+        {
+          session = pool.GetSession(out sessionId);
+          session.BeginUpdate();
+          for (int i = 0; i < 1000; i++)
+          {
+            Man man = new Man();
+            session.Persist(man);
+          }
+          session.Commit();
+        }
+        catch (Exception e)
+        {
+          if (session != null)
+            session.Abort();
+          Console.WriteLine(e.Message);
+          throw e;
+        }
+        finally
+        {
+          pool.FreeSession(sessionId, session);
+        }
+      }
+
+      Parallel.ForEach(Enumerable.Range(0, numberOfSessions * 5), 
+        x =>
+        {
+          int sessionId = -1;
+          SessionBase session = null;
+          try
+          {
+            session = pool.GetSession(out sessionId);
+            if (session.InTransaction == false)
+              session.BeginRead();
+            var allMen = session.AllObjects<Man>();
+            int allMenCt = allMen.Count();
+            foreach (Man man in allMen)
+            {
+              double lat = man.Lattitude;
+            }
+            Console.WriteLine("Man Count is: " + allMenCt + " Session Id is: " + sessionId + " Current task id is: " + (Task.CurrentId.HasValue ? Task.CurrentId.Value.ToString() : "unknown"));
+          }
+          catch (Exception e)
+          {
+            if (session != null)
+              session.Abort();
+            Console.WriteLine(e.Message);
+            throw e;
+          }
+          finally
+          {
+            pool.FreeSession(sessionId, session);
+          }
+        });
+      }
   }
 
   public class VersionManager<T> : VelocityDbList<WeakIOptimizedPersistableReference<T>> where T : IOptimizedPersistable
   {
     public const UInt32 versionMangerDatabase = 100;
-    
+
     /// <summary>
     ///   Initializes a new instance of the <see cref = "VersionManager&lt;T&gt;" /> class.
     /// </summary>
@@ -934,7 +999,6 @@ namespace NUnitTests
     public RecordType RecordType { get; private set; }
 
     public override uint PlacementDatabaseNumber
-
     {
       get
       {
@@ -959,7 +1023,7 @@ namespace NUnitTests
     }
 
     public class TipManager : SortedMap<Oid, WeakIOptimizedPersistableReference<IOptimizedPersistable>>
-  {
-  }
+    {
+    }
   }
 }

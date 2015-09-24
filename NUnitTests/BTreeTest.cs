@@ -352,9 +352,9 @@ namespace NUnitTests
           Man aMan;
           Woman aWoman;
           session.BeginUpdate();
-          CompareByField<Person> compareByField = new CompareByField<Person>("firstName", session, false);
-          compareByField.AddFieldToCompare("lastName");
-          compareByField.AddFieldToCompare("age");
+          CompareByField<Person> compareByField = new CompareByField<Person>("m_firstName", session, false);
+          compareByField.AddFieldToCompare("m_lastName");
+          compareByField.AddFieldToCompare("m_age");
           BTreeSet<Person> bTree = new BTreeSet<Person>(compareByField, session, 2000, (ushort)comparisonByteArraySize);
           Placement place = new Placement((UInt32)numberOfLoops);
           bTree.Persist(place, session);

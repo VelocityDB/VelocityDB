@@ -8,8 +8,6 @@ namespace VelocityDbSchema
 {
   public class Man : Person
   {
-    public const UInt32 PlaceInDatabase = 11;
-
     DateTime birthday;
 
     public Man()
@@ -26,14 +24,6 @@ namespace VelocityDbSchema
       : base(firstName, lastName, age, ssn, bestFriend, spouse)
 		{
       this.birthday = birthday;
-    }
-
-    public override UInt32 PlacementDatabaseNumber
-    {
-      get
-      {
-        return PlaceInDatabase;
-      }
     }
   }
 }

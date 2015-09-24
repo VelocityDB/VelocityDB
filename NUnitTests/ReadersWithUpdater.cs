@@ -99,29 +99,28 @@ namespace NUnitTests
     [TestCase(false)] // test will fail if pessimistic locking is used
     public void SingleReaderSingleUpdater4(bool useReaderCommit)
     {
-      const UInt32 placementDatabase = Man.PlaceInDatabase + 1;
       using (SessionNoServer updater = new SessionNoServer(systemDir, 5000)) 
       using (SessionNoServer reader = new SessionNoServer(systemDir, 5000))
       {
         updater.SetTraceAllDbActivity();
         reader.SetTraceAllDbActivity();
         updater.BeginUpdate();
-        Database db = updater.OpenDatabase(placementDatabase, true, false);
+        UInt32 dbNum = updater.DatabaseNumberOf(typeof(Man));
+        Database db = updater.OpenDatabase(dbNum, true, false);
         if (db != null)
           updater.DeleteDatabase(db);
         updater.Commit();
         updater.BeginUpdate();
         Man man = new Man();
-        Placement place = new Placement(placementDatabase, 1, 1, 2);
         for (int i = 0; i < 100; i++)
         {
           man = new Man();
-          man.Persist(place, updater);
+          updater.Persist(man);
         }
         updater.Commit();
         reader.BeginRead();
         updater.BeginUpdate();
-        db = reader.OpenDatabase(placementDatabase);
+        db = reader.OpenDatabase(dbNum);
         foreach (Page page in db)
           Assert.True(page.PageInfo.VersionNumber == 1);
         if (useReaderCommit)
@@ -132,14 +131,14 @@ namespace NUnitTests
           reader.ForceDatabaseCacheValidation();
         for (int i = 1; i < 25; i++)
         {
-          db = reader.OpenDatabase(placementDatabase);
+          db = reader.OpenDatabase(dbNum);
           foreach (Page page in db)
           {
-            if (page.PageNumber > 0)
+            if (page.PageNumber > 1) // skip AutoPlacemnt page
             {
               Assert.True(page.PageInfo.VersionNumber == (ulong)i);
-              Man man2 = (Man)reader.Open(placementDatabase, page.PageNumber, 1, false);
-              Man manUpdated = (Man)updater.Open(placementDatabase, page.PageNumber, 1, true);
+              Man man2 = (Man)reader.Open(dbNum, page.PageNumber, 1, false);
+              Man manUpdated = (Man)updater.Open(dbNum, page.PageNumber, 1, true);
             }
           }
           if (useReaderCommit)
@@ -152,27 +151,27 @@ namespace NUnitTests
           updater.Commit();
           updater.BeginUpdate();
         }
-        Database db2 = reader.OpenDatabase(placementDatabase);
-        db = updater.OpenDatabase(placementDatabase);
+        Database db2 = reader.OpenDatabase(dbNum);
+        db = updater.OpenDatabase(dbNum);
         for (int i = 25; i < 50; i++)
         {
           foreach (Page page in db)
           {
-            if (page.PageNumber > 0)
+            if (page.PageNumber > 1)
             {
               Assert.True(page.PageInfo.VersionNumber == (ulong)i);
-              Man manUpdated = (Man)updater.Open(placementDatabase, page.PageNumber, 1, true);
+              Man manUpdated = (Man)updater.Open(dbNum, page.PageNumber, 1, true);
             }
           }
           updater.Commit();
           updater.BeginUpdate();
-          db2 = reader.OpenDatabase(placementDatabase);
+          db2 = reader.OpenDatabase(dbNum);
           foreach (Page page in db2)
           {
-            if (page.PageNumber > 0)
+            if (page.PageNumber > 1)
             {
               //Assert.True(page.PageInfo.VersionNumber == (ulong)i + 1);
-              Man man2 = (Man)reader.Open(placementDatabase, page.PageNumber, 1, false);
+              Man man2 = (Man)reader.Open(dbNum, page.PageNumber, 1, false);
             }
           }
           reader.ClearPageCache();
