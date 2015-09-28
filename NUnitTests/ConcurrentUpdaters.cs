@@ -18,7 +18,7 @@ namespace NUnitTests
     static readonly string windrive = Path.GetPathRoot(Environment.SystemDirectory);
     static readonly string systemDir = Path.Combine(windrive, "NUnitTestDbs");
 
-    [TestCase(true, 10)]
+    [TestCase(true, 7)]
     [TestCase(false, 5)]
     public void ConcurrentUpdates(bool serverSession, int numberofThreads)
     {
@@ -35,18 +35,18 @@ namespace NUnitTests
           {
             SessionBase session;
             if (serverSession)
-              session = new ServerClientSession(systemDir);
+              session = new ServerClientSession(systemDir, null, 500);
             else
-              session = new SessionNoServer(systemDir);
+              session = new SessionNoServer(systemDir, 500);
             try
             {
-              for (int j = 0; j < 50; j++)
+              for (int j = 0; j < 30; j++)
                 try
                 {
                   session.BeginUpdate();
                   session.SetTraceDbActivity(878);
                   session.CrossTransactionCacheAllDatabases();
-                  for (int k = 0; k < 10000; k++)
+                  for (int k = 0; k < 5000; k++)
                   {
                     FixedSize fixedSize = new FixedSize();
                     session.Persist(fixedSize);
@@ -78,7 +78,6 @@ namespace NUnitTests
           });
       foreach (Thread thread in threads)
         thread.Start();
-      Thread.Sleep(10000);
       bool keepWaiting = true;
       while (keepWaiting)
       {
@@ -87,7 +86,7 @@ namespace NUnitTests
           if (thread.IsAlive)
           {
             keepWaiting = true;
-            thread.Join(10000);
+            thread.Join();
           }
       } 
     }

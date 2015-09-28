@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LumenWorks.Framework.IO, Version=3.9.0.0, Culture=neutral, PublicKeyToken=5ad3ea2f85776344, processorArchitecture=MSIL">
+      <HintPath>..\packages\LumenWorksCsvReader.3.9\lib\net20\LumenWorks.Framework.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -43,8 +47,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=4.11.2.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.4.13\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=4.14.0.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.4.14\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -61,6 +65,7 @@
     <Compile Include="GeoHash\Util\TwoGeoHashBoundingBox.cs" />
     <Compile Include="GeoHash\Util\VincentyGeodesy.cs" />
     <Compile Include="GeoHash\WGS84Point.cs" />
+    <Compile Include="ImportExportCsv.cs" />
     <Compile Include="JsonImportExport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spatial\NodeBase.cs" />

@@ -10,6 +10,7 @@ using VelocityDbSchema;
 using VelocityDbSchema.Samples.AllSupportedSample;
 using NUnit.Framework;
 using System.Collections;
+using VelocityDBExtensions;
 
 namespace NUnitTests
 {
