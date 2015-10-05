@@ -5,7 +5,7 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.Collection.BTree;
 
-namespace VelocityDbSchema.Samples.Forex
+namespace VelocityDBSchema.Forex
 {
   public class ForexBroker : OptimizedPersistable, IComparable<ForexBroker>
   {

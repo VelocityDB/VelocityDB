@@ -5,103 +5,177 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.Indexing;
 
-namespace VelocityDbSchema.Samples.Forex
+namespace VelocityDBSchema.Forex
 {
-  [Index("dateTime,buy,sell")] // ?? not sure what main index you would want
+  [Index("m_dateTime,m_buy,m_sell")] // ?? not sure what main index you would want
   public class ForexTick : OptimizedPersistable
   {
-    public enum Currency : ushort { USD = 840, SEK = 752 } // fill in all possible traded currencies
-    [Index]
-    DateTime dateTime;
-    double bid;
-    double ask;
-    int tickVolume;
-    int realVolume;
-    Currency buy;
-    Currency sell;
-    ForexBrokerAccount account;
-
-    public ForexTick(DateTime dateTime, double bid, double ask, int tickVolume, int realVolume, Currency buy, Currency sell, ForexBrokerAccount account)
+    public enum Currency : ushort
     {
-      this.dateTime = dateTime;
-      this.bid = bid;
-      this.ask = ask;
-      this.realVolume = realVolume;
-      this.tickVolume = tickVolume;
-      this.buy = buy;
-      this.sell = sell;
-      this.account = account;
+      Q00, // Not set or Unknown
+      ARS, // Argentine Peso
+      AUD, // Australian Dollar
+      BHD, // Bahraini Dinar
+      BBD, // Barbadian Dollar
+      BRL, // Brazilian Real
+      GBP, // British Pound
+      CAD, // Canadian Dollar
+      XAF, // Central African CFA franc
+      CLP, // Chilean Peso
+      CNY, // Chinese Yuan
+      CYP, // Cyprus Pound
+      CZK, // Czech Koruna
+      DKK, // Danish Krone
+      XCD, // East Caribbean Dollar
+      EGP, // Egyptian Pound
+      EEK, // Estonian Kroon
+      EUR, // Euro,
+      HKD, // Hong Kong Dollar
+      HUF, // Hungarian Forint
+      ISK, // Icelandic Krona
+      INR, // Indian Rupee
+      IDR, // Indonesian Rupiah
+      ILS, // Israeli Sheqel
+      JMD, // Jamaican Dollar
+      JPY, // Japanese Yen
+      JOD, // Jordanian Dinar
+      KES, // Kenyan Shilling
+      LVL, // Latvian Lats
+      LBP, // Lebanese Pound
+      LTL, // Lithuanian Litas
+      MYR, // Malaysian Ringgit
+      MXN, // Mexican Peso
+      MAD, // Moroccan Dirham
+      NAD, // Namibian Dollar
+      NPR, // Nepalese Rupee
+      NZD, // New Zealand Dollar
+      NOK, // Norwegian Krone
+      OMR, // Omani Rial
+      PKR, // Pakistani Rupee
+      PAB, // Panamanian Balboa
+      PHP, // Philippine Peso
+      PLN, // Polish Zloty,
+      QAR, // Qatari Riyal
+      RON, // Romanian Leu
+      RUB, // Russian Rouble
+      SAR, // Saudi Riyal
+      SGD, // Singapore Dollar
+      ZAR, // South African Rand
+      KRW, // South Korean Won
+      LKR, // Sri Lankan Rupee
+      SEK, // Swedish Krona
+      CHF, // Swiss Franc
+      THB, // Thai Baht
+      TRY, // Turkish Lira
+      AED, // United Arab Emirates Dirham
+      USD, // US Dollar
+      VEF, // Venezuelan bolivar
+      XOF  // West African CFA franc
+    };
+    [Index]
+    DateTime m_dateTime;
+    double m_bid;
+    double m_ask;
+    double m_spread;
+    long m_volumeMin;
+    long m_volumeMax;
+    Currency m_buy;
+    Currency m_sell;
+    ForexBrokerAccount m_account;
+
+    public ForexTick(ForexBrokerAccount account, DateTime dateTime, double bid, double ask, double spread, long minVolume, long maxVolume, string symbol)
+    {
+      m_dateTime = dateTime;
+      m_bid = bid;
+      m_ask = ask;
+      m_volumeMax = maxVolume;
+      m_volumeMin = minVolume;
+      m_spread = spread;
+      string buy = symbol.Remove(0, 3);
+      string sell = symbol.Remove(3);
+      m_buy = (Currency)Enum.Parse(typeof(Currency), buy);
+      m_sell = (Currency)Enum.Parse(typeof(Currency), sell);
+      m_account = account;
     }
 
-    [FieldAccessor("dateTime")]
+    [FieldAccessor("m_dateTime")]
     public DateTime DateTime
     {
-      get   
+      get
       {
-        return dateTime;
+        return m_dateTime;
       }
     }
 
-    [FieldAccessor("bid")]
+    [FieldAccessor("m_bid")]
     public double Bid
     {
       get
       {
-        return bid;
+        return m_bid;
       }
     }
 
-    [FieldAccessor("ask")]
+    [FieldAccessor("m_ask")]
     public double Ask
     {
       get
       {
-        return ask;
+        return m_ask;
       }
     }
 
-    [FieldAccessor("realVolume")]
-    public int RealVolume
+    [FieldAccessor("m_spread")]
+    public double Spread
     {
       get
       {
-        return realVolume;
+        return m_spread;
       }
     }
 
-    [FieldAccessor("tickVolume")]
-    public int TickVolume
+    [FieldAccessor("m_volumeMax")]
+    public long VolumeMax
     {
       get
       {
-        return tickVolume;
+        return m_volumeMax;
       }
     }
 
-    [FieldAccessor("buy")]
+    [FieldAccessor("m_volumeMin")]
+    public long MinVolume
+    {
+      get
+      {
+        return m_volumeMin;
+      }
+    }
+
+    [FieldAccessor("m_buy")]
     public Currency Buy
     {
       get
       {
-        return buy;
+        return m_buy;
       }
     }
 
-    [FieldAccessor("sell")]
+    [FieldAccessor("m_sell")]
     public Currency Sell
     {
       get
       {
-        return sell;
+        return m_sell;
       }
     }
 
-  [FieldAccessor("account")]
+    [FieldAccessor("m_account")]
     public ForexBrokerAccount Account
     {
       get
       {
-        return account;
+        return m_account;
       }
     }
   }

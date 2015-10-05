@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using VelocityDb;
 
-namespace VelocityDbSchema.Samples.Forex
+namespace VelocityDBSchema.Forex
 {
   public class ForexDom : OptimizedPersistable
   {

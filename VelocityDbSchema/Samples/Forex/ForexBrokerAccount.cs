@@ -5,38 +5,38 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.Indexing;
 
-namespace VelocityDbSchema.Samples.Forex
+namespace VelocityDBSchema.Forex
 {
   [UniqueConstraint]
-  [Index("brokerName,accountNumber")]  
-  public class ForexBrokerAccount
+  [Index("m_brokerName,m_accountNumber")]
+  public class ForexBrokerAccount : OptimizedPersistable
   {
-    public enum BrokerNameEnum : ushort { Unknown = 0, Dukascopy, LMax, Alpari };
+    public enum BrokerNameEnum : ushort { Unknown = 0, Dukascopy, LMax, Alpari, Spotware, SalesDemo };
 
-    BrokerNameEnum brokerName;
-    long accountNumber;
+    BrokerNameEnum m_brokerName;
+    int m_accountNumber;
 
-    public ForexBrokerAccount(BrokerNameEnum brokerName, long accountNumber)
+    public ForexBrokerAccount(BrokerNameEnum brokerName, int accountNumber)
     {
-      this.brokerName = brokerName;
-      this.accountNumber = accountNumber;
+      m_brokerName = brokerName;
+      m_accountNumber = accountNumber;
     }
 
-    [FieldAccessor("accountNumber")]
-    public long AccountNumber
+    [FieldAccessor("m_accountNumber")]
+    public int AccountNumber
     {
       get
       {
-        return accountNumber;
+        return m_accountNumber;
       }
     }
 
-    [FieldAccessor("brokerName")]
+    [FieldAccessor("m_brokerName")]
     public BrokerNameEnum BrokerName
     {
       get
       {
-        return brokerName;
+        return m_brokerName;
       }
     }
   }
