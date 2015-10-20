@@ -86,7 +86,7 @@ namespace NUnitTests
           if (thread.IsAlive)
           {
             keepWaiting = true;
-            thread.Join();
+            thread.Join(5000);
           }
       } 
     }

@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DatabaseManager.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="BaseDatabasePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:/Databases</Value>
+    </Setting>
+    <Setting Name="TcpIpPortNumber" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">7031</Value>
+    </Setting>
+    <Setting Name="MaximumMemoryUse" Type="System.Int64" Scope="User">
+      <Value Profile="(Default)">10000000000</Value>
+    </Setting>
+    <Setting Name="DoWindowsAuthentication" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DatabaseManagerDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:/Databases/DatabaseManager</Value>
+    </Setting>
+    <Setting Name="DatabaseManagerHost" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UseClientServer" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

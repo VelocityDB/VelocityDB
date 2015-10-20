@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VelocityDbBrowser", "VelocityDbBrowser\VelocityDbBrowser.csproj", "{120EC306-FCA1-4925-B6D6-18D192049020}"
 EndProject
@@ -90,6 +90,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickStartVelocityGraph", "QuickStartVelocityGraph\QuickStartVelocityGraph.csproj", "{FFD66DCC-D561-47E7-A9B1-EE2E779623D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoHashSample", "GeoHashSample\GeoHashSample.csproj", "{8099E109-8C8B-4C03-B916-4EC28852DC6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseManager", "DatabaseManager\DatabaseManager.csproj", "{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -929,6 +931,30 @@ Global
 		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|Win32.ActiveCfg = Release|Any CPU
 		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|x64.ActiveCfg = Release|Any CPU
 		{8099E109-8C8B-4C03-B916-4EC28852DC6A}.Release|x86.ActiveCfg = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|ARM.Build.0 = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|Win32.Build.0 = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|x64.Build.0 = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Debug|x86.Build.0 = Debug|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|ARM.ActiveCfg = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|ARM.Build.0 = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|Win32.ActiveCfg = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|Win32.Build.0 = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|x64.ActiveCfg = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|x64.Build.0 = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|x86.ActiveCfg = Release|Any CPU
+		{262B5656-D9C2-43C0-8D0F-61F7527FC9B0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
