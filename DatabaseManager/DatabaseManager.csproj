@@ -71,6 +71,7 @@
     <Compile Include="ConnectionDialog.xaml.cs">
       <DependentUpon>ConnectionDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\FederationCopyInfo.cs" />
     <Compile Include="Model\FederationInfo.cs" />
     <Compile Include="SchemaExtractor.cs" />
     <Compile Include="SchemaInfo.cs" />
@@ -135,6 +136,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\removeIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\copy.ico" />
+    <Resource Include="Images\Search.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

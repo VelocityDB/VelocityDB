@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using VelocityDb;
 
 namespace DatabaseManager
 {
@@ -125,8 +126,10 @@ namespace DatabaseManager
       // Creates a SchemaExtractor instance on a new domain. This is done
       // so that no assembly is loaded on process start, and at the end,
       // only needed assemblies are loaded.
+      //Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
       AppDomain lDomain = AppDomain.CreateDomain("User assemblies domain.");
       SchemaExtractor lExtractor;
+      OptimizedPersistable pObj = (OptimizedPersistable)lDomain.CreateInstanceFromAndUnwrap(typeof(OptimizedPersistable).Assembly.CodeBase, typeof(OptimizedPersistable).FullName);
       lExtractor = (SchemaExtractor)lDomain.CreateInstanceFromAndUnwrap(typeof(SchemaExtractor).Assembly.CodeBase,typeof(SchemaExtractor).FullName);
       // Load assemblies and types on the new domain.
       List<string> lTypeNames = null;
@@ -221,13 +224,15 @@ namespace DatabaseManager
       // that were already loaded.
       pActualDependencies = GetLoadedAssemblies().Except(lInitialAssemblies).ToList();
     }
+
     /// <summary>
     /// Gets filename of all non-dynamic loaded assemblies.
     /// </summary>
     /// <returns></returns>
     private static string[] GetLoadedAssemblies()
     {
-      return AppDomain.CurrentDomain.GetAssemblies()
+      Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+      return assemblies
           .Where(lAssembly => !lAssembly.IsDynamic)
           .Select(lAssembly => lAssembly.CodeBase)
           .Where(lCodeBase => lCodeBase != null)

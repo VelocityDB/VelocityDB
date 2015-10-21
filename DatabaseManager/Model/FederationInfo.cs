@@ -20,9 +20,10 @@ namespace DatabaseManager.Model
     int m_portNumber;
     bool m_windowsAuthentication;
     bool m_usesServerClient;
-    VelocityDbList<DateTime> m_validated;
+    List<DateTime> m_validated;
     string[] m_typesAssemblies;
     string[] m_typesDependencyAssemblies;
+    List<FederationCopyInfo> m_federationCopies;
     [NonSerialized]
     SchemaInfo m_schemaInfo;
 
@@ -32,10 +33,12 @@ namespace DatabaseManager.Model
       m_portNumber = 7031;
       m_windowsAuthentication = false;
       m_usesServerClient = false;
-      m_validated = new VelocityDbList<DateTime>();
+      m_validated = new List<DateTime>();
+      m_federationCopies = new List<FederationCopyInfo>();
     }
 
-    public FederationInfo(string hostName, string systemDbsPath, int portNumber, bool windowsAuthentication, string[] assemblyDirectory, bool usesServerClient = false, string name = null)
+    public FederationInfo(string hostName, string systemDbsPath, int portNumber, bool windowsAuthentication, string[] assemblyDirectory,
+      bool usesServerClient = false, string name = null):this()
     {
       m_hostName = hostName;
       m_sytemDbsPath = systemDbsPath;
@@ -44,8 +47,15 @@ namespace DatabaseManager.Model
       m_usesServerClient = usesServerClient;
       m_name = name;
       m_typesAssemblies = assemblyDirectory;
-      m_validated = new VelocityDbList<DateTime>();
       LoadAllFederationAssemblies();
+    }
+
+    public List<FederationCopyInfo> FederationCopies
+    {
+      get
+      {
+        return m_federationCopies;
+      }
     }
 
     public string HostName
@@ -113,7 +123,7 @@ namespace DatabaseManager.Model
       }
     }
 
-    public VelocityDbList<DateTime> Validated
+    public List<DateTime> Validated
     {
       get
       {
@@ -153,8 +163,6 @@ namespace DatabaseManager.Model
     {
       if (Id == 0)
         return;
-      if (m_validated != null)
-        m_validated.Unpersist(session, disableFlush);
       base.Unpersist(session, disableFlush);
     }
 

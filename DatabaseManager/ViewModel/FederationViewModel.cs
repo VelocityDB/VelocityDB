@@ -19,7 +19,7 @@ namespace DatabaseManager
     {
       m_federationInfo = federationInfo;
       if (m_federationInfo.UsesServerClient || (m_federationInfo.HostName.Length > 0 &&  m_federationInfo.HostName!= Dns.GetHostName()))
-        m_session = new ServerClientSession(m_federationInfo.HostName, m_federationInfo.SystemDbsPath);
+        m_session = new ServerClientSession(m_federationInfo.SystemDbsPath, m_federationInfo.HostName);
       else
         m_session = new SessionNoServer(m_federationInfo.SystemDbsPath);
       m_session.BeginRead();
@@ -38,6 +38,14 @@ namespace DatabaseManager
       get
       {
         return m_federationInfo;
+      }
+    }
+
+    public SessionBase Session
+    {
+      get
+      {
+        return m_session;
       }
     }
 

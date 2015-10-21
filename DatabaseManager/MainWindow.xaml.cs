@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DatabaseManager.Model;
 using VelocityDb.Session;
+using System.Net;
 
 namespace DatabaseManager
 {
@@ -27,7 +28,7 @@ namespace DatabaseManager
     {
       InitializeComponent();
       m_viewModel = new AllFederationsViewModel();
-      base.DataContext = m_viewModel; 
+      base.DataContext = m_viewModel;
     }
 
     private void AddMenuItem_Click(object sender, RoutedEventArgs e)
@@ -46,10 +47,48 @@ namespace DatabaseManager
       }
     }
 
+    private void CopyFederationMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      FederationViewModel view = (FederationViewModel)menuItem.DataContext;
+      FederationInfo info = view.Federationinfo;
+      SessionBase session = view.Session;
+      var lDialog = new System.Windows.Forms.FolderBrowserDialog()
+      {
+        Description = "Choose Federation Copy Folder",
+      };
+      if (lDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+      {
+        string copyDir = lDialog.SelectedPath;
+        session.CopyAllDatabasesTo(copyDir);
+        session = info.Session;
+        session.BeginUpdate();
+        FederationCopyInfo copyInfo = new FederationCopyInfo(Dns.GetHostName(), copyDir);
+        session.Persist(copyInfo);
+        info.Update();
+        info.FederationCopies.Add(copyInfo);
+        session.Commit();
+      }
+    }
+
+    private void ValidateFederationMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      FederationViewModel view = (FederationViewModel)menuItem.DataContext;
+      FederationInfo info = view.Federationinfo;
+      SessionBase session = view.Session;
+      session.Verify();
+      session = info.Session;
+      session.BeginUpdate();
+      info.Update();
+      info.Validated.Add(DateTime.Now);
+      session.Commit();
+    }
+
     private void RemoveFederationInfoMenuItem_Click(object sender, RoutedEventArgs e)
     {
       MenuItem menuItem = (MenuItem)sender;
-      FederationViewModel view = (FederationViewModel) menuItem.DataContext;
+      FederationViewModel view = (FederationViewModel)menuItem.DataContext;
       FederationInfo info = view.Federationinfo;
       SessionBase session = info.Session;
       session.BeginUpdate();
