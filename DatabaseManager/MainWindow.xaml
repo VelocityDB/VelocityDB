@@ -55,18 +55,47 @@
                       <MenuItem.Icon>
                       <Image Source="/DatabaseManager;component/Images/Search.ico" />
                      </MenuItem.Icon>
-                   </MenuItem> 
-                 </ContextMenu>
+                   </MenuItem>
+                  <MenuItem Header="New DatabaseLocation..." Click="NewDatabaseLocationMenuItem_Click">
+                      <MenuItem.Icon>
+                      <Image Source="/DatabaseManager;component/Images/DatabaseLocation.png" />
+                     </MenuItem.Icon>
+                   </MenuItem>
+                  <MenuItem Header="Persist 1000 objects" Click="Create1000TestObjectsMenuItem_Click" >
+                    <MenuItem.Icon>
+                      <Image Source="/DatabaseManager;component/Images/Objects.png" />
+                    </MenuItem.Icon>
+                  </MenuItem>
+                </ContextMenu>
                </TextBlock.ContextMenu>
               </TextBlock>
           </StackPanel>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate 
           DataType="{x:Type local:DatabaseLocationViewModel}"
-          ItemsSource="{Binding Children}"
-          >
+          ItemsSource="{Binding Children}">
           <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding LocationName}" />
+            <TextBlock Text="{Binding LocationName}">
+              <TextBlock.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="Edit" Click="EditDatabaseLocationMenuItem_Click">
+                    <MenuItem.Icon>
+                      <Image Source="/DatabaseManager;component/Images/Edit.png" />
+                    </MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Remove" Click="RemoveDatabaseLocationMenuItem_Click">
+                    <MenuItem.Icon>
+                      <Image Source="/DatabaseManager;component/Images/removeIcon.png" />
+                    </MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Restore" Click="RestoreDatabaseLocationMenuItem_Click" IsEnabled="{Binding IsBackupLocation}">
+                    <MenuItem.Icon>
+                      <Image Source="/DatabaseManager;component/Images/system_restore.png" />
+                    </MenuItem.Icon>
+                  </MenuItem>
+                </ContextMenu>
+              </TextBlock.ContextMenu>
+            </TextBlock>
           </StackPanel>
         </HierarchicalDataTemplate>    
         

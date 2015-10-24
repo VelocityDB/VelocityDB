@@ -7,6 +7,7 @@ using System.Text;
 using DatabaseManager.Model;
 using VelocityDb;
 using VelocityDb.Session;
+using System.Windows;
 
 namespace DatabaseManager
 {
@@ -22,7 +23,16 @@ namespace DatabaseManager
       m_session.BeginUpdate();
       List<FederationViewModel> federationInfos = new List<FederationViewModel>();
       foreach (FederationInfo info in m_session.AllObjects<FederationInfo>())
-        federationInfos.Add(new FederationViewModel(info));
+      {
+        try
+        {
+          federationInfos.Add(new FederationViewModel(info));
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show(ex.Message);
+        }
+      }
       if (federationInfos.Count() == 0)
       {
         string host = Properties.Settings.Default.DatabaseManagerHost;

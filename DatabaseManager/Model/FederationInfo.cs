@@ -20,6 +20,7 @@ namespace DatabaseManager.Model
     int m_portNumber;
     bool m_windowsAuthentication;
     bool m_usesServerClient;
+    bool m_usePessimisticLocking;
     List<DateTime> m_validated;
     string[] m_typesAssemblies;
     string[] m_typesDependencyAssemblies;
@@ -121,6 +122,24 @@ namespace DatabaseManager.Model
       {
         return m_windowsAuthentication;
       }
+      set
+      {
+        Update();
+        m_windowsAuthentication = value;
+      }
+    }
+
+    public bool UsePessimisticLocking
+    {
+      get
+      {
+        return m_usePessimisticLocking;
+      }
+      set
+      {
+        Update();
+        m_usePessimisticLocking = value;
+      }
     }
 
     public List<DateTime> Validated
@@ -155,6 +174,7 @@ namespace DatabaseManager.Model
       }
       set
       {
+        Update();
         m_usesServerClient = value;
       }
     }

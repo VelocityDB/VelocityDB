@@ -55,8 +55,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="VelocityDb, Version=5.0.1.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.0.1\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.5.0.3\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
@@ -71,8 +71,15 @@
     <Compile Include="ConnectionDialog.xaml.cs">
       <DependentUpon>ConnectionDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\DatabaseLocationMutable.cs" />
     <Compile Include="Model\FederationCopyInfo.cs" />
     <Compile Include="Model\FederationInfo.cs" />
+    <Compile Include="NewDatabaseLocationDialog.xaml.cs">
+      <DependentUpon>NewDatabaseLocationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RestoreDialog.xaml.cs">
+      <DependentUpon>RestoreDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SchemaExtractor.cs" />
     <Compile Include="SchemaInfo.cs" />
     <Compile Include="ViewModel\AllFederationsViewModel .cs" />
@@ -102,6 +109,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NewDatabaseLocationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RestoreDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -140,6 +155,12 @@
   <ItemGroup>
     <Resource Include="Images\copy.ico" />
     <Resource Include="Images\Search.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\DatabaseLocation.png" />
+    <Resource Include="Images\Edit.png" />
+    <Resource Include="Images\Objects.png" />
+    <Resource Include="Images\system_restore.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

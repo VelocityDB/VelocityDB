@@ -9,7 +9,7 @@ namespace DatabaseManager
 {
   public class DatabaseLocationViewModel : TreeViewItemViewModel
   {
-    readonly DatabaseLocation m_databaseLocation;
+    DatabaseLocation m_databaseLocation;
 
     public DatabaseLocationViewModel(DatabaseLocation location)
       : base(null, true)
@@ -17,11 +17,34 @@ namespace DatabaseManager
       m_databaseLocation = location;
     }
 
+    public DatabaseLocation DatabaseLocation
+    {
+      get
+      {
+        return m_databaseLocation;
+      }
+    }
+    public IList<DatabaseLocation> DatabaseLocations
+    {
+      get
+      {
+        return m_databaseLocation.Session.DatabaseLocations.ToList();
+      }
+    }
+
     public string LocationName
     {
       get
       {
         return "Host: \"" + m_databaseLocation.HostName + "\" Path: \"" + m_databaseLocation.DirectoryPath + "\" " + m_databaseLocation.Oid;
+      }
+    }
+
+    public bool IsBackupLocation
+    {
+      get
+      {
+        return m_databaseLocation.IsBackupLocation;
       }
     }
 

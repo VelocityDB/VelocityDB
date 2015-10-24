@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              Title="VelocityDB Connection"
-             Height="380" Width="600" MinHeight="360" MinWidth="500">
+             Height="380" Width="600" Icon="Images/Earth.ico" MinHeight="360" MinWidth="500">
     <DockPanel>
         <DockPanel Margin="0,5,1,5" LastChildFill="False" DockPanel.Dock="Bottom">
             <Button Margin="5,0,0,0" Content="Cancel" DockPanel.Dock="Right" MinWidth="70" VerticalAlignment="Top" TabIndex="2" IsCancel="True" Padding="3"/>
@@ -37,7 +37,9 @@
               <Label>Host</Label>
               <TextBox x:Name="HostTextBox" Text="{Binding Host}" IsEnabled="False"/>
             </DockPanel>
-            <CheckBox IsChecked="{Binding PessimisticLocking}" Content="Pessimistc Locking" Margin="0,5,0,0"/>
+            <CheckBox x:Name="PessimisticBox" IsChecked="{Binding Path=PessimisticLocking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" Content="Pessimistic Locking" Margin="0,5,0,0"/>
+            <CheckBox x:Name="WindowsAuthenticationBox" IsChecked="{Binding Path=WindowsAuthentication, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Use Windows Authentication" Margin="0,5,0,0"/>
+            <CheckBox x:Name="CreateNewBox" IsChecked="{Binding Path=CreateNew, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Create New (if system databases missing)" Margin="0,5,0,0"/>
           </StackPanel>
         </GroupBox>
       </DockPanel>

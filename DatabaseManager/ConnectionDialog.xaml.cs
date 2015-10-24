@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Globalization;
 using DatabaseManager.Model;
+using VelocityDb.Session;
+using System.Net;
 
 namespace DatabaseManager
 {
@@ -96,6 +98,31 @@ namespace DatabaseManager
       }
     }
 
+    public bool WindowsAuthentication
+    {
+      get
+      {
+        return m_federationInfo.WindowsAuthentication;
+      }
+      set
+      {
+        m_federationInfo.WindowsAuthentication = value;
+      }
+    }
+    public bool UsePessimisticLocking
+    {
+      get
+      {
+        return m_federationInfo.UsePessimisticLocking;
+      }
+      set
+      {
+        m_federationInfo.UsePessimisticLocking = value;
+      }
+    }
+
+    bool CreateNew { get; set; }
+
     void BtnOkClick(object pSender, RoutedEventArgs pEvents)
     {
       m_federationInfo.UsesServerClient = (bool)RadioServer.IsChecked;
@@ -103,7 +130,19 @@ namespace DatabaseManager
       m_federationInfo.DependencyFiles = (from ListViewItem lItem in DependencyList.Items select (string)lItem.Content).ToArray();
       m_federationInfo.SystemDbsPath = DBDirTextBox.Text;
       m_federationInfo.HostName = HostTextBox.Text;
-      //.WindowsAuthentication = 
+      m_federationInfo.UsePessimisticLocking = (bool) PessimisticBox.IsChecked;
+      m_federationInfo.WindowsAuthentication = (bool) WindowsAuthenticationBox.IsChecked;
+      bool createNew = (bool)CreateNewBox.IsChecked;
+      if (createNew)
+      {
+        SessionBase session;
+        if (m_federationInfo.UsesServerClient || (m_federationInfo.HostName.Length > 0 && m_federationInfo.HostName != Dns.GetHostName()))
+          session = new ServerClientSession(m_federationInfo.SystemDbsPath, m_federationInfo.HostName);
+        else
+          session = new SessionNoServer(m_federationInfo.SystemDbsPath);
+        session.BeginUpdate();
+        session.Commit();
+      }
       DialogResult = true;
     }
 

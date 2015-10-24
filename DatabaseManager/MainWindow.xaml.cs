@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using DatabaseManager.Model;
 using VelocityDb.Session;
 using System.Net;
+using VelocityDb;
+using VelocityDb.Collection;
 
 namespace DatabaseManager
 {
@@ -44,6 +46,162 @@ namespace DatabaseManager
         session.Commit();
         m_viewModel = new AllFederationsViewModel();
         base.DataContext = m_viewModel;
+      }
+    }
+
+    private void Create1000TestObjectsMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      FederationViewModel view = (FederationViewModel)menuItem.DataContext;
+      FederationInfo info = view.Federationinfo;
+      SessionBase session = view.Session;
+      if (session.InTransaction)
+        session.Commit();
+      session.BeginUpdate();
+      try
+      {
+        for (int i = 0; i < 1000; i++)
+        {
+          VelocityDbList<OptimizedPersistable> list = new VelocityDbList<OptimizedPersistable>();
+          //for (int j = 0; j < 10; j++)
+          //  list.Add(new OptimizedPersistable());
+          session.Persist(list);
+        }
+        session.Commit();
+        m_viewModel = new AllFederationsViewModel();
+        base.DataContext = m_viewModel;
+      }
+      catch (Exception ex)
+      {
+        session.Abort();
+        MessageBox.Show(ex.Message);
+      }
+    }
+    
+    private void RemoveDatabaseLocationMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      DatabaseLocationViewModel view = (DatabaseLocationViewModel)menuItem.DataContext;
+      DatabaseLocation dbLocation = view.DatabaseLocation;
+      SessionBase session = dbLocation.Session;
+      session.BeginUpdate();
+      try
+      {
+        session.DeleteLocation(dbLocation);
+        session.Commit();
+        m_viewModel = new AllFederationsViewModel();
+        base.DataContext = m_viewModel;
+      }
+      catch (Exception ex)
+      {
+        session.Abort();
+        MessageBox.Show(ex.Message);
+      }
+    }
+    private void RestoreDatabaseLocationMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      DatabaseLocationViewModel view = (DatabaseLocationViewModel)menuItem.DataContext;
+      DatabaseLocation dbLocation = view.DatabaseLocation;
+      SessionBase session = dbLocation.Session;
+      //DatabaseLocationMutable newLocationMutable = new DatabaseLocationMutable(session);
+      //newLocationMutable.DirectoryPath = dbLocation.DirectoryPath;
+      //newLocationMutable.HostName = dbLocation.HostName;
+      //var popup = new RestoreDialog(newLocationMutable);
+      //bool? result = popup.ShowDialog();
+      //if (result != null && result.Value)
+      {
+        dbLocation.Page = null; // fake it as a transient object before restore !
+        dbLocation.Id = 0;      // be careful about doing this kind of make transient tricks, references from objects like this are still persistent.
+       // if (session.OptimisticLocking) // && session.GetType() == typeof(ServerClientSession))
+        {
+         // session.Dispose();
+         // session = new ServerClientSession(session.SystemDirectory, session.SystemHostName, 2000, false, false); // need to use pessimstic locking for restore
+          // = new SessionNoServer(session.SystemDirectory); // need to use pessimstic locking for restore
+        }
+        session.BeginUpdate();
+        try
+        {
+          session.RestoreFrom(dbLocation, DateTime.Now);
+          session.Commit(false);
+          m_viewModel = new AllFederationsViewModel();
+          base.DataContext = m_viewModel;
+        }
+        catch (Exception ex)
+        {
+          session.Abort();
+          MessageBox.Show(ex.Message);
+        }
+      }
+    }
+
+    private void EditDatabaseLocationMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      DatabaseLocationViewModel view = (DatabaseLocationViewModel)menuItem.DataContext;
+      DatabaseLocation dbLocation = view.DatabaseLocation;
+      SessionBase session = dbLocation.Session;
+      DatabaseLocationMutable newLocationMutable = new DatabaseLocationMutable(session);
+      newLocationMutable.BackupOfOrForLocation = dbLocation.BackupOfOrForLocation;
+      newLocationMutable.CompressPages = dbLocation.CompressPages;
+      newLocationMutable.PageEncryption = dbLocation.PageEncryption;
+      newLocationMutable.StartDatabaseNumber = dbLocation.StartDatabaseNumber;
+      newLocationMutable.EndDatabaseNumber = dbLocation.EndDatabaseNumber;
+      newLocationMutable.IsBackupLocation = dbLocation.IsBackupLocation;
+      newLocationMutable.DirectoryPath = dbLocation.DirectoryPath;
+      newLocationMutable.HostName = dbLocation.HostName;
+      var popup = new NewDatabaseLocationDialog(newLocationMutable, dbLocation);
+      bool? result = popup.ShowDialog();
+      if (result != null && result.Value)
+      {
+        try
+        {
+          DatabaseLocation newLocation = new DatabaseLocation(newLocationMutable.HostName, newLocationMutable.DirectoryPath, newLocationMutable.StartDatabaseNumber,
+            newLocationMutable.EndDatabaseNumber, session, newLocationMutable.CompressPages, newLocationMutable.PageEncryption, newLocationMutable.IsBackupLocation,
+            newLocationMutable.IsBackupLocation ? newLocationMutable.BackupOfOrForLocation : dbLocation.BackupOfOrForLocation);
+          session.BeginUpdate();
+          session.NewLocation(newLocation);
+          session.Commit();
+          m_viewModel = new AllFederationsViewModel();
+          base.DataContext = m_viewModel;
+        }
+        catch (Exception ex)
+        {
+          session.Abort();
+          MessageBox.Show(ex.Message);
+        }
+      }
+    }
+
+    private void NewDatabaseLocationMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      FederationViewModel view = (FederationViewModel)menuItem.DataContext;
+      FederationInfo info = view.Federationinfo;
+      SessionBase session = view.Session;
+      DatabaseLocationMutable newLocationMutable = new DatabaseLocationMutable(session);
+      var popup = new NewDatabaseLocationDialog(newLocationMutable, null);
+      bool? result = popup.ShowDialog();
+      if (result != null && result.Value)
+      {
+        try
+        {
+          DatabaseLocation newLocation = new DatabaseLocation(newLocationMutable.HostName, newLocationMutable.DirectoryPath, newLocationMutable.StartDatabaseNumber,
+            newLocationMutable.EndDatabaseNumber, session, newLocationMutable.CompressPages, newLocationMutable.PageEncryption, newLocationMutable.BackupOfOrForLocation != null,
+            newLocationMutable.BackupOfOrForLocation);
+          if (session.InTransaction)
+            session.Commit();
+          session.BeginUpdate();
+          session.NewLocation(newLocation);
+          session.Commit();
+          m_viewModel = new AllFederationsViewModel();
+          base.DataContext = m_viewModel;
+        }
+        catch (Exception ex)
+        {
+          session.Abort();
+          MessageBox.Show(ex.Message);
+        }
       }
     }
 
