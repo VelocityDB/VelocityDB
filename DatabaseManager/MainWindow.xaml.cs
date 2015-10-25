@@ -123,7 +123,7 @@ namespace DatabaseManager
         try
         {
           session.RestoreFrom(dbLocation, DateTime.Now);
-          session.Commit(false);
+          session.Commit(false, true); // special flags when commit of a restore ...
           m_viewModel = new AllFederationsViewModel();
           base.DataContext = m_viewModel;
         }
@@ -241,6 +241,7 @@ namespace DatabaseManager
       info.Update();
       info.Validated.Add(DateTime.Now);
       session.Commit();
+      MessageBox.Show("Databases validated without errors, " + DateTime.Now);
     }
 
     private void RemoveFederationInfoMenuItem_Click(object sender, RoutedEventArgs e)

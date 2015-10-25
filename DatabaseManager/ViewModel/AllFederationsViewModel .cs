@@ -22,6 +22,7 @@ namespace DatabaseManager
       m_session = new SessionNoServer(Properties.Settings.Default.DatabaseManagerDirectory);
       m_session.BeginUpdate();
       List<FederationViewModel> federationInfos = new List<FederationViewModel>();
+      List<FederationInfo> federationInfosToRemove = new List<FederationInfo>();
       foreach (FederationInfo info in m_session.AllObjects<FederationInfo>())
       {
         try
@@ -30,9 +31,12 @@ namespace DatabaseManager
         }
         catch (Exception ex)
         {
-          MessageBox.Show(ex.Message);
+          if (MessageBox.Show(ex.Message + " for " + info.HostName + " " + info.SystemDbsPath + " Remove this Database?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            federationInfosToRemove.Add(info);
         }
       }
+      foreach (FederationInfo info in federationInfosToRemove)
+        info.Unpersist(m_session);
       if (federationInfos.Count() == 0)
       {
         string host = Properties.Settings.Default.DatabaseManagerHost;
