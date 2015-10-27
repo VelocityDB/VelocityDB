@@ -97,6 +97,17 @@ namespace DatabaseManager
         DBDirTextBox.Text = lDialog.SelectedPath;
       }
     }
+    void BrowseBackupDir(object pSender, RoutedEventArgs pEvents)
+    {
+      var lDialog = new System.Windows.Forms.FolderBrowserDialog()
+      {
+        Description = "Choose Backup Folder",
+      };
+      if (lDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+      {
+        BackupDirTextBox.Text = lDialog.SelectedPath;
+      }
+    }
 
     public bool WindowsAuthentication
     {
@@ -133,7 +144,9 @@ namespace DatabaseManager
       m_federationInfo.UsePessimisticLocking = (bool) PessimisticBox.IsChecked;
       m_federationInfo.WindowsAuthentication = (bool) WindowsAuthenticationBox.IsChecked;
       bool createNew = (bool)CreateNewBox.IsChecked;
-      if (createNew)
+      string restoreFromPath = BackupDirTextBox.Text;
+      string restoreFromHost = BackupHostTextBox.Text;
+      if (createNew || (restoreFromPath != null && restoreFromPath.Length > 0))
       {
         SessionBase session;
         if (m_federationInfo.UsesServerClient || (m_federationInfo.HostName.Length > 0 && m_federationInfo.HostName != Dns.GetHostName()))
@@ -141,6 +154,12 @@ namespace DatabaseManager
         else
           session = new SessionNoServer(m_federationInfo.SystemDbsPath);
         session.BeginUpdate();
+        if (restoreFromPath != null && restoreFromPath.Length > 0)
+        {
+          UInt32 restoreFromRootDbNum = UInt32.Parse(BackupRootDbNumTextBox.Text);
+          DateTime? restoreUpToDateTime = RestoreUpToDateTime.SelectedDate;
+          session.RestoreFrom(restoreFromHost, restoreFromPath, restoreFromRootDbNum, restoreUpToDateTime == null ? DateTime.Now : restoreUpToDateTime.Value);
+        }
         session.Commit();
       }
       DialogResult = true;

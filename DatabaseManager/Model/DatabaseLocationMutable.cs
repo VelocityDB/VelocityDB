@@ -13,7 +13,7 @@ namespace DatabaseManager.Model
     public DatabaseLocationMutable(SessionBase session)
     {
       Session = session;
-      StartDatabaseNumber = 1000000;
+      StartDatabaseNumber = 100000000;
       EndDatabaseNumber = UInt32.MaxValue;
     }
     public string HostName { get; set;}

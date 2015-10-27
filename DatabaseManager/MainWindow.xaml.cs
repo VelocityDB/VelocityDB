@@ -84,6 +84,8 @@ namespace DatabaseManager
       DatabaseLocationViewModel view = (DatabaseLocationViewModel)menuItem.DataContext;
       DatabaseLocation dbLocation = view.DatabaseLocation;
       SessionBase session = dbLocation.Session;
+      if (session.InTransaction)
+        session.Commit();
       session.BeginUpdate();
       try
       {
@@ -104,6 +106,8 @@ namespace DatabaseManager
       DatabaseLocationViewModel view = (DatabaseLocationViewModel)menuItem.DataContext;
       DatabaseLocation dbLocation = view.DatabaseLocation;
       SessionBase session = dbLocation.Session;
+      if (session.InTransaction)
+        session.Commit();
       //DatabaseLocationMutable newLocationMutable = new DatabaseLocationMutable(session);
       //newLocationMutable.DirectoryPath = dbLocation.DirectoryPath;
       //newLocationMutable.HostName = dbLocation.HostName;

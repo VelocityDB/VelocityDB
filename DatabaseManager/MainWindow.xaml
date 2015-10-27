@@ -7,7 +7,7 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:local="clr-namespace:DatabaseManager"
         mc:Ignorable="d"
-        Title="Database Manager" Icon="Images/Earth.ico" Height="350" Width="525">
+        Title="Database Manager" Icon="Images/FastForward.ico" Height="350" Width="525">
   <Grid >
     <Grid.RowDefinitions>
       <RowDefinition Height="auto"></RowDefinition>

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              Title="VelocityDB Connection"
-             Height="380" Width="600" Icon="Images/Earth.ico" MinHeight="360" MinWidth="500">
+             Height="380" Width="900" Icon="Images/Earth.ico" MinHeight="360" MinWidth="700">
     <DockPanel>
         <DockPanel Margin="0,5,1,5" LastChildFill="False" DockPanel.Dock="Bottom">
             <Button Margin="5,0,0,0" Content="Cancel" DockPanel.Dock="Right" MinWidth="70" VerticalAlignment="Top" TabIndex="2" IsCancel="True" Padding="3"/>
@@ -12,22 +12,22 @@
         </DockPanel>
     <Grid DockPanel.Dock="Top" Margin="7">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="250*" MaxWidth="350"/>
-        <ColumnDefinition Width="250*"/>
+        <ColumnDefinition Width="300*" MaxWidth="350"/>
+        <ColumnDefinition Width="300*"/>
+        <ColumnDefinition Width="300*"/>
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
         <RowDefinition Height="100*"/>
       </Grid.RowDefinitions>
       <DockPanel Margin="7" Grid.Column="0" Grid.Row="0">
 
-        <Label Content="DB Directory" DockPanel.Dock="Top"/>
+        <Label Content="Database Directory" DockPanel.Dock="Top"/>
         <DockPanel Margin="0,5,0,5" DockPanel.Dock="Top">
           <Label DockPanel.Dock="Right">
             <Hyperlink Click="BrowseDBDir">Browse...</Hyperlink>
           </Label>
           <TextBox x:Name="DBDirTextBox" Text="{Binding Path=DBFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Left"/>
         </DockPanel>
-
 
         <GroupBox Header="Session Details" Margin="0,5,0,0">
           <StackPanel Margin="0,5,0,5">
@@ -86,6 +86,32 @@
           </DockPanel>
         </Grid>
       </GroupBox>
+      <DockPanel Margin="7" Grid.Column="3" Grid.Row="0">
+
+        <GroupBox Header="Restore From" Margin="0,5,0,0">
+          <StackPanel Margin="0,5,0,5">
+            <Label Content="Backup Directory" DockPanel.Dock="Top"/>
+            <DockPanel Margin="0,5,0,5" DockPanel.Dock="Top">
+              <Label DockPanel.Dock="Right">
+                <Hyperlink Click="BrowseBackupDir">Browse...</Hyperlink>
+              </Label>
+              <TextBox x:Name="BackupDirTextBox" Text="{Binding Path=BackupFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Left"/>
+            </DockPanel>
+            <DockPanel Margin="0,5,10,5">
+              <Label>Host</Label>
+              <TextBox x:Name="BackupHostTextBox" Text="{Binding Host}"/>
+            </DockPanel>
+            <DockPanel Margin="0,5,10,5">
+              <Label>Database Number</Label>
+              <TextBox x:Name="BackupRootDbNumTextBox" Text="100000000"/>
+            </DockPanel>
+            <DockPanel Margin="0,5,10,5">
+              <Label>Restore up to</Label>
+              <DatePicker x:Name="RestoreUpToDateTime"/>
+            </DockPanel>
+          </StackPanel>
+        </GroupBox>
+      </DockPanel>
     </Grid>
   </DockPanel>
 </Window>
