@@ -48,7 +48,7 @@ namespace NUnitTests
 
           for (int j = 1; j <= 5; j++)
           {
-            aMan = new Man(null, aMan, DateTime.Now);
+            aMan = new Man(null, aMan, DateTime.UtcNow);
             aMan.Persist(place, session);
             aWoman = new Woman(aMan, aWoman);
             aWoman.Persist(place, session);
@@ -64,7 +64,7 @@ namespace NUnitTests
           //localDatabase = session.NewDatabase(20001, localLocation);
           for (int j = 1; j <= 5; j++)
           {
-            aMan = new Man(null, aMan, DateTime.Now);
+            aMan = new Man(null, aMan, DateTime.UtcNow);
             aMan.Persist(place, session);
             aWoman = new Woman(aMan, aWoman); 
             aWoman.Persist(place, session);
@@ -79,7 +79,7 @@ namespace NUnitTests
           place = new Placement(30001);
           for (int j = 1; j <= 5; j++)
           {
-            aMan = new Man(null, aMan, DateTime.Now);
+            aMan = new Man(null, aMan, DateTime.UtcNow);
             aMan.Persist(place, session);
             aWoman = new Woman(aMan, aWoman);
             aWoman.Persist(place, session);
@@ -127,7 +127,7 @@ namespace NUnitTests
 
         for (int j = 1; j <= 5; j++)
         {
-          aMan = new Man(null, aMan, DateTime.Now);
+          aMan = new Man(null, aMan, DateTime.UtcNow);
           aMan.Persist(place, session);
           aWoman = new Woman(aMan, aWoman);
           aWoman.Persist(place, session);
@@ -145,7 +145,7 @@ namespace NUnitTests
         //localDatabase = session.NewDatabase(20001, localLocation);
         for (int j = 1; j <= 5; j++)
         {
-          aMan = new Man(null, aMan, DateTime.Now);
+          aMan = new Man(null, aMan, DateTime.UtcNow);
           aMan.Persist(place, session);
           aWoman = new Woman(aMan, aWoman);
           aWoman.Persist(place, session);
@@ -162,7 +162,7 @@ namespace NUnitTests
         place = new Placement(30001);
         for (int j = 1; j <= 5; j++)
         {
-          aMan = new Man(null, aMan, DateTime.Now);
+          aMan = new Man(null, aMan, DateTime.UtcNow);
           aMan.Persist(place, session);
           aWoman = new Woman(aMan, aWoman);
           aWoman.Persist(place, session);
@@ -178,7 +178,7 @@ namespace NUnitTests
         //localDatabase = session.NewDatabase(20001, localLocation);
         for (int j = 1; j <= 5; j++)
         {
-          aMan = new Man(null, aMan, DateTime.Now);
+          aMan = new Man(null, aMan, DateTime.UtcNow);
           aMan.Persist(place, session);
           aWoman = new Woman(aMan, aWoman);
           aWoman.Persist(place, session);

@@ -43,7 +43,7 @@ namespace NUnitTests
         session.NewLocation(backupLocation);
         for (j = 1; j <= loops; j++)
         {
-          aMan = new Man(null, aMan, DateTime.Now);
+          aMan = new Man(null, aMan, DateTime.UtcNow);
           aMan.Persist(place, session);
           aWoman = new Woman(aMan, aWoman);
           aWoman.Persist(place, session);
@@ -78,7 +78,7 @@ namespace NUnitTests
         session.NewLocation(backupLocation);
         for (j = 1; j <= loops; j++)
         {
-          aMan = new Man(null, aMan, DateTime.Now);
+          aMan = new Man(null, aMan, DateTime.UtcNow);
           session.Persist(aMan);
           aWoman = new Woman(aMan, aWoman);
           session.Persist(aWoman);
@@ -106,7 +106,7 @@ namespace NUnitTests
         session.BeginUpdate();
         for (j = 1; j <= loops; j++)
         {
-          aMan = new Man(null, aMan, DateTime.Now);
+          aMan = new Man(null, aMan, DateTime.UtcNow);
           aMan.Persist(place, session);
           aWoman = new Woman(aMan, aWoman);
           aWoman.Persist(place, session);
@@ -127,8 +127,8 @@ namespace NUnitTests
       {
         session.BeginUpdate();
         DatabaseLocation backupLocation = session.DatabaseLocations.LocationForDb(backupLocationStartDbNum);
-        session.RestoreFrom(backupLocation, DateTime.Now);
-        session.Commit(false);
+        session.RestoreFrom(backupLocation, DateTime.UtcNow);
+        session.Commit(false, true);
       }
     }
 
@@ -140,8 +140,8 @@ namespace NUnitTests
         session.BeginUpdate();
         DatabaseLocation backupLocation = new DatabaseLocation(Dns.GetHostName(), backupDir, backupLocationStartDbNum, UInt32.MaxValue, session,
           PageInfo.compressionKind.None, PageInfo.encryptionKind.noEncryption, true, session.DatabaseLocations.Default());
-        session.RestoreFrom(backupLocation, DateTime.Now);
-        session.Commit(false);
+        session.RestoreFrom(backupLocation, DateTime.UtcNow);
+        session.Commit(false, true);
       }
     }
   }

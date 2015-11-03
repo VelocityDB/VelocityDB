@@ -72,7 +72,7 @@ namespace NUnitTests
         Vertex other = otherType.NewVertex();
         Edge bestFriend = kinga.AddEdge(userBestFriendEdgeType, robin);
         Edge otherEdge = kinga.AddEdge(otherEdgeType, robin);
-        DateTime now = DateTime.Now;
+        DateTime now = DateTime.UtcNow;
         mats.SetProperty("Address", 1);
         bestFriend.SetProperty(bestFriendPropertyType, now);
         kinga.SetProperty(userNamePropertyType, "Kinga");

@@ -143,7 +143,7 @@ namespace NUnitTests
           Issue.StatusEnum status = (Issue.StatusEnum)rand.Next(5);
           if (status == Issue.StatusEnum.Open || status == Issue.StatusEnum.InProgress || status == Issue.StatusEnum.Reopened)
             resolution = Issue.Resolution.Incomplete; // the other states does not make sense
-          DateTime dueDate = new DateTime(rand.Next());
+          DateTime dueDate = new DateTime(rand.Next(), DateTimeKind.Utc);
           string c = "project" + i.ToString();
           string s = "summary" + i.ToString();
           string e = "environment" + i.ToString();

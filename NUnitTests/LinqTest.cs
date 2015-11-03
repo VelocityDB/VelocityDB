@@ -53,9 +53,9 @@ namespace NUnitTests
                    Category = "cat",
                    ResourceImageType = "",
                    FolderPath = "",
-                   LastAccessTime = DateTime.Now,
-                   LastWriteTime = DateTime.Now,
-                   CreationTime = DateTime.Now,
+                   LastAccessTime = DateTime.UtcNow,
+                   LastWriteTime = DateTime.UtcNow,
+                   CreationTime = DateTime.UtcNow,
                    Size = 40000,
                  });
           session.Persist(velrecord);

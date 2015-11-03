@@ -197,7 +197,7 @@ namespace NUnitTests
       int maxPassengers = 5;
       int fuelCapacity = 40;
       double litresPer100Kilometers = 5;
-      DateTime modelYear = new DateTime(2003, 1, 1);
+      DateTime modelYear = new DateTime(2003, 1, 1, 0, 0, 0, DateTimeKind.Utc);
       string modelName = "Highlander";
       int maxSpeed = 200;
       int odometer = 100000;
@@ -493,7 +493,7 @@ namespace NUnitTests
         maxPassengers = 5;
         fuelCapacity = 50;
         litresPer100Kilometers = 8;
-        modelYear = new DateTime(2006, 1, 1);
+        modelYear = new DateTime(2006, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         brandName = "Toyota";
         modelName = "Tacoma";
         maxSpeed = 210;
@@ -508,7 +508,7 @@ namespace NUnitTests
         maxPassengers = 5;
         fuelCapacity = 60;
         litresPer100Kilometers = 3;
-        modelYear = new DateTime(2001, 1, 1);
+        modelYear = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         brandName = "Lincoln";
         modelName = "Town Car";
         maxSpeed = 220;
@@ -526,7 +526,7 @@ namespace NUnitTests
           maxPassengers = i;
           fuelCapacity = 60;
           litresPer100Kilometers = 3;
-          modelYear = new DateTime(2001, 1, 1);
+          modelYear = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
           brandName = "Null Car";
           modelName = null;
           maxSpeed = 220;
