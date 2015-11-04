@@ -18,6 +18,7 @@ namespace DatabaseManager.Model
     string m_hostName;
     string m_sytemDbsPath;
     int m_portNumber;
+    int m_waitForLockMilliseconds;
     bool m_windowsAuthentication;
     bool m_usesServerClient;
     bool m_usePessimisticLocking;
@@ -38,7 +39,7 @@ namespace DatabaseManager.Model
       m_federationCopies = new List<FederationCopyInfo>();
     }
 
-    public FederationInfo(string hostName, string systemDbsPath, int portNumber, bool windowsAuthentication, string[] assemblyDirectory,
+    public FederationInfo(string hostName, string systemDbsPath, int portNumber, bool windowsAuthentication, string[] assemblyDirectory, int waitForLockMilliseconds,
       bool usesServerClient = false, string name = null):this()
     {
       m_hostName = hostName;
@@ -48,6 +49,7 @@ namespace DatabaseManager.Model
       m_usesServerClient = usesServerClient;
       m_name = name;
       m_typesAssemblies = assemblyDirectory;
+      m_waitForLockMilliseconds = waitForLockMilliseconds;
       LoadAllFederationAssemblies();
     }
 
@@ -126,6 +128,18 @@ namespace DatabaseManager.Model
       {
         Update();
         m_windowsAuthentication = value;
+      }
+    }
+    public int WaitForMilliSeconds
+    {
+      get
+      {
+        return m_waitForLockMilliseconds;
+      }
+      set
+      {
+        Update();
+        m_waitForLockMilliseconds = value;
       }
     }
 

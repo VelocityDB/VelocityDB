@@ -12,44 +12,50 @@ namespace DatabaseManager
 {
   public class FieldViewModel : TreeViewItemViewModel
   {
-    readonly string fieldAsString;
-    readonly object memberObj;
-    readonly Page page;
-    readonly SessionBase _session;
-    readonly bool isEncodedOidArray;
+    readonly string m_fieldAsString;
+    readonly UInt64 m_parentId;
+    readonly DataMember m_member;
+    readonly SessionBase m_session;
+    readonly bool m_isEncodedOidArray;
     public FieldViewModel(IOptimizedPersistable parentObj, DataMember member, ObjectViewModel parentObject, SessionBase session)
       : base(parentObject, true)
     {
-      _session = session;
-      page = parentObj.Page;
-      memberObj = member.GetMemberValue(parentObj.WrappedObject);
-      isEncodedOidArray = (parentObj as BTreeNode) != null && memberObj != null && (memberObj as Array) != null && (member.Field.Name == "keysArray" || member.Field.Name == "valuesArray");
-      fieldAsString = OptimizedPersistable.ToStringDetails(member, parentObj.WrappedObject, parentObj, parentObj.Page, true);
+      m_member = member;
+      m_session = session;
+      m_parentId = parentObj.Id; 
+      object memberObj = member.GetMemberValue(parentObj.WrappedObject);
+      m_isEncodedOidArray = (parentObj as BTreeNode) != null && memberObj != null && (memberObj as Array) != null && (member.Field.Name == "keysArray" || member.Field.Name == "valuesArray");
+      m_fieldAsString = OptimizedPersistable.ToStringDetails(member, parentObj.WrappedObject, parentObj, parentObj.Page, true);
     }
 
     public string FieldName
     {
-      get { return fieldAsString; }
+      get { return m_fieldAsString; }
     }
 
     public string FieldDisplay
     {
       get
       {
-        return fieldAsString;
+        return m_fieldAsString;
       }
     }
 
     protected override void LoadChildren()
     {
-      Array a = memberObj as Array;
-      IOptimizedPersistable p = memberObj as IOptimizedPersistable;
-      if (a != null)
-        base.Children.Add(new ArrayViewModel(a, this, isEncodedOidArray, page, _session));
-      else if (p != null)
-        base.Children.Add(new ObjectViewModel(p, this, _session));
-      else
-        base.Children.Add(new ListViewModel(memberObj as IList, this, page));
+      IOptimizedPersistable parentObj = (IOptimizedPersistable) m_session.Open(m_parentId);
+      if (parentObj != null)
+      {
+        object memberObj = m_member.GetMemberValue(parentObj.WrappedObject);
+        Array a = memberObj as Array;
+        IOptimizedPersistable p = memberObj as IOptimizedPersistable;
+        if (a != null)
+          base.Children.Add(new ArrayViewModel(a, this, m_isEncodedOidArray, parentObj.Page, m_session));
+        else if (p != null)
+          base.Children.Add(new ObjectViewModel(p, this, m_session));
+        else
+          base.Children.Add(new ListViewModel(memberObj as IList, this, parentObj.Page));
+      }
     }
   }
 }

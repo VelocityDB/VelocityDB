@@ -19,9 +19,9 @@ namespace DatabaseManager
     {
       m_federationInfo = federationInfo;
       if (m_federationInfo.UsesServerClient || (m_federationInfo.HostName.Length > 0 &&  m_federationInfo.HostName!= Dns.GetHostName()))
-        m_session = new ServerClientSession(m_federationInfo.SystemDbsPath, m_federationInfo.HostName, 2000, m_federationInfo.UsePessimisticLocking == false);
+        m_session = new ServerClientSession(m_federationInfo.SystemDbsPath, m_federationInfo.HostName, m_federationInfo.WaitForMilliSeconds, m_federationInfo.UsePessimisticLocking == false);
       else
-        m_session = new SessionNoServer(m_federationInfo.SystemDbsPath, 5000, m_federationInfo.UsePessimisticLocking == false);
+        m_session = new SessionNoServer(m_federationInfo.SystemDbsPath, m_federationInfo.WaitForMilliSeconds, m_federationInfo.UsePessimisticLocking == false);
       m_session.BeginRead();
     }
 

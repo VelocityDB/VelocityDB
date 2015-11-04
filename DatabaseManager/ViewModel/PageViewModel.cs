@@ -10,39 +10,49 @@ namespace DatabaseManager
 {
   public class PageViewModel : TreeViewItemViewModel
   {
-    readonly Page _page;
-    readonly SessionBase _session;
+    readonly UInt32 m_dbNum;
+    readonly UInt16 m_pageNum;
+    readonly SessionBase m_session;
 
     public PageViewModel(Page page, DatabaseViewModel parentDatabase, SessionBase session)
       : base(parentDatabase, true)
     {
-      _page = page;
-      _session = session;
+      m_dbNum = page.Database.DatabaseNumber;
+      m_pageNum = page.PageNumber;
+      m_session = session;
     }
 
     public string PageName
     {
       get
       {
-        string contentType = "";
-        uint typever = _page.PageInfo.ShapeNumber;
-        if (typever > 0)
+        Database db = m_session.OpenDatabase(m_dbNum, false, false);
+        if (db != null)
         {
-          TypeVersion tv = _session.OpenSchema(false).GetTypeVersion(typever, _session);
-          if (tv != null && tv.Type != null)
-            contentType = " of type: " + tv.Type.ToGenericTypeString();
-          else
-            contentType = " of type: " + "unknown with id " + typever;
+          Page page = m_session.OpenPage(db, m_pageNum);
+          string contentType = "";
+          uint typever = page.PageInfo.ShapeNumber;
+          if (typever > 0)
+          {
+            TypeVersion tv = m_session.OpenSchema(false).GetTypeVersion(typever, m_session);
+            if (tv != null && tv.Type != null)
+              contentType = " of type: " + tv.Type.ToGenericTypeString();
+            else
+              contentType = " of type: " + "unknown with id " + typever;
+          }
+          return "Page: " + page.PageNumber.ToString() + " size: " +
+          page.PageInfo.UncompressedSize + " stored size: " + page.PageInfo.OnDiskSize + " compression: " + page.PageInfo.Compressed + " " + page.PageInfo.Encryption + " version: " + page.PageInfo.VersionNumber + " objects: " + page.PageInfo.NumberOfSlots + contentType;
         }
-        return "Page: " + _page.PageNumber.ToString() + " size: " +
-        _page.PageInfo.UncompressedSize + " stored size: " + _page.PageInfo.OnDiskSize +  " compression: " + _page.PageInfo.Compressed + " " + _page.PageInfo.Encryption + " version: " + _page.PageInfo.VersionNumber + " objects: " + _page.PageInfo.NumberOfSlots + contentType;
+        return "Failed to open " + m_dbNum;
       }
     }
 
     protected override void LoadChildren()
     {
-      foreach (IOptimizedPersistable o in _page)
-        base.Children.Add(new ObjectViewModel(o, this, _session));
+      Database db = m_session.OpenDatabase(m_dbNum, false, false);
+      Page page = m_session.OpenPage(db, m_pageNum);
+      foreach (IOptimizedPersistable o in page)
+        base.Children.Add(new ObjectViewModel(o, this, m_session));
     }
   }
 }

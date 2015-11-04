@@ -134,6 +134,8 @@ namespace DatabaseManager
 
     bool CreateNew { get; set; }
 
+    //int WaitForMilliSeconds { get; set; }
+
     void BtnOkClick(object pSender, RoutedEventArgs pEvents)
     {
       m_federationInfo.UsesServerClient = (bool)RadioServer.IsChecked;
@@ -143,6 +145,7 @@ namespace DatabaseManager
       m_federationInfo.HostName = HostTextBox.Text;
       m_federationInfo.UsePessimisticLocking = (bool) PessimisticBox.IsChecked;
       m_federationInfo.WindowsAuthentication = (bool) WindowsAuthenticationBox.IsChecked;
+      m_federationInfo.WaitForMilliSeconds = int.Parse(WaitForMilliSecondsTextBox.Text);
       bool createNew = (bool)CreateNewBox.IsChecked;
       string restoreFromPath = BackupDirTextBox.Text;
       string restoreFromHost = BackupHostTextBox.Text;
@@ -170,6 +173,7 @@ namespace DatabaseManager
       InitializeComponent();
       m_federationInfo = federationInfo;
       RadioNoServ.IsChecked = true;
+      WaitForMilliSecondsTextBox.Text = "5000";
     }
 
     private void DependencySelection(Object sender, SelectionChangedEventArgs e)

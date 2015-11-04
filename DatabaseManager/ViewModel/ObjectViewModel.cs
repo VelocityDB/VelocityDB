@@ -11,14 +11,14 @@ namespace DatabaseManager
 {
  public class ObjectViewModel : TreeViewItemViewModel
   {
-    readonly IOptimizedPersistable m_object;
+    readonly UInt64 m_objectId;
     readonly SessionBase m_session;
     readonly string m_objectAsString;
 
     public ObjectViewModel(IOptimizedPersistable obj, TreeViewItemViewModel parentPage, SessionBase session)
       : base(parentPage, true)
     {
-     m_object = obj;
+     m_objectId = obj.Id;
      m_session = session;
      if (obj.WrappedObject != obj)
        m_objectAsString = obj.WrappedObject.ToString() + " " + new Oid(obj.Id);
@@ -28,7 +28,7 @@ namespace DatabaseManager
     public ObjectViewModel(IOptimizedPersistable obj, FieldViewModel parentView, SessionBase session)
       : base(parentView, true)
     {
-      m_object = obj;
+      m_objectId = obj.Id;
       m_session = session;
       if (obj.WrappedObject != obj)
         m_objectAsString = obj.WrappedObject.ToString() + " " + new Oid(obj.Id);
@@ -58,30 +58,38 @@ namespace DatabaseManager
           IList list = (IList)memberObj;
           listWithItems = list != null && list.Count > 0;
         }
-        if (member.Field != null && memberObj != null & (member.Field.FieldType.IsArray || member.HasId || listWithItems))
-          base.Children.Add(new FieldViewModel(m_object, member, this, m_session));
-        else
-          base.Children.Add(new FieldViewModelNoExpansions(m_object, member, this, m_session));
+        IOptimizedPersistable pObj = (IOptimizedPersistable) m_session.Open(m_objectId);
+        if (pObj != null)
+        {
+          if (member.Field != null && memberObj != null & (member.Field.FieldType.IsArray || member.HasId || listWithItems))
+            base.Children.Add(new FieldViewModel(pObj, member, this, m_session));
+          else
+            base.Children.Add(new FieldViewModelNoExpansions(pObj, member, this, m_session));
+        }
     }
 
     protected override void LoadChildren()
     {
-      m_object.LoadFields();
-      object o = m_object.WrappedObject;
-      TypeVersion baseShape = m_object.Shape.BaseShape;
-      while (baseShape != null)
+      IOptimizedPersistable pObj = (IOptimizedPersistable)m_session.Open(m_objectId);
+      if (pObj != null)
       {
-        foreach (DataMember member in baseShape.DataMemberArray)
+        pObj.LoadFields();
+        object o = pObj.WrappedObject;
+        TypeVersion baseShape = pObj.Shape.BaseShape;
+        while (baseShape != null)
+        {
+          foreach (DataMember member in baseShape.DataMemberArray)
+          {
+            object memberObj = member.GetMemberValue(o);
+            LoadChild(member, memberObj);
+          }
+          baseShape = baseShape.BaseShape;
+        }
+        foreach (DataMember member in pObj.Shape.DataMemberArray)
         {
           object memberObj = member.GetMemberValue(o);
           LoadChild(member, memberObj);
         }
-        baseShape = baseShape.BaseShape;
-      }
-      foreach (DataMember member in m_object.Shape.DataMemberArray)
-      {
-        object memberObj = member.GetMemberValue(o);
-        LoadChild(member, memberObj);
       }
     }
   }

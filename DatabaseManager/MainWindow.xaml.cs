@@ -222,6 +222,8 @@ namespace DatabaseManager
       if (lDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
       {
         string copyDir = lDialog.SelectedPath;
+        if (session.InTransaction)
+          session.Commit(); // must not be in transaction while copying databases
         session.CopyAllDatabasesTo(copyDir);
         session = info.Session;
         session.BeginUpdate();
@@ -230,6 +232,7 @@ namespace DatabaseManager
         info.Update();
         info.FederationCopies.Add(copyInfo);
         session.Commit();
+        MessageBox.Show("Databases copied to " + copyDir + " at " + DateTime.Now);
       }
     }
 

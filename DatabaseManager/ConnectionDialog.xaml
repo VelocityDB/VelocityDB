@@ -40,6 +40,10 @@
             <CheckBox x:Name="PessimisticBox" IsChecked="{Binding Path=PessimisticLocking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" Content="Pessimistic Locking" Margin="0,5,0,0"/>
             <CheckBox x:Name="WindowsAuthenticationBox" IsChecked="{Binding Path=WindowsAuthentication, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Use Windows Authentication" Margin="0,5,0,0"/>
             <CheckBox x:Name="CreateNewBox" IsChecked="{Binding Path=CreateNew, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Create New (if system databases missing)" Margin="0,5,0,0"/>
+            <DockPanel Margin="0,5,10,5">
+              <Label>WaitForMilliseconds</Label>
+              <TextBox x:Name="WaitForMilliSecondsTextBox"/>
+            </DockPanel>
           </StackPanel>
         </GroupBox>
       </DockPanel>

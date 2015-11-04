@@ -47,6 +47,7 @@ namespace DatabaseManager
           Properties.Settings.Default.TcpIpPortNumber,
           Properties.Settings.Default.DoWindowsAuthentication,
           null,
+          Properties.Settings.Default.WaitForLockMilliseconds,
           Properties.Settings.Default.UseClientServer,
           "Database Manager");
         m_session.Persist(info);

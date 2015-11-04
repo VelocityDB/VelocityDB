@@ -9,26 +9,33 @@ namespace DatabaseManager
 {
   public class DatabaseViewModel : TreeViewItemViewModel
   {
-    readonly Database m_database;
+    readonly SessionBase m_session;
+    readonly UInt32 m_dbid;
 
     public DatabaseViewModel(DatabaseLocationViewModel databaseLocationView, Database database)
       : base(databaseLocationView, true)
     {
-      m_database = database;
+      m_session = database.Session;
+      m_dbid = database.DatabaseNumber;
     }
 
     public string DatabaseName
     {
       get
       {
-        return m_database.ToString();
+        Database db = m_session.OpenDatabase(m_dbid, false, false);
+        if (db != null)
+          return db.ToString();
+        return "Database failed to open: " + m_dbid;
       }
     }
 
     protected override void LoadChildren()
     {
-      foreach (Page page in m_database)
-        base.Children.Add(new PageViewModel(page, this, m_database.Session));
+      Database db = m_session.OpenDatabase(m_dbid, false, false);
+      if (db != null)
+        foreach (Page page in db)
+          base.Children.Add(new PageViewModel(page, this, m_session));
     }
   }
 }
