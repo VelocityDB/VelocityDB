@@ -20,8 +20,7 @@ namespace VelocityGraph
   /// </summary>
   public class Vertex : Element, IVertex
   {
-    VertexType vertexType;
-
+    VertexType m_vertexType;
     /// <summary>
     /// Normally you should use <see cref="VelocityGraph.VertexType.GetVertex(VertexId,bool,bool)"/> but if you need a reference to a Vertex that has no yet been created, this constructor may be used (but know what you are doing!)
     /// </summary>
@@ -31,7 +30,7 @@ namespace VelocityGraph
     public Vertex(Graph g, VertexType eType, VertexId eId)
       : base(eId, g)
     {
-      vertexType = eType;
+      m_vertexType = eType;
     }
 
     /// <summary>
@@ -99,7 +98,7 @@ namespace VelocityGraph
     {
       get
       {
-        UInt64 fullId = (UInt64)vertexType.TypeId;
+        UInt64 fullId = (UInt64)m_vertexType.TypeId;
         fullId <<= 32;
         fullId += (UInt64)id;
         return fullId;
@@ -114,7 +113,19 @@ namespace VelocityGraph
     /// <returns>The number of edges.</returns>
     public long GetNumberOfEdges(EdgeType edgeType, Direction dir)
     {
-      return vertexType.GetNumberOfEdges(edgeType, this.VertexId, dir);
+      return m_vertexType.GetNumberOfEdges(edgeType, this.VertexId, dir);
+    }
+
+    /// <summary>
+    /// Gets the number of edges from or to this vertex for the given edge type and the given other Vertex. 
+    /// </summary>
+    /// <param name="edgeType">an EdgeType</param>
+    /// <param name="headVertex">Vertex at other end of the edge</param>
+    /// <param name="dir">direction, one of: Out, In, Both</param>
+    /// <returns>The number of edges.</returns>
+    public long GetNumberOfEdges(EdgeType edgeType, Vertex headVertex, Direction dir)
+    {
+      return m_vertexType.GetNumberOfEdges(edgeType, this.VertexId, headVertex.VertexId, dir);
     }
 
     /// <summary>
@@ -125,8 +136,8 @@ namespace VelocityGraph
     /// <returns>the object value related to the string key</returns>
     public override object GetProperty(string key)
     {
-      PropertyType pt = vertexType.FindProperty(key);
-      return vertexType.GetPropertyValue(id, pt);
+      PropertyType pt = m_vertexType.FindProperty(key);
+      return m_vertexType.GetPropertyValue(id, pt);
     }
 
     /// <summary>
@@ -135,7 +146,7 @@ namespace VelocityGraph
     /// <returns>the set of all string keys associated with the vertex</returns>
     public override IEnumerable<string> GetPropertyKeys()
     {
-      foreach (string key in vertexType.GetPropertyKeys())
+      foreach (string key in m_vertexType.GetPropertyKeys())
       {
         if (GetProperty(key) != null)
           yield return key;
@@ -149,7 +160,7 @@ namespace VelocityGraph
     /// <returns>the property value</returns>
     public object GetProperty(PropertyType property)
     {
-      return vertexType.GetPropertyValue(VertexId, property);
+      return m_vertexType.GetPropertyValue(VertexId, property);
     }
 
     /// <summary>
@@ -160,7 +171,7 @@ namespace VelocityGraph
     /// <returns>a set of Edge</returns>
     public IEnumerable<IEdge> GetEdges(EdgeType edgeType, Direction dir)
     {
-      return vertexType.GetEdges(edgeType, this, dir);
+      return m_vertexType.GetEdges(edgeType, this, dir);
     }
 
     /// <summary>
@@ -193,7 +204,7 @@ namespace VelocityGraph
     IEnumerable<IEdge> GetInEdges(params string[] labels)
     {
       if (labels.Length == 0)
-        foreach (IEdge edge in vertexType.GetEdges(this, Direction.In))
+        foreach (IEdge edge in m_vertexType.GetEdges(this, Direction.In))
           yield return edge;
       else
       {
@@ -202,7 +213,7 @@ namespace VelocityGraph
           EdgeType edgeType = Graph.FindEdgeType(label);
           if (edgeType != null)
           {
-            foreach (IEdge edge in vertexType.GetEdges(edgeType, this, Direction.In))
+            foreach (IEdge edge in m_vertexType.GetEdges(edgeType, this, Direction.In))
               yield return edge;
           }
         }
@@ -223,7 +234,7 @@ namespace VelocityGraph
     {
       if (labels.Length == 0)
       {
-        foreach (IEdge edge in vertexType.GetEdges(this, Direction.Out))
+        foreach (IEdge edge in m_vertexType.GetEdges(this, Direction.Out))
           yield return edge;
       }
       else
@@ -231,7 +242,7 @@ namespace VelocityGraph
         foreach (string label in labels)
         {
           EdgeType edgeType = Graph.FindEdgeType(label);
-          foreach (IEdge edge in vertexType.GetEdges(edgeType, this, Direction.Out))
+          foreach (IEdge edge in m_vertexType.GetEdges(edgeType, this, Direction.Out))
             yield return edge;
         }
       }
@@ -252,7 +263,7 @@ namespace VelocityGraph
         foreach (Edge edge in GetEdges(direction, labels))
           edgeTypes.Add(edge.EdgeType);
         foreach (EdgeType edgeType in edgeTypes)
-          foreach (IVertex vertex in vertexType.GetVertices(edgeType, this, direction))
+          foreach (IVertex vertex in m_vertexType.GetVertices(edgeType, this, direction))
             yield return vertex;
       }
       else
@@ -260,7 +271,7 @@ namespace VelocityGraph
         foreach (string label in labels)
         {
           EdgeType edgeType = Graph.FindEdgeType(label);
-          foreach (IVertex vertex in vertexType.GetVertices(edgeType, this, direction))
+          foreach (IVertex vertex in m_vertexType.GetVertices(edgeType, this, direction))
             yield return vertex;
         }
       }
@@ -284,7 +295,7 @@ namespace VelocityGraph
     {
       get
       {
-        return vertexType;
+        return m_vertexType;
       }
     }
 
@@ -296,7 +307,7 @@ namespace VelocityGraph
     /// <returns>Dictionary of vertex key with edge path(s) to vertex</returns>
     public Dictionary<Vertex, HashSet<Edge>> Traverse(EdgeType etype, Direction dir)
     {
-      return vertexType.Traverse(this, etype, dir);
+      return m_vertexType.Traverse(this, etype, dir);
     }
 
     struct PathInfo
@@ -538,7 +549,7 @@ namespace VelocityGraph
     /// <inheritdoc />
     public override void Remove()
     {
-      vertexType.RemoveVertex(this);
+      m_vertexType.RemoveVertex(this);
     }
 
     /// <summary>
@@ -549,7 +560,7 @@ namespace VelocityGraph
     /// <returns>the object value associated with that key prior to removal</returns>
     public override object RemoveProperty(string key)
     {
-      PropertyType pt = vertexType.FindProperty(key);
+      PropertyType pt = m_vertexType.FindProperty(key);
       if (pt == null)
         return null;
       return pt.RemovePropertyValue(id);
@@ -563,7 +574,7 @@ namespace VelocityGraph
     /// <param name="v">the property value</param>
     public void SetProperty(PropertyType property, IComparable v)
     {
-      vertexType.SetPropertyValue(VertexId, property, v);
+      m_vertexType.SetPropertyValue(VertexId, property, v);
     }
 
     /// <summary>
@@ -580,10 +591,10 @@ namespace VelocityGraph
         throw new ArgumentException("Property value may not be null");
       if (key.Equals(StringFactory.Id))
         throw ExceptionFactory.PropertyKeyIdIsReserved();
-      PropertyType pt = vertexType.FindProperty(key);
+      PropertyType pt = m_vertexType.FindProperty(key);
       if (pt == null)
-        pt = vertexType.graph.NewVertexProperty(vertexType, key, DataType.Object, PropertyKind.Indexed);
-      vertexType.SetPropertyValue(VertexId, pt, (IComparable)value);
+        pt = m_vertexType.graph.NewVertexProperty(m_vertexType, key, DataType.Object, PropertyKind.Indexed);
+      m_vertexType.SetPropertyValue(VertexId, pt, (IComparable)value);
     }
 
     /// <summary>
@@ -595,16 +606,16 @@ namespace VelocityGraph
     /// <param name="value">the object value o the property</param>
     internal override void SetProperty<T>(string key, T value)
     {
-      PropertyType pt = vertexType.FindProperty(key);
+      PropertyType pt = m_vertexType.FindProperty(key);
       if (pt == null)
-        pt = vertexType.graph.NewVertexProperty(vertexType, key, DataType.Object, PropertyKind.Indexed);
-      vertexType.SetPropertyValue(VertexId, pt, value);
+        pt = m_vertexType.graph.NewVertexProperty(m_vertexType, key, DataType.Object, PropertyKind.Indexed);
+      m_vertexType.SetPropertyValue(VertexId, pt, value);
     }
 
     /// <inheritdoc />
     public override string ToString()
     {
-      return "Vertex: " + VertexId + " " + vertexType.TypeName;
+      return "Vertex: " + VertexId + " " + m_vertexType.TypeName;
     }
   }
 }

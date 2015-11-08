@@ -85,6 +85,18 @@ namespace VelocityDbSchema
         this.m_bestFriend = new WeakIOptimizedPersistableReference<Person>(bestFriend);
 		}
 
+    public override int CompareTo(object obj)
+    {
+      Person otherPerson = (Person)obj;
+      if (otherPerson != null)
+      {
+        return m_ssn.CompareTo(otherPerson.m_ssn);
+      }
+      else
+      {
+        throw new ArgumentException("object is not a Person or is null");
+      }
+    }
     public Guid PersonID
     {
       get

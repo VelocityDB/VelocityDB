@@ -986,6 +986,86 @@ namespace VelocityGraph
     }
 
     /// <summary>
+    /// Get the number of edges of a certain type that can be found associated with a vertex id, another vertex id at other end and an edge direction
+    /// </summary>
+    /// <param name="etype">Type of edges to look for</param>
+    /// <param name="vertexId">Id of a <see cref="Vertex"/></param>
+    /// <param name="vertexId2">Id of a <see cref="Vertex"/></param>
+    /// <param name="dir">Edge direction to use</param>
+    /// <returns>The number of edges found</returns>
+    public long GetNumberOfEdges(EdgeType edgeType, VertexId vertexId, VertexId vertexId2, Direction dir)
+    {
+      BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>> map;
+      long numberOfEdges = 0;
+      switch (dir)
+      {
+        case Direction.Out:
+          if (tailToHeadEdges.TryGetValue(edgeType, out map))
+            foreach (var p1 in map)
+            {
+              BTreeSet<EdgeIdVertexId> edgeVertexSet;
+              if (p1.Value.TryGetValue(vertexId, out edgeVertexSet))
+              {
+                foreach (UInt64 l in edgeVertexSet)
+                {
+                  VertexId vId = (int)l;
+                  if (vertexId2 == vId)
+                    numberOfEdges++;
+                }
+              }
+            }
+          break;
+        case Direction.In:
+          if (headToTailEdges.TryGetValue(edgeType, out map))
+            foreach (var p1 in map)
+            {
+              BTreeSet<EdgeIdVertexId> edgeVertexSet;
+              if (p1.Value.TryGetValue(vertexId, out edgeVertexSet))
+              {
+                foreach (UInt64 l in edgeVertexSet)
+                {
+                  VertexId vId = (int)l;
+                  if (vertexId2 == vId)
+                    numberOfEdges++;
+                }
+              }
+            }
+          break;
+        case Direction.Both:
+          if (tailToHeadEdges.TryGetValue(edgeType, out map))
+            foreach (var p1 in map)
+            {
+              BTreeSet<EdgeIdVertexId> edgeVertexSet;
+              if (p1.Value.TryGetValue(vertexId, out edgeVertexSet))
+              {
+                foreach (UInt64 l in edgeVertexSet)
+                {
+                  VertexId vId = (int)l;
+                  if (vertexId2 == vId)
+                    numberOfEdges++;
+                }
+              }
+            }
+          if (headToTailEdges.TryGetValue(edgeType, out map))
+            foreach (var p1 in map)
+            {
+              BTreeSet<EdgeIdVertexId> edgeVertexSet;
+              if (p1.Value.TryGetValue(vertexId, out edgeVertexSet))
+              {
+                foreach (UInt64 l in edgeVertexSet)
+                {
+                  VertexId vId = (int)l;
+                  if (vertexId2 == vId)
+                    numberOfEdges++;
+                }
+              }
+            }
+          break;
+      }
+      return numberOfEdges;
+    }
+
+    /// <summary>
     /// Enumerates all vertices for the given type
     /// </summary>
     /// <param name="polymorphic">If true, also include all vertices of sub types of this VertexType</param>

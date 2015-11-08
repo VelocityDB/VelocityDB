@@ -366,6 +366,16 @@ namespace VelocityGraph
     /// <summary>
     /// Create a new vertex (of VertexType "default"), add it to the graph, and return the newly created vertex.
     /// </summary>
+    /// <returns>the newly created vertex</returns>
+    public virtual Vertex AddVertex()
+    {
+      VertexType vt = vertexType[0];
+      return vt.NewVertex(0);
+    }
+
+    /// <summary>
+    /// Create a new vertex (of VertexType "default"), add it to the graph, and return the newly created vertex.
+    /// </summary>
     /// <param name="id">the recommended object identifier</param>
     /// <returns>the newly created vertex</returns>
     public virtual IVertex AddVertex(object id)
@@ -1188,7 +1198,20 @@ namespace VelocityGraph
     /// <param name="filename">the JSON file to write the Graph data to</param>
     public void ExportToGraphJson(string filename)
     {
-      GraphJsonWriter.OutputGraph(this, filename, GraphJsonSettings.Default);
+      GraphJsonSettings gs = new GraphJsonSettings();
+    /*  gs.VertexTypeFuncProp = v =>
+      {
+        Vertex vertex = v as Vertex;
+        string s = (string)vertex.VertexType.TypeName;
+        return s;
+      };
+      gs.EdgeTypeFuncProp = e =>
+      {
+        Edge edge = e as Edge;
+        string s = (string)edge.EdgeType.TypeName;
+        return s;
+      };*/
+      GraphJsonWriter.OutputGraph(this, filename, gs);
     }
 
     /// <summary>

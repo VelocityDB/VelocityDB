@@ -32,11 +32,10 @@ namespace DatingRecommendations
 
   class DatingRecommendations
   {
-    static readonly string s_systemDir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-      "VelocityDB" + Path.DirectorySeparatorChar + "Databases" + Path.DirectorySeparatorChar + "DatingRecommendations");
-
+    static readonly string s_systemDir = SessionBase.BaseDatabasePath + "/DatingRecommendations";
     static readonly string s_inputDataDir = "D:/libimseti"; // change if you need to, download dataset from http://www.occamslab.com/petricek/data/
     static readonly string s_licenseDbFile = "c:/4.odb";
+    static readonly int s_highestRating = 10;
     enum Gender { Male, Female, Unknown };
 
     static void Main(string[] args)
@@ -49,10 +48,11 @@ namespace DatingRecommendations
           Directory.Delete(s_systemDir, true); // remove systemDir from prior runs and all its databases.
         Directory.CreateDirectory(s_systemDir);
         File.Copy(s_licenseDbFile, Path.Combine(s_systemDir, "4.odb"));
-
         using (SessionNoServer session = new SessionNoServer(s_systemDir))
         {
-          DataCache.MaximumMemoryUse = 10000000000; // 10 GB, set this to what fits your case
+          DataCache.MaximumMemoryUse = 12000000000; // 12 GB, set this to what fits your case
+          SessionBase.BTreeAddFastTransientBatchSize = 10; // reduces memory usage
+          Vertex[] ratingVertices = new Vertex[10];
           session.BeginUpdate();
           session.DefaultDatabaseLocation().CompressPages = PageInfo.compressionKind.LZ4;
           Graph g = new Graph(session);
@@ -110,18 +110,17 @@ namespace DatingRecommendations
                 priorRaterId = raterId;
                 int ratedId = int.Parse(fields[1]);
                 int rating = int.Parse(fields[2]);
-                Vertex ratingVertex = (from v in ratingType.GetVertices() where ((int)v.GetProperty(ratingValuePropertyType)) == rating select v).FirstOrDefault();
+                Vertex ratingVertex = ratingVertices[rating - 1];
                 if (ratingVertex == null)
                 {
                   ratingVertex = ratingType.NewVertex();
                   ratingVertex.SetProperty(ratingValuePropertyType, rating);
+                  ratingVertices[rating - 1] = ratingVertex;
                 }
                 Vertex rated = userType.GetVertex(ratedId);
                 Edge aRatingOf = ratingOfType.NewEdge(rater, rated);
                 aRatingOf.SetProperty(ratingEdgePropertyType, rating);
                 Edge userRating = ratingEdgeType.NewEdge(rated, ratingVertex);
-                if (lineNumber >= 10000000) // remove this condition if you have time to wait a while and you have at least 16GB of RAM memory
-                  break;
               }
               Console.WriteLine("Done importing " + lineNumber + " ratings");
             }
@@ -141,12 +140,10 @@ namespace DatingRecommendations
         PropertyType ratingValuePropertyType = ratingType.FindProperty("RatingValue");
 
         EdgeType ratingEdgeType = g.FindEdgeType("UserToRating");
-        PropertyType userRatingEdgePropertyType = ratingEdgeType.FindProperty("UserRating");
 
         EdgeType ratingOfType = g.FindEdgeType("RatingOf");
         PropertyType ratingEdgePropertyType = ratingOfType.FindProperty("Rating");
         // Complex queries
-        var ratingsVertexEnum = from v in ratingType.GetVertices() orderby v.GetProperty(ratingValuePropertyType) descending select v;
         int ct = 0;
 
 // Given a user id, and based on the rated profiles, find other users who have rated similarly on the same profiles, and find other profiles to recommend based on what those other users have rated
@@ -169,8 +166,8 @@ namespace DatingRecommendations
         ct = 0;
         foreach (Vertex v in someUserRated)
         {
-          ct++;
-          //Console.WriteLine("User id: " + v.VertexId);
+          if (ct++ % 50 == 0) // don't print them all !
+            Console.WriteLine("User id: " + v.VertexId);
         }
         Console.WriteLine("Number of some user's rated profiles: " + ct);
 
@@ -178,8 +175,8 @@ namespace DatingRecommendations
         ct = 0;
         foreach (Vertex v in similarRatings)
         {
-          ct++;
-          //Console.WriteLine("User id: " + v.VertexId);
+          if (ct++ % 50 == 0) // don't print them all !
+            Console.WriteLine("User id: " + v.VertexId);
         }
         Console.WriteLine("Number of matching profiles: " + ct);
 
@@ -269,45 +266,54 @@ namespace DatingRecommendations
         }
         Console.WriteLine();
 
+        var ratingsVertexEnum = from v in ratingType.GetVertices() orderby v.GetProperty(ratingValuePropertyType) descending select v;
+        Vertex rating10Vertex = ratingsVertexEnum.First();
 // Get the 20 best rated profiles regardless of gender
-        var top = from v in ratingsVertexEnum
-                  from e in v.GetEdges(ratingEdgeType, Direction.In)
-                  select e.GetVertex(Direction.Out);
+        var top = from u in userType.GetVertices()
+                  let edgeCt = u.GetNumberOfEdges(ratingEdgeType, rating10Vertex, Direction.Out)
+                  orderby edgeCt descending
+                  select new { u, edgeCt };
+                   
         Console.WriteLine("20 best rated profiles regardless of gender");
         ct = 0;
-        foreach (Vertex v in top)
+        foreach (var v in top)
         {
           if (++ct > 20)
             break;
-          Console.WriteLine("User id: " + v.VertexId);
+          Console.WriteLine("User id: " + v.u.VertexId + "\t10 ratings: " + v.edgeCt);
         }
         Console.WriteLine();
 
 // Get the 20 best rated males
         Console.WriteLine("20 best rated male profiles");
-        var top20males = from Vertex v in top
-                         where ((Gender)v.GetProperty(genderType)) == Gender.Male
-                         select v;
+        var top20males = from u in userType.GetVertices()
+                         where ((Gender)u.GetProperty(genderType)) == Gender.Male
+                         let edgeCt = u.GetNumberOfEdges(ratingEdgeType, rating10Vertex, Direction.Out)
+                         orderby edgeCt descending
+                         select new { u, edgeCt };
+
         ct = 0;
-        foreach (Vertex v in top20males)
+        foreach (var v in top20males)
         {
           if (++ct > 20)
             break;
-          Console.WriteLine("Male User id: " + v.VertexId);
+          Console.WriteLine("Male User id: " + v.u.VertexId + " \t10 ratings: " + v.edgeCt);
         }
         Console.WriteLine();
 
 // Get the 20 best rated females
         Console.WriteLine("20 best rated female profiles");
-        var top20females = from Vertex v in top 
-                           where ((Gender)v.GetProperty(genderType)) == Gender.Female
-                           select v;
+        var top20females = from u in userType.GetVertices()
+                           where ((Gender)u.GetProperty(genderType)) == Gender.Female
+                           let edgeCt = u.GetNumberOfEdges(ratingEdgeType, rating10Vertex, Direction.Out)
+                           orderby edgeCt descending
+                           select new { u, edgeCt };
         ct = 0;
-        foreach (Vertex v in top20females)
+        foreach (var v in top20females)
         {
           if (++ct > 20)
             break;
-          Console.WriteLine("Female User id: " + v.VertexId);
+          Console.WriteLine("Female User id: " + v.u.VertexId + "\t10 ratings: " + v.edgeCt);
         }
         session.Commit();
       }
