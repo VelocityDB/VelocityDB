@@ -37,11 +37,10 @@ namespace TriangleCounter
     static int discoverTrianglesSingleCore(BTreeMap<int, int[]> edges)
     {
       int triangles = 0;
-      BTreeMapIterator<int, int[]> edgesItr = edges.Iterator();
-      while (edgesItr.MoveNext())
+      foreach (KeyValuePair<int, int[]> pair in edges)
       {
-        int nodeId = edgesItr.CurrentKey();
-        int[] edge = edgesItr.CurrentValue();
+        int nodeId = pair.Key;
+        int[] edge = pair.Value;
         int stop = edge.Length - 1;
         int i = stop;
         int edgeToStart, edgeTo;
@@ -105,26 +104,20 @@ namespace TriangleCounter
               Console.WriteLine("First parameter is numberOfWorkerThreads which must be an Int32");
           }
           bool useLinq = args.Length > 1;
-          Placement btreePlace = new Placement(40, 1, 1, 10000, 65500, true);
-          Placement edgeInfoPlace = new Placement(40, 10000, 1, 10000, 65500, true);
           session.BeginUpdate();
-          BTreeMap<int, int[]> edges;
           BTreeMapIterator<int, int[]> edgesItr;
           int[] edge = null;
-          Database edgeDb = session.OpenDatabase(40, false, false);
-          if (edgeDb != null)
+          BTreeMap<int, int[]> edges = session.AllObjects<BTreeMap<int, int[]>>(false).FirstOrDefault();
+          if (edges != null)
           {
             session.Commit();
             session.BeginRead();
-            edges = (BTreeMap<int, int[]>)session.Open(40, 1, 1, false);
           }
           else
           {
             DatabaseLocation location = session.DatabaseLocations.Default();
-            //location.CompressPages = false; // no compression should make it faster (?) 
-            session.NewDatabase(40, 395, "Edges");
             edges = new BTreeMap<int, int[]>(null, session, 6000);
-            edges.Persist(btreePlace, session, true);
+            session.Persist(edges);
             edgesItr = edges.Iterator();
             using (StreamReader stream = new StreamReader(edgesInputFile, true))
             {
@@ -255,9 +248,8 @@ namespace TriangleCounter
             triangles = discoverTrianglesSingleCore(edges);
 
           session.Commit();
-
         }
-        Console.WriteLine("Number of Triangles found: " + triangles);
+        Console.WriteLine("Number of Triangles found: " + triangles + ", time is " + DateTime.Now);
       }
       catch (Exception e)
       {

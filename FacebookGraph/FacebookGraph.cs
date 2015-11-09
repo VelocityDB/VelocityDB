@@ -35,9 +35,10 @@ namespace FacebookGraph
 
     static void Main(string[] args)
     {
-      DataCache.MaximumMemoryUse = 10000000000; // 10 GB, set this to what fits your case
+      DataCache.MaximumMemoryUse = 12000000000; // 12 GB, set this to what fits your case
       FacebookGraph facebookGraph = new FacebookGraph();
-      //SessionBase.BaseDatabasePath = "d:/Databases";
+      SessionBase.BaseDatabasePath = "d:/Databases";
+      SessionBase.BTreeAddFastTransientBatchSize = 10; // reduces memory usage
       bool import = args.Length > 0 && args[0].ToLower() == "-import";
       bool dirExist = Directory.Exists(Path.Combine(SessionBase.BaseDatabasePath, s_systemDir));
       if (import || !dirExist)
@@ -104,13 +105,11 @@ namespace FacebookGraph
               }
             }
           }
-          if (DataCache.MaximumMemoryUse >= 27000000000)
+          if (DataCache.MaximumMemoryUse <= 27000000000)
           {
-            if (lineNumber >= 120000) // remove this condition if you have time to wait a while...
+            if (lineNumber >= 100000) // remove this condition if you have time to wait a long while...
               break;
           }
-          else if (lineNumber >= 60000)
-            break;
         }
         Console.WriteLine("Done importing " + lineNumber + " users with " + fiendsCt + " friends");
         session.Commit();
