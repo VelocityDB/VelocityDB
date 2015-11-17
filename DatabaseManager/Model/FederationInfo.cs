@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using VelocityDb;
 using VelocityDb.Collection;
 using VelocityDb.Session;
+using VelocityDb.TypeInfo;
 
 namespace DatabaseManager.Model
 {
@@ -238,7 +239,7 @@ namespace DatabaseManager.Model
       }
 
       // Obtain types from names and fill in schema.
-      pSchema.PersistableTypes = lTypeNames.Select(lTypeName => Type.GetType(lTypeName, true)).ToArray();
+      pSchema.PersistableTypes = lTypeNames.Select(lTypeName => DataMember.GetTypeFromAnyAssemblyVersion(lTypeName)).ToArray();
       pSchema.LoadedAssemblies = lActualDependencies.ToArray();
       pSchema.LoadedAssembliesNames = lAssemblyNames.ToArray();
     }

@@ -154,6 +154,9 @@ namespace DatabaseManager
       newLocationMutable.IsBackupLocation = dbLocation.IsBackupLocation;
       newLocationMutable.DirectoryPath = dbLocation.DirectoryPath;
       newLocationMutable.HostName = dbLocation.HostName;
+      if (dbLocation.DesKey != null)
+        newLocationMutable.DesKey = SessionBase.TextEncoding.GetString(dbLocation.DesKey, 0, dbLocation.DesKey.Length);
+
       var popup = new NewDatabaseLocationDialog(newLocationMutable, dbLocation);
       bool? result = popup.ShowDialog();
       if (result != null && result.Value)
@@ -163,8 +166,11 @@ namespace DatabaseManager
           DatabaseLocation newLocation = new DatabaseLocation(newLocationMutable.HostName, newLocationMutable.DirectoryPath, newLocationMutable.StartDatabaseNumber,
             newLocationMutable.EndDatabaseNumber, session, newLocationMutable.CompressPages, newLocationMutable.PageEncryption, newLocationMutable.IsBackupLocation,
             newLocationMutable.IsBackupLocation ? newLocationMutable.BackupOfOrForLocation : dbLocation.BackupOfOrForLocation);
+          if (session.InTransaction)
+            session.Commit();
           session.BeginUpdate();
-          session.NewLocation(newLocation);
+          newLocation = session.NewLocation(newLocation);
+          newLocation.DesKey = SessionBase.TextEncoding.GetBytes(newLocationMutable.DesKey);
           session.Commit();
           m_viewModel = new AllFederationsViewModel();
           base.DataContext = m_viewModel;

@@ -289,7 +289,6 @@ namespace NUnitTests
     }   
  
     [Test]
-    [ExpectedException(typeof(System.InvalidOperationException))]
     public void CreateDefaultCompareFailException()
     {
       using (SessionNoServer session = new SessionNoServer(systemDir))

@@ -62,11 +62,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="VelocityDb, Version=5.0.11.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.0.11\lib\net40\VelocityDb.dll</HintPath>
+      <HintPath>..\packages\VelocityDB.5.0.12\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="VelocityGraph, Version=2.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.2.6.1\lib\Net40\VelocityGraph.dll</HintPath>
+    <Reference Include="VelocityGraph, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.2.7\lib\Net40\VelocityGraph.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

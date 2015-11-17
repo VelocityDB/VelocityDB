@@ -100,7 +100,7 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="VelocityDb, Version=5.0.11.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.0.11\lib\net40\VelocityDb.dll</HintPath>
+      <HintPath>..\packages\VelocityDB.5.0.12\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease">

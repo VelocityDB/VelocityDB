@@ -260,6 +260,26 @@ namespace VelocityGraph
       }
     }
 
+    internal Dictionary<Vertex, HashSet<Edge>> Traverse(Vertex vertex1, Direction dir, ISet<EdgeType> edgeTypesToTraverse = null)
+    {
+      Dictionary<Vertex, HashSet<Edge>> result = new Dictionary<Vertex, HashSet<Edge>>(10);
+      if (edgeTypesToTraverse == null)
+        edgeTypesToTraverse = EdgeTypes;
+      foreach (EdgeType edgeType in edgeTypesToTraverse)
+      {
+        var dict = Traverse(vertex1, edgeType, dir);
+        foreach (var keyValue in dict)
+        {
+          HashSet<Edge> edgeSet;
+          if (result.TryGetValue(keyValue.Key, out edgeSet))
+            edgeSet.UnionWith(keyValue.Value);
+          else
+            result.Add(keyValue.Key, keyValue.Value);
+        }
+      }
+      return result;
+    }
+
     /// <summary>
     /// Selects all neighbor Vertices from or to this vertex and for the given edge type.
     /// </summary>

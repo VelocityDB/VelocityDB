@@ -112,7 +112,7 @@ namespace NUnitTests
         allSupported2 = (AllSupported)session.Open(id);
         allSupported2.Update();
         allSupported2.nullableaDouble = 0.5;
-        allSupported2.nullabledateTime = DateTime.MaxValue;
+        allSupported2.NullableDateTime = DateTime.MaxValue;
         allSupported2 = null;
         session.Commit();
       }
@@ -123,7 +123,15 @@ namespace NUnitTests
         allSupported2 = (AllSupported)session.Open(id);
         Assert.NotNull(allSupported2);
         Assert.AreEqual(allSupported2.nullableaDouble, 0.5);
-        Assert.AreEqual(allSupported2.nullabledateTime, DateTime.MaxValue);
+        Assert.AreEqual(allSupported2.NullableDateTime, DateTime.MaxValue);
+        session.Commit();
+        session.BeginUpdate();
+        allSupported2.NullableDateTime = DateTime.UtcNow;
+
+        session.Commit();
+        session.BeginRead();
+        allSupported2 = (AllSupported)session.Open(id);
+        Assert.AreEqual(DateTimeKind.Utc, allSupported2.NullableDateTime.Value.Kind);
         session.Commit();
       }
     }

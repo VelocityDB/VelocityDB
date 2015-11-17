@@ -303,11 +303,22 @@ namespace VelocityGraph
     /// Selects all neighbor Vertices from or to this vertex and for the given edge type.
     /// </summary>
     /// <param name="etype">Edge type identifier.</param>
-    /// <param name="dir">Direction</param>
+    /// <param name="dir">Direction to traverse edges</param>
     /// <returns>Dictionary of vertex key with edge path(s) to vertex</returns>
     public Dictionary<Vertex, HashSet<Edge>> Traverse(EdgeType etype, Direction dir)
     {
       return m_vertexType.Traverse(this, etype, dir);
+    }
+
+    /// <summary>
+    /// Selects all neighbor Vertices from or to this vertex and for the given edge types.
+    /// </summary>
+    /// <param name="dir">Direction to traverse edges</param>
+    /// <param name="edgeTypesToTraverse">the type of edges to follow, by default null which means follow all edge types</param>
+    /// <returns></returns>
+    public Dictionary<Vertex, HashSet<Edge>> Traverse(Direction dir, ISet<EdgeType> edgeTypesToTraverse = null)
+    {
+      return m_vertexType.Traverse(this, dir, edgeTypesToTraverse);
     }
 
     struct PathInfo
@@ -325,9 +336,10 @@ namespace VelocityGraph
     /// Traverses graph from this Vertex to a target Vertex using Breadth-first search like in Dijkstra's algorithm
     /// </summary>
     /// <param name="toVertex">the goal Vertex</param>
-    /// <param name="et">the type of edges to follow</param>
     /// <param name="maxHops">maximum number of hops between this Vertex and to Vertex</param>
     /// <param name="all">find or not find all paths to goal Vertex</param>
+    /// <param name="dir">Direction to traverse edges</param>
+    /// <param name="edgeTypesToTraverse">the type of edges to follow, by default null which means follow all edge types</param>
     /// <param name="includedVertices">one or more Vertex instances that MUST be in the path for the path to be traversed i.e. if a path does exist
     /// to the specified toVertex, but does not include all the instances in includedVertices set, the Traverse method will exclude that path</param>
     /// <param name="excludedVertices">one or more Vertex instances that MUST NOT be in the path for the path to be traversed i.e. if a path does exist
@@ -348,7 +360,7 @@ namespace VelocityGraph
     /// <param name="validateEdge">A function that will be called before accepting an Edge in path to toVertex. If function returns true then this Edge is accepted in path; otherwise edge is rejected</param>
     /// <param name="validateEdges">A function that will be called before accepting a candidate Edges list in path to toVertex. If function returns true then this Edge list is accepted in path; otherwise edge list is rejected</param>
     /// <returns>List of paths to goal Vertex</returns>
-    public List<List<Edge>> Traverse(Vertex toVertex, EdgeType et, int maxHops, bool all, ISet<Vertex> includedVertices = null, ISet<Vertex> excludedVertices = null,
+    public List<List<Edge>> Traverse(Vertex toVertex, int maxHops, bool all, Direction dir = Direction.Both, ISet<EdgeType> edgeTypesToTraverse = null, ISet<Vertex> includedVertices = null, ISet<Vertex> excludedVertices = null,
       ISet<Edge> includedEdges = null, ISet<Edge> excludedEdges = null, ISet<PropertyType> includedVertexProperty = null, ISet<PropertyType> excludedVertexProperty = null,
       ISet<PropertyType> includedEdgeProperty = null, ISet<PropertyType> excludedEdgeProperty = null, Func<Vertex, bool> validateVertex = null, Func<Edge, bool> validateEdge = null,
       Func<List<Edge>, bool> validateEdges = null)
@@ -411,7 +423,7 @@ namespace VelocityGraph
       while (q.Count > 0)
       {
         pathInfo = q.Dequeue();
-        Dictionary<Vertex, HashSet<Edge>> friends = pathInfo.node.Traverse(et, Direction.Out);
+        Dictionary<Vertex, HashSet<Edge>> friends = pathInfo.node.Traverse(dir, edgeTypesToTraverse);
         if (friends.TryGetValue(toVertex, out edgeSet))
         {
           foreach (Edge edge in edgeSet)

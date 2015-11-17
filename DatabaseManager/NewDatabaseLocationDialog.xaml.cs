@@ -35,6 +35,7 @@ namespace DatabaseManager
         BackupOfLocationLabel.Content = "Backup";
         BackupOfLocationBox.IsReadOnly = true;
       }
+      EncryptionBox.SelectedValue = m_newLocation.PageEncryption;
       base.DataContext = this;
     }
 
@@ -61,7 +62,11 @@ namespace DatabaseManager
     {
       get
       {
-        return new CollectionView(Enum.GetValues(typeof(PageInfo.encryptionKind)));
+        Array encryptionKinds = Enum.GetValues(typeof(PageInfo.encryptionKind));
+        PageInfo.encryptionKind[] filtered = new PageInfo.encryptionKind[2];
+        filtered[0] = (PageInfo.encryptionKind) encryptionKinds.GetValue(0); // not all encryption kinds publicly supported (yet)
+        filtered[1] = (PageInfo.encryptionKind) encryptionKinds.GetValue(1); // not all encryption kinds publicly supported (yet)
+        return new CollectionView(filtered);
       }
     }
 
@@ -144,6 +149,7 @@ namespace DatabaseManager
       }
       m_newLocation.CompressPages = (PageInfo.compressionKind)CompressionBox.SelectedValue;
       m_newLocation.PageEncryption = (PageInfo.encryptionKind)EncryptionBox.SelectedValue;
+      m_newLocation.DesKey = EncyptionKeyTextBox.Text;
       m_newLocation.HostName = HostTextBox.Text;
       m_newLocation.DirectoryPath = DirectoryTextBox.Text;
       DialogResult = true;

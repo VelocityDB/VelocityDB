@@ -19,6 +19,7 @@ namespace DatabaseManager.Model
     public string HostName { get; set;}
     public SessionBase Session { get; set; }
 
+    public string DesKey { get; set; }
     public string DirectoryPath { get; set; }
 
     public DatabaseLocation BackupOfOrForLocation { get; set; }

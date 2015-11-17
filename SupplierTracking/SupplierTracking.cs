@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using VelocityDb;
 using VelocityDb.Session;
 using VelocityGraph;
+using Frontenac.Blueprints.Util.IO.GraphJson;
 
 namespace SupplierTracking
 {
@@ -160,7 +161,21 @@ namespace SupplierTracking
         Console.WriteLine("Supplier 1 to Warehouse D total: " + supplierTracking.CalculateTotalTo(supplier1, supplierWarehouseEdgeType, moveToS1EdgeType, howManyS1Property, wareHouseD1));
         Console.WriteLine("Supplier 2 to Warehouse D total: " + supplierTracking.CalculateTotalTo(supplier2, supplierWarehouseEdgeType, moveToS2EdgeType, howManyS2Property, wareHouseD1));
         Console.WriteLine("Supplier 3 to Warehouse D total: " + supplierTracking.CalculateTotalTo(supplier3, supplierWarehouseEdgeType, moveToS3EdgeType, howManyS3Property, wareHouseD1));
-        g.ExportToGraphJson("c:/SupplierTrackingExportToGraphJson.json");
+        VelocityGraph.GraphJsonSettings gs = new VelocityGraph.GraphJsonSettings();
+        gs.ClusterFuncProp = v =>
+        {
+          string s = (string)v.GetProperty("name");
+          if (s == null)
+            return 0;
+          return Convert.ToInt32(s.First());
+        };
+        gs.VertexTypeFuncProp = v =>
+        {
+          Vertex vertex = v as Vertex;
+          string s = (string)vertex.VertexType.TypeName;
+          return s;
+        }; 
+        g.ExportToGraphJson("c:/SupplierTrackingExportToGraphJson.json", gs);
         Graph g2 = new Graph(session);
         session.Persist(g2);
         g2.ImportGraphJson("c:/SupplierTrackingExportToGraphJson.json");
@@ -173,10 +188,12 @@ namespace SupplierTracking
     {
       int total = 0;
       HashSet<Vertex> excludeSet = new HashSet<Vertex>();
+      HashSet<EdgeType> edgeTypesToTraverse = new HashSet<EdgeType>();
+      edgeTypesToTraverse.Add(moveToEdgeType);
       foreach (IEdge wareHouseEdge in supplier.GetEdges(supplierWarehouseEdgeType, Direction.Out))
       {
         Vertex supplierWareHouse = (Vertex)wareHouseEdge.GetVertex(Direction.In);
-        var allPaths = supplierWareHouse.Traverse(toVertex, moveToEdgeType, 10, true, null, excludeSet);
+        var allPaths = supplierWareHouse.Traverse(toVertex, 10, true, Direction.Out, edgeTypesToTraverse, null, excludeSet);
         foreach (List<Edge> path in allPaths)
         {
           if (path.Count > 0)

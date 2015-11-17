@@ -215,7 +215,20 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     public Int16? nullableint16;
     public Int32? nullableint32;
     public Int64? nullableint64;
-    public DateTime? nullabledateTime;
+    DateTime? m_nullabledateTime;
+    public DateTime? NullableDateTime
+    {
+      get
+      {
+        return m_nullabledateTime;
+      }
+      set
+      {
+        Update();
+        m_nullabledateTime = value;
+      }
+    }
+
     public TimeSpan? nullabletimeSpan;
     public Decimal? nullableDecimal;
     WeakIOptimizedPersistableReference<OptimizedPersistable> m_weakIOptimizedPersistableReference;
@@ -566,7 +579,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       jaggedArray[0] = new int[] { 1, 3, 5, 7, 9 };
       jaggedArray[1] = new int[] { 0, 2, 4, 6 };
       jaggedArray[2] = new int[] { 11, 22 };
-      nullabledateTime = null;
+      m_nullabledateTime = null;
       m_nullableByte = null;
       m_enumByte = ByteEnum.b;
       m_enumInt16 = Int16Enum.c;
