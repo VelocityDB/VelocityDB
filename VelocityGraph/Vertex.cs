@@ -321,15 +321,42 @@ namespace VelocityGraph
       return m_vertexType.Traverse(this, dir, edgeTypesToTraverse);
     }
 
-    struct PathInfo
+    class PathInfo
     {
-      public PathInfo(Vertex node, List<Edge> edgePath)
+      Vertex m_node;
+      List<Edge> m_edgePath;
+      HashSet<Vertex> m_visited;
+      public PathInfo(Vertex node, List<Edge> edgePath, HashSet<Vertex> visited)
       {
-        this.node = node;
-        this.edgePath = edgePath;
+        m_node = node;
+        m_edgePath = edgePath;
+        m_visited = new HashSet<Vertex>();
+        if (visited != null)
+          m_visited.UnionWith(visited);
       }
-      public Vertex node;
-      public List<Edge> edgePath;
+      public Vertex Node
+      {
+        get
+        {
+          return m_node;
+        }
+      }
+
+      public List<Edge> EdgePath
+      {
+        get
+        {
+          return m_edgePath;
+        }
+      }
+
+      public HashSet<Vertex> Visited
+      {
+        get
+        {
+          return m_visited;
+        }
+      }
     }
 
     /// <summary>
@@ -366,11 +393,8 @@ namespace VelocityGraph
       Func<List<Edge>, bool> validateEdges = null)
     {
       Queue<PathInfo> q = new Queue<PathInfo>();
-      HashSet<Vertex> visited = new HashSet<Vertex>();
       HashSet<PropertyType> vertexPropertyTypesToFind = null;
       HashSet<PropertyType> edgePropertyTypesToFind = null;
-      visited.Add(this);
-      visited.Add(toVertex); // don't pass through end vertex when finding paths (only end a path with toVertex)
       HashSet<Edge> edgeSet;
       List<Edge> path = new List<Edge>();
       List<List<Edge>> resultPaths = new List<List<Edge>>();
@@ -416,14 +440,16 @@ namespace VelocityGraph
       }
       else
         includedEdgePropertySize = 0;
+      PathInfo pathInfo = new PathInfo(this, path, null);
       if (excludedVertices != null)
-        visited.UnionWith(excludedVertices);
-      PathInfo pathInfo = new PathInfo(this, path);
+        pathInfo.Visited.UnionWith(excludedVertices);
+      pathInfo.Visited.Add(this);
+      pathInfo.Visited.Add(toVertex);
       q.Enqueue(pathInfo);
       while (q.Count > 0)
       {
         pathInfo = q.Dequeue();
-        Dictionary<Vertex, HashSet<Edge>> friends = pathInfo.node.Traverse(dir, edgeTypesToTraverse);
+        Dictionary<Vertex, HashSet<Edge>> friends = pathInfo.Node.Traverse(dir, edgeTypesToTraverse);
         if (friends.TryGetValue(toVertex, out edgeSet))
         {
           foreach (Edge edge in edgeSet)
@@ -431,7 +457,7 @@ namespace VelocityGraph
             if ((excludedEdges == null || excludedEdges.Contains(edge) == false) && (validateEdge == null || validateEdge(edge)))
             {
               //Console.WriteLine(this + " and " + toVertex + " have a friendship link");
-              List<Edge> edgePath = pathInfo.edgePath;
+              List<Edge> edgePath = pathInfo.EdgePath;
               edgePath.Add(edge);
               if (validateEdges == null || validateEdges(edgePath))
               {
@@ -493,10 +519,10 @@ namespace VelocityGraph
             }
           }
         }
-        if (pathInfo.edgePath.Count < maxHops)
+        if (pathInfo.EdgePath.Count < maxHops)
           foreach (KeyValuePair<Vertex, HashSet<Edge>> v in friends)
           {
-            if (visited.Contains(v.Key) == false)
+            if (pathInfo.Visited.Contains(v.Key) == false)
               foreach (Edge edge in v.Value)
               {
                 if (excludedEdges == null || excludedEdges.Contains(edge) == false)
@@ -508,7 +534,7 @@ namespace VelocityGraph
                     {
                       if (pt.HasPropertyValue(v.Key.VertexId))
                       {
-                        visited.Add(v.Key);
+                        pathInfo.Visited.Add(v.Key);
                         doExclude = true;
                         break;
                       }
@@ -528,11 +554,11 @@ namespace VelocityGraph
                   }
 
                   if (!doExclude)
-                  {
-                    visited.Add(v.Key);
-                    path = new List<Edge>(pathInfo.edgePath);
+                  {                   
+                    path = new List<Edge>(pathInfo.EdgePath);
                     path.Add(edge);
-                    PathInfo newPath = new PathInfo(v.Key, path);
+                    PathInfo newPath = new PathInfo(v.Key, path, pathInfo.Visited);
+                    newPath.Visited.Add(v.Key);
                     if (validateEdges == null || validateEdges(path))
                     {
                       if (validateVertex == null || validateVertex(v.Key))

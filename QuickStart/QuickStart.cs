@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using VelocityDb;
@@ -14,19 +15,28 @@ namespace QuickStart
 
     static int Main(string[] args)
     {
-      SessionNoServer session = new SessionNoServer(systemDir);
-      Console.WriteLine("Running with databases in directory: " + session.SystemDirectory);
-      session.BeginUpdate();
-      Company company = new Company();
-      company.Name = "MyCompany";
-      session.Persist(company);
-
-      Employee employee1 = new Employee();
-      employee1.Employer = company;
-      employee1.FirstName = "John";
-      employee1.LastName = "Walter";
-      session.Persist(employee1);
-      session.Commit();
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        Console.WriteLine("Running with databases in directory: " + session.SystemDirectory);
+        try
+        {
+          session.BeginUpdate();
+          Company company = new Company();
+          company.Name = "MyCompany";
+          session.Persist(company);
+          Employee employee1 = new Employee();
+          employee1.Employer = company;
+          employee1.FirstName = "John";
+          employee1.LastName = "Walter";
+          session.Persist(employee1);
+          session.Commit();
+        }
+        catch (Exception ex)
+        {
+          Trace.WriteLine(ex.Message);
+          session.Abort();
+        }
+      }
       Retrieve();
       return 0;
     }

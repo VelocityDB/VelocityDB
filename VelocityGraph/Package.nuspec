@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>VelocityGraph</id>
-    <version>2.7</version>
+    <version>2.7.1</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
     <licenseUrl>http://www.VelocityGraph.com/Eula.htm</licenseUrl>
@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <summary>VelocityGraph is a graph database for .NET. It is the first pure .NET graph database to fully implement the standard Blueprints graph API.</summary>
     <description>Pure fast and scalable .NET graph database. The interface classes used are Frontenac.Blueprints.</description>
-    <releaseNotes>Updated Vertex.Traverse API. Updated GraphJson support for VelocityGraph exports.</releaseNotes>
+    <releaseNotes>Fix for Vertex.Traverse and GraphJson export (source and target Vertex were reversed).</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>Hybrid Object Graph Database .NET Blueprints Distributable Embeddable</tags>
     <dependencies>

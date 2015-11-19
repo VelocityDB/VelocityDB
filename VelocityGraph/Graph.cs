@@ -1564,8 +1564,8 @@ namespace VelocityGraph
       if (isEdge)
       {
         var edge = element as IEdge;
-        var source = edge.GetVertex(Direction.In).Id;
-        var target = edge.GetVertex(Direction.Out).Id;
+        var source = edge.GetVertex(Direction.Out).Id;
+        var target = edge.GetVertex(Direction.In).Id;
         var caption = edge.Label;
 
         map.Add(settings.SourceProp, source);
