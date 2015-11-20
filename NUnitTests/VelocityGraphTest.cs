@@ -22,6 +22,7 @@ using EdgeIdVertexId = System.UInt64;
 using System.Threading;
 using System.Net;
 using System.Diagnostics;
+using VelocityDbSchema;
 
 namespace NUnitTests
 {
@@ -383,6 +384,188 @@ namespace NUnitTests
       }
     }
 
+    [Test]
+    public void TraverseTest()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session);
+        session.Persist(g);
+
+        VertexType Airport_Type = g.NewVertexType("Airport");
+        PropertyType Airport_Name_Type = g.NewVertexProperty(Airport_Type, "Airport", DataType.String, PropertyKind.Indexed);
+
+        VertexType Flight_Type = g.NewVertexType("Flight");
+        PropertyType Flight_Name_Type = g.NewVertexProperty(Flight_Type, "Flight", DataType.String, PropertyKind.Indexed);
+        PropertyType Flight_Origin_Type = g.NewVertexProperty(Flight_Type, "Origin", DataType.String, PropertyKind.Indexed);
+        PropertyType Flight_Dest_Type = g.NewVertexProperty(Flight_Type, "Destination", DataType.String, PropertyKind.Indexed);
+
+        EdgeType origin_for = g.NewEdgeType("origin for", true, Airport_Type, Flight_Type);
+        EdgeType arrives_at = g.NewEdgeType("arrives at", true, Flight_Type, Airport_Type);
+
+        Vertex sydney = Airport_Type.NewVertex();
+        sydney.SetProperty(Airport_Name_Type, "SYD");
+
+        Vertex london = Airport_Type.NewVertex();
+        london.SetProperty(Airport_Name_Type, "LHR");
+
+        Vertex madrid = Airport_Type.NewVertex();
+        madrid.SetProperty(Airport_Name_Type, "MAD");
+
+        Vertex dubai = Airport_Type.NewVertex();
+        dubai.SetProperty(Airport_Name_Type, "DBX");
+
+        // sydney to london
+        Vertex qf1 = Flight_Type.NewVertex();
+        qf1.SetProperty(Flight_Name_Type, "QF1");
+        qf1.SetProperty(Flight_Origin_Type, "SYD");
+        qf1.SetProperty(Flight_Dest_Type, "LHR");
+
+        //london to sydney
+        Vertex qf2 = Flight_Type.NewVertex();
+        qf2.SetProperty(Flight_Name_Type, "QF2");
+        qf2.SetProperty(Flight_Origin_Type, "LHR");
+        qf2.SetProperty(Flight_Dest_Type, "SYD");
+
+        //london to madrid
+        Vertex ba512 = Flight_Type.NewVertex();
+        ba512.SetProperty(Flight_Name_Type, "BA512");
+        ba512.SetProperty(Flight_Origin_Type, "LHR");
+        ba512.SetProperty(Flight_Dest_Type, "MAD");
+
+        //madrid to london
+        Vertex ba461 = Flight_Type.NewVertex();
+        ba461.SetProperty(Flight_Name_Type, "BA461");
+        ba461.SetProperty(Flight_Origin_Type, "MAD");
+        ba461.SetProperty(Flight_Dest_Type, "LHR");
+
+        //sydney to dubai
+        Vertex qf414 = Flight_Type.NewVertex();
+        qf414.SetProperty(Flight_Name_Type, "QF414");
+        qf414.SetProperty(Flight_Origin_Type, "SYD");
+        qf414.SetProperty(Flight_Dest_Type, "DBX");
+
+        //dubai to sydney
+        Vertex qf413 = Flight_Type.NewVertex();
+        qf413.SetProperty(Flight_Name_Type, "QF413");
+        qf413.SetProperty(Flight_Origin_Type, "DBX");
+        qf413.SetProperty(Flight_Dest_Type, "SYD");
+
+        //sydney to london
+        Vertex ba999 = Flight_Type.NewVertex();
+        ba999.SetProperty(Flight_Name_Type, "BA999");
+        ba999.SetProperty(Flight_Origin_Type, "SYD");
+        ba999.SetProperty(Flight_Dest_Type, "LHR");
+
+        Vertex ba888 = Flight_Type.NewVertex();
+        ba888.SetProperty(Flight_Name_Type, "BA888");
+        ba888.SetProperty(Flight_Origin_Type, "LHR");
+        ba888.SetProperty(Flight_Dest_Type, "SYD");
+
+        Edge anEdge;
+        anEdge = g.NewEdge(origin_for, sydney, qf1);
+        anEdge = g.NewEdge(arrives_at, qf1, london);
+
+        anEdge = g.NewEdge(origin_for, london, qf2);
+        anEdge = g.NewEdge(arrives_at, qf2, sydney);
+
+        anEdge = g.NewEdge(origin_for, london, ba512);
+        anEdge = g.NewEdge(arrives_at, ba512, madrid);
+
+        anEdge = g.NewEdge(origin_for, madrid, ba461);
+        anEdge = g.NewEdge(arrives_at, ba461, london);
+
+        anEdge = g.NewEdge(origin_for, sydney, qf414);
+        anEdge = g.NewEdge(arrives_at, qf414, dubai);
+
+        anEdge = g.NewEdge(origin_for, dubai, qf413);
+        anEdge = g.NewEdge(arrives_at, qf413, sydney);
+
+        anEdge = g.NewEdge(origin_for, sydney, ba999);
+        anEdge = g.NewEdge(arrives_at, ba999, london);
+
+        anEdge = g.NewEdge(origin_for, london, ba888);
+        anEdge = g.NewEdge(arrives_at, ba888, sydney);
+
+        g.ExportToGraphJson(@"c:/Temp/testTraverse.json");
+
+        Dictionary<Vertex, HashSet<Edge>> to_sydney = sydney.Traverse(Direction.In);
+        Dictionary<Vertex, HashSet<Edge>> from_sydney = sydney.Traverse(Direction.Out);
+        Dictionary<Vertex, HashSet<Edge>> to_from_sydney = sydney.Traverse(Direction.Both);
+
+        Dictionary<Vertex, HashSet<Edge>> to_london = london.Traverse(Direction.In);
+        Dictionary<Vertex, HashSet<Edge>> from_london = london.Traverse(Direction.Out);
+        Dictionary<Vertex, HashSet<Edge>> to_from_london = london.Traverse(Direction.Both);
+
+        HashSet<EdgeType> edge_set = new HashSet<EdgeType>();
+
+        edge_set.Add(origin_for);
+        edge_set.Add(arrives_at);
+
+        var to_madrid = sydney.Traverse(madrid, 99, true, Direction.Out); // (madrid, 99, false, edge_set);
+
+        foreach (List<Edge> list_edge in to_madrid)
+        {
+          foreach (Edge edge in list_edge)
+          {
+            if (edge.Head.VertexType == Flight_Type)
+            {
+              Trace.WriteLine((string)Flight_Name_Type.GetPropertyValue(edge.Head.VertexId) + " " +
+                  (string)Flight_Origin_Type.GetPropertyValue(edge.Head.VertexId) + " " +
+                  (string)Flight_Dest_Type.GetPropertyValue(edge.Head.VertexId));
+            }
+          }
+          Trace.WriteLine("");
+          Trace.WriteLine("_________________________");
+          Trace.WriteLine("");
+        }
+        Trace.WriteLine("");
+        Trace.WriteLine("############################");
+        Trace.WriteLine("");
+
+        var to_sydney_path = madrid.Traverse(sydney, 99, true, Direction.Out); // (madrid, 99, false, edge_set);
+
+        foreach (List<Edge> list_edge in to_sydney_path)
+        {
+          foreach (Edge edge in list_edge)
+          {
+            if (edge.Head.VertexType == Flight_Type)
+            {
+              Trace.WriteLine((string)Flight_Name_Type.GetPropertyValue(edge.Head.VertexId) + " " +
+                  (string)Flight_Origin_Type.GetPropertyValue(edge.Head.VertexId) + " " +
+                  (string)Flight_Dest_Type.GetPropertyValue(edge.Head.VertexId));
+            }
+          }
+          Trace.WriteLine("");
+          Trace.WriteLine("_________________________");
+          Trace.WriteLine("");
+        }
+        Trace.WriteLine("");
+        Trace.WriteLine("############################");
+        Trace.WriteLine("");
+
+        var to_london1 = sydney.Traverse(london, 99, true, Direction.Out);
+
+        foreach (List<Edge> list_edge in to_london1)
+        {
+          foreach (Edge edge in list_edge)
+          {
+            if (edge.Head.VertexType == Flight_Type)
+            {
+              Trace.WriteLine((string)Flight_Name_Type.GetPropertyValue(edge.Head.VertexId) + " " +
+                  (string)Flight_Origin_Type.GetPropertyValue(edge.Head.VertexId) + " " +
+                  (string)Flight_Dest_Type.GetPropertyValue(edge.Head.VertexId));
+            }
+          }
+          Trace.WriteLine("");
+          Trace.WriteLine("_________________________");
+          Trace.WriteLine("");
+        }
+        session.Commit();
+      }
+    }
+
     static string systemHost = Dns.GetHostName();
 
     [TestCase(false)]
@@ -414,21 +597,35 @@ namespace NUnitTests
         PropertyType movieTitleType = g.NewVertexProperty(movieType, "TITLE", DataType.String, PropertyKind.Indexed);
         PropertyType movieYearType = g.NewVertexProperty(movieType, "YEAR", DataType.Integer, PropertyKind.Indexed);
         PropertyType objectPropertyType = g.NewVertexProperty(movieType, "object", DataType.Object, PropertyKind.NotIndexed);
-        PropertyType objectPropertyTypeIndexed = g.NewVertexProperty(movieType, "object2", DataType.IOptimizedPersistable, PropertyKind.Indexed);
+        PropertyType objectPropertyTypeIndexed = g.NewVertexProperty(movieType, "director", DataType.IOptimizedPersistable, PropertyKind.Indexed);
 
         Vertex mVickyCB = movieType.NewVertex();
         mVickyCB.SetProperty(movieTitleType, "Vicky Cristina Barcelona");
         mVickyCB.SetProperty(movieYearType, (int)(2008));
-        OptimizedPersistable pObj = new OptimizedPersistable();
+        Person pObj = new Person();
         session.Persist(pObj);
         mVickyCB.SetProperty(objectPropertyType, pObj);
-        pObj = new OptimizedPersistable();
-        session.Persist(pObj);
+        pObj = new Person();
+        Person pSave = null;
+        Vertex vSave = null;
         mVickyCB.SetProperty(objectPropertyTypeIndexed, pObj);
+        for (int i = 0; i < 100; i++)
+        {         
+          Vertex vertex =  movieType.NewVertex();
+          pObj = new Person();
+          vertex.SetProperty(objectPropertyTypeIndexed, pObj);
+          if (i == 44)
+          {
+            pSave = pObj;
+            vSave = vertex;
+          }
+        }
+        Vertex lookup = objectPropertyTypeIndexed.GetPropertyVertex(pSave);
+        Assert.AreEqual(lookup, vSave);
         Vertex mMatsCB = movieType.NewVertex();
         mMatsCB.SetProperty(movieTitleType, "Mats Cristina Barcelona");
         mMatsCB.SetProperty(movieYearType, (int)(2008));
-        pObj = new OptimizedPersistable();
+        pObj = new Person();
         session.Persist(pObj);
         mMatsCB.SetProperty(objectPropertyType, pObj);
         session.Commit();

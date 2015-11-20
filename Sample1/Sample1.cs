@@ -10,16 +10,18 @@ namespace Sample1
 
     static int Main(string[] args)
     {
-      SessionNoServer session = new SessionNoServer(systemDir);
-      Console.WriteLine("Running with databases in directory: " + session.SystemDirectory);
-      session.BeginUpdate();
-      Person person = new Person("Robin", "Hood", 30);
-      session.Persist(person);
-      person = new Person("Bill", "Gates", 56);
-      session.Persist(person);
-      person = new Person("Steve", "Jobs", 56);
-      session.Persist(person);
-      session.Commit();
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        Console.WriteLine("Running with databases in directory: " + session.SystemDirectory);
+        session.BeginUpdate();
+        Person person = new Person("Robin", "Hood", 30);
+        session.Persist(person);
+        person = new Person("Bill", "Gates", 56);
+        session.Persist(person);
+        person = new Person("Steve", "Jobs", 56);
+        session.Persist(person);
+        session.Commit();
+      }
       return 0;
     }
   }
