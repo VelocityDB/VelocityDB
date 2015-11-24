@@ -134,41 +134,42 @@ namespace FacebookGraph
 
         var someUserFriends = from Edge e in someUser.GetEdges(friendEdgeType, Direction.Out)
                               select e.Head;
+        var someUser3LevelNetwork = someUser.Traverse(3, true, Direction.Out);
         HashSet<Edge> edges = new HashSet<Edge>();
         Edge edge = (Edge)someUser.GetEdges(friendEdgeType, Direction.Out).Skip(1).First();
         edges.Add(edge);
         HashSet<EdgeType> edgeTypesToTraverse = new HashSet<EdgeType>();
         edgeTypesToTraverse.Add(friendEdgeType);
         // Find Shortest path between two given user ids
-        List<List<Edge>> path = someUser.Traverse(someUser2, 10, false, Direction.Out, edgeTypesToTraverse);
+        List<List<Edge>> path = someUser.Traverse(4, false, Direction.Out, someUser2, edgeTypesToTraverse);
         Debug.Assert(path.Count > 0);
-        var path2 = someUser.Traverse(userType.GetVertex(41), 10, false, Direction.Out, edgeTypesToTraverse);
+        var path2 = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(41), edgeTypesToTraverse);
         HashSet<Vertex> vertices = new HashSet<Vertex>();
         vertices.Add(someUser2);
-        var path3 = someUser.Traverse(userType.GetVertex(2876), 10, false, Direction.Out, edgeTypesToTraverse, vertices); // path must include vertices
-        var path3b = someUser.Traverse(userType.GetVertex(2876), 10, false, Direction.Out, edgeTypesToTraverse, null, vertices); // path must NOT include vertices
-        var path3c = someUser.Traverse(userType.GetVertex(2876), 10, false, Direction.Out, edgeTypesToTraverse, null, null, edges); // path must include edges
-        var path3d = someUser.Traverse(userType.GetVertex(2876), 10, false, Direction.Out, edgeTypesToTraverse, null, null, null, edges); // path must NOT include edges
+        var path3 = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(9465810), edgeTypesToTraverse, vertices); // path must include vertices
+        var path3b = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(9465810), edgeTypesToTraverse, null, vertices); // path must NOT include vertices
+        var path3c = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(9465810), edgeTypesToTraverse, null, null, edges); // path must include edges
+        var path3d = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(9465810), edgeTypesToTraverse, null, null, null, edges); // path must NOT include edges
         HashSet<PropertyType> vertexPropertyTypes = new HashSet<PropertyType>();
         vertexPropertyTypes.Add(incomeProperty);
         vertexPropertyTypes.Add(countryProperty);
-        var path3e = someUser.Traverse(userType.GetVertex(2876), 10, false, Direction.Out, edgeTypesToTraverse, null, null, null, edges, vertexPropertyTypes); // path must NOT include edges and at least one vertex in path must have property in propertyTypes
-        var path3f = someUser.Traverse(userType.GetVertex(2876), 10, false, Direction.Out, edgeTypesToTraverse, null, null, null, edges, null, vertexPropertyTypes); // path must NOT include edges and no vertex in path must have any property in propertyTypes
+        var path3e = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(9465810), edgeTypesToTraverse, null, null, null, edges, vertexPropertyTypes); // path must NOT include edges and at least one vertex in path must have property in propertyTypes
+        var path3f = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(9465810), edgeTypesToTraverse, null, null, null, edges, null, vertexPropertyTypes); // path must NOT include edges and no vertex in path must have any property in propertyTypes
         HashSet<PropertyType> edgePropertyTypes = new HashSet<PropertyType>();
         edgePropertyTypes.Add(friendshipStartProperty);
-        var path3g = someUser.Traverse(userType.GetVertex(2876), 10, false, Direction.Out, edgeTypesToTraverse, null, null, null, edges, null, null, edgePropertyTypes);
-        var path3h = someUser.Traverse(userType.GetVertex(2876), 10, false, Direction.Out, edgeTypesToTraverse, null, null, null, edges, null, null, null, edgePropertyTypes);
-        var path3i = someUser.Traverse(userType.GetVertex(2876), 10, false, Direction.Out, edgeTypesToTraverse, null, null, null, edges, null, null, null, null, p => { object pv = p.GetProperty(countryProperty); return pv != null && pv.Equals("Sweden"); });
-        var path3j = someUser.Traverse(userType.GetVertex(2876), 10, false, Direction.Out, edgeTypesToTraverse, null, null, null, edges, null, null, null, null, null, p => { DateTime? pv = (DateTime?)p.GetProperty(friendshipStartProperty); return pv != null && pv.Value.CompareTo(DateTime.Now) > 0; });
-        var path4 = someUser.Traverse(userType.GetVertex(2798), 10, false, Direction.Out, edgeTypesToTraverse);
-        var path5 = someUser.Traverse(userType.GetVertex(175), 10, false, Direction.Out, edgeTypesToTraverse);
-        var path6 = someUser.Traverse(userType.GetVertex(1531), 10, false, Direction.Out, edgeTypesToTraverse);
-        var path7 = someUser.Traverse(userType.GetVertex(1537), 10, false, Direction.Out, edgeTypesToTraverse);
+        var path3g = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(9465810), edgeTypesToTraverse, null, null, null, edges, null, null, edgePropertyTypes);
+        var path3h = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(9465810), edgeTypesToTraverse, null, null, null, edges, null, null, null, edgePropertyTypes);
+        var path3i = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(9465810), edgeTypesToTraverse, null, null, null, edges, null, null, null, null, p => { object pv = p.GetProperty(countryProperty); return pv != null && pv.Equals("Sweden"); });
+        var path3j = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(9465810), edgeTypesToTraverse, null, null, null, edges, null, null, null, null, null, p => { DateTime? pv = (DateTime?)p.GetProperty(friendshipStartProperty); return pv != null && pv.Value.CompareTo(DateTime.Now) > 0; });
+        var path4 = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(2798), edgeTypesToTraverse);
+        var path5 = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(175), edgeTypesToTraverse);
+        var path6 = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(1531), edgeTypesToTraverse);
+        var path7 = someUser.Traverse(4, false, Direction.Out, userType.GetVertex(1537), edgeTypesToTraverse);
         Console.WriteLine();
 
         // Get all the paths between two user ids
-        var path8 = someUser.Traverse(someUser2, 10, true, Direction.Out, edgeTypesToTraverse);
-        path = someUser.Traverse(userType.GetVertex(41), 10, true, Direction.Out, edgeTypesToTraverse);
+        var path8 = someUser.Traverse(4, true, Direction.Out, someUser2, edgeTypesToTraverse);
+        path = someUser.Traverse(4, true, Direction.Out, userType.GetVertex(41), edgeTypesToTraverse);
 
         // Get the number of unique 2nd level friends a given user has (friends of my friends)
 

@@ -503,7 +503,7 @@ namespace NUnitTests
         edge_set.Add(origin_for);
         edge_set.Add(arrives_at);
 
-        var to_madrid = sydney.Traverse(madrid, 99, true, Direction.Out); // (madrid, 99, false, edge_set);
+        var to_madrid = sydney.Traverse(99, true, Direction.Out, madrid); // (madrid, 99, false, edge_set);
 
         foreach (List<Edge> list_edge in to_madrid)
         {
@@ -524,7 +524,7 @@ namespace NUnitTests
         Trace.WriteLine("############################");
         Trace.WriteLine("");
 
-        var to_sydney_path = madrid.Traverse(sydney, 99, true, Direction.Out); // (madrid, 99, false, edge_set);
+        var to_sydney_path = madrid.Traverse(99, true, Direction.Out, sydney); // (madrid, 99, false, edge_set);
 
         foreach (List<Edge> list_edge in to_sydney_path)
         {
@@ -545,7 +545,7 @@ namespace NUnitTests
         Trace.WriteLine("############################");
         Trace.WriteLine("");
 
-        var to_london1 = sydney.Traverse(london, 99, true, Direction.Out);
+        var to_london1 = sydney.Traverse(99, true, Direction.Out, london);
 
         foreach (List<Edge> list_edge in to_london1)
         {
