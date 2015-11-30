@@ -90,13 +90,16 @@
       <td class="style3">
         E-Mail:</td>
       <td class="style4">
-        <asp:TextBox ID="Email" runat="server" Width="250px"></asp:TextBox>
+        <asp:TextBox ID="Email" runat="server" Width="250px" ></asp:TextBox>
       </td>
       <td>*
         <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" 
           Display="Dynamic" ErrorMessage="E-Mail Adress" ForeColor="Red"          
           ValidationExpression="^[\w-\.]{1,}\@([\da-zA-Z-]{1,}\.){1,}[\da-zA-Z-]{2,6}$" 
           ControlToValidate="Email">Enter a valid E-Mail address</asp:RegularExpressionValidator>
+        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
+          Display="Dynamic" ErrorMessage="E-Mail Adress" ForeColor="Red" 
+          ControlToValidate="Email">Enter your Email</asp:RequiredFieldValidator>
       </td>
     </tr>
     <tr>
@@ -104,18 +107,15 @@
     <td>
         <asp:Button ID="SendEmailVerificationButton" runat="server" Text="Send Email Verification Number" 
           Width="217px" BackColor="Yellow" CausesValidation="False" 
-          onclick="SendEmailVerificationButton_Click" /></td>
+          onclick="SendEmailVerificationButton_Click" Visible="False" /></td>
     </tr>
     <tr class="style2">
       <td class="style3">
-        Email Verification:</td>
+        </td>
       <td class="style4">
-        <asp:TextBox ID="EmailVerification" runat="server" Width="250px"></asp:TextBox>
+        <asp:TextBox ID="EmailVerification" runat="server" Width="250px" Visible="False"></asp:TextBox>
       </td>
-       <td>*
-        <asp:RequiredFieldValidator ID="EmailVerificationValidator" runat="server" 
-          ErrorMessage="RequiredFieldValidator" ForeColor="Red" 
-          ControlToValidate="EmailVerification">Enter the email verification number from the email send to your email when clicking the \"Send Email Verification Number\" Button </asp:RequiredFieldValidator>
+       <td>
       </td>
       <td>
         &nbsp;</td>
@@ -177,13 +177,13 @@
           <asp:ListItem>Albania</asp:ListItem>
           <asp:ListItem>Algeria</asp:ListItem>
           <asp:ListItem>American Samoa</asp:ListItem>
-                 <asp:ListItem>Andorra</asp:ListItem>
+          <asp:ListItem>Andorra</asp:ListItem>
           <asp:ListItem>Angola</asp:ListItem>
           <asp:ListItem>Anguilla</asp:ListItem>
           <asp:ListItem>Antarctica</asp:ListItem>
           <asp:ListItem>Antigua and Barbuda</asp:ListItem>
           <asp:ListItem>Argentina</asp:ListItem>
-                 <asp:ListItem>Armenia</asp:ListItem>
+          <asp:ListItem>Armenia</asp:ListItem>
           <asp:ListItem>Aruba</asp:ListItem>
           <asp:ListItem>Australia</asp:ListItem>
           <asp:ListItem>Austria</asp:ListItem>
@@ -243,6 +243,7 @@
           <asp:ListItem>Ethiopia</asp:ListItem>
           <asp:ListItem>Falkland Islands (Malvinas)</asp:ListItem>
           <asp:ListItem>Faroe Islands</asp:ListItem>
+          <asp:ListItem>Fiji</asp:ListItem>
           <asp:ListItem>Finland</asp:ListItem>
           <asp:ListItem>Fmr Yugoslav Rep of Macedonia</asp:ListItem>
           <asp:ListItem>France</asp:ListItem>
@@ -286,6 +287,7 @@
           <asp:ListItem>Kiribati</asp:ListItem>
           <asp:ListItem Value="KP">Korea, Democratic People`s Rep</asp:ListItem>
           <asp:ListItem Value="KR">Korea, Republic of</asp:ListItem>
+          <asp:ListItem>Kosovo</asp:ListItem>
           <asp:ListItem>Kuwait</asp:ListItem>
           <asp:ListItem>Kyrgyzstan</asp:ListItem>
           <asp:ListItem Value="LA">Lao People`s Democratic Rep</asp:ListItem>
@@ -293,11 +295,12 @@
           <asp:ListItem>Lebanon</asp:ListItem>
           <asp:ListItem>Lesotho</asp:ListItem>
           <asp:ListItem>Liberia</asp:ListItem>
-          <asp:ListItem>Libyan Arab Jamahiriya</asp:ListItem>
+          <asp:ListItem>Libya</asp:ListItem>
           <asp:ListItem>Liechtenstein</asp:ListItem>
           <asp:ListItem>Lithuania</asp:ListItem>
           <asp:ListItem>Luxembourg</asp:ListItem>
           <asp:ListItem>Macau</asp:ListItem>
+          <asp:ListItem>Macedonia</asp:ListItem>
           <asp:ListItem>Madagascar</asp:ListItem>
           <asp:ListItem>Malawi</asp:ListItem>
           <asp:ListItem>Malaysia</asp:ListItem>
@@ -314,11 +317,15 @@
           <asp:ListItem>Moldova, Republic of</asp:ListItem>
           <asp:ListItem>Monaco</asp:ListItem>
           <asp:ListItem>Mongolia</asp:ListItem>
+          <asp:ListItem>Montenegro</asp:ListItem>
           <asp:ListItem>Montserrat</asp:ListItem>
           <asp:ListItem>Morocco</asp:ListItem>
           <asp:ListItem>Mozambique</asp:ListItem>
           <asp:ListItem>Myanmar</asp:ListItem>
           <asp:ListItem>Namibia</asp:ListItem>
+          <asp:ListItem>Nauru</asp:ListItem>
+          <asp:ListItem>Nepal</asp:ListItem>
+          <asp:ListItem>Netherlands</asp:ListItem>
           <asp:ListItem>Netherlands Antilles</asp:ListItem>
           <asp:ListItem>New Caledonia</asp:ListItem>
           <asp:ListItem>New Zealand</asp:ListItem>
@@ -356,6 +363,7 @@
           <asp:ListItem>Sao Tome And Principe</asp:ListItem>
           <asp:ListItem>Saudi Arabia</asp:ListItem>
           <asp:ListItem>Senegal</asp:ListItem>
+          <asp:ListItem>Serbia</asp:ListItem>
           <asp:ListItem>Seychelles</asp:ListItem>
           <asp:ListItem>Sierra Leone</asp:ListItem>
           <asp:ListItem>Singapore</asp:ListItem>
@@ -366,19 +374,19 @@
           <asp:ListItem>South Africa</asp:ListItem>
           <asp:ListItem>Spain</asp:ListItem>
           <asp:ListItem>Sri Lanka</asp:ListItem>
-          <asp:ListItem>St Vincent and the Grenadines</asp:ListItem>
-          <asp:ListItem>Sth Georgia &amp; Sth Sandwich Is</asp:ListItem>
+          <asp:ListItem>St. Pierre and Miquelon</asp:ListItem>
           <asp:ListItem>Sudan</asp:ListItem>
           <asp:ListItem>Suriname</asp:ListItem>
-          <asp:ListItem>Svalbard And Jan Mayen</asp:ListItem>
+          <asp:ListItem>Svalbard And Jan Mayen Islands</asp:ListItem>
           <asp:ListItem>Swaziland</asp:ListItem>
           <asp:ListItem>Sweden</asp:ListItem>
           <asp:ListItem>Switzerland</asp:ListItem>
           <asp:ListItem>Syrian Arab Republic</asp:ListItem>
-          <asp:ListItem>Taiwan, Province Of China</asp:ListItem>
+          <asp:ListItem>Taiwan</asp:ListItem>
           <asp:ListItem>Tajikistan</asp:ListItem>
           <asp:ListItem>Tanzania, United Republic Of</asp:ListItem>
           <asp:ListItem>Thailand</asp:ListItem>
+          <asp:ListItem>Timor-Leste</asp:ListItem>
           <asp:ListItem>Togo</asp:ListItem>
           <asp:ListItem>Tokelau</asp:ListItem>
           <asp:ListItem>Tonga</asp:ListItem>
@@ -387,6 +395,9 @@
           <asp:ListItem>Turkey</asp:ListItem>
           <asp:ListItem>Turkmenistan</asp:ListItem>
           <asp:ListItem>Turks And Caicos Islands</asp:ListItem>
+          <asp:ListItem>Tuvalu</asp:ListItem>
+          <asp:ListItem>Uganda</asp:ListItem>
+          <asp:ListItem>Ukraine</asp:ListItem>
           <asp:ListItem>United Arab Emirates</asp:ListItem>
           <asp:ListItem>United Kingdom</asp:ListItem>
           <asp:ListItem>Uruguay</asp:ListItem>
@@ -400,10 +411,9 @@
           <asp:ListItem Value="WF">Wallis And Futuna</asp:ListItem>
           <asp:ListItem Value="EH">Western Sahara</asp:ListItem>
           <asp:ListItem Value="YE">Yemen</asp:ListItem>
-          <asp:ListItem Value="CS">Serbia and Montenegro</asp:ListItem>
           <asp:ListItem Value="ZM">Zambia</asp:ListItem>
           <asp:ListItem Value="ZW">Zimbabwe</asp:ListItem>
-                 </asp:DropDownList>
+          </asp:DropDownList>
       </td>
       <td>
         &nbsp;</td>
@@ -518,5 +528,6 @@
         &nbsp;</td>
     </tr>
   </table>  </asp:Panel>
+<br />
+<p><a href="privacy-policy.htm">Privacy Policy Statement</a></p>
 </asp:Content>
-

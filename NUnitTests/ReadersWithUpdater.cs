@@ -305,6 +305,7 @@ namespace NUnitTests
               Man manUpdated = (Man)updater.Open(dbNum, page.PageNumber, 1, true);
             }
           }
+          updater.Commit(); // must commit updater first, we validate and update reader on BeginRead or ForceDatabaseCacheValidation
           if (useReaderCommit)
           {
             reader.Commit();
@@ -312,7 +313,6 @@ namespace NUnitTests
           }
           else
             reader.ForceDatabaseCacheValidation();
-          updater.Commit();
           updater.BeginUpdate();
         }
         Database db2 = reader.OpenDatabase(dbNum);

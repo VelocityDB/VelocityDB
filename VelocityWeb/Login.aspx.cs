@@ -15,7 +15,7 @@ namespace VelocityWeb
 {
   public partial class Login : System.Web.UI.Page
   {
-    static readonly string dataPath = HttpContext.Current.Server.MapPath("~/Database");
+    static readonly string s_dataPath = HttpContext.Current.Server.MapPath("~/Database");
     string continueUrl;
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -34,10 +34,10 @@ namespace VelocityWeb
     {
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        using (SessionNoServer session = new SessionNoServer(s_dataPath, 2000, true, true))
         {
           session.BeginRead();
-          Root root = (Root)session.Open(Root.PlaceInDatabase, 1, 1, false);
+          Root root = session.AllObjects<Root>(false).FirstOrDefault();
           if (root == null)
           {
             ErrorMessage.Text = "The entered email address is not registered with this website";
@@ -77,10 +77,10 @@ namespace VelocityWeb
       }
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        using (SessionNoServer session = new SessionNoServer(s_dataPath, 2000, true, true))
         {
           session.BeginUpdate();
-          Root velocityDbroot = (Root)session.Open(Root.PlaceInDatabase, 1, 1, false);
+          Root velocityDbroot = session.AllObjects<Root>(false).FirstOrDefault();
           if (velocityDbroot == null)
           {
             ErrorMessage.Text = "The entered email address is not registered with this website";

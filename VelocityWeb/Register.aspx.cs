@@ -16,7 +16,7 @@ namespace VelocityWeb
 {
   public partial class Register : System.Web.UI.Page
   {
-    static readonly string dataPath = HttpContext.Current.Server.MapPath("~/Database");
+    static readonly string s_dataPath = HttpContext.Current.Server.MapPath("~/Database");
     static List<string> UsaStates = new List<string>()
 { "Alabama", "AL", "Alaska", "AK", "Arizona", "AZ", "Arkansas", "AR", "California", "CA", "Colorado", "CO","Connecticut", "CT", "Delaware", "DE", "Florida", "FL", "Georgia", "GA",
 "Hawaii", "HI","Idaho", "ID","Illinois", "IL","Indiana", "IN","Iowa", "IA","Kansas", "KS","Kentucky", "KY","Louisiana", "LA","Maine", "ME","Maryland", "MD","Massachusetts", "MA","Michigan", "MI","Minnesota", "MN",
@@ -50,15 +50,14 @@ namespace VelocityWeb
         DataCache.UnauthorizedPerformanceCounter = true;
         try
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+          using (SessionNoServer session = new SessionNoServer(s_dataPath, 2000, true, true))
           {
             session.BeginUpdate();
-            Root velocityDbroot = (Root)session.Open(Root.PlaceInDatabase, 1, 1, false);
+            Root velocityDbroot = session.AllObjects<Root>(false).FirstOrDefault();
             if (velocityDbroot == null)
             {
-              Placement placementRoot = new Placement(Root.PlaceInDatabase, 1, 1, 1000, 1000, true);
               velocityDbroot = new Root(session, 10000);
-              velocityDbroot.Persist(placementRoot, session);
+              session.Persist(velocityDbroot);
             }
             else
             {
@@ -68,7 +67,6 @@ namespace VelocityWeb
                 CustomerContact lookup = new CustomerContact(user, null);
                 if (velocityDbroot.customersByEmail.TryGetKey(lookup, ref existingCustomer))
                 {
-                  EmailVerificationValidator.Enabled = false;
                   CompanyName.Text = existingCustomer.company;
                   FirstName.Text = existingCustomer.firstName;
                   LastName.Text = existingCustomer.lastName;
@@ -90,8 +88,6 @@ namespace VelocityWeb
                   HowFoundRadioButtonList.SelectedIndex = (int)existingCustomer.howFoundVelocityDb;
                   HowFoundTextBox.Text = existingCustomer.howFoundOther;
                 }
-                else if (Request.IsLocal)
-                  EmailVerificationValidator.Enabled = false;
               }
             }
             session.Commit();
@@ -108,13 +104,13 @@ namespace VelocityWeb
     {
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        using (SessionNoServer session = new SessionNoServer(s_dataPath, 2000, true, true))
         {
           session.BeginUpdate();
           CustomerContact customer = new CustomerContact(CompanyName.Text, FirstName.Text, LastName.Text, Email.Text, Address.Text, AddressLine2.Text,
             City.Text, ZipCode.Text, State.Text, Country.SelectedItem.Text, Country.SelectedItem.Value, Phone.Text, Fax.Text, MobilePhone.Text,
             SkypeName.Text, Website.Text, UserName.Text, Password.Text, HowFoundTextBox.Text, HowFoundRadioButtonList.SelectedIndex, session);
-          Root root = (Root)session.Open(Root.PlaceInDatabase, 1, 1, false);
+          Root root = session.AllObjects<Root>(false).FirstOrDefault();
           CustomerContact lookup;
           string user = this.User.Identity.Name;
           if (user != null && user.Length > 0)
@@ -200,29 +196,28 @@ namespace VelocityWeb
           }
           else
           {
-            if (Request.IsLocal == false)
-            {
-              int emailVerification = (int)Session["EmailVerification"];
-              string verifiedEmail = (string)Session["EmailVerificationEmail"];
-              if (emailVerification < 0 || verifiedEmail != customer.email)
-              {
-                errors.Text = "Email was not verified for new user registration";
-                session.Abort();
-                return;
-              }
-              int enteredVerificationNumber;
-              int.TryParse(EmailVerification.Text, out enteredVerificationNumber);
-              if (emailVerification != enteredVerificationNumber)
-              {
-                errors.Text = "Entered Email Verification number is " + enteredVerificationNumber + " does match the emailed verification number: " + emailVerification;
-                Session["EmailVerification"] = -1;
-                session.Abort();
-                return;
-              }
-            }
-            Placement placementCustomer = new Placement(customer.PlacementDatabaseNumber);
+            //if (Request.IsLocal == false)
+            //{
+            //  string verifiedEmail = (string)Session["EmailVerificationEmail"];
+              //int emailVerification = (int)Session["EmailVerification"];
+              //if (emailVerification < 0 || verifiedEmail != customer.email)
+              //{
+              //  errors.Text = "Email was not verified for new user registration";
+              //  session.Abort();
+              //  return;
+              //}
+              //int enteredVerificationNumber;
+              //int.TryParse(EmailVerification.Text, out enteredVerificationNumber);
+              //if (emailVerification != enteredVerificationNumber)
+              //{
+              //  errors.Text = "Entered Email Verification number is " + enteredVerificationNumber + " does match the emailed verification number: " + emailVerification;
+              //  Session["EmailVerification"] = -1;
+              //  session.Abort();
+              //  return;
+              //}
+            //}
             customer.idNumber = root.NewCustomerNumber();
-            customer.Persist(placementCustomer, session);
+            session.Persist(customer);
             root.customersByEmail.Add(customer);
             root.customersByUserName.Add(customer);
           }

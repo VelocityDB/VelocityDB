@@ -12,7 +12,6 @@ namespace VelocityDbSchema.VelocityWeb
 {
   public class Root : OptimizedPersistable
   {
-    public const UInt32 PlaceInDatabase = 11;
     public UInt32 lastLicenseNumber;
     public UInt32 lastCustomerIdNumber;
     public BTreeSet<CustomerContact> customersByEmail;
@@ -37,14 +36,6 @@ namespace VelocityDbSchema.VelocityWeb
     {
       Update();
       return ++lastCustomerIdNumber;
-    }
-
-    public override UInt32 PlacementDatabaseNumber
-    {
-      get
-      {
-        return PlaceInDatabase;
-      }
     }
   }
 }

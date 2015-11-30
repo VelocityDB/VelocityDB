@@ -16,26 +16,39 @@ namespace VelocityWeb.Secure
 {
   public partial class Issues : System.Web.UI.Page
   {
-    static readonly string dataPath = HttpContext.Current.Server.MapPath("~/IssuesDatabase");
+    static readonly string s_dataPath = HttpContext.Current.Server.MapPath("~/IssuesDatabase");
+    static SessionPool s_sessionPool = null;
+    static SessionNoServerShared s_sharedReadOnlySession = null;
+    static object s_lockObject = new object();
     private string viewString;
     protected void Page_Load(object sender, EventArgs e)
     {
       if (!IsPostBack)
       {
+        Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        lock (s_lockObject)
+        {
+          if (s_sessionPool == null)
+            s_sessionPool = new SessionPool(1, () => new SessionNoServer(s_dataPath));
+          if (s_sharedReadOnlySession == null)
+            s_sharedReadOnlySession = new SessionNoServerShared(s_dataPath);
+        }
         Page.Header.Title = "VelocityWeb - Issue Tracking";
         HtmlGenericControl menu = (HtmlGenericControl)Master.FindControl("liIssues");
         menu.Attributes.Add("class", "active");
         IssueTracker bugTracker = null;
-        User user;
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, false))
+        User user = null;
+        int sessionId = -1;
+        SessionBase session = null;
+        try
         {
+          session = s_sessionPool.GetSession(out sessionId);
           session.BeginUpdate();
-          bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+          bugTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
           if (bugTracker == null)
           {
-            Placement placementRoot = new Placement(IssueTracker.PlaceInDatabase, 1, 1, 1000, 1000);
             bugTracker = new IssueTracker(10, session);
-            bugTracker.Persist(placementRoot, session, true, true);
+            session.Persist(bugTracker);
             user = lookupUser(bugTracker, session);
             PermissionScheme permissions = new PermissionScheme(user);
             bugTracker.Permissions = permissions;
@@ -45,6 +58,17 @@ namespace VelocityWeb.Secure
             user = lookupUser(bugTracker, session);
 
           session.Commit();
+          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+        }
+        catch (Exception ex)
+        {
+          if (session != null)
+            session.Abort();
+          Console.Out.WriteLine(ex.StackTrace);
+        }
+        finally
+        {
+          s_sessionPool.FreeSession(sessionId, session);
         }
         if (Session["filterById"] == null)
         {
@@ -138,27 +162,30 @@ namespace VelocityWeb.Secure
     void createInitialObjects(IssueTracker issueTracker, User user, SessionBase session)
     {
       Project project = new Project(user, "VelocityDB", "Object Database Management System");
-      project.Persist(session, project);
+      session.Persist(project);
       issueTracker.ProjectSet.Add(project);
 
       Component webSite = new Component(user, "Web Site", "VelocityDB.com", project);
-      webSite.Persist(session, webSite);
+      session.Persist(webSite);
       issueTracker.ComponentSet.Add(webSite);
 
       Component samples = new Component(user, "Samples", "Samples applications provided", project);
-      samples.Persist(session, webSite);
+      session.Persist(samples);
       issueTracker.ComponentSet.Add(samples);
 
       Component collections = new Component(user, "Collections", "Any of the collection classes", project);
-      collections.Persist(session, samples);
+      session.Persist(collections);
       issueTracker.ComponentSet.Add(collections);
 
       Component performance = new Component(user, "Performance", "Any performance issue", project);
-      performance.Persist(session, collections);
+      session.Persist(performance);
       issueTracker.ComponentSet.Add(performance);
 
-      ProductVersion version = new ProductVersion(user, "0.8", "First initial version", new DateTime(2011, 08, 01));
-      version.Persist(session, version);
+      ProductVersion version = new ProductVersion(user, "5.0.16", "First initial version", new DateTime(2015, 11, 29));
+      session.Persist(version);
+      issueTracker.VersionSet.Add(version);
+      version = new ProductVersion(user, "4.7", "June 13 version", new DateTime(2015, 06, 13));
+      session.Persist(version);
       issueTracker.VersionSet.Add(version);
     }
 
@@ -273,14 +300,10 @@ namespace VelocityWeb.Secure
       SortedSetAny<User> userSet;
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-        {
-          session.BeginRead();
-          IssueTracker bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-          if (bugTracker == null)
-            return null;
-          userSet = bugTracker.UserSet;
-        }
+        var bugTracker = s_sharedReadOnlySession.AllObjects<IssueTracker>(false).FirstOrDefault();
+        if (bugTracker == null)
+          return null;
+        userSet = bugTracker.UserSet;
       }
       catch (System.Exception ex)
       {
@@ -324,14 +347,9 @@ namespace VelocityWeb.Secure
     {
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-        {
-          session.BeginRead();
-          IssueTracker bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-          IList<Issue> issueSet = bugTracker.IssueSetById.Keys;
-          session.Commit();
-          return issueSet;
-        }
+        IssueTracker bugTracker = s_sharedReadOnlySession.AllObjects<IssueTracker>(false).FirstOrDefault();
+        IList<Issue> issueSet = bugTracker.IssueSetById.Keys;
+        return issueSet;
       }
       catch (System.Exception ex)
       {
@@ -356,98 +374,93 @@ namespace VelocityWeb.Secure
     {
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        IssueTracker bugTracker = s_sharedReadOnlySession.AllObjects<IssueTracker>(false).FirstOrDefault();
+        if (bugTracker != null)
         {
-          session.BeginRead();
-          IssueTracker bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-          if (bugTracker != null)
+          ICollection<Issue> issueSet = bugTracker.IssueSetById.Keys;
+          if (sortExpression.Length > 0)
           {
-            ICollection<Issue> issueSet = bugTracker.IssueSetById.Keys;
-            if (sortExpression.Length > 0)
+            string[] selectAndDir = sortExpression.Split(' ');
+            int sorting = int.Parse(selectAndDir[0]);
+            bool reverse = selectAndDir.Length > 1;
+            switch (sorting)
             {
-              string[] selectAndDir = sortExpression.Split(' ');
-              int sorting = int.Parse(selectAndDir[0]);
-              bool reverse = selectAndDir.Length > 1;
-              switch (sorting)
-              {
-                case 1: issueSet = bugTracker.IssueSetByPriority.Keys;
-                  break;
-                case 2: issueSet = bugTracker.IssueSetByDateTimeCreated.Keys;
-                  break;
-                case 3: issueSet = bugTracker.IssueSetByStatus.Keys;
-                  break; // do sorting by using LINQ since we did not create a sorted collection sorted by FixResolution
-                case 4: issueSet = (from issue in issueSet orderby issue.FixResolution select issue).ToList();
-                  break;
-                case 5: issueSet = bugTracker.IssueSetBySummary.Keys;
-                  break;
-                case 6: // do sorting by using LINQ since we did not create a sorted collection sorted by component
-                  issueSet = (from issue in issueSet orderby issue.Project, issue.Component select issue).ToList();
-                  break;
-                case 7: issueSet = bugTracker.IssueSetByVersion.Keys;
-                  break;
-                case 8: issueSet = bugTracker.IssueSetByCategory.Keys;
-                  break;
-                case 9: issueSet = bugTracker.IssueSetByReportedBy.Keys;
-                  break;
-                case 10: issueSet = bugTracker.IssueSetByLastUpdatedBy.Keys;
-                  break;
-                case 11: issueSet = bugTracker.IssueSetByLastUpdatedBy.Keys;
-                  break;
-                case 12:
-                  if (bugTracker.IssueSetByAssignedTo.Keys.Count > 0)
-                    issueSet = bugTracker.IssueSetByAssignedTo.Keys;
-                  break;
-                case 13: issueSet = bugTracker.IssueSetByDueDate.Keys;
-                  break;
+              case 1: issueSet = bugTracker.IssueSetByPriority.Keys;
+                break;
+              case 2: issueSet = bugTracker.IssueSetByDateTimeCreated.Keys;
+                break;
+              case 3: issueSet = bugTracker.IssueSetByStatus.Keys;
+                break; // do sorting by using LINQ since we did not create a sorted collection sorted by FixResolution
+              case 4: issueSet = (from issue in issueSet orderby issue.FixResolution select issue).ToList();
+                break;
+              case 5: issueSet = bugTracker.IssueSetBySummary.Keys;
+                break;
+              case 6: // do sorting by using LINQ since we did not create a sorted collection sorted by component
+                issueSet = (from issue in issueSet orderby issue.Project, issue.Component select issue).ToList();
+                break;
+              case 7: issueSet = bugTracker.IssueSetByVersion.Keys;
+                break;
+              case 8: issueSet = bugTracker.IssueSetByCategory.Keys;
+                break;
+              case 9: issueSet = bugTracker.IssueSetByReportedBy.Keys;
+                break;
+              case 10: issueSet = bugTracker.IssueSetByLastUpdatedBy.Keys;
+                break;
+              case 11: issueSet = bugTracker.IssueSetByLastUpdatedBy.Keys;
+                break;
+              case 12:
+                if (bugTracker.IssueSetByAssignedTo.Keys.Count > 0)
+                  issueSet = bugTracker.IssueSetByAssignedTo.Keys;
+                break;
+              case 13: issueSet = bugTracker.IssueSetByDueDate.Keys;
+                break;
 
-              }
-              if (reverse)
-              {
-                List<Issue> tempList = new List<Issue>(issueSet.Count);
-                IEnumerable<Issue> temp = issueSet.Reverse<Issue>();
-                foreach (Issue issue in temp)
-                {
-                  tempList.Add(issue);
-                }
-                issueSet = tempList;
-              }
-              //setSortArrow(sorting, reverse);
             }
-            //object viewState = ViewState["filterById"];
-            object filterOnObject = Session["filterOn"];
-            if (filterOnObject != null && (bool)filterOnObject)
+            if (reverse)
             {
-              object sessionState = Session["filterById"];
-              bool filterById = (bool)sessionState;
-              if (filterById)
+              List<Issue> tempList = new List<Issue>(issueSet.Count);
+              IEnumerable<Issue> temp = issueSet.Reverse<Issue>();
+              foreach (Issue issue in temp)
               {
-                string idFrom = (string)Session["idFrom"];
-                if (idFrom.Length > 0)
-                {
-                  UInt64 startId = UInt64.Parse(idFrom);
-                  UInt64 endId = UInt64.Parse((string)Session["idTo"]);
-                  issueSet = (from issue in issueSet where issue.Id >= startId && issue.Id <= endId select issue).ToList();
-                }
+                tempList.Add(issue);
               }
-              List<int> priorityNumList = (List<int>)Session["priorityFilter"];
-              if (priorityNumList != null && priorityNumList.Count > 0)
+              issueSet = tempList;
+            }
+            //setSortArrow(sorting, reverse);
+          }
+          //object viewState = ViewState["filterById"];
+          object filterOnObject = Session["filterOn"];
+          if (filterOnObject != null && (bool)filterOnObject)
+          {
+            object sessionState = Session["filterById"];
+            bool filterById = (bool)sessionState;
+            if (filterById)
+            {
+              string idFrom = (string)Session["idFrom"];
+              if (idFrom.Length > 0)
               {
-                issueSet = (from issue in issueSet where priorityNumList.Contains((int)issue.Priority) select issue).ToList();
-              }
-              List<int> statusNumList = (List<int>)Session["statusFilter"];
-              if (statusNumList != null && statusNumList.Count > 0)
-              {
-                issueSet = (from issue in issueSet where statusNumList.Contains((int)issue.Status) select issue).ToList();
-              }
-              List<int> categoryNumList = (List<int>)Session["categoryFilter"];
-              if (categoryNumList.Count > 0)
-              {
-                issueSet = (from issue in issueSet where categoryNumList.Contains((int)issue.Category) select issue).ToList();
+                UInt64 startId = UInt64.Parse(idFrom);
+                UInt64 endId = UInt64.Parse((string)Session["idTo"]);
+                issueSet = (from issue in issueSet where issue.Id >= startId && issue.Id <= endId select issue).ToList();
               }
             }
-            session.Commit();
-            return issueSet;
+            List<int> priorityNumList = (List<int>)Session["priorityFilter"];
+            if (priorityNumList != null && priorityNumList.Count > 0)
+            {
+              issueSet = (from issue in issueSet where priorityNumList.Contains((int)issue.Priority) select issue).ToList();
+            }
+            List<int> statusNumList = (List<int>)Session["statusFilter"];
+            if (statusNumList != null && statusNumList.Count > 0)
+            {
+              issueSet = (from issue in issueSet where statusNumList.Contains((int)issue.Status) select issue).ToList();
+            }
+            List<int> categoryNumList = (List<int>)Session["categoryFilter"];
+            if (categoryNumList.Count > 0)
+            {
+              issueSet = (from issue in issueSet where categoryNumList.Contains((int)issue.Category) select issue).ToList();
+            }
           }
+          return issueSet;
         }
       }
       catch (System.Exception ex)
@@ -461,42 +474,37 @@ namespace VelocityWeb.Secure
     {
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        IssueTracker bugTracker = s_sharedReadOnlySession.AllObjects<IssueTracker>(false).FirstOrDefault();
+        if (bugTracker != null)
         {
-          session.BeginRead();
-          IssueTracker bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-          if (bugTracker != null)
+          ICollection<Project> projectSet = bugTracker.ProjectSet.Keys;
+          if (sortExpression.Length > 0)
           {
-            ICollection<Project> projectSet = bugTracker.ProjectSet.Keys;
-            if (sortExpression.Length > 0)
+            string[] selectAndDir = sortExpression.Split(' ');
+            int sorting = int.Parse(selectAndDir[0]);
+            bool reverse = selectAndDir.Length > 1;
+            switch (sorting)
             {
-              string[] selectAndDir = sortExpression.Split(' ');
-              int sorting = int.Parse(selectAndDir[0]);
-              bool reverse = selectAndDir.Length > 1;
-              switch (sorting)
-              {
-                case 1: projectSet = (from project in projectSet orderby project.Name select project).ToList();
-                  break;
-                case 2: projectSet = (from project in projectSet orderby project.Description select project).ToList();
-                  break;
-                case 3: projectSet = (from project in projectSet orderby project.CreatedBy select project).ToList();
-                  break;
-              }
-              if (reverse)
-              {
-                List<Project> tempList = new List<Project>(projectSet.Count);
-                IEnumerable<Project> temp = projectSet.Reverse<Project>();
-                foreach (Project issue in temp)
-                {
-                  tempList.Add(issue);
-                }
-                projectSet = tempList;
-              }
+              case 1: projectSet = (from project in projectSet orderby project.Name select project).ToList();
+                break;
+              case 2: projectSet = (from project in projectSet orderby project.Description select project).ToList();
+                break;
+              case 3: projectSet = (from project in projectSet orderby project.CreatedBy select project).ToList();
+                break;
             }
-            session.Commit();
-            Session["Projects"] = projectSet;
-            return projectSet;
+            if (reverse)
+            {
+              List<Project> tempList = new List<Project>(projectSet.Count);
+              IEnumerable<Project> temp = projectSet.Reverse<Project>();
+              foreach (Project issue in temp)
+              {
+                tempList.Add(issue);
+              }
+              projectSet = tempList;
+            }
           }
+          Session["Projects"] = projectSet;
+          return projectSet;
         }
       }
       catch (System.Exception ex)
@@ -573,18 +581,14 @@ namespace VelocityWeb.Secure
         Project project = (Project)obj;
         try
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginRead();
-            IssueTracker bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-            SortedSetAny<Project> projectSet = bugTracker.ProjectSet;
-            int index = projectSet.IndexOf(project);
-            session.Commit();
-            return index;
-          }
+          IssueTracker bugTracker = s_sharedReadOnlySession.AllObjects<IssueTracker>(false).FirstOrDefault();
+          SortedSetAny<Project> projectSet = bugTracker.ProjectSet;
+          int index = projectSet.IndexOf(project);
+          return index;
         }
         catch (System.Exception ex)
         {
+          this.errorLabel.Text = ex.ToString();
           Console.WriteLine(ex.ToString());
         }
       }
@@ -598,18 +602,14 @@ namespace VelocityWeb.Secure
         Component component = (Component)obj;
         try
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginRead();
-            IssueTracker bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-            SortedSetAny<Component> componentSet = bugTracker.ComponentSet;
-            int index = componentSet.IndexOf(component);
-            session.Commit();
-            return index;
-          }
+          IssueTracker bugTracker = s_sharedReadOnlySession.AllObjects<IssueTracker>(false).FirstOrDefault();
+          SortedSetAny<Component> componentSet = bugTracker.ComponentSet;
+          int index = componentSet.IndexOf(component);
+          return index;
         }
         catch (System.Exception ex)
         {
+          this.errorLabel.Text = ex.ToString();
           Console.WriteLine(ex.ToString());
         }
       }
@@ -623,18 +623,14 @@ namespace VelocityWeb.Secure
         ProductVersion version = (ProductVersion)obj;
         try
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginRead();
-            IssueTracker bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-            SortedSetAny<ProductVersion> versionSet = bugTracker.VersionSet;
-            int index = versionSet.IndexOf(version);
-            session.Commit();
-            return index;
-          }
+          IssueTracker bugTracker = s_sharedReadOnlySession.AllObjects<IssueTracker>(false).FirstOrDefault();
+          SortedSetAny<ProductVersion> versionSet = bugTracker.VersionSet;
+          int index = versionSet.IndexOf(version);
+          return index;
         }
         catch (System.Exception ex)
         {
+          this.errorLabel.Text = ex.ToString();
           Console.WriteLine(ex.ToString());
         }
       }
@@ -648,18 +644,14 @@ namespace VelocityWeb.Secure
         User user = (User)obj;
         try
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginRead();
-            IssueTracker bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-            SortedSetAny<User> userSet = bugTracker.UserSet;
-            int index = userSet.IndexOf(user);
-            session.Commit();
-            return index;
-          }
+          IssueTracker bugTracker = s_sharedReadOnlySession.AllObjects<IssueTracker>(false).FirstOrDefault();
+          SortedSetAny<User> userSet = bugTracker.UserSet;
+          int index = userSet.IndexOf(user);
+          return index;
         }
         catch (System.Exception ex)
         {
+          this.errorLabel.Text = ex.ToString();
           Console.WriteLine(ex.ToString());
         }
       }
@@ -670,40 +662,35 @@ namespace VelocityWeb.Secure
     {
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        IssueTracker bugTracker = s_sharedReadOnlySession.AllObjects<IssueTracker>(false).FirstOrDefault();
+        ICollection<Component> componentSet = bugTracker.ComponentSet.Keys;
+        if (sortExpression.Length > 0)
         {
-          session.BeginRead();
-          IssueTracker bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-          ICollection<Component> componentSet = bugTracker.ComponentSet.Keys;
-          if (sortExpression.Length > 0)
+          string[] selectAndDir = sortExpression.Split(' ');
+          int sorting = int.Parse(selectAndDir[0]);
+          bool reverse = selectAndDir.Length > 1;
+          switch (sorting)
           {
-            string[] selectAndDir = sortExpression.Split(' ');
-            int sorting = int.Parse(selectAndDir[0]);
-            bool reverse = selectAndDir.Length > 1;
-            switch (sorting)
-            {
-              case 1: componentSet = (from component in componentSet orderby component.Name select component).ToList();
-                break;
-              case 2: componentSet = (from component in componentSet orderby component.Description select component).ToList();
-                break;
-              case 3: componentSet = (from component in componentSet orderby component.Project select component).ToList();
-                break;
-            }
-            if (reverse)
-            {
-              List<Component> tempList = new List<Component>(componentSet.Count);
-              IEnumerable<Component> temp = componentSet.Reverse<Component>();
-              foreach (Component issue in temp)
-              {
-                tempList.Add(issue);
-              }
-              componentSet = tempList;
-            }
+            case 1: componentSet = (from component in componentSet orderby component.Name select component).ToList();
+              break;
+            case 2: componentSet = (from component in componentSet orderby component.Description select component).ToList();
+              break;
+            case 3: componentSet = (from component in componentSet orderby component.Project select component).ToList();
+              break;
           }
-          session.Commit();
-          Session["Components"] = componentSet;
-          return componentSet;
+          if (reverse)
+          {
+            List<Component> tempList = new List<Component>(componentSet.Count);
+            IEnumerable<Component> temp = componentSet.Reverse<Component>();
+            foreach (Component issue in temp)
+            {
+              tempList.Add(issue);
+            }
+            componentSet = tempList;
+          }
         }
+        Session["Components"] = componentSet;
+        return componentSet;
       }
       catch (System.Exception ex)
       {
@@ -716,41 +703,36 @@ namespace VelocityWeb.Secure
     {
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        IssueTracker bugTracker = s_sharedReadOnlySession.AllObjects<IssueTracker>(false).FirstOrDefault();
+        ICollection<ProductVersion> versionSet = bugTracker.VersionSet.Keys;
+        if (sortExpression.Length > 0)
         {
-          session.BeginRead();
-          IssueTracker bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-          ICollection<ProductVersion> versionSet = bugTracker.VersionSet.Keys;
-          if (sortExpression.Length > 0)
+          string[] selectAndDir = sortExpression.Split(' ');
+          int sorting = int.Parse(selectAndDir[0]);
+          bool reverse = selectAndDir.Length > 1;
+          switch (sorting)
           {
-            string[] selectAndDir = sortExpression.Split(' ');
-            int sorting = int.Parse(selectAndDir[0]);
-            bool reverse = selectAndDir.Length > 1;
-            switch (sorting)
-            {
-              case 1: versionSet = (from version in versionSet orderby version.Name select version).ToList();
-                break;
-              case 2: versionSet = (from version in versionSet orderby version.Description select version).ToList();
-                break;
-              case 3: versionSet = (from version in versionSet orderby version.ReleaseDate select version).ToList();
-                break;
-              case 4: versionSet = (from version in versionSet orderby version.CreatedBy select version).ToList();
-                break;
-            }
-            if (reverse)
-            {
-              List<ProductVersion> tempList = new List<ProductVersion>(versionSet.Count);
-              IEnumerable<ProductVersion> temp = versionSet.Reverse<ProductVersion>();
-              foreach (ProductVersion issue in temp)
-              {
-                tempList.Add(issue);
-              }
-              versionSet = tempList;
-            }
+            case 1: versionSet = (from version in versionSet orderby version.Name select version).ToList();
+              break;
+            case 2: versionSet = (from version in versionSet orderby version.Description select version).ToList();
+              break;
+            case 3: versionSet = (from version in versionSet orderby version.ReleaseDate select version).ToList();
+              break;
+            case 4: versionSet = (from version in versionSet orderby version.CreatedBy select version).ToList();
+              break;
           }
-          session.Commit();
-          return versionSet;
+          if (reverse)
+          {
+            List<ProductVersion> tempList = new List<ProductVersion>(versionSet.Count);
+            IEnumerable<ProductVersion> temp = versionSet.Reverse<ProductVersion>();
+            foreach (ProductVersion issue in temp)
+            {
+              tempList.Add(issue);
+            }
+            versionSet = tempList;
+          }
         }
+        return versionSet;
       }
       catch (System.Exception ex)
       {
@@ -767,12 +749,7 @@ namespace VelocityWeb.Secure
         Issue issue;
         if (Id > 0)
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginRead();
-            issue = (Issue)session.Open(Id);
-            session.Commit();
-          }
+          issue = (Issue)s_sharedReadOnlySession.Open(Id);
         }
         else
           issue = new Issue();
@@ -795,12 +772,7 @@ namespace VelocityWeb.Secure
         Project project;
         if (Id > 0)
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginRead();
-            project = (Project)session.Open(Id);
-            session.Commit();
-          }
+          project = (Project)s_sharedReadOnlySession.Open(Id);
         }
         else
           project = new Project();
@@ -823,12 +795,7 @@ namespace VelocityWeb.Secure
         Component component;
         if (Id > 0)
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginRead();
-            component = (Component)session.Open(Id);
-            session.Commit();
-          }
+          component = (Component)s_sharedReadOnlySession.Open(Id);
         }
         else
           component = new Component();
@@ -851,12 +818,7 @@ namespace VelocityWeb.Secure
         ProductVersion version;
         if (Id > 0)
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginRead();
-            version = (ProductVersion)session.Open(Id);
-            session.Commit();
-          }
+          version = (ProductVersion)s_sharedReadOnlySession.Open(Id);
         }
         else
           version = new ProductVersion(null, null, null, DateTime.MaxValue);
@@ -879,12 +841,7 @@ namespace VelocityWeb.Secure
         User user;
         if (Id > 0)
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginRead();
-            user = (User)session.Open(Id);
-            session.Commit();
-          }
+          user = (User)s_sharedReadOnlySession.Open(Id);
         }
         else
           user = new User();
@@ -1270,26 +1227,32 @@ namespace VelocityWeb.Secure
 
     public void DeleteIssue(UInt64 id)
     {
-      try
+      if (id > 0)
       {
-        if (id > 0)
+        int sessionId = -1;
+        SessionBase session = null;
+        try
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginUpdate();
-            IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
-            Issue existingIssue = (Issue)session.Open(id);
-            if (issueTracker.Remove(existingIssue))
-            {
-              existingIssue.Unpersist(session);
-              session.Commit();
-            }
-          }
+          session = s_sessionPool.GetSession(out sessionId);
+          session.BeginUpdate();
+          IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
+          Issue existingIssue = (Issue)session.Open(id);
+          if (issueTracker.Remove(existingIssue))
+            existingIssue.Unpersist(session);
+          session.Commit();
+          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
         }
-      }
-      catch (System.Exception ex)
-      {
-        this.errorLabel.Text = ex.ToString();
+        catch (Exception ex)
+        {
+          if (session != null)
+            session.Abort();
+          this.errorLabel.Text = ex.ToString();
+          Console.Out.WriteLine(ex.StackTrace);
+        }
+        finally
+        {
+          s_sessionPool.FreeSession(sessionId, session);
+        }
       }
     }
 
@@ -1299,16 +1262,31 @@ namespace VelocityWeb.Secure
       {
         if (id > 0)
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+          int sessionId = -1;
+          SessionBase session = null;
+          try
           {
+            session = s_sessionPool.GetSession(out sessionId);
             session.BeginUpdate();
-            IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
             Project existingProject = (Project)session.Open(id);
             if (issueTracker.ProjectSet.Remove(existingProject))
             {
               existingProject.Unpersist(session);
               session.Commit();
+              s_sharedReadOnlySession.ForceDatabaseCacheValidation();
             }
+            session.Abort();
+          }
+          catch (Exception ex)
+          {
+            if (session != null)
+              session.Abort();
+            Console.Out.WriteLine(ex.StackTrace);
+          }
+          finally
+          {
+            s_sessionPool.FreeSession(sessionId, session);
           }
         }
       }
@@ -1324,16 +1302,31 @@ namespace VelocityWeb.Secure
       {
         if (id > 0)
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+          int sessionId = -1;
+          SessionBase session = null;
+          try
           {
+            session = s_sessionPool.GetSession(out sessionId);
             session.BeginUpdate();
-            IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
             Component existingComponent = (Component)session.Open(id);
             if (issueTracker.ComponentSet.Remove(existingComponent))
             {
               existingComponent.Unpersist(session);
               session.Commit();
+              s_sharedReadOnlySession.ForceDatabaseCacheValidation();
             }
+            session.Abort();
+          }
+          catch (Exception ex)
+          {
+            if (session != null)
+              session.Abort();
+            Console.Out.WriteLine(ex.StackTrace);
+          }
+          finally
+          {
+            s_sessionPool.FreeSession(sessionId, session);
           }
         }
       }
@@ -1349,16 +1342,31 @@ namespace VelocityWeb.Secure
       {
         if (id > 0)
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+          int sessionId = -1;
+          SessionBase session = null;
+          try
           {
+            session = s_sessionPool.GetSession(out sessionId);
             session.BeginUpdate();
-            IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
             ProductVersion existingVersion = (ProductVersion)session.Open(id);
             if (issueTracker.VersionSet.Remove(existingVersion))
             {
               existingVersion.Unpersist(session);
               session.Commit();
+              s_sharedReadOnlySession.ForceDatabaseCacheValidation();
             }
+            session.Abort();
+          }
+          catch (Exception ex)
+          {
+            if (session != null)
+              session.Abort();
+            Console.Out.WriteLine(ex.StackTrace);
+          }
+          finally
+          {
+            s_sessionPool.FreeSession(sessionId, session);
           }
         }
       }
@@ -1374,16 +1382,31 @@ namespace VelocityWeb.Secure
       {
         if (id > 0)
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+          int sessionId = -1;
+          SessionBase session = null;
+          try
           {
+            session = s_sessionPool.GetSession(out sessionId);
             session.BeginUpdate();
-            IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
             User existingUser = (User)session.Open(id);
             if (issueTracker.UserSet.Remove(existingUser))
             {
               existingUser.Unpersist(session);
               session.Commit();
+              s_sharedReadOnlySession.ForceDatabaseCacheValidation();
             }
+            session.Abort();
+          }
+          catch (Exception ex)
+          {
+            if (session != null)
+              session.Abort();
+            Console.Out.WriteLine(ex.StackTrace);
+          }
+          finally
+          {
+            s_sessionPool.FreeSession(sessionId, session);
           }
         }
       }
@@ -1397,6 +1420,7 @@ namespace VelocityWeb.Secure
     {
       string userEmail = this.User.Identity.Name;
       User user = new User(userEmail);
+      string dataPath = HttpContext.Current.Server.MapPath("~/Database");
       if (!issueTracker.UserSet.TryGetValue(user, ref user))
       {
         CustomerContact existingCustomer = null;
@@ -1408,7 +1432,7 @@ namespace VelocityWeb.Secure
           using (SessionNoServer session2 = new SessionNoServer(dataPath, 2000, true, true))
           {
             session2.BeginRead();
-            Root velocityDbroot = (Root)session2.Open(Root.PlaceInDatabase, 1, 1, false);
+            Root velocityDbroot = session2.AllObjects<Root>(false).FirstOrDefault();
             CustomerContact lookup = new CustomerContact(userEmail, null);
             velocityDbroot.customersByEmail.TryGetKey(lookup, ref existingCustomer);
             session2.Commit();
@@ -1422,8 +1446,7 @@ namespace VelocityWeb.Secure
           this.errorLabel.Text = ex.ToString();
         }
         user = new User(null, userEmail, firstName, lastName, userName);
-        Placement placer = new Placement(user.PlacementDatabaseNumber);
-        user.Persist(placer, session, true, true);
+        session.Persist(user);
         issueTracker.UserSet.Add(user);
       }
       return user;
@@ -1454,10 +1477,13 @@ namespace VelocityWeb.Secure
         if (updatedAttachementsObj != null)
           updatedAttachments = (SortedSetAny<Attachment>)Session["UpdatedAttachments"];
         Session["UpdatedAttachments"] = null;
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        int sessionId = -1;
+        SessionBase session = null;
+        try
         {
+          session = s_sessionPool.GetSession(out sessionId);
           session.BeginUpdate();
-          IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+          IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
           Project project = issueTracker.ProjectSet.Keys[projectIndex];
           Component component = issueTracker.ComponentSet.Keys[componentIndex];
           ProductVersion version = issueTracker.VersionSet.Count > 0 ? issueTracker.VersionSet.Keys[versionIndex] : null;
@@ -1478,8 +1504,7 @@ namespace VelocityWeb.Secure
               if (updatedAttachments != null)
                 foreach (Attachment attachment in updatedAttachments)
                   attachment.IssueAttachedTo = new WeakIOptimizedPersistableReference<Issue>(issue);
-              Placement placer = new Placement(issue.PlacementDatabaseNumber);
-              issue.Persist(placer, session, true, true);
+              session.Persist(issue);
               issueTracker.Add(issue);
             }
           }
@@ -1561,11 +1586,23 @@ namespace VelocityWeb.Secure
               }
           }
           session.Commit();
+          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+        }
+        catch (Exception ex)
+        {
+          if (session != null)
+            session.Abort();
+          Console.Out.WriteLine(ex.StackTrace);
+        }
+        finally
+        {
+          s_sessionPool.FreeSession(sessionId, session);
         }
       }
       catch (System.Exception ex)
       {
         Console.WriteLine(ex.ToString());
+        this.errorLabel.Text = ex.ToString();
       }
     }
 
@@ -1573,6 +1610,7 @@ namespace VelocityWeb.Secure
     {
       try
       {
+        string dataPath = HttpContext.Current.Server.MapPath("~/tracker");
         using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
         {
           session.BeginUpdate();
@@ -1582,11 +1620,10 @@ namespace VelocityWeb.Secure
               Console.WriteLine("Project null storeName detected in Update method");
             else
             {
-              IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+              IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
               User user = lookupUser(issueTracker, session);
               Project newProject = new Project(user, newValues.Name, newValues.Description);
-              Placement placer = new Placement(newProject.PlacementDatabaseNumber, 1, 1, 10000, 10000);
-              newProject.Persist(placer, session);
+              session.Persist(newProject);
               issueTracker.ProjectSet.Add(newProject);
             }
           }
@@ -1611,10 +1648,13 @@ namespace VelocityWeb.Secure
       {
         object projectIndexObj = Session["ProjectSelected"];
         int projectIndex = projectIndexObj == null ? 0 : (int)projectIndexObj;
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        int sessionId = -1;
+        SessionBase session = null;
+        try
         {
+          session = s_sessionPool.GetSession(out sessionId);
           session.BeginUpdate();
-          IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+          IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
           Project project = issueTracker.ProjectSet.Keys[projectIndex];
           if (newValues.Id == 0)
           {
@@ -1624,8 +1664,7 @@ namespace VelocityWeb.Secure
             {
               User user = lookupUser(issueTracker, session);
               Component newComponent = new Component(user, newValues.Name, newValues.Description, project);
-              Placement placer = new Placement(newComponent.PlacementDatabaseNumber, 1, 1, 10000, 10000);
-              newComponent.Persist(placer, session, true, true);
+              session.Persist(newComponent);
               issueTracker.ComponentSet.Add(newComponent);
             }
           }
@@ -1637,6 +1676,17 @@ namespace VelocityWeb.Secure
             existingComponent.Project = project;
           }
           session.Commit();
+          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+        }
+        catch (Exception ex)
+        {
+          if (session != null)
+            session.Abort();
+          Console.Out.WriteLine(ex.StackTrace);
+        }
+        finally
+        {
+          s_sessionPool.FreeSession(sessionId, session);
         }
       }
       catch (System.Exception ex)
@@ -1649,16 +1699,18 @@ namespace VelocityWeb.Secure
     {
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        int sessionId = -1;
+        SessionBase session = null;
+        try
         {
+          session = s_sessionPool.GetSession(out sessionId);
           session.BeginUpdate();
           if (newValues.Id == 0)
           {
-            IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
             User user = lookupUser(issueTracker, session);
             User newUser = new User(user, newValues.Email, newValues.FirstName, newValues.LastName, newValues.UserName);
-            Placement placer = new Placement(newUser.PlacementDatabaseNumber);
-            newUser.Persist(placer, session, true, true);
+            session.Persist(newUser);
             issueTracker.UserSet.Add(newUser);
           }
           else
@@ -1670,6 +1722,17 @@ namespace VelocityWeb.Secure
             existingUser.UserName = newValues.UserName;
           }
           session.Commit();
+          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+        }
+        catch (Exception ex)
+        {
+          if (session != null)
+            session.Abort();
+          Console.Out.WriteLine(ex.StackTrace);
+        }
+        finally
+        {
+          s_sessionPool.FreeSession(sessionId, session);
         }
       }
       catch (System.Exception ex)
@@ -1682,8 +1745,11 @@ namespace VelocityWeb.Secure
     {
       try
       {
-        using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+        int sessionId = -1;
+        SessionBase session = null;
+        try
         {
+          session = s_sessionPool.GetSession(out sessionId);
           session.BeginUpdate();
           if (newValues.Id == 0)
           {
@@ -1691,11 +1757,10 @@ namespace VelocityWeb.Secure
               Console.WriteLine("ProductVersion null storeName detected in Update method");
             else
             {
-              IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+              IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
               User user = lookupUser(issueTracker, session);
               ProductVersion newVersion = new ProductVersion(user, newValues.Name, newValues.Description, newValues.ReleaseDate);
-              Placement placer = new Placement(newVersion.PlacementDatabaseNumber);
-              newVersion.Persist(placer, session);
+              session.Persist(newVersion);
               issueTracker.VersionSet.Add(newVersion);
             }
           }
@@ -1707,6 +1772,17 @@ namespace VelocityWeb.Secure
             existingVersion.ReleaseDate = newValues.ReleaseDate;
           }
           session.Commit();
+          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+        }
+        catch (Exception ex)
+        {
+          if (session != null)
+            session.Abort();
+          Console.Out.WriteLine(ex.StackTrace);
+        }
+        finally
+        {
+          s_sessionPool.FreeSession(sessionId, session);
         }
       }
       catch (System.Exception ex)
@@ -1936,15 +2012,28 @@ namespace VelocityWeb.Secure
         {
           try
           {
-            string dataPath = HttpContext.Current.Server.MapPath("~/IssuesDatabase");
-            using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+            int sessionId = -1;
+            SessionBase session = null;
+            try
             {
+              session = s_sessionPool.GetSession(out sessionId);
               session.BeginUpdate();
               Attachment attachment = (Attachment)session.Open(id);
               if (attachment.IssueAttachedTo != null)
                 attachment.IssueAttachedTo.GetTarget(false, session).Attachments.Remove(attachment);
               attachment.Unpersist(session);
               session.Commit();
+              s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+            }
+            catch (Exception ex)
+            {
+              if (session != null)
+                session.Abort();
+              Console.Out.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+              s_sessionPool.FreeSession(sessionId, session);
             }
           }
           catch (System.Exception ex)
@@ -1980,9 +2069,11 @@ namespace VelocityWeb.Secure
         {
           try
           {
-            string dataPath = HttpContext.Current.Server.MapPath("~/IssuesDatabase");
-            using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+            int sessionId = -1;
+            SessionBase session = null;
+            try
             {
+              session = s_sessionPool.GetSession(out sessionId);
               session.BeginUpdate();
               Attachment attachment = (Attachment)session.Open(id);
               session.Commit();
@@ -1990,6 +2081,17 @@ namespace VelocityWeb.Secure
               Response.Cache.SetCacheability(HttpCacheability.NoCache);
               Response.ContentType = attachment.ContentType;
               Response.BinaryWrite(attachment.FileContent);
+              s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+            }
+            catch (Exception ex)
+            {
+              if (session != null)
+                session.Abort();
+              Console.Out.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+              s_sessionPool.FreeSession(sessionId, session);
             }
           }
           catch (System.Exception ex)
@@ -2014,14 +2116,9 @@ namespace VelocityWeb.Secure
       {
         try
         {
-          using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
-          {
-            session.BeginRead();
-            Attachment attachment = (Attachment)session.Open(id);
-            image.Visible = attachment.ContentType.Contains("image");
-            uploadTextBox.Text = attachment.Comment;
-            session.Commit();
-          }
+          Attachment attachment = (Attachment)s_sharedReadOnlySession.Open(id);
+          image.Visible = attachment.ContentType.Contains("image");
+          uploadTextBox.Text = attachment.Comment;
         }
         catch (System.Exception ex)
         {
@@ -2102,12 +2199,13 @@ namespace VelocityWeb.Secure
 
     protected void AddAdminUsers_Click(object sender, EventArgs e)
     {
-      string dataPath = HttpContext.Current.Server.MapPath("~/IssuesDatabase");
-      IssueTracker bugTracker = null;
-      using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+      int sessionId = -1;
+      SessionBase session = null;
+      try
       {
+        session = s_sessionPool.GetSession(out sessionId);
         session.BeginUpdate();
-        bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+        IssueTracker bugTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
         int index = 0;
         foreach (ListItem item in RegularUsers.Items)
         {
@@ -2121,6 +2219,17 @@ namespace VelocityWeb.Secure
         session.Commit();
         AdminUsers.DataSource = bugTracker.Permissions.AdminSet.Keys;
         AdminUsers.DataBind();
+        s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+      }
+      catch (Exception ex)
+      {
+        if (session != null)
+          session.Abort();
+        Console.Out.WriteLine(ex.StackTrace);
+      }
+      finally
+      {
+        s_sessionPool.FreeSession(sessionId, session);
       }
     }
 
@@ -2137,11 +2246,13 @@ namespace VelocityWeb.Secure
 
     protected void RemoveAdminUsers_Click(object sender, EventArgs e)
     {
-      IssueTracker bugTracker = null;
-      using (SessionNoServer session = new SessionNoServer(dataPath, 2000, true, true))
+      int sessionId = -1;
+      SessionBase session = null;
+      try
       {
+        session = s_sessionPool.GetSession(out sessionId);
         session.BeginUpdate();
-        bugTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+        IssueTracker bugTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
         int index = 0;
         foreach (ListItem item in AdminUsers.Items)
         {
@@ -2156,6 +2267,17 @@ namespace VelocityWeb.Secure
         session.Commit();
         AdminUsers.DataSource = bugTracker.Permissions.AdminSet.Keys;
         AdminUsers.DataBind();
+        s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+      }
+      catch (Exception ex)
+      {
+        if (session != null)
+          session.Abort();
+        Console.Out.WriteLine(ex.StackTrace);
+      }
+      finally
+      {
+        s_sessionPool.FreeSession(sessionId, session);
       }
     }
   }

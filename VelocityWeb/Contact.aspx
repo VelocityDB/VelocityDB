@@ -11,13 +11,31 @@
 <p><a href="mailto:support@velocitydb.com">support@VelocityDB.com</a></p>
 <h3>Email Sales</h3>
 <p><a href="mailto:sales@velocitydb.com">sales@VelocityDB.com</a></p>
+<h3>Email Mats Persson (founder)</h3>
+<p><a href="mailto:Mats@VelocityDB.com">Mats@VelocityDB.com</a></p>
 <h3>Mailing address</h3>
-<p>6414 Stroud Dr</p>
-<p>Houston, TX 77074-6340</p>
+<p>2034 Cordoba Pl</p>
+<p>Carlsbad, CA 92008-3710</p>
 <h3>Skype</h3>
 <p>VelocityDB</p>
 <h3>Phone</h3>
-<p>(858) 255 0710</p>
+<p>+1 760 845 4368</p>
+<h3>Mobile</h3>
+<p>+1 408 596 0973</p></div>
 </div>
-</div>
+<%--<script type="text/javascript" src="http://cdn.dev.skype.com/uri/skype-uri.js"></script>
+<div id="genSkypeCall_01">
+    <script type="text/javascript">
+        Skype.ui({
+            name: "call",
+            element: "genSkypeCall_01",
+            participants: ["VelocityDB"],
+            imageSize: 32,
+            imageColor: "skype"
+        });
+    </script>
+</div>--%>
+
+<%--<h3>Phone number</h3>--%>
+<%--<p>858 246 6700</p>--%>
 </asp:Content>

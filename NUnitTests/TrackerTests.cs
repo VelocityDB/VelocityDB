@@ -24,13 +24,12 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        Placement placementRoot = new Placement(IssueTracker.PlaceInDatabase);
         IssueTracker issueTracker = new IssueTracker(10, session);
         User user = new User(null, "mats.persson@gmail.com", "Mats", "Persson", "matspca");
-        user.Persist(session, user);
+        session.Persist(user);
         PermissionScheme permissions = new PermissionScheme(user);
         issueTracker.Permissions = permissions;
-        issueTracker.Persist(placementRoot, session);
+        session.Persist(issueTracker);
         session.Commit();
       }
     }
@@ -44,13 +43,13 @@ namespace NUnitTests
         using (SessionNoServer session = new SessionNoServer(systemDir))
         {
           session.BeginUpdate();
-          IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+          IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
           string email = i.ToString() + "@gmail.com";
           string first = "first" + i.ToString();
           string last = "last" + i.ToString();
           string userName = "username" + i.ToString();
           user = new User(user, email, first, last, userName);
-          user.Persist(session, priorUser ?? user);
+          session.Persist(user);
           issueTracker.UserSet.Add(user);
           priorUser = user;
           session.Commit();
@@ -66,12 +65,12 @@ namespace NUnitTests
         using (SessionNoServer session = new SessionNoServer(systemDir))
         {
           session.BeginUpdate();
-          IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+          IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
           User user = issueTracker.UserSet.Keys[rand.Next(issueTracker.UserSet.Keys.Count - 1)];
           string v = "version" + i.ToString();
           string d = "vdescription" + i.ToString();
           version = new ProductVersion(user, v, d, null);
-          version.Persist(session, priorVersion ?? version);
+          session.Persist(version);
           issueTracker.VersionSet.Add(version);
           priorVersion = version;
           session.Commit();
@@ -87,12 +86,12 @@ namespace NUnitTests
         using (SessionNoServer session = new SessionNoServer(systemDir))
         {
           session.BeginUpdate();
-          IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+          IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
           User user = issueTracker.UserSet.Keys[rand.Next(issueTracker.UserSet.Keys.Count - 1)];
           string p = "project" + i.ToString();
           string d = "pdescription" + i.ToString();
           project = new Project(user, p, d);
-          project.Persist(session, priorProject ?? project);
+          session.Persist(project);
           priorProject = project;
           issueTracker.ProjectSet.Add(project);
           session.Commit();
@@ -108,13 +107,13 @@ namespace NUnitTests
         using (SessionNoServer session = new SessionNoServer(systemDir))
         {
           session.BeginUpdate();
-          IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+          IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
           User user = issueTracker.UserSet.Keys[rand.Next(issueTracker.UserSet.Keys.Count - 1)];
           Project project = issueTracker.ProjectSet.Keys[rand.Next(issueTracker.ProjectSet.Keys.Count - 1)];
           string c = "component" + i.ToString();
           string d = "cdescription" + i.ToString();
           component = new Component(user, c, d, project);
-          component.Persist(session, priorComponent ?? component);
+          session.Persist(component);
           issueTracker.ComponentSet.Add(component);
           priorComponent = component;
           session.Commit();
@@ -130,8 +129,8 @@ namespace NUnitTests
       {
         session.BeginUpdate();
         for (int i = 0; i < numberOfIssues; i++)
-        {         
-          IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+        {
+          IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
           User user = issueTracker.UserSet.Keys[rand.Next(issueTracker.UserSet.Count)];
           User assignedTo = issueTracker.UserSet.Keys[rand.Next(issueTracker.UserSet.Count)];
           Project project = issueTracker.ProjectSet.Keys[rand.Next(issueTracker.ProjectSet.Count)];
@@ -149,7 +148,7 @@ namespace NUnitTests
           string e = "environment" + i.ToString();
           string d = "idescription" + i.ToString();
           issue = new Issue(user, priority, project, category, component, version, resolution, s, d, e, assignedTo, dueDate, null, status);
-          issue.Persist(session, priorIssue == null ? issue : priorIssue);
+          session.Persist(issue);
           priorIssue = issue;
           issueTracker.Add(issue);       
         }
@@ -163,7 +162,7 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir, 2000, true, true))
       {
         session.BeginRead();
-        IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+        IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
         session.Commit();
       }
     }
@@ -174,7 +173,7 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir, 2000, true, false))
       {
         session.BeginUpdate();
-        IssueTracker issueTracker = (IssueTracker)session.Open(IssueTracker.PlaceInDatabase, 1, 1, false);
+        IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
         session.Commit();
       }
     }
