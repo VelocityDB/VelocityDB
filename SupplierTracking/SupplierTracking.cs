@@ -31,8 +31,7 @@ namespace SupplierTracking
         Directory.CreateDirectory(session.SystemDirectory);
         File.Copy(s_licenseDbFile, Path.Combine(session.SystemDirectory, "4.odb"));
         session.BeginUpdate();
-        Graph g = new Graph(session);
-        session.Persist(g);
+        Graph g = new Graph(session, false);
 
         // SCHEMA
         VertexType warehouseVertexType = g.NewVertexType("Warehouse");
@@ -177,7 +176,6 @@ namespace SupplierTracking
         }; 
         g.ExportToGraphJson("c:/SupplierTrackingExportToGraphJson.json", gs);
         Graph g2 = new Graph(session);
-        session.Persist(g2);
         g2.ImportGraphJson("c:/SupplierTrackingExportToGraphJson.json");
         session.Commit();
         return 0;

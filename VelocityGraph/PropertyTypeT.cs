@@ -23,28 +23,28 @@ namespace VelocityGraph
   [Serializable]
   public class PropertyTypeT<T> : PropertyType where T : IComparable
   {
-    BTreeMap<ElementId, T> propertyValue;
-    BTreeMap<T, BTreeSet<ElementId>> valueIndex;
-    BTreeMap<T, ElementId> valueIndexUnique;
+    BTreeMap<ElementId, T> m_propertyValue;
+    BTreeMap<T, BTreeSet<ElementId>> m_valueIndex;
+    BTreeMap<T, ElementId> m_valueIndexUnique;
 
     internal PropertyTypeT(bool isVertexProp, TypeId typeId, PropertyId propertyId, string name, PropertyKind kind, Graph graph)
       : base(isVertexProp, typeId, propertyId, name, graph)
     {
-      propertyValue = new BTreeMap<ElementId, T>(null, graph.Session);
+      m_propertyValue = new BTreeMap<ElementId, T>(null, graph.Session);
       switch (kind)
       {
         case PropertyKind.Indexed:
-          valueIndex = new BTreeMap<T, BTreeSet<ElementId>>(null, graph.Session);
+          m_valueIndex = new BTreeMap<T, BTreeSet<ElementId>>(null, graph.Session);
           break;
         case PropertyKind.Unique:
-          valueIndexUnique = new BTreeMap<T, ElementId>(null, graph.Session);
+          m_valueIndexUnique = new BTreeMap<T, ElementId>(null, graph.Session);
           break;
       }
     }
 
     bool GetPropertyValueT(ElementId oid, ref T pv)
     {
-      if (propertyValue.TryGetValue(oid, out pv))
+      if (m_propertyValue.TryGetValue(oid, out pv))
         return true;
       return false;
     }    
@@ -55,30 +55,30 @@ namespace VelocityGraph
     /// <returns></returns>
     public override bool HasPropertyValue(ElementId elementId)
     {
-      return propertyValue.Contains(elementId);
+      return m_propertyValue.Contains(elementId);
     }     
 
     bool RemovePropertyValueT(ElementId oid, out T pv)
     {
-      if (propertyValue.TryGetValue(oid, out pv))
+      if (m_propertyValue.TryGetValue(oid, out pv))
       {
-        propertyValue.Remove(oid);
-        if (valueIndex != null)
+        m_propertyValue.Remove(oid);
+        if (m_valueIndex != null)
         {
-          if (valueIndex.TryGetKey(pv, ref pv))
+          if (m_valueIndex.TryGetKey(pv, ref pv))
           {
-            BTreeSet<ElementId> oidArray = valueIndex[pv];
+            BTreeSet<ElementId> oidArray = m_valueIndex[pv];
             if (oidArray.Count > 1)
               oidArray.Remove(oid);
             else
             {
               oidArray.Unpersist(Session);
-              valueIndex.Remove(pv);
+              m_valueIndex.Remove(pv);
             }
           }
         }
-        else if (valueIndexUnique != null)
-          valueIndexUnique.Remove(pv);
+        else if (m_valueIndexUnique != null)
+          m_valueIndexUnique.Remove(pv);
         return true;
       }
       return false;
@@ -87,25 +87,25 @@ namespace VelocityGraph
     void SetPropertyValueX(ElementId element, T aValue)
     {
       Update();
-      propertyValue[element] = aValue;
-      if (valueIndex != null)
+      m_propertyValue[element] = aValue;
+      if (m_valueIndex != null)
       {
         BTreeSet<ElementId> oidArray;
-        if (!valueIndex.TryGetKey(aValue, ref aValue))
+        if (!m_valueIndex.TryGetKey(aValue, ref aValue))
         {
-          oidArray = new BTreeSet<ElementId>(null, graph.Session);
+          oidArray = new BTreeSet<ElementId>(null, Session);
           oidArray.Add(element);
-          valueIndex.AddFast(aValue, oidArray);
+          m_valueIndex.AddFast(aValue, oidArray);
         }
         else
         {
-          oidArray = valueIndex[aValue];
+          oidArray = m_valueIndex[aValue];
           oidArray.Add(element);
-          valueIndex[aValue] = oidArray;
+          m_valueIndex[aValue] = oidArray;
         }
       }
-      else if (valueIndexUnique != null)
-        valueIndexUnique.AddFast(aValue, element);
+      else if (m_valueIndexUnique != null)
+        m_valueIndexUnique.AddFast(aValue, element);
     }
 
     /// <summary>
@@ -118,15 +118,15 @@ namespace VelocityGraph
     public Vertex GetPropertyVertex(T value, bool polymorphic = false, bool errorIfNotFound = true)
     {
       VertexId elementId = -1;
-      if (valueIndexUnique == null || valueIndexUnique.TryGetValue(value, out elementId) == false)
+      if (m_valueIndexUnique == null || m_valueIndexUnique.TryGetValue(value, out elementId) == false)
       {
         BTreeSet<ElementId> elementIds;
-        if (valueIndex != null && valueIndex.TryGetValue(value, out elementIds))
+        if (m_valueIndex != null && m_valueIndex.TryGetValue(value, out elementIds))
           elementId = elementIds.First();
       }
       if (elementId == -1)
         return null;
-      VertexType vertexType = graph.vertexType[TypeId];
+      VertexType vertexType = MyGraph.VertexTypes[TypeId];
       return vertexType.GetVertex(elementId, polymorphic, errorIfNotFound);
     }
 
@@ -147,11 +147,11 @@ namespace VelocityGraph
     public IEnumerable<Vertex> GetPropertyVertices(T value, bool polymorphic = false)
     {
       VertexId elementId = -1;
-      VertexType vertexType = graph.vertexType[TypeId];
-      if (valueIndexUnique == null || valueIndexUnique.TryGetValue(value, out elementId) == false)
+      VertexType vertexType = MyGraph.VertexTypes[TypeId];
+      if (m_valueIndexUnique == null || m_valueIndexUnique.TryGetValue(value, out elementId) == false)
       {
         BTreeSet<ElementId> elementIds;
-        if (valueIndex != null && valueIndex.TryGetValue(value, out elementIds))
+        if (m_valueIndex != null && m_valueIndex.TryGetValue(value, out elementIds))
           foreach (ElementId eId in elementIds)
           {
             Vertex vertex = vertexType.GetVertex(eId, polymorphic, false);
@@ -183,15 +183,15 @@ namespace VelocityGraph
     public Edge GetPropertyEdge(T value)
     {
       EdgeId elementId = -1;
-      if (valueIndexUnique == null || valueIndexUnique.TryGetValue(value, out elementId) == false)
+      if (m_valueIndexUnique == null || m_valueIndexUnique.TryGetValue(value, out elementId) == false)
       {
         BTreeSet<ElementId> elementIds;
-        if (valueIndex != null && valueIndex.TryGetValue(value, out elementIds))
+        if (m_valueIndex != null && m_valueIndex.TryGetValue(value, out elementIds))
           elementId = elementIds.First();
       }
       if (elementId == -1)
         return null;
-      EdgeType edgeType = graph.edgeType[TypeId];
+      EdgeType edgeType = MyGraph.EdgeTypes[TypeId];
       return edgeType.GetEdge(elementId);
     }
 
@@ -204,11 +204,11 @@ namespace VelocityGraph
     public IEnumerable<Edge> GetPropertyEdges(T value)
    {
       EdgeId elementId = -1;
-      EdgeType edgeType = graph.edgeType[TypeId];
-      if (valueIndexUnique == null || valueIndexUnique.TryGetValue(value, out elementId) == false)
+      EdgeType edgeType = MyGraph.EdgeTypes[TypeId];
+      if (m_valueIndexUnique == null || m_valueIndexUnique.TryGetValue(value, out elementId) == false)
       {
         BTreeSet<ElementId> elementIds;
-        if (valueIndex != null && valueIndex.TryGetValue(value, out elementIds))
+        if (m_valueIndex != null && m_valueIndex.TryGetValue(value, out elementIds))
           foreach (ElementId eId in elementIds)
             yield return edgeType.GetEdge(eId);
       }
@@ -256,7 +256,7 @@ namespace VelocityGraph
     {
       if (object.ReferenceEquals(value, null))
         throw new NullObjectException("A property value may not be null");
-      if (graph.VertexIdSetPerType && IsVertexProperty)
+      if (MyGraph.VertexIdSetPerType && IsVertexProperty)
       {
         if (typeId != TypeId)
           throw new NotSupportedException("SetPropertyValue with a different VertexType/EdgeType than used by property is not supported when using VertexIdSetPerType, create Graph with option bool vertexIdSetPerVertexType set to false");
@@ -265,16 +265,16 @@ namespace VelocityGraph
       {
         if (IsVertexProperty)
         {
-          VertexType vertexTypeIn = graph.GetVertexType(typeId);
-          VertexType vertexType = graph.GetVertexType(TypeId);
-          if (vertexType.subType.Contains(vertexTypeIn) == false)
+          VertexType vertexTypeIn = MyGraph.GetVertexType(typeId);
+          VertexType vertexType = MyGraph.GetVertexType(TypeId);
+          if (vertexType.SubTypes.Contains(vertexTypeIn) == false)
             throw new UnexpectedException("Invalid VertexType used for setting property");
         }
         else
         {
-          EdgeType edgeTypeIn = graph.GetEdgeType(typeId);
-          EdgeType edgeType = graph.GetEdgeType(TypeId);
-          if (edgeType.subType.Contains(edgeTypeIn) == false)
+          EdgeType edgeTypeIn = MyGraph.GetEdgeType(typeId);
+          EdgeType edgeType = MyGraph.GetEdgeType(TypeId);
+          if (edgeType.SubTypes.Contains(edgeTypeIn) == false)
             throw new UnexpectedException("Invalid EdgeType used for setting property");
         }
       }

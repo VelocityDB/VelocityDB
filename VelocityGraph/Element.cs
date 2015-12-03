@@ -17,7 +17,7 @@ namespace VelocityGraph
     /// <summary>
     /// The id of an element
     /// </summary>
-    protected readonly ElementId id;
+    protected readonly ElementId m_id;
 
     /// <summary>
     /// Constructor setting the id and graph reference
@@ -26,7 +26,7 @@ namespace VelocityGraph
     /// <param name="graph">The owning graph</param>
     protected Element(ElementId id, Graph graph):base(graph)
     {
-      this.id = id;
+      m_id = id;
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ namespace VelocityGraph
     /// <returns>The hash code given by id</returns>
     public override int GetHashCode()
     {
-      return id.GetHashCode();
+      return m_id.GetHashCode();
     }
   }
 }

@@ -42,6 +42,7 @@ namespace DatingRecommendations
     {
       bool import = args.Length > 0 && args[0].ToLower() == "-import";
       bool dirExist = Directory.Exists(s_systemDir);
+      SessionBase.ClearAllCachedObjectsWhenDetectingUpdatedDatabase = false;
       if (import || !dirExist)
       {
         if (dirExist)
@@ -56,8 +57,7 @@ namespace DatingRecommendations
           session.BeginUpdate();
           session.DefaultDatabaseLocation().CompressPages = PageInfo.compressionKind.LZ4;
           Graph g = new Graph(session);
-          session.Persist(g);
-
+  
           // SCHEMA
           VertexType userType = g.NewVertexType("User");
           PropertyType genderType = userType.NewProperty("Gender", DataType.Integer, PropertyKind.Indexed);

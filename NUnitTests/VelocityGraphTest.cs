@@ -838,9 +838,8 @@ namespace NUnitTests
         //        Assert.That(bl!=null);
 
         // var db = session.OpenDatabase(15, true);
-        var graph = new Graph(session);
         session.BeginUpdate();
-        session.Persist(graph);
+        var graph = new Graph(session);
 
         //define schema                       Trace.Wri
 

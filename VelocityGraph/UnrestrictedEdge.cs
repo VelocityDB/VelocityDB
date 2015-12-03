@@ -14,9 +14,9 @@ namespace VelocityGraph
 {
   internal class UnrestrictedEdge : OptimizedPersistable
   {
-    public VertexType headVertexType;
-    public VertexId headVertexId;
-    public VertexType tailVertexType;
-    public VertexId tailVertexId;
+    public VertexType m_headVertexType;
+    public VertexId m_headVertexId;
+    public VertexType m_tailVertexType;
+    public VertexId m_tailVertexId;
   }
 }

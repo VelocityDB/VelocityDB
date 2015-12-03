@@ -22,18 +22,18 @@ namespace VelocityGraph
   [Serializable]
   public partial class EdgeType : OptimizedPersistable, IComparable<EdgeType>, IEqualityComparer<EdgeType>
   {
-    internal Graph graph;
-    EdgeType baseType;
-    internal VelocityDbList<EdgeType> subType;
-    string typeName;
-    TypeId typeId;
-    VelocityDbList<Range<EdgeId>> edgeRanges;
-    internal BTreeMap<EdgeId, UnrestrictedEdge> unrestrictedEdges;
-    internal BTreeMap<EdgeId, UInt64> restrictedEdges;
-    internal BTreeMap<string, PropertyType> stringToPropertyType;
-    bool birectional;
-    VertexType headType;
-    VertexType tailType;
+    WeakIOptimizedPersistableReference<Graph> m_graph;
+    EdgeType m_baseType;
+    List<EdgeType> m_subTypes;
+    string m_typeName;
+    TypeId m_typeId;
+    WeakIOptimizedPersistableReference<VelocityDbList<Range<EdgeId>>> m_edgeRanges;
+    internal BTreeMap<EdgeId, UnrestrictedEdge> m_unrestrictedEdges;
+    internal BTreeMap<EdgeId, UInt64> m_restrictedEdges;
+    internal BTreeMap<string, PropertyType> m_stringToPropertyType;
+    bool m_birectional;
+    WeakIOptimizedPersistableReference<VertexType> m_headType;
+    WeakIOptimizedPersistableReference<VertexType> m_tailType;
 
     /// <summary>
     /// Creates a new edge type.
@@ -47,22 +47,30 @@ namespace VelocityGraph
     /// <param name="graph">The owning graph</param>
     public EdgeType(TypeId aTypeId, string aTypeName, VertexType tailType, VertexType headType, bool birectional, EdgeType baseType, Graph graph)
     {
-      this.graph = graph;
-      this.baseType = baseType;
-      subType = new VelocityDbList<EdgeType>();
+      m_graph = new WeakIOptimizedPersistableReference<Graph>(graph);
+      m_baseType = baseType;
+      m_subTypes = new List<EdgeType>();
       if (baseType != null)
-        baseType.subType.Add(this);
-      this.birectional = birectional;
-      typeId = aTypeId;
-      typeName = aTypeName;
-      this.tailType = tailType;
-      this.headType = headType;
+      {
+        baseType.Update();
+        baseType.m_subTypes.Add(this);
+      }
+      m_birectional = birectional;
+      m_typeId = aTypeId;
+      m_typeName = aTypeName;
+      if (tailType != null)
+        m_tailType = new WeakIOptimizedPersistableReference<VertexType>(tailType);
+      if (headType != null)
+        m_headType = new WeakIOptimizedPersistableReference<VertexType>(headType);
       if (Unrestricted)
-        unrestrictedEdges = new BTreeMap<EdgeId, UnrestrictedEdge>(null, graph.Session);
+        m_unrestrictedEdges = new BTreeMap<EdgeId, UnrestrictedEdge>(null, graph.Session);
       else
-        restrictedEdges = new BTreeMap<EdgeId, ulong>(null, graph.Session);
-      stringToPropertyType = new BTreeMap<string, PropertyType>(null, graph.Session);
-      edgeRanges = new VelocityDbList<Range<EdgeId>>();
+        m_restrictedEdges = new BTreeMap<EdgeId, ulong>(null, graph.Session);
+      m_stringToPropertyType = new BTreeMap<string, PropertyType>(null, graph.Session);
+      var edgeRanges = new VelocityDbList<Range<EdgeId>>();
+      graph.Session.Persist(edgeRanges);
+      m_edgeRanges = new WeakIOptimizedPersistableReference<VelocityDbList<Range<PropertyId>>>(edgeRanges);
+      graph.Session.Persist(this);
     }
 
     /// <summary>
@@ -72,7 +80,7 @@ namespace VelocityGraph
     /// <returns>a negative number if less, 0 if equal or else a positive number</returns>
     public int CompareTo(EdgeType obj)
     {
-      return typeId.CompareTo(obj.typeId);
+      return m_typeId.CompareTo(obj.m_typeId);
     }
 
     /// <summary>
@@ -83,7 +91,15 @@ namespace VelocityGraph
     /// <returns>0 if edge types are equal, -1 if aId is less than bId; otherwise 1</returns>
     public static int Compare(EdgeType aId, EdgeType bId)
     {
-      return aId.typeId.CompareTo(bId.typeId);
+      return aId.m_typeId.CompareTo(bId.m_typeId);
+    }
+
+    VelocityDbList<Range<EdgeId>> EdgeRanges
+    {
+      get
+      {
+        return m_edgeRanges.GetTarget(false, Session);
+      }
     }
 
     /// <summary>
@@ -104,7 +120,7 @@ namespace VelocityGraph
     {
       get
       {
-        return birectional == false;
+        return m_birectional == false;
       }
     }
     /// <summary>
@@ -117,24 +133,24 @@ namespace VelocityGraph
       if (Unrestricted)
       {
         UnrestrictedEdge headTail;
-        if (unrestrictedEdges.TryGetValue(edgeId, out headTail))
+        if (m_unrestrictedEdges.TryGetValue(edgeId, out headTail))
         {
-          VertexType vt = headTail.headVertexType;
-          Vertex head = vt.GetVertex(headTail.headVertexId);
-          vt = headTail.tailVertexType;
-          Vertex tail = vt.GetVertex(headTail.tailVertexId);
-          return new Edge(graph, this, edgeId, head, tail);
+          VertexType vt = headTail.m_headVertexType;
+          Vertex head = vt.GetVertex(headTail.m_headVertexId);
+          vt = headTail.m_tailVertexType;
+          Vertex tail = vt.GetVertex(headTail.m_tailVertexId);
+          return new Edge(MyGraph, this, edgeId, head, tail);
         }
       }
       else
       {
         UInt64 vertexVertex;
-        if (restrictedEdges.TryGetValue(edgeId, out vertexVertex))
+        if (m_restrictedEdges.TryGetValue(edgeId, out vertexVertex))
         {
           VertexId headId = (VertexId)(vertexVertex >> 32);
-          Vertex head = headType.GetVertex(headId);
-          Vertex tail = tailType.GetVertex((VertexId)vertexVertex);
-          return new Edge(graph, this, edgeId, head, tail);
+          Vertex head = HeadType.GetVertex(headId);
+          Vertex tail = TailType.GetVertex((VertexId)vertexVertex);
+          return new Edge(MyGraph, this, edgeId, head, tail);
         }
       }
 
@@ -149,28 +165,28 @@ namespace VelocityGraph
     public IEnumerable<Edge> GetEdges(bool polymorphic = false)
     {
       if (Unrestricted)
-        foreach (var m in unrestrictedEdges)
+        foreach (var m in m_unrestrictedEdges)
         {
-          VertexType vt1 = m.Value.headVertexType;
-          Vertex head = vt1.GetVertex(m.Value.headVertexId);
-          VertexType vt2 = m.Value.tailVertexType;
-          Vertex tail = vt2.GetVertex(m.Value.tailVertexId);
+          VertexType vt1 = m.Value.m_headVertexType;
+          Vertex head = vt1.GetVertex(m.Value.m_headVertexId);
+          VertexType vt2 = m.Value.m_tailVertexType;
+          Vertex tail = vt2.GetVertex(m.Value.m_tailVertexId);
           yield return GetEdge(m.Key, tail, head);
         }
       else
-        foreach (var m in restrictedEdges)
+        foreach (var m in m_restrictedEdges)
         {
-          VertexType vt1 = headType;
+          VertexType vt1 = HeadType;
           VertexId vId = (VertexId) (m.Value >> 32);
           Vertex head = vt1.GetVertex(vId);
-          VertexType vt2 = tailType;
+          VertexType vt2 = TailType;
           vId = (VertexId) m.Value;
           Vertex tail = vt2.GetVertex(vId);
           yield return GetEdge(m.Key, tail, head);
         }
       if (polymorphic)
       {
-        foreach (EdgeType et in subType)
+        foreach (EdgeType et in m_subTypes)
           foreach (Edge e in et.GetEdges(polymorphic))
             yield return e;
       }
@@ -183,7 +199,7 @@ namespace VelocityGraph
     public long CountEdges()
     {
       long ct = 0;
-      foreach (Range<EdgeId> range in edgeRanges)
+      foreach (Range<EdgeId> range in EdgeRanges)
         ct += range.Max - range.Min + 1;
       return ct;
     }
@@ -199,11 +215,11 @@ namespace VelocityGraph
     {
       if (Unrestricted)
       {
-        if (unrestrictedEdges.Contains(edgeId))
-          return new Edge(graph, this, edgeId, headVertex, tailVertex);
+        if (m_unrestrictedEdges.Contains(edgeId))
+          return new Edge(MyGraph, this, edgeId, headVertex, tailVertex);
       }
-      else if (restrictedEdges.Contains(edgeId))
-        return new Edge(graph, this, edgeId, headVertex, tailVertex);
+      else if (m_restrictedEdges.Contains(edgeId))
+        return new Edge(MyGraph, this, edgeId, headVertex, tailVertex);
       throw new EdgeDoesNotExistException();
     }
 
@@ -214,7 +230,7 @@ namespace VelocityGraph
     /// <returns>Hash code of an edge type</returns>
     public int GetHashCode(EdgeType t)
     {
-      return t.typeId.GetHashCode();
+      return t.m_typeId.GetHashCode();
     }
 
     /// <summary>
@@ -223,7 +239,7 @@ namespace VelocityGraph
     /// <returns>the set of all string keys associated with the edge type</returns>
     public IEnumerable<string> GetPropertyKeys()
     {
-      foreach (var pair in stringToPropertyType)
+      foreach (var pair in m_stringToPropertyType)
       {
         yield return pair.Key;
       }
@@ -236,7 +252,7 @@ namespace VelocityGraph
     {
       get
       {
-        return headType;
+        return m_headType.GetTarget(false, Session);
       }
     }
 
@@ -250,12 +266,12 @@ namespace VelocityGraph
     public PropertyType NewProperty(string name, DataType dt, PropertyKind kind)
     {
       PropertyType aType;
-      if (stringToPropertyType.TryGetValue(name, out aType) == false)
+      if (m_stringToPropertyType.TryGetValue(name, out aType) == false)
       {
-        graph.Update();
+        var propertyTypes = MyGraph.PropertyTypes;
         int pos = -1;
         int i = 0;
-        foreach (PropertyType pt in graph.propertyType)
+        foreach (PropertyType pt in propertyTypes)
           if (pt == null)
           {
             pos = i;
@@ -264,13 +280,11 @@ namespace VelocityGraph
           else
             ++i;
         if (pos < 0)
-        {
-          pos = graph.propertyType.Length;
-          Array.Resize(ref graph.propertyType, pos + 1);
-        }
-        aType = graph.PropertyTypeFromDataType(false, dt, this.TypeId, pos, name, kind);
-        graph.propertyType[pos] = aType;
-        stringToPropertyType.AddFast(name, aType);
+          pos = propertyTypes.Count;
+        aType = MyGraph.PropertyTypeFromDataType(false, dt, this.TypeId, pos, name, kind);
+        Session.Persist(aType);
+        propertyTypes[pos] = aType;
+        m_stringToPropertyType.AddFast(name, aType);
       }
       return aType;
     }
@@ -285,40 +299,38 @@ namespace VelocityGraph
     internal PropertyType NewProperty(string name, object value, PropertyKind kind)
     {
       PropertyType aType;
-      if (stringToPropertyType.TryGetValue(name, out aType) == false)
+      if (m_stringToPropertyType.TryGetValue(name, out aType) == false)
       {
-        int pos = graph.propertyType.Length;
-        graph.Update();
-        Array.Resize(ref graph.propertyType, pos + 1);
+        int pos = MyGraph.PropertyTypes.Count;
         switch (Type.GetTypeCode(value.GetType()))
         {
           case TypeCode.Boolean:
-            aType = new PropertyTypeT<bool>(false, this.TypeId, pos, name, kind, graph);
+            aType = new PropertyTypeT<bool>(false, this.TypeId, pos, name, kind, MyGraph);
             break;
           case TypeCode.Int32:
-            aType = new PropertyTypeT<int>(false, this.TypeId, pos, name, kind, graph);
+            aType = new PropertyTypeT<int>(false, this.TypeId, pos, name, kind, MyGraph);
             break;
           case TypeCode.Int64:
-            aType = new PropertyTypeT<long>(false, this.TypeId, pos, name, kind, graph);
+            aType = new PropertyTypeT<long>(false, this.TypeId, pos, name, kind, MyGraph);
             break;
           case TypeCode.Single:
-            aType = new PropertyTypeT<Single>(false, this.TypeId, pos, name, kind, graph);
+            aType = new PropertyTypeT<Single>(false, this.TypeId, pos, name, kind, MyGraph);
             break;
           case TypeCode.Double:
-            aType = new PropertyTypeT<double>(false, this.TypeId, pos, name, kind, graph);
+            aType = new PropertyTypeT<double>(false, this.TypeId, pos, name, kind, MyGraph);
             break;
           case TypeCode.DateTime:
-            aType = new PropertyTypeT<DateTime>(false, this.TypeId, pos, name, kind, graph);
+            aType = new PropertyTypeT<DateTime>(false, this.TypeId, pos, name, kind, MyGraph);
             break;
           case TypeCode.String:
-            aType = new PropertyTypeT<string>(false, this.TypeId, pos, name, kind, graph);
+            aType = new PropertyTypeT<string>(false, this.TypeId, pos, name, kind, MyGraph);
             break;
           case TypeCode.Object:
-            aType = new PropertyTypeT<IComparable>(false, this.TypeId, pos, name, kind, graph);
+            aType = new PropertyTypeT<IComparable>(false, this.TypeId, pos, name, kind, MyGraph);
             break;
         }
-        graph.propertyType[pos] = aType;
-        stringToPropertyType.AddFast(name, aType);
+        MyGraph.PropertyTypes[pos] = aType;
+        m_stringToPropertyType.AddFast(name, aType);
       }
       return aType;
     }
@@ -327,14 +339,14 @@ namespace VelocityGraph
     {
       Range<EdgeId> range;
       EdgeId eId = 1;
-      switch (edgeRanges.Count)
+      switch (EdgeRanges.Count)
       {
         case 0:
           range = new Range<EdgeId>(1, 1);
-          edgeRanges.Add(range);
+          EdgeRanges.Add(range);
           break;
         case 1:
-          range = edgeRanges.First();
+          range = EdgeRanges.First();
 
           if (range.Min == 1)
           {
@@ -346,11 +358,11 @@ namespace VelocityGraph
             eId = range.Min - 1;
             range = new Range<EdgeId>(eId, range.Max);
           }
-          edgeRanges[0] = range;
+          EdgeRanges[0] = range;
           break;
         default:
           {
-            range = edgeRanges.First();
+            range = EdgeRanges.First();
             if (range.Min > 1)
             {
               eId = range.Min - 1;
@@ -358,10 +370,10 @@ namespace VelocityGraph
             }
             else
             {
-              Range<VertexId> nextRange = edgeRanges[1];
+              Range<VertexId> nextRange = EdgeRanges[1];
               if (range.Max + 2 == nextRange.Min)
               {
-                edgeRanges.Remove(range);
+                EdgeRanges.Remove(range);
                 eId = range.Max + 1;
                 range = new Range<VertexId>(range.Min, nextRange.Max);
               }
@@ -370,12 +382,20 @@ namespace VelocityGraph
                 range = new Range<VertexId>(range.Min, range.Max + 1);
                 eId = range.Max + 1;
               }
-              edgeRanges.Add(range);
+              EdgeRanges.Add(range);
             }
           }
           break;
       }
       return eId;
+    }
+
+    public Graph MyGraph
+    {
+      get
+      {
+        return m_graph.GetTarget(false, Session);
+      }
     }
 
     /// <summary>
@@ -386,22 +406,22 @@ namespace VelocityGraph
     /// <returns>a new edge</returns>
     public Edge NewEdge(Vertex tail, Vertex head)
     {
-      if (tailType != null && tail.VertexType != tailType)
+      if (m_tailType != null && tail.VertexType != TailType)
         throw new InvalidTailVertexTypeException();
-      if (headType != null && head.VertexType != headType)
+      if (m_headType != null && head.VertexType != HeadType)
         throw new InvalidHeadVertexTypeException();
-      EdgeId eId = NewEdgeId(graph);
+      EdgeId eId = NewEdgeId(MyGraph);
       if (Unrestricted)
-        unrestrictedEdges.AddFast(eId, new UnrestrictedEdge { headVertexType = head.VertexType, headVertexId = head.VertexId, tailVertexType = tail.VertexType, tailVertexId = tail.VertexId });
+        m_unrestrictedEdges.AddFast(eId, new UnrestrictedEdge { m_headVertexType = head.VertexType, m_headVertexId = head.VertexId, m_tailVertexType = tail.VertexType, m_tailVertexId = tail.VertexId });
       else
       {
         UInt64 vertexVertex = (UInt64)head.VertexId;
         vertexVertex = vertexVertex << 32;
         vertexVertex += (UInt64)tail.VertexId;
-        restrictedEdges.AddFast(eId, vertexVertex);
+        m_restrictedEdges.AddFast(eId, vertexVertex);
       }
-      Edge edge = new Edge(graph, this, eId, head, tail);
-      if (birectional)
+      Edge edge = new Edge(MyGraph, this, eId, head, tail);
+      if (m_birectional)
       {
         tail.VertexType.NewTailToHeadEdge(this, edge, tail, head, Session);
         head.VertexType.NewHeadToTailEdge(this, edge, tail, head, Session);
@@ -418,10 +438,13 @@ namespace VelocityGraph
     {
       if (GetEdges().ElementAtOrDefault(0) != null)
         throw new EdgeTypeInUseException();
-      if (subType.Count > 0)
+      if (m_subTypes.Count > 0)
         throw new EdgeTypeInUseException();
-      if (baseType != null)
-        baseType.subType.Remove(this);
+      if (m_baseType != null)
+      {
+        m_baseType.Update();
+        m_baseType.m_subTypes.Remove(this);
+      }
       Unpersist(Session);
     }
 
@@ -433,13 +456,13 @@ namespace VelocityGraph
     {
       if (Unrestricted)
       {
-        UnrestrictedEdge unrestrictedEdge = unrestrictedEdges[edge.EdgeId];
-        unrestrictedEdge.Unpersist(graph.Session);
-        unrestrictedEdges.Remove(edge.EdgeId);
+        UnrestrictedEdge unrestrictedEdge = m_unrestrictedEdges[edge.EdgeId];
+        unrestrictedEdge.Unpersist(Session);
+        m_unrestrictedEdges.Remove(edge.EdgeId);
       }
       else
-        restrictedEdges.Remove(edge.EdgeId);
-      if (birectional)
+        m_restrictedEdges.Remove(edge.EdgeId);
+      if (m_birectional)
       {
         edge.Tail.VertexType.RemoveTailToHeadEdge(edge);
         edge.Head.VertexType.RemoveHeadToTailEdge(edge);
@@ -450,6 +473,7 @@ namespace VelocityGraph
         edge.RemoveProperty(key);
       Range<EdgeId> range = new Range<EdgeId>(edge.EdgeId, edge.EdgeId);
       bool isEqual;
+      var edgeRanges = EdgeRanges;
       int pos = edgeRanges.BinarySearch(range, out isEqual);
       if (pos >= 0)
       {
@@ -483,7 +507,7 @@ namespace VelocityGraph
     /// <param name="headV"></param>
     /// <param name="session"></param>
     /// <returns></returns>
-   public Edge NewEdgeX(PropertyType[] propertyType, PropertyType tailAttr, object tailV, PropertyType headAttr, object headV, SessionBase session)
+    public Edge NewEdgeX(WeakReferenceList<PropertyType> propertyType, PropertyType tailAttr, object tailV, PropertyType headAttr, object headV, SessionBase session)
    {
       throw new NotImplementedException("don't yet know what it is supposed to do");
    }
@@ -495,7 +519,7 @@ namespace VelocityGraph
     {
       get
       {
-        return typeId;
+        return m_typeId;
       }
     }
 
@@ -506,7 +530,7 @@ namespace VelocityGraph
     {
       get
       {
-        return typeName;
+        return m_typeName;
       }
     }
 
@@ -518,7 +542,7 @@ namespace VelocityGraph
     public PropertyType FindProperty(string name)
     {
       PropertyType anPropertyType;
-      if (stringToPropertyType.TryGetValue(name, out anPropertyType))
+      if (m_stringToPropertyType.TryGetValue(name, out anPropertyType))
       {
         return anPropertyType;
       }
@@ -544,20 +568,16 @@ namespace VelocityGraph
     /// <param name="v">a value</param>
     public void SetPropertyValue(ElementId elementId, PropertyType property, IComparable v)
     {
-      property.SetPropertyValue(elementId, typeId, v);
+      property.SetPropertyValue(elementId, m_typeId, v);
     }
 
-    /// <summary>
-    /// Gets the session managing this object
-    /// </summary>
-    public override SessionBase Session
+    public List<EdgeType> SubTypes
     {
       get
       {
-        return (graph != null && graph.Session != null) ? graph.Session : base.Session;
+        return m_subTypes;
       }
     }
-
     /// <summary>
     /// Gets the Tail VertexType of the edge (might not be set)
     /// </summary>
@@ -565,14 +585,14 @@ namespace VelocityGraph
     {
       get
       {
-        return tailType;
+        return m_tailType.GetTarget(false, Session);
       }
     }
 
     /// <inheritdoc />
     public override string ToString()
     {
-      return "EdgeType: " + typeName;
+      return "EdgeType: " + m_typeName;
     }
 
     /// <inheritdoc />
@@ -580,15 +600,14 @@ namespace VelocityGraph
     {
       if (IsPersistent == false)
         return;
-      subType.Unpersist(session, disableFlush);
-      if (unrestrictedEdges != null)
-        unrestrictedEdges.Unpersist(session, disableFlush);
-      if (restrictedEdges != null)
-        restrictedEdges.Unpersist(session, disableFlush);
-      stringToPropertyType.Unpersist(session, disableFlush);
-      edgeRanges.Unpersist(session, disableFlush);
+      if (m_unrestrictedEdges != null)
+        m_unrestrictedEdges.Unpersist(session, disableFlush);
+      if (m_restrictedEdges != null)
+        m_restrictedEdges.Unpersist(session, disableFlush);
+      m_stringToPropertyType.Unpersist(session, disableFlush);
+      EdgeRanges.Unpersist(session, disableFlush);
       base.Unpersist(session, disableFlush);
-      graph.RemoveEdgeTypeRef(this);
+      MyGraph.RemoveEdgeTypeRef(this);
     }
 
     /// <summary>
@@ -598,7 +617,7 @@ namespace VelocityGraph
     {
       get
       {
-        return headType == null;
+        return m_headType == null;
       }
     }
   }

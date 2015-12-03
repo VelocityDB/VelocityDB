@@ -22,31 +22,37 @@ namespace VelocityGraph
   [Serializable]
   public partial class VertexType : OptimizedPersistable
   {
-    internal Graph graph;
-    VertexType baseType;
-    internal VelocityDbList<VertexType> subType;
-    string typeName;
-    TypeId typeId;
-    VelocityDbList<Range<VertexId>> vertecis;
-    internal BTreeMap<string, PropertyType> stringToPropertyType;
-    BTreeSet<EdgeType> edgeTypes;
-    BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>> tailToHeadEdges;
-    BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>> headToTailEdges;
+    WeakIOptimizedPersistableReference<Graph> m_graph;
+    VertexType m_baseType;
+    List<VertexType> m_subTypes;
+    string m_typeName;
+    TypeId m_typeId;
+    WeakIOptimizedPersistableReference<VelocityDbList<Range<VertexId>>> m_vertices;
+    internal BTreeMap<string, PropertyType> m_stringToPropertyType;
+    BTreeSet<EdgeType> m_edgeTypes;
+    BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>> m_tailToHeadEdges;
+    BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>> m_headToTailEdges;
 
     internal VertexType(TypeId aTypeId, string aTypeName, VertexType baseType, Graph graph)
     {
-      this.graph = graph;
-      this.baseType = baseType;
-      subType = new VelocityDbList<VertexType>();
+      m_graph = new WeakIOptimizedPersistableReference<Graph>(graph);
+      m_baseType = baseType;
+      m_subTypes = new List<VertexType>();
       if (baseType != null)
-        baseType.subType.Add(this);
-      typeId = (TypeId)aTypeId;
-      typeName = aTypeName;
-      vertecis = new VelocityDbList<Range<VertexId>>();
-      stringToPropertyType = new BTreeMap<string, PropertyType>(null, graph.Session);
-      edgeTypes = new BTreeSet<EdgeType>(null, graph.Session);
-      tailToHeadEdges = new BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>>(null, graph.Session);
-      headToTailEdges = new BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>>(null, graph.Session);
+      {
+        baseType.Update();
+        baseType.m_subTypes.Add(this);
+      }
+      m_typeId = (TypeId)aTypeId;
+      m_typeName = aTypeName;
+      var vertices = new VelocityDbList<Range<VertexId>>();
+      graph.Session.Persist(vertices);
+      m_vertices = new WeakIOptimizedPersistableReference<VelocityDbList<Range<VertexId>>>(vertices);
+      m_stringToPropertyType = new BTreeMap<string, PropertyType>(null, graph.Session);
+      m_edgeTypes = new BTreeSet<EdgeType>(null, graph.Session);
+      m_tailToHeadEdges = new BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>>(null, graph.Session);
+      m_headToTailEdges = new BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>>(null, graph.Session);
+      graph.Session.Persist(this);
     }
 
     /// <summary>
@@ -56,7 +62,7 @@ namespace VelocityGraph
     {
       get
       {
-        return edgeTypes;
+        return m_edgeTypes;
       }
     }
 
@@ -82,29 +88,30 @@ namespace VelocityGraph
     /// <returns>A Vertex or null</returns>
     public Vertex GetVertex(VertexId vertexId, bool polymorphic = false, bool errorIfNotFound = true)
     {
-      if (vertecis.Count > 0)
+      var vertices = Vertices;
+      if (vertices.Count > 0)
       {
         Range<VertexId> range = new Range<VertexId>(vertexId, vertexId);
         bool isEqual;
-        int pos = vertecis.BinarySearch(range, out isEqual);
+        int pos = vertices.BinarySearch(range, out isEqual);
         if (pos >= 0)
         {
-          if (pos == vertecis.Count)
+          if (pos == vertices.Count)
             --pos;
-          range = vertecis[pos];
+          range = vertices[pos];
           if (range.Contains(vertexId))
-            return new Vertex(graph, this, vertexId);
+            return new Vertex(MyGraph, this, vertexId);
           if (pos > 0)
           {
-            range = vertecis[--pos];
+            range = vertices[--pos];
             if (range.Contains(vertexId))
-              return new Vertex(graph, this, vertexId);
+              return new Vertex(MyGraph, this, vertexId);
           }
         }
       }
       if (polymorphic)
       {
-        foreach (VertexType vt in subType)
+        foreach (VertexType vt in m_subTypes)
         {
           Vertex v = vt.GetVertex(vertexId, polymorphic, false);
           if (v != null)
@@ -116,6 +123,13 @@ namespace VelocityGraph
       return null;
     }
 
+    public Graph MyGraph
+    {
+      get
+      {
+        return m_graph.GetTarget(false, Session);
+      }
+    }
     internal void NewTailToHeadEdge(EdgeType edgeType, Edge edge, Vertex tail, Vertex head, SessionBase session)
     {
       BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>> map;
@@ -123,7 +137,7 @@ namespace VelocityGraph
       BTreeSet<EdgeIdVertexId> set;
       //lock (tailToHeadEdges)
       {
-        if (!tailToHeadEdges.TryGetValue(edgeType, out map))
+        if (!m_tailToHeadEdges.TryGetValue(edgeType, out map))
         {
           map = new BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>(null, session);
           innerMap = new BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>(null, session);
@@ -136,8 +150,8 @@ namespace VelocityGraph
           //}
           innerMap.AddFast(tail.VertexId, set);
           map.AddFast(head.VertexType, innerMap);
-          tailToHeadEdges.AddFast(edgeType, map);
-          edgeTypes.AddFast(edgeType);
+          m_tailToHeadEdges.AddFast(edgeType, map);
+          m_edgeTypes.AddFast(edgeType);
         }
         else if (!map.TryGetValue(head.VertexType, out innerMap))
         {
@@ -171,10 +185,13 @@ namespace VelocityGraph
     {
       if (GetVertices().ElementAtOrDefault(0) != null)
         throw new VertexTypeInUseException();
-      if (subType.Count > 0)
+      if (m_subTypes.Count > 0)
         throw new VertexTypeInUseException();
-      if (baseType != null)
-        baseType.subType.Remove(this);
+      if (m_baseType != null)
+      {
+        m_baseType.Update();
+        m_baseType.m_subTypes.Remove(this);
+      }
       Unpersist(Session);
     }
 
@@ -183,7 +200,7 @@ namespace VelocityGraph
       BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>> map;
       BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>> innerMap;
       BTreeSet<EdgeIdVertexId> set;
-      if (tailToHeadEdges.TryGetValue(edge.EdgeType, out map))
+      if (m_tailToHeadEdges.TryGetValue(edge.EdgeType, out map))
         if (map.TryGetValue(edge.Head.VertexType, out innerMap))
           if (innerMap.TryGetValue(edge.Tail.VertexId, out set))
             set.Remove(edgeVertexId(edge, edge.Head.VertexId));
@@ -194,7 +211,7 @@ namespace VelocityGraph
       BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>> map;
       BTreeMap<EdgeId, BTreeSet<EdgeIdVertexId>> innerMap;
       BTreeSet<EdgeIdVertexId> set;
-      if (headToTailEdges.TryGetValue(edge.EdgeType, out map))
+      if (m_headToTailEdges.TryGetValue(edge.EdgeType, out map))
         if (map.TryGetValue(edge.Tail.VertexType, out innerMap))
           if (innerMap.TryGetValue(edge.Head.VertexId, out set))
             set.Remove(edgeVertexId(edge, edge.Tail.VertexId));
@@ -207,15 +224,15 @@ namespace VelocityGraph
       BTreeSet<EdgeIdVertexId> set;
       //lock (headToTailEdges)
       {
-        if (!headToTailEdges.TryGetValue(edgeType, out map))
+        if (!m_headToTailEdges.TryGetValue(edgeType, out map))
         {
           map = new BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>(null, session);
           innerMap = new BTreeMap<EdgeId, BTreeSet<EdgeIdVertexId>>(null, session);
           set = new BTreeSet<EdgeIdVertexId>(null, session);
           innerMap.AddFast(head.VertexId, set);
           map.AddFast(tail.VertexType, innerMap);
-          headToTailEdges.AddFast(edgeType, map);
-          edgeTypes.AddFast(edgeType);
+          m_headToTailEdges.AddFast(edgeType, map);
+          m_edgeTypes.AddFast(edgeType);
         }
         else if (!map.TryGetValue(tail.VertexType, out innerMap))
         {
@@ -240,11 +257,7 @@ namespace VelocityGraph
     /// <returns>The newly created <see cref="Vertex"/></returns>
     public Vertex NewVertex(VertexId vId = 0)
     {
-      vId = graph.AllocateVertexId(vId);
-      vId = graph.AllocateVertexId(vId, vertecis);
-      if (graph.vertexIdToVertexType != null)
-        graph.vertexIdToVertexType.AddFast(vId, typeId);
-      return new Vertex(graph, this, vId);
+      return MyGraph.NewVertex(this, vId);
     }
 
     internal void AddToResult(Dictionary<Vertex, HashSet<Edge>> result, Vertex key, Edge value)
@@ -294,34 +307,34 @@ namespace VelocityGraph
       {
         if (etype.Unrestricted)
         {
-          foreach (var pair in etype.unrestrictedEdges)
+          foreach (var pair in etype.m_unrestrictedEdges)
           {
             UnrestrictedEdge edgeStruct = pair.Value;
-            bool headSameVertex = vertex1.VertexType == edgeStruct.headVertexType && vertex1.VertexId == edgeStruct.headVertexId;
-            bool tailSameVertex = vertex1.VertexType == edgeStruct.tailVertexType && vertex1.VertexId == edgeStruct.tailVertexId;
+            bool headSameVertex = vertex1.VertexType == edgeStruct.m_headVertexType && vertex1.VertexId == edgeStruct.m_headVertexId;
+            bool tailSameVertex = vertex1.VertexType == edgeStruct.m_tailVertexType && vertex1.VertexId == edgeStruct.m_tailVertexId;
             Vertex other;
             if (headSameVertex)
             {
-              VertexType vt = edgeStruct.tailVertexType;
-              other = vt.GetVertex(edgeStruct.tailVertexId);
+              VertexType vt = edgeStruct.m_tailVertexType;
+              other = vt.GetVertex(edgeStruct.m_tailVertexId);
             }
             else
             {
               if (tailSameVertex == false)
                 continue;
-              VertexType vt = edgeStruct.headVertexType;
-              other = vt.GetVertex(edgeStruct.headVertexId);
+              VertexType vt = edgeStruct.m_headVertexType;
+              other = vt.GetVertex(edgeStruct.m_headVertexId);
             }
 #if EdgeDebug
           Edge edge = etype.GetEdge(graph, pair.Key, other, vertex1);
 #else
-            Edge edge = new Edge(graph, etype, pair.Key, vertex1, other);
+            Edge edge = new Edge(MyGraph, etype, pair.Key, vertex1, other);
 #endif
             AddToResult(result, other, edge);
           }
         }
         else
-          foreach (var pair in etype.restrictedEdges)
+          foreach (var pair in etype.m_restrictedEdges)
           {
             UInt64 vertexVertex = pair.Value;
             VertexId headVertexId = (VertexId) (vertexVertex >> 32);
@@ -344,7 +357,7 @@ namespace VelocityGraph
 #if EdgeDebug
           Edge edge = etype.GetEdge(g, pair.Key, other, vertex1);
 #else
-            Edge edge = new Edge(graph, etype, pair.Key, vertex1, other);
+            Edge edge = new Edge(MyGraph, etype, pair.Key, vertex1, other);
 #endif
             AddToResult(result, other, edge);
           }
@@ -356,7 +369,7 @@ namespace VelocityGraph
         switch (dir)
         {
           case Direction.Out:
-            if (tailToHeadEdges.TryGetValue(etype, out map))
+            if (m_tailToHeadEdges.TryGetValue(etype, out map))
             {
               foreach (KeyValuePair<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>> pair in map)
               {
@@ -365,7 +378,7 @@ namespace VelocityGraph
                 {
                   foreach (EdgeIdVertexId id in set)
                   {
-                    Vertex vertex2 = new Vertex(graph, pair.Key, (VertexId)id);
+                    Vertex vertex2 = new Vertex(MyGraph, pair.Key, (VertexId)id);
                     EdgeId eId = (EdgeId)(id >> 32);
                     Edge edge = etype.GetEdge(eId, vertex1, vertex2);
                     AddToResult(result, vertex2, edge);
@@ -375,7 +388,7 @@ namespace VelocityGraph
             }
             break;
           case Direction.In:
-            if (headToTailEdges.TryGetValue(etype, out map))
+            if (m_headToTailEdges.TryGetValue(etype, out map))
             {
               foreach (KeyValuePair<VertexType, BTreeMap<EdgeId, BTreeSet<EdgeIdVertexId>>> pair in map)
               {
@@ -384,12 +397,12 @@ namespace VelocityGraph
                 {
                   foreach (EdgeIdVertexId id in set)
                   {
-                    Vertex vertex2 = new Vertex(graph, pair.Key, (VertexId)id);
+                    Vertex vertex2 = new Vertex(MyGraph, pair.Key, (VertexId)id);
                     EdgeId eId = (EdgeId)(id >> 32);
 #if EdgeDebug
                     Edge edge = etype.GetEdge(g, eId, vertex1, vertex2);
 #else
-                    Edge edge = new Edge(graph, etype, eId, vertex1, vertex2);
+                    Edge edge = new Edge(MyGraph, etype, eId, vertex1, vertex2);
 #endif
                     AddToResult(result, vertex2, edge);
                   }
@@ -398,7 +411,7 @@ namespace VelocityGraph
             }
             break;
           case Direction.Both:
-            if (tailToHeadEdges.TryGetValue(etype, out map))
+            if (m_tailToHeadEdges.TryGetValue(etype, out map))
             {
               foreach (KeyValuePair<VertexType, BTreeMap<EdgeId, BTreeSet<EdgeIdVertexId>>> pair in map)
               {
@@ -407,19 +420,19 @@ namespace VelocityGraph
                 {
                   foreach (EdgeIdVertexId id in set)
                   {
-                    Vertex vertex2 = new Vertex(graph, pair.Key, (VertexId)id);
+                    Vertex vertex2 = new Vertex(MyGraph, pair.Key, (VertexId)id);
                     EdgeId eId = (EdgeId)(id >> 32);
 #if EdgeDebug
                     Edge edge = etype.GetEdge(g, eId, vertex1, vertex2);
 #else
-                    Edge edge = new Edge(graph, etype, eId, vertex1, vertex2);
+                    Edge edge = new Edge(MyGraph, etype, eId, vertex1, vertex2);
 #endif
                     AddToResult(result, vertex2, edge);
                   }
                 }
               }
             }
-            if (headToTailEdges.TryGetValue(etype, out map))
+            if (m_headToTailEdges.TryGetValue(etype, out map))
             {
               foreach (KeyValuePair<VertexType, BTreeMap<EdgeId, BTreeSet<EdgeIdVertexId>>> pair in map)
               {
@@ -428,12 +441,12 @@ namespace VelocityGraph
                 {
                   foreach (EdgeIdVertexId id in set)
                   {
-                    Vertex vertex2 = new Vertex(graph, pair.Key, (VertexId)id);
+                    Vertex vertex2 = new Vertex(MyGraph, pair.Key, (VertexId)id);
                     EdgeId eId = (EdgeId)(id >> 32);
 #if EdgeDebug
                     Edge edge = etype.GetEdge(g, eId, vertex1, vertex2);
 #else
-                    Edge edge = new Edge(graph, etype, eId, vertex1, vertex2);
+                    Edge edge = new Edge(MyGraph, etype, eId, vertex1, vertex2);
 #endif
                     AddToResult(result, vertex2, edge);
                   }
@@ -456,12 +469,12 @@ namespace VelocityGraph
     public PropertyType NewProperty(string name, DataType dt, PropertyKind kind)
     {
       PropertyType aType;
-      if (stringToPropertyType.TryGetValue(name, out aType) == false)
+      if (m_stringToPropertyType.TryGetValue(name, out aType) == false)
       {
-        graph.Update();
+        var propertyTypes = MyGraph.PropertyTypes;
         int pos = -1;
         int i = 0;
-        foreach (PropertyType pt in graph.propertyType)
+        foreach (PropertyType pt in propertyTypes)
           if (pt == null)
           {
             pos = i;
@@ -470,13 +483,11 @@ namespace VelocityGraph
           else
             ++i;
         if (pos < 0)
-        {
-          pos = graph.propertyType.Length;
-          Array.Resize(ref graph.propertyType, pos + 1);
-        }
-        aType = graph.PropertyTypeFromDataType(true, dt, typeId, pos, name, kind);
-        graph.propertyType[pos] = aType;
-        stringToPropertyType.AddFast(name, aType);
+          pos = propertyTypes.Count;
+        aType = MyGraph.PropertyTypeFromDataType(true, dt, m_typeId, pos, name, kind);
+        Session.Persist(aType);
+        propertyTypes[pos] = aType;
+        m_stringToPropertyType.AddFast(name, aType);
       }
       return aType;
     }
@@ -488,7 +499,7 @@ namespace VelocityGraph
     {
       get
       {
-        return typeId;
+        return m_typeId;
       }
     }
 
@@ -500,7 +511,7 @@ namespace VelocityGraph
     public PropertyType FindProperty(string name)
     {
       PropertyType anPropertyType;
-      if (stringToPropertyType.TryGetValue(name, out anPropertyType))
+      if (m_stringToPropertyType.TryGetValue(name, out anPropertyType))
       {
         return anPropertyType;
       }
@@ -513,7 +524,7 @@ namespace VelocityGraph
     /// <returns>the set of all string keys associated with the vertex type</returns>
     public IEnumerable<string> GetPropertyKeys()
     {
-      foreach (var pair in stringToPropertyType)
+      foreach (var pair in m_stringToPropertyType)
       {
         yield return pair.Key;
       }
@@ -525,7 +536,7 @@ namespace VelocityGraph
     /// <returns>the set of property types associated with the vertex type</returns>
     public IEnumerable<PropertyType> GetPropertyTypes()
     {
-      foreach (var pair in stringToPropertyType)
+      foreach (var pair in m_stringToPropertyType)
       {
         yield return pair.Value;
       }
@@ -543,7 +554,7 @@ namespace VelocityGraph
       switch (dir)
       {
         case Direction.Out:
-          if (tailToHeadEdges.TryGetValue(etype, out map))
+          if (m_tailToHeadEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -559,7 +570,7 @@ namespace VelocityGraph
               }
           break;
         case Direction.In:
-          if (headToTailEdges.TryGetValue(etype, out map))
+          if (m_headToTailEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -575,7 +586,7 @@ namespace VelocityGraph
               }
           break;
         case Direction.Both:
-          if (tailToHeadEdges.TryGetValue(etype, out map))
+          if (m_tailToHeadEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -589,7 +600,7 @@ namespace VelocityGraph
                   yield return edge;
                 }
               };
-          if (headToTailEdges.TryGetValue(etype, out map))
+          if (m_headToTailEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -618,7 +629,7 @@ namespace VelocityGraph
       switch (dir)
       {
         case Direction.Out:
-          foreach (var p0 in tailToHeadEdges)
+          foreach (var p0 in m_tailToHeadEdges)
             foreach (var p1 in p0.Value)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -636,7 +647,7 @@ namespace VelocityGraph
             }
           break;
         case Direction.In:
-          foreach (var p0 in headToTailEdges)
+          foreach (var p0 in m_headToTailEdges)
             foreach (var p1 in p0.Value)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -654,7 +665,7 @@ namespace VelocityGraph
             }
           break;
         case Direction.Both:
-          foreach (var p0 in tailToHeadEdges)
+          foreach (var p0 in m_tailToHeadEdges)
             foreach (var p1 in p0.Value)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -670,7 +681,7 @@ namespace VelocityGraph
                 }
               }
             }
-          foreach (var p0 in headToTailEdges)
+          foreach (var p0 in m_headToTailEdges)
             foreach (var p1 in p0.Value)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -704,7 +715,7 @@ namespace VelocityGraph
       switch (dir)
       {
         case Direction.Out:
-          if (tailToHeadEdges.TryGetValue(edgeType, out map))
+          if (m_tailToHeadEdges.TryGetValue(edgeType, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -718,13 +729,13 @@ namespace VelocityGraph
 #if VertexDebug
                     Vertex head = p1.Key.GetVertex(vId);
 #else
-                    Vertex head = new Vertex(graph, p1.Key, vId);
+                    Vertex head = new Vertex(MyGraph, p1.Key, vId);
 #endif
                     EdgeId eId = (int)(l >> 32);
 #if EdgeDebug
                     Edge edge = edgeType.GetEdge(g, eId, head, vertex1);
 #else
-                    Edge edge = new Edge(graph, edgeType, eId, head, vertex1);
+                    Edge edge = new Edge(MyGraph, edgeType, eId, head, vertex1);
 #endif
                     yield return edge;
                   }
@@ -733,7 +744,7 @@ namespace VelocityGraph
             }
           break;
         case Direction.In:
-          if (headToTailEdges.TryGetValue(edgeType, out map))
+          if (m_headToTailEdges.TryGetValue(edgeType, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -754,7 +765,7 @@ namespace VelocityGraph
             }
           break;
         case Direction.Both:
-          if (tailToHeadEdges.TryGetValue(edgeType, out map))
+          if (m_tailToHeadEdges.TryGetValue(edgeType, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -773,7 +784,7 @@ namespace VelocityGraph
                 }
               }
             }
-          if (headToTailEdges.TryGetValue(edgeType, out map))
+          if (m_headToTailEdges.TryGetValue(edgeType, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -809,7 +820,7 @@ namespace VelocityGraph
       switch (dir)
       {
         case Direction.Out:
-          if (tailToHeadEdges.TryGetValue(etype, out map))
+          if (m_tailToHeadEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -817,7 +828,7 @@ namespace VelocityGraph
               }
           break;
         case Direction.In:
-          if (headToTailEdges.TryGetValue(etype, out map))
+          if (m_headToTailEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -825,13 +836,13 @@ namespace VelocityGraph
               }
           break;
         case Direction.Both:
-          if (tailToHeadEdges.TryGetValue(etype, out map))
+          if (m_tailToHeadEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
                 numberOfEdges += p2.Value.Count;
               }
-          if (headToTailEdges.TryGetValue(etype, out map))
+          if (m_headToTailEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -857,7 +868,7 @@ namespace VelocityGraph
       switch (dir)
       {
         case Direction.Out:
-          if (tailToHeadEdges.TryGetValue(etype, out map))
+          if (m_tailToHeadEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -875,13 +886,13 @@ namespace VelocityGraph
                   if (topCt[0] < p2.Value.Count)
                   {
                     topCt[pos] = p2.Value.Count;
-                    top[pos] = new Vertex(graph, this, p2.Key);
+                    top[pos] = new Vertex(MyGraph, this, p2.Key);
                   }
                 }
               }
           break;
         case Direction.In:
-          if (headToTailEdges.TryGetValue(etype, out map))
+          if (m_headToTailEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -899,13 +910,13 @@ namespace VelocityGraph
                   if (topCt[0] < p2.Value.Count)
                   {
                     topCt[pos] = p2.Value.Count;
-                    top[pos] = new Vertex(graph, p1.Key, p2.Key);
+                    top[pos] = new Vertex(MyGraph, p1.Key, p2.Key);
                   }
                 }
               }
           break;
         case Direction.Both:
-          if (tailToHeadEdges.TryGetValue(etype, out map))
+          if (m_tailToHeadEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -923,11 +934,11 @@ namespace VelocityGraph
                   if (topCt[0] < p2.Value.Count)
                   {
                     topCt[pos] = p2.Value.Count;
-                    top[pos] = new Vertex(graph, p1.Key, p2.Key);
+                    top[pos] = new Vertex(MyGraph, p1.Key, p2.Key);
                   }
                 }
               }
-          if (headToTailEdges.TryGetValue(etype, out map))
+          if (m_headToTailEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
               foreach (var p2 in p1.Value)
               {
@@ -945,7 +956,7 @@ namespace VelocityGraph
                   if (topCt[0] < p2.Value.Count)
                   {
                     topCt[pos] = p2.Value.Count;
-                    top[pos] = new Vertex(graph, p1.Key, p2.Key);
+                    top[pos] = new Vertex(MyGraph, p1.Key, p2.Key);
                   }
                 }
               }
@@ -968,7 +979,7 @@ namespace VelocityGraph
       switch (dir)
       {
         case Direction.Out:
-          if (tailToHeadEdges.TryGetValue(etype, out map))
+          if (m_tailToHeadEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -977,7 +988,7 @@ namespace VelocityGraph
             }
           break;
         case Direction.In:
-          if (headToTailEdges.TryGetValue(etype, out map))
+          if (m_headToTailEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -986,14 +997,14 @@ namespace VelocityGraph
             }
           break;
         case Direction.Both:
-          if (tailToHeadEdges.TryGetValue(etype, out map))
+          if (m_tailToHeadEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
               if (p1.Value.TryGetValue(vertexId, out edgeVertexSet))
                 numberOfEdges += edgeVertexSet.Count;
             }
-          if (headToTailEdges.TryGetValue(etype, out map))
+          if (m_headToTailEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -1020,7 +1031,7 @@ namespace VelocityGraph
       switch (dir)
       {
         case Direction.Out:
-          if (tailToHeadEdges.TryGetValue(edgeType, out map))
+          if (m_tailToHeadEdges.TryGetValue(edgeType, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -1036,7 +1047,7 @@ namespace VelocityGraph
             }
           break;
         case Direction.In:
-          if (headToTailEdges.TryGetValue(edgeType, out map))
+          if (m_headToTailEdges.TryGetValue(edgeType, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -1052,7 +1063,7 @@ namespace VelocityGraph
             }
           break;
         case Direction.Both:
-          if (tailToHeadEdges.TryGetValue(edgeType, out map))
+          if (m_tailToHeadEdges.TryGetValue(edgeType, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -1066,7 +1077,7 @@ namespace VelocityGraph
                 }
               }
             }
-          if (headToTailEdges.TryGetValue(edgeType, out map))
+          if (m_headToTailEdges.TryGetValue(edgeType, out map))
             foreach (var p1 in map)
             {
               BTreeSet<EdgeIdVertexId> edgeVertexSet;
@@ -1092,12 +1103,12 @@ namespace VelocityGraph
     /// <returns>Enumeration of vertices</returns>
     public IEnumerable<Vertex> GetVertices(bool polymorphic = false)
     {
-      foreach (Range<VertexId> range in vertecis)
+      foreach (Range<VertexId> range in Vertices)
         foreach (VertexId vId in Enumerable.Range((int)range.Min, (int)range.Max - range.Min + 1))
-          yield return new Vertex(graph, this, vId);
+          yield return new Vertex(MyGraph, this, vId);
       if (polymorphic)
       {
-        foreach (VertexType vt in subType)
+        foreach (VertexType vt in m_subTypes)
           foreach (Vertex v in vt.GetVertices(polymorphic))
             yield return v;
       }
@@ -1110,7 +1121,7 @@ namespace VelocityGraph
     public long CountVertices()
     {
       long ct = 0;
-      foreach (Range<VertexId> range in vertecis)
+      foreach (Range<VertexId> range in Vertices)
         ct += range.Max - range.Min + 1;
       return ct;
     }
@@ -1121,7 +1132,7 @@ namespace VelocityGraph
     /// <returns>An enumeration of vertex ids</returns>
     public IEnumerable<VertexId> GetVerticeIds()
     {
-      foreach (Range<VertexId> range in vertecis)
+      foreach (Range<VertexId> range in Vertices)
         foreach (int vId in Enumerable.Range((int)range.Min, (int)range.Max - range.Min + 1))
           yield return (VertexId) vId;
     }
@@ -1140,7 +1151,7 @@ namespace VelocityGraph
       switch (dir)
       {
         case Direction.Out:
-          if (tailToHeadEdges.TryGetValue(etype, out map))
+          if (m_tailToHeadEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
             {
               if (p1.Value.TryGetValue(vertex1.VertexId, out set))
@@ -1155,7 +1166,7 @@ namespace VelocityGraph
             }
           break;
         case Direction.In:
-          if (headToTailEdges.TryGetValue(etype, out map))
+          if (m_headToTailEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
             {
               if (p1.Value.TryGetValue(vertex1.VertexId, out set))
@@ -1170,7 +1181,7 @@ namespace VelocityGraph
             }
           break;
         case Direction.Both:
-          if (tailToHeadEdges.TryGetValue(etype, out map))
+          if (m_tailToHeadEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
             {
               if (p1.Value.TryGetValue(vertex1.VertexId, out set))
@@ -1183,7 +1194,7 @@ namespace VelocityGraph
                 }
               }
             }
-          if (headToTailEdges.TryGetValue(etype, out map))
+          if (m_headToTailEdges.TryGetValue(etype, out map))
             foreach (var p1 in map)
             {
               if (p1.Value.TryGetValue(vertex1.VertexId, out set))
@@ -1208,7 +1219,7 @@ namespace VelocityGraph
     {
       BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>> innerMap;
       BTreeSet<EdgeIdVertexId> edgeVertexSet;
-      foreach (var m in headToTailEdges)
+      foreach (var m in m_headToTailEdges)
       {
         if (m.Key.TailType != null)
         {
@@ -1232,7 +1243,7 @@ namespace VelocityGraph
           throw new NotImplementedException();
       }
 
-      foreach (var m in headToTailEdges)
+      foreach (var m in m_headToTailEdges)
       {
         if (m.Key.TailType != null)
         {
@@ -1247,7 +1258,7 @@ namespace VelocityGraph
           throw new NotImplementedException();
       }
 
-      foreach (var m in tailToHeadEdges)
+      foreach (var m in m_tailToHeadEdges)
       {
         if (m.Key.HeadType != null)
         {
@@ -1271,7 +1282,7 @@ namespace VelocityGraph
           throw new NotImplementedException();
       }
 
-      foreach (var m in tailToHeadEdges)
+      foreach (var m in m_tailToHeadEdges)
       {
         if (m.Key.HeadType != null)
         {
@@ -1289,8 +1300,8 @@ namespace VelocityGraph
       foreach (PropertyType pt in GetPropertyTypes())
         pt.RemovePropertyValue(vertex.VertexId);
 
-      graph.DeAllocateVertexId(vertex.VertexId);
-      graph.DeAllocateVertexId(vertex.VertexId, vertecis);
+      MyGraph.DeAllocateVertexId(vertex.VertexId);
+      MyGraph.DeAllocateVertexId(vertex.VertexId, Vertices);
     }
 
     /// <summary>
@@ -1312,20 +1323,16 @@ namespace VelocityGraph
     /// <param name="v">the value to set the property to</param>
     public void SetPropertyValue(VertexId vertexId, PropertyType propertyType, IComparable v)
     {
-      propertyType.SetPropertyValue(vertexId, typeId, v);
+      propertyType.SetPropertyValue(vertexId, m_typeId, v);
     }
 
-    /// <summary>
-    /// Gets the session managing this object
-    /// </summary>
-    public override SessionBase Session
+    public List<VertexType> SubTypes
     {
       get
       {
-        return (graph != null && graph.Session != null) ? graph.Session : base.Session;
+        return m_subTypes;
       }
     }
-
     /// <summary>
     /// Gets the name of this <see cref="VertexType"/> 
     /// </summary>
@@ -1333,14 +1340,14 @@ namespace VelocityGraph
     {
       get
       {
-        return typeName;
+        return m_typeName;
       }
     }
 
     /// <inheritdoc />
     public override string ToString()
     {
-      return "VertexType: " + typeName;
+      return "VertexType: " + m_typeName;
     }
 
     /// <inheritdoc />
@@ -1348,14 +1355,26 @@ namespace VelocityGraph
     {
       if (IsPersistent == false)
         return;
-      subType.Unpersist(session, disableFlush);
-      vertecis.Unpersist(session, disableFlush);
-      stringToPropertyType.Unpersist(session, disableFlush);
-      edgeTypes.Unpersist(session, disableFlush);
-      tailToHeadEdges.Unpersist(session, disableFlush);
-      headToTailEdges.Unpersist(session, disableFlush);
+      Vertices.Unpersist(session, disableFlush);
+      m_stringToPropertyType.Unpersist(session, disableFlush);
+      m_edgeTypes.Unpersist(session, disableFlush);
+      m_tailToHeadEdges.Unpersist(session, disableFlush);
+      m_headToTailEdges.Unpersist(session, disableFlush);
       base.Unpersist(session, disableFlush);
-      graph.RemoveVertexTypeRef(this);
+      MyGraph.RemoveVertexTypeRef(this);
+    }
+
+    internal VelocityDbList<Range<VertexId>> Vertices
+    {
+      get
+      {
+        return m_vertices.GetTarget(false, Session);
+      }
+      set
+      {
+        Update();
+        m_vertices.Id = value.Id;
+      }
     }
   }
 }

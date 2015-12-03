@@ -58,7 +58,6 @@ namespace FacebookGraph
         session.BeginUpdate();
         session.DefaultDatabaseLocation().CompressPages = PageInfo.compressionKind.LZ4;
         Graph g = new Graph(session);
-        session.Persist(g);
 
         // SCHEMA
         VertexType userType = g.NewVertexType("User");
@@ -76,7 +75,7 @@ namespace FacebookGraph
         long fiendsCt = 0;
         int stop = (int)Math.Pow(2, 26); // make sure to create enough of these
         for (int i = 1; i < stop; i++)
-          userType.NewVertex();
+          g.NewVertex(userType);
         session.Commit();
         session.BeginUpdate();
         foreach (string line in File.ReadLines(s_inputData))

@@ -48,7 +48,7 @@ namespace SortedObjects
           using (SessionNoServer session = new SessionNoServer(s_systemDir))
           {
             session.BeginRead();
-            BTreeSet<Person> bTree = (BTreeSet<Person>)session.Open(bTreeId);
+            BTreeSet<Person> bTree = session.Open<BTreeSet<Person>>(bTreeId);
             foreach (Person person in (IEnumerable<Person>)bTree)
             {
               if (person.IdNumber > 196988888791402)

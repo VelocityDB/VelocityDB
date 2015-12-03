@@ -17,21 +17,28 @@ namespace VelocityGraph
   [Serializable]
   abstract public partial class PropertyType : OptimizedPersistable
   {
-    internal Graph graph;
-    string propertyName;
-    TypeId typeId;
-    PropertyId propertyId;
-    bool isVertexProperty;
+    WeakIOptimizedPersistableReference<Graph> m_graph;
+    string m_propertyName;
+    TypeId m_typeId;
+    PropertyId m_propertyId;
+    bool m_isVertexProperty;
 
     internal PropertyType(bool isVertexProp, TypeId typeId, PropertyId propertyId, string name, Graph graph)
     {
-      this.typeId = typeId;
-      isVertexProperty = isVertexProp;
-      this.propertyId = propertyId;
-      propertyName = name;
-      this.graph = graph;
+      m_typeId = typeId;
+      m_isVertexProperty = isVertexProp;
+      m_propertyId = propertyId;
+      m_propertyName = name;
+      m_graph = new WeakIOptimizedPersistableReference<Graph>(graph);
     }
 
+    public Graph MyGraph
+    {
+      get
+      {
+        return m_graph.GetTarget(false, Session);
+      }
+    }
     /// <summary>
     /// Get id of this property type
     /// </summary>
@@ -39,7 +46,7 @@ namespace VelocityGraph
     {
       get
       {
-        return propertyId;
+        return m_propertyId;
       }
     }    
     
@@ -50,7 +57,7 @@ namespace VelocityGraph
     {
       get
       {
-        return typeId;
+        return m_typeId;
       }
     }
 
@@ -61,7 +68,7 @@ namespace VelocityGraph
     {
       get
       {
-        return propertyName;
+        return m_propertyName;
       }
     }
 
@@ -72,7 +79,7 @@ namespace VelocityGraph
     {
       get
       {
-        return isVertexProperty;
+        return m_isVertexProperty;
       }
     }
 

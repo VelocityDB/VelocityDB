@@ -18,15 +18,15 @@ namespace VelocityGraph
   /// </summary>
   public class Edge : Element, IEdge
   {
-    EdgeType edgeType;
-    Vertex tail;
-    Vertex head;
+    EdgeType m_edgeType;
+    Vertex m_tail;
+    Vertex m_head;
 
     internal Edge(Graph g, EdgeType eType, EdgeId eId, Vertex h, Vertex t):base(eId, g)
     {
-      edgeType = eType;
-      tail = t;
-      head = h;
+      m_edgeType = eType;
+      m_tail = t;
+      m_head = h;
     }
     /// <summary>
     /// Gets the edge id
@@ -35,7 +35,7 @@ namespace VelocityGraph
     {
       get
       {
-        return id;
+        return m_id;
       }
     }
     /// <summary>
@@ -45,7 +45,7 @@ namespace VelocityGraph
     {
       get
       {
-        return edgeType;
+        return m_edgeType;
       }
     }
 
@@ -75,9 +75,9 @@ namespace VelocityGraph
     {
       get
       {
-        UInt64 fullId = (UInt64)edgeType.TypeId;
+        UInt64 fullId = (UInt64)m_edgeType.TypeId;
         fullId <<= 32;
-        fullId += (UInt64)id;
+        fullId += (UInt64)m_id;
         return fullId;
       }
     }
@@ -90,7 +90,7 @@ namespace VelocityGraph
     {
       get
       {
-        return edgeType.TypeName;
+        return m_edgeType.TypeName;
       }
     }
 
@@ -100,7 +100,7 @@ namespace VelocityGraph
     /// <param name="property">Property type identifier.</param>
     public IComparable GetProperty(PropertyType property)
     {
-      return edgeType.GetPropertyValue(EdgeId, property);
+      return m_edgeType.GetPropertyValue(EdgeId, property);
     }
     
     /// <summary>
@@ -111,10 +111,10 @@ namespace VelocityGraph
     /// <returns>the object value related to the string key</returns>
     public override object GetProperty(string key)
     {
-      PropertyType pt = edgeType.FindProperty(key);
+      PropertyType pt = m_edgeType.FindProperty(key);
       if (pt == null)
         return null;
-      return edgeType.GetPropertyValue(id, pt);
+      return m_edgeType.GetPropertyValue(m_id, pt);
     }
 
     /// <summary>
@@ -123,7 +123,7 @@ namespace VelocityGraph
     /// <returns>the set of all string keys associated with the element</returns>
     public override IEnumerable<string> GetPropertyKeys()
     {
-      foreach (string key in edgeType.GetPropertyKeys())
+      foreach (string key in m_edgeType.GetPropertyKeys())
       {
         if (GetProperty(key) != null)
           yield return key;
@@ -139,9 +139,9 @@ namespace VelocityGraph
     IVertex IEdge.GetVertex(Direction direction)
     {
       if (direction == Direction.In)
-        return head;
+        return m_head;
       if (direction == Direction.Out)
-        return tail;
+        return m_tail;
       throw new ArgumentException("A direction of BOTH is not supported");
     }
 
@@ -152,7 +152,7 @@ namespace VelocityGraph
     {
       get
       {
-        return tail;        
+        return m_tail;        
       }
     }
 
@@ -163,7 +163,7 @@ namespace VelocityGraph
     {
       get
       {
-        return head;
+        return m_head;
       }
     }
 
@@ -174,17 +174,17 @@ namespace VelocityGraph
     /// <returns>The other end of the edge.</returns>
     public Vertex GetEdgePeer(Vertex vertex)
     {
-      if (head == vertex)
-        return tail;
-      if (tail == vertex)
-        return head;
+      if (m_head == vertex)
+        return m_tail;
+      if (m_tail == vertex)
+        return m_head;
       throw new ArgumentException("Vertex argument must be either Head or Tail Vertex");
     }
 
     /// <inheritdoc />
     public override int GetHashCode()
     {
-      return id.GetHashCode();
+      return m_id.GetHashCode();
     }
 
     /// <summary>
@@ -192,7 +192,7 @@ namespace VelocityGraph
     /// </summary>
     public override void Remove()
     {
-      edgeType.RemoveEdge(this);
+      m_edgeType.RemoveEdge(this);
     }
 
     /// <summary>
@@ -203,8 +203,8 @@ namespace VelocityGraph
     /// <returns>the object value associated with that key prior to removal</returns>
     public override object RemoveProperty(string key)
     {
-      PropertyType pt = edgeType.FindProperty(key);
-      return pt.RemovePropertyValue(id);
+      PropertyType pt = m_edgeType.FindProperty(key);
+      return pt.RemovePropertyValue(m_id);
     }
     /// <summary>
     /// Sets the value for a property
@@ -213,8 +213,8 @@ namespace VelocityGraph
     /// <param name="v">the value</param>
     public void SetProperty(PropertyType property, IComparable v)
     {
-      if (edgeType != null)
-        edgeType.SetPropertyValue(EdgeId, property, v);
+      if (m_edgeType != null)
+        m_edgeType.SetPropertyValue(EdgeId, property, v);
       else
         throw new InvalidTypeIdException();
     }    
@@ -233,10 +233,10 @@ namespace VelocityGraph
         throw new ArgumentException("Property value may not be null");
       if (key.Equals(StringFactory.Id))
         throw ExceptionFactory.PropertyKeyIdIsReserved();
-      PropertyType pt = edgeType.FindProperty(key);
+      PropertyType pt = m_edgeType.FindProperty(key);
       if (pt == null)
-        pt = edgeType.NewProperty(key, value, PropertyKind.Indexed);
-      edgeType.SetPropertyValue(EdgeId, pt, (IComparable) value);
+        pt = m_edgeType.NewProperty(key, value, PropertyKind.Indexed);
+      m_edgeType.SetPropertyValue(EdgeId, pt, (IComparable) value);
     }
 
     /// <summary>
@@ -248,18 +248,18 @@ namespace VelocityGraph
     /// <param name="value">the object value o the property</param>
     internal override void SetProperty<T>(string key, T value)
     {
-      PropertyType pt = edgeType.FindProperty(key);
+      PropertyType pt = m_edgeType.FindProperty(key);
       if (pt == null)
       {
-        pt = edgeType.graph.NewEdgeProperty(edgeType, key, DataType.Object, PropertyKind.Indexed);
+        pt = m_edgeType.MyGraph.NewEdgeProperty(m_edgeType, key, DataType.Object, PropertyKind.Indexed);
       }
-      edgeType.SetPropertyValue(EdgeId, pt, value);
+      m_edgeType.SetPropertyValue(EdgeId, pt, value);
     }
 
     /// <inheritdoc />
     public override string ToString()
     {
-      return "Edge: " + EdgeId + " " + edgeType.TypeName;
+      return "Edge: " + EdgeId + " " + m_edgeType.TypeName;
     }
   }
 }

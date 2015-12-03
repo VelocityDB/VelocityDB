@@ -100,7 +100,7 @@ namespace VelocityGraph
       {
         UInt64 fullId = (UInt64)m_vertexType.TypeId;
         fullId <<= 32;
-        fullId += (UInt64)id;
+        fullId += (UInt64)m_id;
         return fullId;
       }
     }
@@ -137,7 +137,7 @@ namespace VelocityGraph
     public override object GetProperty(string key)
     {
       PropertyType pt = m_vertexType.FindProperty(key);
-      return m_vertexType.GetPropertyValue(id, pt);
+      return m_vertexType.GetPropertyValue(m_id, pt);
     }
 
     /// <summary>
@@ -223,7 +223,7 @@ namespace VelocityGraph
     /// <inheritdoc />
     public override int GetHashCode()
     {
-      return id.GetHashCode();
+      return m_id.GetHashCode();
     }
     /// <summary>
     /// Enumerates all outgoing edges of selected edge types
@@ -284,7 +284,7 @@ namespace VelocityGraph
     {
       get
       {
-        return id;
+        return m_id;
       }
     }
 
@@ -611,7 +611,7 @@ namespace VelocityGraph
       PropertyType pt = m_vertexType.FindProperty(key);
       if (pt == null)
         return null;
-      return pt.RemovePropertyValue(id);
+      return pt.RemovePropertyValue(m_id);
     }
 
     /// <summary>
@@ -641,7 +641,7 @@ namespace VelocityGraph
         throw ExceptionFactory.PropertyKeyIdIsReserved();
       PropertyType pt = m_vertexType.FindProperty(key);
       if (pt == null)
-        pt = m_vertexType.graph.NewVertexProperty(m_vertexType, key, DataType.Object, PropertyKind.Indexed);
+        pt = m_vertexType.MyGraph.NewVertexProperty(m_vertexType, key, DataType.Object, PropertyKind.Indexed);
       m_vertexType.SetPropertyValue(VertexId, pt, (IComparable)value);
     }
 
@@ -656,7 +656,7 @@ namespace VelocityGraph
     {
       PropertyType pt = m_vertexType.FindProperty(key);
       if (pt == null)
-        pt = m_vertexType.graph.NewVertexProperty(m_vertexType, key, DataType.Object, PropertyKind.Indexed);
+        pt = m_vertexType.MyGraph.NewVertexProperty(m_vertexType, key, DataType.Object, PropertyKind.Indexed);
       m_vertexType.SetPropertyValue(VertexId, pt, value);
     }
 
