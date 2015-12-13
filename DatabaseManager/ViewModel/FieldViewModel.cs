@@ -43,7 +43,7 @@ namespace DatabaseManager
 
     protected override void LoadChildren()
     {
-      IOptimizedPersistable parentObj = (IOptimizedPersistable) m_session.Open(m_parentId);
+      IOptimizedPersistable parentObj = (IOptimizedPersistable) m_session.Open(m_parentId, false, null, false, 0, Int32.MaxValue);
       if (parentObj != null)
       {
         object memberObj = m_member.GetMemberValue(parentObj.WrappedObject);

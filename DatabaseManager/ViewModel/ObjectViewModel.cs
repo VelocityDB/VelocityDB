@@ -9,7 +9,7 @@ using VelocityDb.TypeInfo;
 
 namespace DatabaseManager
 {
- public class ObjectViewModel : TreeViewItemViewModel
+  public class ObjectViewModel : TreeViewItemViewModel
   {
     readonly UInt64 m_objectId;
     readonly SessionBase m_session;
@@ -18,12 +18,12 @@ namespace DatabaseManager
     public ObjectViewModel(IOptimizedPersistable obj, TreeViewItemViewModel parentPage, SessionBase session)
       : base(parentPage, true)
     {
-     m_objectId = obj.Id;
-     m_session = session;
-     if (obj.WrappedObject != obj)
-       m_objectAsString = obj.WrappedObject.ToString() + " " + new Oid(obj.Id);
-     else
-       m_objectAsString = obj.ToString();
+      m_objectId = obj.Id;
+      m_session = session;
+      if (obj.WrappedObject != obj)
+        m_objectAsString = obj.WrappedObject.ToString() + " " + new Oid(obj.Id);
+      else
+        m_objectAsString = obj.ToString();
     }
     public ObjectViewModel(IOptimizedPersistable obj, FieldViewModel parentView, SessionBase session)
       : base(parentView, true)
@@ -43,7 +43,7 @@ namespace DatabaseManager
 
     public string ObjectDisplay
     {
-      get 
+      get
       {
         //return _object.ToStringDetails(_schema);
         return m_objectAsString;
@@ -52,25 +52,25 @@ namespace DatabaseManager
 
     void LoadChild(DataMember member, object memberObj)
     {
-        bool listWithItems = false;
-        if (member.Field != null && member.Field.FieldType.IsGenericType && member.Field.FieldType.GetGenericTypeDefinition() == typeof(List<>))
-        {
-          IList list = (IList)memberObj;
-          listWithItems = list != null && list.Count > 0;
-        }
-        IOptimizedPersistable pObj = (IOptimizedPersistable) m_session.Open(m_objectId);
-        if (pObj != null)
-        {
-          if (member.Field != null && memberObj != null & (member.Field.FieldType.IsArray || member.HasId || listWithItems))
-            base.Children.Add(new FieldViewModel(pObj, member, this, m_session));
-          else
-            base.Children.Add(new FieldViewModelNoExpansions(pObj, member, this, m_session));
-        }
+      bool listWithItems = false;
+      if (member.Field != null && member.Field.FieldType.IsGenericType && member.Field.FieldType.GetGenericTypeDefinition() == typeof(List<>))
+      {
+        IList list = (IList)memberObj;
+        listWithItems = list != null && list.Count > 0;
+      }
+      IOptimizedPersistable pObj = (IOptimizedPersistable)m_session.Open(m_objectId, false, null, false, 0, Int32.MaxValue);
+      if (pObj != null)
+      {
+        if (member.Field != null && memberObj != null & (member.Field.FieldType.IsArray || member.HasId || listWithItems))
+          base.Children.Add(new FieldViewModel(pObj, member, this, m_session));
+        else
+          base.Children.Add(new FieldViewModelNoExpansions(pObj, member, this, m_session));
+      }
     }
 
     protected override void LoadChildren()
     {
-      IOptimizedPersistable pObj = (IOptimizedPersistable)m_session.Open(m_objectId);
+      IOptimizedPersistable pObj = (IOptimizedPersistable)m_session.Open(m_objectId, false, null, false, 0, Int32.MaxValue);
       if (pObj != null)
       {
         pObj.LoadFields();

@@ -65,7 +65,8 @@ namespace VelocityDBExtensions
                   TypeVersion tv = pObj.Shape;
                   if (!files.TryGetValue(tv.ShortId, out writer))
                   {
-                    string typeName = tv.VelocityDbType.Type.ToGenericTypeString();
+                    Type type = tv.VelocityDbType.Type;
+                    string typeName = type == null ? "Unknown (not loaded)" : type.ToGenericTypeString();
                     string[] illegal = new string[] { "<", ">" };
                     foreach (var c in illegal)
                     {
@@ -112,11 +113,15 @@ namespace VelocityDBExtensions
 #endif
         }
 #if WINDOWS_UWP
-        pageWriter.Dispose();
-        dbWriter.Dispose();
+        if (pageWriter != null)
+          pageWriter.Dispose();
+        if (dbWriter != null)
+          dbWriter.Dispose();
 #else
-        pageWriter.Close();
-        dbWriter.Close();
+        if (pageWriter != null)
+          pageWriter.Close();
+        if (dbWriter != null)
+          dbWriter.Close();
 #endif
       }
     }

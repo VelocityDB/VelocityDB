@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using VelocityDb.Collection;
 using VelocityDb.Session;
 using VelocityDbSchema.NUnit;
 
@@ -22,21 +23,27 @@ namespace NUnitTests
       using (SessionBase session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
+        WeakReferenceList<BaseClassA> baseClassAList = new WeakReferenceList<BaseClassA>();
+        session.Persist(baseClassAList);
         for (int i = 0; i < 5; i++)
         {
           var classA = new BaseClassA();
           session.Persist(classA);
+          baseClassAList.Add(classA);
         }
+        WeakReferenceList<ClassB> classBList = new WeakReferenceList<ClassB>();
+        session.Persist(classBList);
         for (int i = 0; i < 5; i++)
         {
           var classB = new ClassB();
-          session.Persist(classB);
+          classBList.Add(classB);
         }
-
+        WeakReferenceList<ClassC> classCList = new WeakReferenceList<ClassC>();
+        session.Persist(classCList);
         for (int i = 0; i < 5; i++)
         {
           var classC = new ClassC();
-          session.Persist(classC);
+          classCList.Add(classC);
         }
         session.Commit();
       }
@@ -74,6 +81,9 @@ namespace NUnitTests
         session.BeginUpdate();
         foreach (var o in session.AllObjects<BaseClassA>())
           o.Unpersist(session);
+        foreach (var o in session.AllObjects<WeakReferenceList<BaseClassA>>())
+          o.Unpersist(session);
+        Assert.AreEqual(0, session.AllObjects<WeakReferenceList<BaseClassA>>().Count);
         Assert.AreEqual(0, session.AllObjects<BaseClassA>().Count);
         session.Commit();
       }
