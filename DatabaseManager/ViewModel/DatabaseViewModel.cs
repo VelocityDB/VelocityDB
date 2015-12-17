@@ -25,8 +25,16 @@ namespace DatabaseManager
       {
         Database db = m_session.OpenDatabase(m_dbid, false, false);
         if (db != null)
-          return db.ToString();
+          return db.ToString().Remove(0, 10);
         return "Database failed to open: " + m_dbid;
+      }
+    }
+
+    public UInt32 DatabaseNumber
+    {
+      get
+      {
+        return m_dbid;
       }
     }
 

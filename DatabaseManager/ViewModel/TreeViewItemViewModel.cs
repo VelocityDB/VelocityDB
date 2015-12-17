@@ -10,28 +10,22 @@ namespace DatabaseManager
     /// </summary>
     public class TreeViewItemViewModel : INotifyPropertyChanged
     {
-        #region Data
-
         static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
 
-        readonly ObservableCollection<TreeViewItemViewModel> _children;
-        readonly TreeViewItemViewModel _parent;
+        readonly ObservableCollection<TreeViewItemViewModel> m_children;
+        readonly TreeViewItemViewModel m_parent;
 
-        bool _isExpanded;
-        bool _isSelected;
-
-        #endregion // Data
-
-        #region Constructors
+        bool m_isExpanded;
+        bool m_isSelected;
 
         protected TreeViewItemViewModel(TreeViewItemViewModel parent, bool lazyLoadChildren)
         {
-            _parent = parent;
+            m_parent = parent;
 
-            _children = new ObservableCollection<TreeViewItemViewModel>();
+            m_children = new ObservableCollection<TreeViewItemViewModel>();
 
             if (lazyLoadChildren)
-                _children.Add(DummyChild);
+                m_children.Add(DummyChild);
         }
 
         // This is used to create the DummyChild instance.
@@ -39,23 +33,13 @@ namespace DatabaseManager
         {
         }
 
-        #endregion // Constructors
-
-        #region Presentation Members
-
-        #region Children
-
         /// <summary>
         /// Returns the logical child items of this object.
         /// </summary>
         public ObservableCollection<TreeViewItemViewModel> Children
         {
-            get { return _children; }
+            get { return m_children; }
         }
-
-        #endregion // Children
-
-        #region HasLoadedChildren
 
         /// <summary>
         /// Returns true if this object's Children have not yet been populated.
@@ -65,28 +49,24 @@ namespace DatabaseManager
             get { return this.Children.Count == 1 && this.Children[0] == DummyChild; }
         }
 
-        #endregion // HasLoadedChildren
-
-        #region IsExpanded
-
         /// <summary>
         /// Gets/sets whether the TreeViewItem 
         /// associated with this object is expanded.
         /// </summary>
         public bool IsExpanded
         {
-            get { return _isExpanded; }
+            get { return m_isExpanded; }
             set
             {
-                if (value != _isExpanded)
+                if (value != m_isExpanded)
                 {
-                    _isExpanded = value;
+                    m_isExpanded = value;
                     this.OnPropertyChanged("IsExpanded");
                 }
 
                 // Expand all the way up to the root.
-                if (_isExpanded && _parent != null)
-                    _parent.IsExpanded = true;
+                if (m_isExpanded && m_parent != null)
+                    m_parent.IsExpanded = true;
 
                 // Lazy load the child items, if necessary.
                 if (this.HasDummyChild)
@@ -97,30 +77,22 @@ namespace DatabaseManager
             }
         }
 
-        #endregion // IsExpanded
-
-        #region IsSelected
-
         /// <summary>
         /// Gets/sets whether the TreeViewItem 
         /// associated with this object is selected.
         /// </summary>
         public bool IsSelected
         {
-            get { return _isSelected; }
+            get { return m_isSelected; }
             set
             {
-                if (value != _isSelected)
+                if (value != m_isSelected)
                 {
-                    _isSelected = value;
+                    m_isSelected = value;
                     this.OnPropertyChanged("IsSelected");
                 }
             }
         }
-
-        #endregion // IsSelected
-
-        #region LoadChildren
 
         /// <summary>
         /// Invoked when the child items need to be loaded on demand.
@@ -130,20 +102,10 @@ namespace DatabaseManager
         {
         }
 
-        #endregion // LoadChildren
-
-        #region Parent
-
         public TreeViewItemViewModel Parent
         {
-            get { return _parent; }
+            get { return m_parent; }
         }
-
-        #endregion // Parent
-
-        #endregion // Presentation Members
-
-        #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -152,7 +114,5 @@ namespace DatabaseManager
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        #endregion // INotifyPropertyChanged Members
     }
 }

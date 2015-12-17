@@ -79,9 +79,13 @@ namespace NUnitTests
       using (SessionBase session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        foreach (var o in session.AllObjects<BaseClassA>())
-          o.Unpersist(session);
         foreach (var o in session.AllObjects<WeakReferenceList<BaseClassA>>())
+          o.Unpersist(session);
+        foreach (var o in session.AllObjects<WeakReferenceList<ClassB>>())
+          o.Unpersist(session);
+        foreach (var o in session.AllObjects<WeakReferenceList<ClassC>>())
+          o.Unpersist(session);
+        foreach (var o in session.AllObjects<BaseClassA>())
           o.Unpersist(session);
         Assert.AreEqual(0, session.AllObjects<WeakReferenceList<BaseClassA>>().Count);
         Assert.AreEqual(0, session.AllObjects<BaseClassA>().Count);

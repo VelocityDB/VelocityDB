@@ -17,6 +17,7 @@ using VelocityDb.Session;
 using System.Net;
 using VelocityDb;
 using VelocityDb.Collection;
+using System.IO;
 
 namespace DatabaseManager
 {
@@ -26,27 +27,44 @@ namespace DatabaseManager
   public partial class MainWindow : Window
   {
     AllFederationsViewModel m_viewModel;
-    public MainWindow()
+    public MainWindow(string dbFilePath)
     {
       InitializeComponent();
       m_viewModel = new AllFederationsViewModel();
-      base.DataContext = m_viewModel;
+      DirectoryInfo dirInfo = m_viewModel.Initialize(dbFilePath);
+      bool addedFd = false;
+      if (dirInfo != null)
+        addedFd = AddFederation(dirInfo);
+      if (addedFd == false)
+        base.DataContext = m_viewModel;
     }
 
-    private void AddMenuItem_Click(object sender, RoutedEventArgs e)
+    bool AddFederation(DirectoryInfo dirInfo)
     {
       FederationInfo info = new FederationInfo();
+      if (dirInfo != null)
+        info.SystemDbsPath = dirInfo.FullName;
       ConnectionDialog popup = new ConnectionDialog(info);
       bool? result = popup.ShowDialog();
       if (result != null && result.Value)
       {
+        if (info.HostName == null || info.HostName.Length == 0)
+          info.HostName = SessionBase.LocalHost;
         SessionBase session = m_viewModel.ActiveSession;
+        if (session.InTransaction)
+          session.Commit();
         session.BeginUpdate();
         session.Persist(info);
         session.Commit();
         m_viewModel = new AllFederationsViewModel();
         base.DataContext = m_viewModel;
+        return true;
       }
+      return false;
+    }
+    private void AddMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      AddFederation(null);
     }
 
     private void Create1000TestObjectsMenuItem_Click(object sender, RoutedEventArgs e)
@@ -183,13 +201,10 @@ namespace DatabaseManager
       }
     }
 
-    private void NewDatabaseLocationMenuItem_Click(object sender, RoutedEventArgs e)
+    void AddDatabaseLocation(SessionBase session, string directory)
     {
-      MenuItem menuItem = (MenuItem)sender;
-      FederationViewModel view = (FederationViewModel)menuItem.DataContext;
-      FederationInfo info = view.Federationinfo;
-      SessionBase session = view.Session;
       DatabaseLocationMutable newLocationMutable = new DatabaseLocationMutable(session);
+      newLocationMutable.DirectoryPath = directory;
       var popup = new NewDatabaseLocationDialog(newLocationMutable, null);
       bool? result = popup.ShowDialog();
       if (result != null && result.Value)
@@ -213,6 +228,15 @@ namespace DatabaseManager
           MessageBox.Show(ex.Message);
         }
       }
+    }
+
+    private void NewDatabaseLocationMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      FederationViewModel view = (FederationViewModel)menuItem.DataContext;
+      FederationInfo info = view.Federationinfo;
+      SessionBase session = view.Session;
+      AddDatabaseLocation(session, "");
     }
 
     private void CopyFederationMenuItem_Click(object sender, RoutedEventArgs e)

@@ -174,6 +174,7 @@ namespace DatabaseManager
       m_federationInfo = federationInfo;
       RadioNoServ.IsChecked = true;
       WaitForMilliSecondsTextBox.Text = "5000";
+      DBDirTextBox.Text = federationInfo.SystemDbsPath;
     }
 
     private void DependencySelection(Object sender, SelectionChangedEventArgs e)
@@ -189,6 +190,18 @@ namespace DatabaseManager
     void EnableServerParameters(object pSender, RoutedEventArgs pEvents)
     {
       HostTextBox.IsEnabled = true;
+    }
+
+    string DBFolder
+    {
+      get
+      {
+        return m_federationInfo.SystemDbsPath;
+      }
+      set
+      {
+        m_federationInfo.SystemDbsPath = value;
+      }
     }
 
     void RemoveAssembly(object pSender, RoutedEventArgs pEvents)

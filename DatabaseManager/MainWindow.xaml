@@ -97,14 +97,12 @@
               </TextBlock.ContextMenu>
             </TextBlock>
           </StackPanel>
-        </HierarchicalDataTemplate>    
-        
-        <HierarchicalDataTemplate 
-          DataType="{x:Type local:DatabaseViewModel}"
-          ItemsSource="{Binding Children}"
-          >
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type local:DatabaseViewModel}" ItemsSource="{Binding Children}">
           <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding DatabaseName}" />
+            <Image Width="16" Height="16" Margin="1,0" Source="/DatabaseManager;component/Images/Database.png" />
+            <TextBlock Text="{Binding DatabaseName}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
         
