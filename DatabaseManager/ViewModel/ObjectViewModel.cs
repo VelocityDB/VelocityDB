@@ -25,6 +25,7 @@ namespace DatabaseManager
       else
         m_objectAsString = obj.ToString();
     }
+
     public ObjectViewModel(IOptimizedPersistable obj, FieldViewModel parentView, SessionBase session)
       : base(parentView, true)
     {
@@ -35,6 +36,41 @@ namespace DatabaseManager
       else
         m_objectAsString = obj.ToString();
     }
+
+    public ObjectViewModel(object obj, FieldViewModel parentView, int arrayIndex, bool encodedOid, SessionBase session)
+      : base(parentView, true)
+    {
+      m_session = session;
+      if (encodedOid)
+      {
+        if (obj.GetType() == typeof(UInt64))
+        {
+          m_objectId = (UInt64)obj;
+          m_objectAsString = "[" + arrayIndex.ToString() + "] " + new Oid(m_objectId).ToString();
+        }
+        else
+        {
+          Oid oid = new Oid(parentView.ParentId);
+          oid = new Oid(oid.Database, (UInt32)obj);
+          m_objectId = oid.Id;
+          m_objectAsString = "[" + arrayIndex.ToString() + "] " + new OidShort(oid.IdShort).ToString();
+        }
+      }
+      else
+      {
+        IOptimizedPersistable pObj = obj as IOptimizedPersistable;
+        if (pObj == null)
+          session.GlobalObjWrapperGet(obj, out pObj);
+        if (pObj != null)
+          m_objectId = pObj.Id;
+        m_session = session;
+        if (pObj != null && pObj.WrappedObject != obj)
+          m_objectAsString = "[" + arrayIndex.ToString() + "] " + pObj.WrappedObject.ToString() + " " + new Oid(pObj.Id);
+        else
+          m_objectAsString = "[" + arrayIndex.ToString() + "] " + obj.ToString();
+      }
+    }
+
     public string ObjectName
     {
       //get { return _object.ToStringDetails(_schema); }
@@ -61,7 +97,7 @@ namespace DatabaseManager
       IOptimizedPersistable pObj = (IOptimizedPersistable)m_session.Open(m_objectId, false, null, false, 0, Int32.MaxValue);
       if (pObj != null)
       {
-        if (member.Field != null && memberObj != null & (member.Field.FieldType.IsArray || member.HasId || listWithItems))
+        if (member.Field != null && memberObj != null & (member.Field.FieldType.IsArray || member.HasId || listWithItems || member.WeakIOptimizedPersistableReference))
           base.Children.Add(new FieldViewModel(pObj, member, this, m_session));
         else
           base.Children.Add(new FieldViewModelNoExpansions(pObj, member, this, m_session));

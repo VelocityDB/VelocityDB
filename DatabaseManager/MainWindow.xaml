@@ -129,7 +129,7 @@
             <TextBlock Text="{Binding FieldDisplay}" />
           </StackPanel>
         </DataTemplate>
-        
+
         <HierarchicalDataTemplate 
           DataType="{x:Type local:FieldViewModel}"
           ItemsSource="{Binding Children}"
@@ -138,13 +138,13 @@
             <TextBlock Text="{Binding FieldDisplay}" />
           </StackPanel>
         </HierarchicalDataTemplate>
-        
-        <DataTemplate DataType="{x:Type local:ArrayViewModel}">
+
+        <DataTemplate DataType="{x:Type local:ArrayViewModelNoExpansions}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding ArrayDisplay}" />
           </StackPanel>
         </DataTemplate>
-
+        
         <DataTemplate DataType="{x:Type local:ListViewModel}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding ListDisplay}" />
