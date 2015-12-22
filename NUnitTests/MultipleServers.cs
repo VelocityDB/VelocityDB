@@ -20,8 +20,8 @@ namespace NUnitTests
     public const string copyDir = @"c:/NUnitTestDbs/copy";
     public const string systemDir2 = "c:/NUnitTestDbs2";
     public const string location2Dir = "c:/NUnitTestDbsLocation2";
-    public string systemHost2 = "Asus2";
-    public string systemHost = "Asus";
+    public string systemHost2 = "Asus";
+    public string systemHost = "Asus2";
     //public string systemHost2 = "AcerLaptop";
     public string systemHost3 = "FindPriceBuy";
     //public string systemHost2 = "WINDOWS-9HKQ9DL";
@@ -31,71 +31,73 @@ namespace NUnitTests
      //public string systemHost2 = "Lidia-PC";
 
     [Test]  
-    [ExpectedException(typeof(InvalidChangeOfDefaultLocationException))]
     public void multipleServersInvalid()
     {
-      using (ServerClientSession session = new ServerClientSession(systemDir))
+      Assert.Throws<InvalidChangeOfDefaultLocationException>(() =>
       {
-        session.SetTraceDbActivity(2);
-        try
+        using (ServerClientSession session = new ServerClientSession(systemDir))
         {
-          DatabaseLocation localLocation = new DatabaseLocation(systemHost, location2Dir, 10000, 20000, session, PageInfo.compressionKind.LZ4, 0);
-          Placement place = new Placement(10000, 2);
-          session.BeginUpdate();
-          session.NewLocation(localLocation);
-          Man aMan = null;
-          Woman aWoman = null;
+          session.SetTraceDbActivity(2);
+          try
+          {
+            DatabaseLocation localLocation = new DatabaseLocation(systemHost, location2Dir, 10000, 20000, session, PageInfo.compressionKind.LZ4, 0);
+            Placement place = new Placement(10000, 2);
+            session.BeginUpdate();
+            session.NewLocation(localLocation);
+            Man aMan = null;
+            Woman aWoman = null;
 
-          for (int j = 1; j <= 5; j++)
-          {
-            aMan = new Man(null, aMan, DateTime.UtcNow);
-            aMan.Persist(place, session);
-            aWoman = new Woman(aMan, aWoman);
-            aWoman.Persist(place, session);
-            aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
-            if (j % 1000 == 0)
+            for (int j = 1; j <= 5; j++)
             {
-              session.FlushUpdates();
+              aMan = new Man(null, aMan, DateTime.UtcNow);
+              aMan.Persist(place, session);
+              aWoman = new Woman(aMan, aWoman);
+              aWoman.Persist(place, session);
+              aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
+              if (j % 1000 == 0)
+              {
+                session.FlushUpdates();
+              }
             }
-          }
-          localLocation = new DatabaseLocation(systemHost, systemDir, 20001, 30000, session, PageInfo.compressionKind.None, 0);
-          session.NewLocation(localLocation);
-          place = new Placement(20001);
-          //localDatabase = session.NewDatabase(20001, localLocation);
-          for (int j = 1; j <= 5; j++)
-          {
-            aMan = new Man(null, aMan, DateTime.UtcNow);
-            aMan.Persist(place, session);
-            aWoman = new Woman(aMan, aWoman); 
-            aWoman.Persist(place, session);
-            aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);     
-            if (j % 1000 == 0)
+            localLocation = new DatabaseLocation(systemHost, systemDir, 20001, 30000, session, PageInfo.compressionKind.None, 0);
+            session.NewLocation(localLocation);
+            place = new Placement(20001);
+            //localDatabase = session.NewDatabase(20001, localLocation);
+            for (int j = 1; j <= 5; j++)
             {
-              session.FlushUpdates();
+              aMan = new Man(null, aMan, DateTime.UtcNow);
+              aMan.Persist(place, session);
+              aWoman = new Woman(aMan, aWoman);
+              aWoman.Persist(place, session);
+              aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
+              if (j % 1000 == 0)
+              {
+                session.FlushUpdates();
+              }
             }
-          }
-          DatabaseLocation serverLocation = new DatabaseLocation(systemHost2, location2Dir, 30001, 40000, session, PageInfo.compressionKind.LZ4, 0);
-          session.NewLocation(serverLocation);
-          place = new Placement(30001);
-          for (int j = 1; j <= 5; j++)
-          {
-            aMan = new Man(null, aMan, DateTime.UtcNow);
-            aMan.Persist(place, session);
-            aWoman = new Woman(aMan, aWoman);
-            aWoman.Persist(place, session);
-            aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);          
-            if (j % 1000 == 0)
+            DatabaseLocation serverLocation = new DatabaseLocation(systemHost2, location2Dir, 30001, 40000, session, PageInfo.compressionKind.LZ4, 0);
+            session.NewLocation(serverLocation);
+            place = new Placement(30001);
+            for (int j = 1; j <= 5; j++)
             {
-              session.FlushUpdates();
+              aMan = new Man(null, aMan, DateTime.UtcNow);
+              aMan.Persist(place, session);
+              aWoman = new Woman(aMan, aWoman);
+              aWoman.Persist(place, session);
+              aMan.m_spouse = new WeakIOptimizedPersistableReference<VelocityDbSchema.Person>(aWoman);
+              if (j % 1000 == 0)
+              {
+                session.FlushUpdates();
+              }
             }
+            session.Commit();
           }
-          session.Commit();
+          finally
+          {
+            //session.Close();
+          }
         }
-        finally
-        {
-          //session.Close();
-        }
-      }
+      });
     }
 
     [Test]

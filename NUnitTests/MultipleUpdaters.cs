@@ -57,40 +57,11 @@ namespace NUnitTests
     }
 
     [Test]
-    [ExpectedException(typeof(OptimisticLockingFailed))]
     public void TwoUpdaters1()
     {
-      UInt64 id;
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      Assert.Throws<TryingToBeginReadOnlyTransactionWhileInUpdateTransactionException>(() =>
       {
-        session.BeginUpdate();
-        Man man = new Man();
-        man.Persist(session, man);
-        id = man.Id;
-        session.Commit();
-        session.BeginUpdate();
-        man.Age = ++man.Age;
-        Database db = session.NewDatabase(3567);
-        using (SessionNoServer session2 = new SessionNoServer(systemDir))
-        {
-          session2.BeginUpdate();
-          Man man2 = (Man)session2.Open(id);
-          Assert.Less(man2.Age, man.Age);
-          man2.Age = ++man.Age;
-          session2.Commit();
-        }
-        session.DeleteDatabase(db);
-        session.Commit(); // OptimisticLockingFailed here
-      }
-    }
-
-    [Test]
-    [ExpectedException(typeof(OpenDatabaseException))] 
-    public void TwoUpdaters2()
-    {
-      UInt64 id;
-      try
-      {
+        UInt64 id;
         using (SessionNoServer session = new SessionNoServer(systemDir))
         {
           session.BeginUpdate();
@@ -100,56 +71,91 @@ namespace NUnitTests
           session.Commit();
           session.BeginUpdate();
           man.Age = ++man.Age;
-          session.FlushUpdates();
-          using (SessionNoServer session2 = new SessionNoServer(systemDir))
-          {
-            session2.BeginRead();
-            Man man2 = (Man)session2.Open(id);
-            Assert.Less(man2.Age, man.Age);
-            man2.Age = ++man.Age; // We'll get the OpenDatabase exception here since we are not in an update transaction
-            session2.Commit();
-          }
-          session.Commit();
-        }
-      }
-      finally
-      {
-        System.GC.Collect();
-      }
-    }
-
-    [Test]
-    [ExpectedException(typeof(OptimisticLockingFailed))]
-    public void TwoUpdaters3()
-    {
-      UInt64 id;
-      try
-      {
-        using (SessionNoServer session = new SessionNoServer(systemDir))
-        {
-          session.BeginUpdate();
-          Man man = new Man();
-          man.Persist(session, man);
-          id = man.Id;
-          session.Commit();
-          session.BeginUpdate();
-          man.Age = ++man.Age;
-          session.FlushUpdates(); // fStream set for updated databases will cause other write sessions to fail updating these databases
+          Database db = session.NewDatabase(3567);
           using (SessionNoServer session2 = new SessionNoServer(systemDir))
           {
             session2.BeginUpdate();
             Man man2 = (Man)session2.Open(id);
             Assert.Less(man2.Age, man.Age);
             man2.Age = ++man.Age;
-            session2.Commit(); // OptimisticLockingFailed here
+            session2.Commit();
           }
-          session.Commit();
+          session.DeleteDatabase(db);
+          session.Commit(); // OptimisticLockingFailed here
         }
-      }
-      finally
+      });
+    }
+
+    [Test]
+    public void TwoUpdaters2()
+    {
+      Assert.Throws<OpenDatabaseException>(() =>
       {
-        System.GC.Collect();
-      }
+        UInt64 id;
+        try
+        {
+          using (SessionNoServer session = new SessionNoServer(systemDir))
+          {
+            session.BeginUpdate();
+            Man man = new Man();
+            man.Persist(session, man);
+            id = man.Id;
+            session.Commit();
+            session.BeginUpdate();
+            man.Age = ++man.Age;
+            session.FlushUpdates();
+            using (SessionNoServer session2 = new SessionNoServer(systemDir))
+            {
+              session2.BeginRead();
+              Man man2 = (Man)session2.Open(id);
+              Assert.Less(man2.Age, man.Age);
+              man2.Age = ++man.Age; // We'll get the OpenDatabase exception here since we are not in an update transaction
+              session2.Commit();
+            }
+            session.Commit();
+          }
+        }
+        finally
+        {
+          System.GC.Collect();
+        }
+      });
+    }
+
+    [Test]
+    public void TwoUpdaters3()
+    {
+      Assert.Throws<OptimisticLockingFailed>(() =>
+      {
+        UInt64 id;
+        try
+        {
+          using (SessionNoServer session = new SessionNoServer(systemDir))
+          {
+            session.BeginUpdate();
+            Man man = new Man();
+            man.Persist(session, man);
+            id = man.Id;
+            session.Commit();
+            session.BeginUpdate();
+            man.Age = ++man.Age;
+            session.FlushUpdates(); // fStream set for updated databases will cause other write sessions to fail updating these databases
+            using (SessionNoServer session2 = new SessionNoServer(systemDir))
+            {
+              session2.BeginUpdate();
+              Man man2 = (Man)session2.Open(id);
+              Assert.Less(man2.Age, man.Age);
+              man2.Age = ++man.Age;
+              session2.Commit(); // OptimisticLockingFailed here
+            }
+            session.Commit();
+          }
+        }
+        finally
+        {
+          System.GC.Collect();
+        }
+      });
     }
   }
 }

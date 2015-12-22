@@ -49,34 +49,36 @@ namespace NUnitTests
     }
 
     [Test]
-    [ExpectedException(typeof(NoValidVelocityDBLicenseFoundException))]
     public void aaaFakeLicenseDatabase()
     {
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      Assert.Throws<NoValidVelocityDBLicenseFoundException>(() =>
       {
-        session.BeginUpdate();
-        Database database;
-        License license = new License("Mats", 1, null, null, null, 99999, DateTime.MaxValue, 9999, 99, 9999);
-        Placement placer = new Placement(License.PlaceInDatabase, 1, 1, 1);
-        license.Persist(placer, session);
-        for (uint i = 10; i < 20; i++)
+        using (SessionNoServer session = new SessionNoServer(systemDir))
         {
-          database = session.NewDatabase(i);
-          Assert.NotNull(database);
+          session.BeginUpdate();
+          Database database;
+          License license = new License("Mats", 1, null, null, null, 99999, DateTime.MaxValue, 9999, 99, 9999);
+          Placement placer = new Placement(License.PlaceInDatabase, 1, 1, 1);
+          license.Persist(placer, session);
+          for (uint i = 10; i < 20; i++)
+          {
+            database = session.NewDatabase(i);
+            Assert.NotNull(database);
+          }
+          session.Commit();
+          File.Copy(Path.Combine(systemDir, "20.odb"), Path.Combine(systemDir, "4.odb"));
+          session.BeginUpdate();
+          for (uint i = 21; i < 30; i++)
+          {
+            database = session.NewDatabase(i);
+            Assert.NotNull(database);
+          }
+          session.RegisterClass(typeof(VelocityDbSchema.Samples.Sample1.Person));
+          Graph g = new Graph(session);
+          session.Persist(g);
+          session.Commit();
         }
-        session.Commit();
-        File.Copy(Path.Combine(systemDir, "20.odb"), Path.Combine(systemDir, "4.odb"));
-        session.BeginUpdate();
-        for (uint i = 21; i < 30; i++)
-        {
-          database = session.NewDatabase(i);
-          Assert.NotNull(database);
-        }
-        session.RegisterClass(typeof(VelocityDbSchema.Samples.Sample1.Person));
-        Graph g = new Graph(session);
-        session.Persist(g);
-        session.Commit();
-      }
+      });
     }
 
     [TestCase(true, true)]

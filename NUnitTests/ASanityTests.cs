@@ -353,7 +353,7 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginRead();
-        Man man = (Man)session.Open(id);
+        Man man = session.Open<Man>(id);
         Man man2 = (Man)man.Clone();
         Assert.NotNull(man);
         Assert.IsFalse(man2.IsPersistent);
@@ -408,35 +408,39 @@ namespace NUnitTests
     }
 
     [Test]
-    [ExpectedException(typeof(AlreadyInTransactionException))]
     public void Transaction1()
     {
-      UInt64 id;
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      Assert.Throws<AlreadyInTransactionException>(() =>
       {
-        session.BeginRead();
-        session.BeginUpdate();
-        Man man = new Man();
-        man.Persist(session, man);
-        id = man.Id;
-        session.Commit();
-      }
+        UInt64 id;
+        using (SessionNoServer session = new SessionNoServer(systemDir))
+        {
+          session.BeginRead();
+          session.BeginUpdate();
+          Man man = new Man();
+          man.Persist(session, man);
+          id = man.Id;
+          session.Commit();
+        }
+      });
     }
 
     [Test]
-    [ExpectedException(typeof(TryingToBeginReadOnlyTransactionWhileInUpdateTransactionException))]
     public void Transaction2()
     {
-      UInt64 id;
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      Assert.Throws<TryingToBeginReadOnlyTransactionWhileInUpdateTransactionException>(() =>
       {
-        session.BeginUpdate();
-        session.BeginRead();
-        Man man = new Man();
-        man.Persist(session, man);
-        id = man.Id;
-        session.Commit();
-      }
+        UInt64 id;
+        using (SessionNoServer session = new SessionNoServer(systemDir))
+        {
+          session.BeginUpdate();
+          session.BeginRead();
+          Man man = new Man();
+          man.Persist(session, man);
+          id = man.Id;
+          session.Commit();
+        }
+      });
     }
 
     [Test]
@@ -471,7 +475,7 @@ namespace NUnitTests
         using (SessionNoServer session2 = new SessionNoServer(systemDir))
         {
           session2.BeginRead();
-          StoreCat storeCat2 = (StoreCat)session2.Open(id);
+          StoreCat storeCat2 = session2.Open<StoreCat>(id);
           if (storeCat2.cat.Name != "Boze")
             Console.WriteLine("Wrong storeName");
           session2.Commit();
@@ -493,7 +497,7 @@ namespace NUnitTests
         using (SessionNoServer session2 = new SessionNoServer(systemDir))
         {
           session2.BeginRead();
-          StoreList storeList2 = (StoreList)session2.Open(id);
+          StoreList storeList2 = session2.Open<StoreList>(id);
           if (storeList2.in16 != 16)
             Console.WriteLine("Should be 16");
           session2.Commit();
@@ -675,7 +679,7 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginRead();
-        TestRec tr2 = (TestRec)session.Open(id);
+        TestRec tr2 = session.Open<TestRec>(id);
         int[] trArray = (int[])tr.Stuff;
         int[] tr2Array = (int[])tr2.Stuff;
         Assert.AreEqual(trArray, tr2Array);

@@ -157,32 +157,34 @@ namespace NUnitTests
     }
 
     [Test]
-    [ExpectedException(typeof(NotImplementedException))]
     public void CompareInt32DescendingComparisonArray()
     {
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      Assert.Throws<NotImplementedException>(() =>
       {
-        session.BeginUpdate();
-        AllSupported obj = new AllSupported(2);
-        CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("int32", session, false, false, false);
-        BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(Int32), true);
-        for (int i = 0; i < 100000; i++)
+        using (SessionNoServer session = new SessionNoServer(systemDir))
         {
-          obj = new AllSupported(1);
-          obj.int32 = randGen.Next(Int32.MinValue, Int32.MaxValue);
-          sortedSet.Add(obj);
+          session.BeginUpdate();
+          AllSupported obj = new AllSupported(2);
+          CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("int32", session, false, false, false);
+          BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(Int32), true);
+          for (int i = 0; i < 100000; i++)
+          {
+            obj = new AllSupported(1);
+            obj.int32 = randGen.Next(Int32.MinValue, Int32.MaxValue);
+            sortedSet.Add(obj);
+          }
+          int ct = 0;
+          AllSupported prior = null;
+          foreach (AllSupported currentObj in (IEnumerable<AllSupported>)sortedSet)
+          {
+            if (prior != null)
+              Assert.Greater(prior.int32, currentObj.int32);
+            prior = currentObj;
+            ct++;
+          }
+          session.Commit();
         }
-        int ct = 0;
-        AllSupported prior = null;
-        foreach (AllSupported currentObj in (IEnumerable<AllSupported>)sortedSet)
-        {
-          if (prior != null)
-            Assert.Greater(prior.int32, currentObj.int32);
-          prior = currentObj;
-          ct++;
-        }
-        session.Commit();
-      }
+      });
     }
 
     [Test]

@@ -11,34 +11,42 @@ namespace AutoClaimUsingSQL
   {
     public void DeleteClaim(string claimNumber)
     {
-      AutoClaimEntityFrameworkContext dbContext = new AutoClaimEntityFrameworkContext();
-      MitchellClaimType claim = (from c in dbContext.Claims.Include("LossInfo").Include("Vehicles") where c.ClaimNumber == claimNumber select c).FirstOrDefault();
-      if (claim == null)
-        Console.WriteLine("Invalid claim update, claim with claim number: " + claimNumber + " does not exist in database");
-      dbContext.Claims.Remove(claim);
-      dbContext.SaveChanges();
+      using (AutoClaimEntityFrameworkContext dbContext = new AutoClaimEntityFrameworkContext())
+      {
+        MitchellClaimType claim = (from c in dbContext.Claims.Include("LossInfo").Include("Vehicles") where c.ClaimNumber == claimNumber select c).FirstOrDefault();
+        if (claim == null)
+          Console.WriteLine("Invalid claim update, claim with claim number: " + claimNumber + " does not exist in database");
+        dbContext.Claims.Remove(claim);
+        dbContext.SaveChanges();
+      }
     }
 
     public IList<MitchellClaimType> FindClaims(DateTime lossDateFrom, DateTime lossDateTo)
     {
-      AutoClaimEntityFrameworkContext dbContext = new AutoClaimEntityFrameworkContext();
-      return (from c in dbContext.Claims where c.LossDate >= lossDateFrom && c.LossDate <= lossDateTo select c).ToList();
+      using (AutoClaimEntityFrameworkContext dbContext = new AutoClaimEntityFrameworkContext())
+      {
+        return (from c in dbContext.Claims where c.LossDate >= lossDateFrom && c.LossDate <= lossDateTo select c).ToList();
+      }
     }
 
     public void NewClaim(MitchellClaimType claim)
     {
-      AutoClaimEntityFrameworkContext dbContext = new AutoClaimEntityFrameworkContext();
-      dbContext.Claims.Add(claim);
-      dbContext.SaveChanges();
+      using (AutoClaimEntityFrameworkContext dbContext = new AutoClaimEntityFrameworkContext())
+      {
+        dbContext.Claims.Add(claim);
+        dbContext.SaveChanges();
+      }
     }
 
     public MitchellClaimType ReadClaim(string claimNumber)
     {
-      AutoClaimEntityFrameworkContext dbContext = new AutoClaimEntityFrameworkContext();
-      MitchellClaimType claim = (from c in dbContext.Claims.Include("LossInfo").Include("Vehicles") where c.ClaimNumber == claimNumber select c).FirstOrDefault();
-      if (claim == null)
-        Console.WriteLine("Invalid claim read, claim with claim number: " + claimNumber + " does not exist in database");
-      return claim;
+      using (AutoClaimEntityFrameworkContext dbContext = new AutoClaimEntityFrameworkContext())
+      {
+        MitchellClaimType claim = (from c in dbContext.Claims.Include("LossInfo").Include("Vehicles") where c.ClaimNumber == claimNumber select c).FirstOrDefault();
+        if (claim == null)
+          Console.WriteLine("Invalid claim read, claim with claim number: " + claimNumber + " does not exist in database");
+        return claim;
+      }
     }
 
     public void UpdateClaim(MitchellClaimType claimUpdates)

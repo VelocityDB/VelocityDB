@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using VelocityDb.TypeInfo;
 using VelocityDb.Session;
+using VelocityDb.TypeInfo;
 using VelocityDBExtensions;
-using VelocityDb;
-using Newtonsoft.Json;
 
 namespace WebApi.Controllers
 {
-  /// <summary>
-  /// Handles messages with url "api/type"
-  /// </summary>
-  public class TypeController : ApiController
-  {
+    public class TypeController : ApiController
+    {
     /// <summary>
     /// Get the names of all persitent types used.
     /// </summary>
@@ -28,12 +22,12 @@ namespace WebApi.Controllers
       using (SessionNoServer session = new SessionNoServer(path))
       {
         session.BeginRead();
-        Database db = session.OpenDatabase(1);
+        VelocityDb.Database db = session.OpenDatabase(1);
         var e = db.AllObjects<VelocityDbType>(false);
         var types = session.ExportToJson<VelocityDbType>(false, false);
         List<string> stringList = new List<String>();
         foreach (VelocityDbType t in e)
-          yield return t.Type.ToGenericTypeString();
+          yield return t.Type == null ? "Unknown (not loaded)" : t.Type.ToGenericTypeString(); ;
         session.Commit();
       }
     }

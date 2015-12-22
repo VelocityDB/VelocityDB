@@ -18,7 +18,7 @@ namespace DatabaseManager
     public FederationViewModel(FederationInfo federationInfo) : base(null, true)
     {
       m_federationInfo = federationInfo;
-      if (m_federationInfo.UsesServerClient || (m_federationInfo.HostName.Length > 0 &&  m_federationInfo.HostName!= Dns.GetHostName()))
+      if (m_federationInfo.UsesServerClient || (SessionBase.IsSameHost(m_federationInfo.HostName, SessionBase.LocalHost) == false))
         m_session = new ServerClientSession(m_federationInfo.SystemDbsPath, m_federationInfo.HostName, m_federationInfo.WaitForMilliSeconds, m_federationInfo.UsePessimisticLocking == false);
       else
         m_session = new SessionNoServer(m_federationInfo.SystemDbsPath, m_federationInfo.WaitForMilliSeconds, m_federationInfo.UsePessimisticLocking == false);
