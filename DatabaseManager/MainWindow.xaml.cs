@@ -95,7 +95,14 @@ namespace DatabaseManager
         MessageBox.Show(ex.Message);
       }
     }
-    
+
+    private void DatabaseLocationOrderByMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      DatabaseLocationViewModel view = (DatabaseLocationViewModel)menuItem.DataContext;
+      view.OrderDatabasesByName = menuItem.IsChecked;
+    }
+
     private void RemoveDatabaseLocationMenuItem_Click(object sender, RoutedEventArgs e)
     {
       MenuItem menuItem = (MenuItem)sender;
@@ -118,6 +125,7 @@ namespace DatabaseManager
         MessageBox.Show(ex.Message);
       }
     }
+
     private void RestoreDatabaseLocationMenuItem_Click(object sender, RoutedEventArgs e)
     {
       MenuItem menuItem = (MenuItem)sender;

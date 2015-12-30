@@ -10,11 +10,13 @@ namespace DatabaseManager
   public class DatabaseLocationViewModel : TreeViewItemViewModel
   {
     DatabaseLocation m_databaseLocation;
+    bool m_orderDatabasesByName;
 
-    public DatabaseLocationViewModel(DatabaseLocation location)
+    public DatabaseLocationViewModel(DatabaseLocation location, bool orderDatabasesByName)
       : base(null, true)
     {
       m_databaseLocation = location;
+      m_orderDatabasesByName = orderDatabasesByName;
     }
 
     public DatabaseLocation DatabaseLocation
@@ -48,11 +50,29 @@ namespace DatabaseManager
       }
     }
 
+    public bool OrderDatabasesByName
+    {
+      get
+      {
+        return m_orderDatabasesByName;
+      }
+      set
+      {
+        m_orderDatabasesByName = value;
+        base.Children.Clear();
+        LoadChildren();
+      }
+    }
+
     protected override void LoadChildren()
     {
       base.Children.Add(new ObjectViewModel(m_databaseLocation, this, m_databaseLocation.Session));
-      SortedSet<Database> dbSet = new SortedSet<Database>(m_databaseLocation.Session.OpenLocationDatabases(m_databaseLocation, false));
-      foreach (Database database in dbSet)
+      IOrderedEnumerable<Database> dbs;
+      if (m_orderDatabasesByName)
+        dbs = m_databaseLocation.Session.OpenLocationDatabases(m_databaseLocation, false).OrderBy(db => db.Name);
+      else
+        dbs = m_databaseLocation.Session.OpenLocationDatabases(m_databaseLocation, false).OrderBy(db => db.Id);
+      foreach (Database database in dbs)
         base.Children.Add(new DatabaseViewModel(this, database));
     }
   }

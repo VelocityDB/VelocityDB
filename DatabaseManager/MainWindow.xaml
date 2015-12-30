@@ -93,6 +93,7 @@
                       <Image Source="/DatabaseManager;component/Images/system_restore.png" />
                     </MenuItem.Icon>
                   </MenuItem>
+                  <MenuItem Header="_Order Databases by Name" IsCheckable="true" IsChecked="{Binding OrderDatabasesByName}" Click="DatabaseLocationOrderByMenuItem_Click"/>
                 </ContextMenu>
               </TextBlock.ContextMenu>
             </TextBlock>

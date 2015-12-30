@@ -246,7 +246,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     }
     public virtual void PersistMyReferences(SessionBase session, bool inFlush)
     {
-      Shape.PersistRefences(WrappedObject, true, page.PageInfo, this, session, inFlush);
+      Shape.PersistRefences(WrappedObject, page.PageInfo, this, session, inFlush);
     }
 
     /// <summary>

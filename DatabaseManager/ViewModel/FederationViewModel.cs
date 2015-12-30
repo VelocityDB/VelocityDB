@@ -54,7 +54,7 @@ namespace DatabaseManager
       base.Children.Add(new ObjectViewModel(m_federationInfo, this, m_session));
       DatabaseLocations locations = m_session.DatabaseLocations;
       foreach (DatabaseLocation location in locations)
-        base.Children.Add(new DatabaseLocationViewModel(location));
+        base.Children.Add(new DatabaseLocationViewModel(location, Properties.Settings.Default.OrderDatabasesByName));
     }
   }
 }
