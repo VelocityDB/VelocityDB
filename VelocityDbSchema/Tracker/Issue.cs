@@ -11,40 +11,40 @@ namespace VelocityDbSchema.Tracker
   [Serializable]
   public class Issue : OptimizedPersistable
   {
-    SortedSetAny<Attachment> attachments;
+    SortedSetAny<Attachment> m_attachments;
 #pragma warning disable 0414
-    SortedSetAny<User> subscribers;
+    SortedSetAny<User> m_subscribers;
 #pragma warning restore 0414
-    User assignedTo;
-    User lastUpdatedBy;
-    User reportedBy;
-    DateTime dateTimeLastUpdated;
-    DateTime dateTimeCreated;
-    DateTime dueDate;
-    StatusEnum status;
+    User m_assignedTo;
+    User m_lastUpdatedBy;
+    User m_reportedBy;
+    DateTime m_dateTimeLastUpdated;
+    DateTime m_dateTimeCreated;
+    DateTime m_dueDate;
+    StatusEnum m_status;
 #pragma warning disable 0169
-    TimeSpan estimatedTimeToFix;
+    TimeSpan m_estimatedTimeToFix;
 #pragma warning restore 0169
 #pragma warning disable 0414
-    TestCase testCase;
+    TestCase m_testCase;
 #pragma warning restore 0414
-    SortedSetAny<Component> affectedComponentSet;
-    SortedSetAny<ProductVersion> affectedVersionSet;
-    SortedSetAny<Vote> voteSet;
-    SortedSetAny<Issue> relatedIssueSet;
-    SortedSetAny<ProductVersion> fixedInVersionSet;
-    SortedSetAny<SubTask> subTaskSet;
-    SortedSetAny<ProductLabel> labelSet;
-    string summary; // a brief one line summary of the issue.
-    string description; // longer text about the issue
-    string environment; // like "Windows 7 32 bit" or ie8
-    string fixmessage;
-    Resolution fixResolution;
-    PriorityEnum priority;
-    CategoryEnum category;
-    ProductVersion version;
-    Project project;
-    Component component;
+    SortedSetAny<Component> m_affectedComponentSet;
+    SortedSetAny<ProductVersion> m_affectedVersionSet;
+    SortedSetAny<Vote> m_voteSet;
+    SortedSetAny<Issue> m_relatedIssueSet;
+    SortedSetAny<ProductVersion> m_fixedInVersionSet;
+    SortedSetAny<SubTask> m_subTaskSet;
+    SortedSetAny<ProductLabel> m_labelSet;
+    string m_summary; // a brief one line summary of the issue.
+    string m_description; // longer text about the issue
+    string m_environment; // like "Windows 7 32 bit" or ie8
+    string m_fixmessage;
+    Resolution m_fixResolution;
+    PriorityEnum m_priority;
+    CategoryEnum m_category;
+    ProductVersion m_version;
+    Project m_project;
+    Component m_component;
     public enum Resolution : byte { Incomplete, Fixed, WontFix, Dublicate, CannotReproduce };
     public enum SecurityLevel : byte { All, Reporters, Developers};
     public enum PriorityEnum : byte { Blocker, Critical, Major, Minor, Trivial };
@@ -56,46 +56,46 @@ namespace VelocityDbSchema.Tracker
       string summary, string description, string environment, User assignedTo, DateTime dueDate, SortedSetAny<Attachment> attachments, StatusEnum status = StatusEnum.Open)
     {
       if (attachments != null)
-        this.attachments = attachments;
+        m_attachments = attachments;
       else
-        this.attachments = new SortedSetAny<Attachment>();
-      this.reportedBy = reportedBy;
-      this.project = project;
-      this.component = component;
-      affectedComponentSet = new SortedSetAny<Component>(1);
+        m_attachments = new SortedSetAny<Attachment>();
+      m_reportedBy = reportedBy;
+      m_project = project;
+      m_component = component;
+      m_affectedComponentSet = new SortedSetAny<Component>(1);
       if (component != null)
-        affectedComponentSet.Add(component);
-      affectedVersionSet = new SortedSetAny<ProductVersion>(1);
+        m_affectedComponentSet.Add(component);
+      m_affectedVersionSet = new SortedSetAny<ProductVersion>(1);
       if (version != null)
-        affectedVersionSet.Add(version);
-      voteSet = new SortedSetAny<Vote>(1);
-      relatedIssueSet = new SortedSetAny<Issue>(1);
-      fixedInVersionSet = new SortedSetAny<ProductVersion>(1);
-      subTaskSet = new SortedSetAny<SubTask>(1);
-      labelSet = new SortedSetAny<ProductLabel>(1);
-      this.version = version;
-      this.summary = summary;
-      this.description = description;
-      this.environment = environment;
-      this.category = category;
-      this.priority = priority;
-      fixResolution = resolution;
-      dateTimeCreated = DateTime.Now;
-      dateTimeLastUpdated = dateTimeCreated;
-      fixmessage = null;
-      lastUpdatedBy = reportedBy;
-      this.dueDate = dueDate;
-      this.status = status;
-      this.AssignedTo = assignedTo;
-      subscribers = null; // to do
-      testCase = null;// to do
+        m_affectedVersionSet.Add(version);
+      m_voteSet = new SortedSetAny<Vote>(1);
+      m_relatedIssueSet = new SortedSetAny<Issue>(1);
+      m_fixedInVersionSet = new SortedSetAny<ProductVersion>(1);
+      m_subTaskSet = new SortedSetAny<SubTask>(1);
+      m_labelSet = new SortedSetAny<ProductLabel>(1);
+      m_version = version;
+      m_summary = summary;
+      m_description = description;
+      m_environment = environment;
+      m_category = category;
+      m_priority = priority;
+      m_fixResolution = resolution;
+      m_dateTimeCreated = DateTime.Now;
+      m_dateTimeLastUpdated = m_dateTimeCreated;
+      m_fixmessage = null;
+      m_lastUpdatedBy = reportedBy;
+      m_dueDate = dueDate;
+      m_status = status;
+      AssignedTo = assignedTo;
+      m_subscribers = null; // to do
+      m_testCase = null;// to do
     }
 
     public SortedSetAny<Attachment> Attachments
     {
       get
       {
-        return attachments;
+        return m_attachments;
       }
     }
 
@@ -103,9 +103,9 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        if (attachments == null)
+        if (m_attachments == null)
           return null;
-        return attachments.Keys.ToArray();
+        return m_attachments.Keys.ToArray();
       }
     }
     
@@ -113,12 +113,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return assignedTo;
+        return m_assignedTo;
       }
       set
       {
         Update();
-        assignedTo = value;
+        m_assignedTo = value;
       }
     }
 
@@ -126,12 +126,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return category;
+        return m_category;
       }
       set
       {
         Update();
-        category = value;
+        m_category = value;
       }
     }
     
@@ -139,12 +139,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return component;
+        return m_component;
       }
       set
       {
         Update();
-        component = value;
+        m_component = value;
       }
     }
     
@@ -152,7 +152,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return dateTimeCreated;
+        return m_dateTimeCreated;
       }
     }
 
@@ -160,12 +160,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return dateTimeLastUpdated;
+        return m_dateTimeLastUpdated;
       }
       set
       {
         Update();
-        dateTimeLastUpdated = value;
+        m_dateTimeLastUpdated = value;
       }
     }
 
@@ -173,12 +173,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return description;
+        return m_description;
       }
       set
       {
         Update();
-        description = value;
+        m_description = value;
       }
     }
     
@@ -186,12 +186,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return dueDate;
+        return m_dueDate;
       }
       set
       {
         Update();
-        dueDate = value;
+        m_dueDate = value;
       }
     }
 
@@ -199,12 +199,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return environment;
+        return m_environment;
       }
       set
       {
         Update();
-        environment = value;
+        m_environment = value;
       }
     }
 
@@ -212,12 +212,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return fixmessage;
+        return m_fixmessage;
       }
       set
       {
         Update();
-        fixmessage = value;
+        m_fixmessage = value;
       }
     }
 
@@ -225,12 +225,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return fixResolution;
+        return m_fixResolution;
       }
       set
       {
         Update();
-        fixResolution = value;
+        m_fixResolution = value;
       }
     } 
     
@@ -246,7 +246,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return lastUpdatedBy;
+        return m_lastUpdatedBy;
       }
     }
 
@@ -267,24 +267,24 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return priority;
+        return m_priority;
       }
       set
       {
         Update();
-        priority = value;
+        m_priority = value;
       }
     }
     public Project Project
     {
       get
       {
-        return project;
+        return m_project;
       }
       set
       {
         Update();
-        project = value;
+        m_project = value;
       }
     }
 
@@ -292,12 +292,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return reportedBy;
+        return m_reportedBy;
       }
       set
       {
         Update();
-        reportedBy = value;
+        m_reportedBy = value;
       }
     }
 
@@ -305,11 +305,11 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return status;
+        return m_status;
       }
       set
       {
-        status = value;
+        m_status = value;
       }
     }
 
@@ -317,12 +317,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return summary;
+        return m_summary;
       }
       set
       {
         Update();
-        summary = value;
+        m_summary = value;
       }
     }
 
@@ -330,12 +330,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return version;
+        return m_version;
       }
       set
       {
         Update();
-        version = value;
+        m_version = value;
       }
     }
   }

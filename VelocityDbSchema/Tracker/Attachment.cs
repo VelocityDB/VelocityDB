@@ -10,22 +10,22 @@ namespace VelocityDbSchema.Tracker
    [Serializable]
   public class Attachment : OptimizedPersistable
   {
-    string comment;
-    string fileName;
-    string filePath;
-    string contentType;
-    byte[] fileContent;
-    WeakIOptimizedPersistableReference<Issue>  issueAttachedTo;
+    string m_comment;
+    string m_fileName;
+    string m_filePath;
+    string m_contentType;
+    byte[] m_fileContent;
+    WeakIOptimizedPersistableReference<Issue>  m_issueAttachedTo;
 
     public Attachment(string filePath, string fileName, string note, byte[] content, string contentType, Issue issue)
     {
-      this.fileName = fileName;
-      this.filePath = filePath;
-      this.comment = note;
-      this.contentType = contentType;
-      fileContent = content;
+      this.m_fileName = fileName;
+      this.m_filePath = filePath;
+      this.m_comment = note;
+      this.m_contentType = contentType;
+      m_fileContent = content;
       if (issue != null)
-        issueAttachedTo = new WeakIOptimizedPersistableReference<Issue>(issue);
+        m_issueAttachedTo = new WeakIOptimizedPersistableReference<Issue>(issue);
     }
 
     public override int CompareTo(object obj)
@@ -45,12 +45,13 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return comment;
+        return m_comment;
       }
       set
       {
         Update();
-        comment = value;
+        LoadFields();
+        m_comment = value;
       }
     }
 
@@ -58,7 +59,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return contentType;
+        return m_contentType;
       }
     }
 
@@ -66,19 +67,21 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return fileName;
+        return m_fileName;
       }
       set
       {
         Update();
-        fileName = value;
+        LoadFields();
+        m_fileName = value;
       }
     }
     public byte[] FileContent
     {
       get
       {
-        return fileContent;
+        LoadFields();
+        return m_fileContent;
       }
     }
 
@@ -86,17 +89,29 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueAttachedTo;
+        return m_issueAttachedTo;
       }
       set
       {
         Update();
-        issueAttachedTo = value;
+        LoadFields();
+        m_issueAttachedTo = value;
       }
     }
+
+    public override bool LazyLoadFields
+    {
+      get
+      {
+        return true;
+      }
+    }
+
     public override string ToString()
     {
-      return FileName + " " + fileContent.Length.ToString() + " bytes";
+      if (FieldsLoaded)
+        return FileName + " " + m_fileContent.Length.ToString() + " bytes";
+      return FileName;
     }
   }
 }

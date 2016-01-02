@@ -159,6 +159,7 @@ namespace NUnitTests
     [Test]
     public void CompareInt32DescendingComparisonArray()
     {
+#if DEBUG
       Assert.Throws<NotImplementedException>(() =>
       {
         using (SessionNoServer session = new SessionNoServer(systemDir))
@@ -185,6 +186,7 @@ namespace NUnitTests
           session.Commit();
         }
       });
+#endif
     }
 
     [Test]

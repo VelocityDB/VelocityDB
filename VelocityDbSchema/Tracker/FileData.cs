@@ -13,22 +13,22 @@ namespace VelocityDbSchema.Tracker
 
   public FileData(FileInfo fileInfo)
     {
-      this.fileInfo = fileInfo;
-      fileName = fileInfo.Name;
-      directoryName = fileInfo.DirectoryName;
-      fileBinaryData = null;
+      m_fileInfo = fileInfo;
+      m_fileName = fileInfo.Name;
+      m_directoryName = fileInfo.DirectoryName;
+      m_fileBinaryData = null;
     }
     [NonSerialized]
-    FileInfo fileInfo;
+    FileInfo m_fileInfo;
     public void SetFileBytes()
     {
-      FileStream file = fileInfo.OpenRead();
-      fileBinaryData = new byte[file.Length];
+      FileStream file = m_fileInfo.OpenRead();
+      m_fileBinaryData = new byte[file.Length];
       int offset = 0;
       int remaining = (int) file.Length; // how to handle larger files ???
       while (remaining > 0)
       {
-        int read = file.Read(fileBinaryData, offset, remaining);
+        int read = file.Read(m_fileBinaryData, offset, remaining);
         if (read <= 0)
           throw new EndOfStreamException
               (String.Format("End of stream reached with {0} bytes left to read", remaining));
@@ -39,13 +39,13 @@ namespace VelocityDbSchema.Tracker
 
     public void SetFileInfo(string fileName)
     {
-      fileInfo = new FileInfo(fileName);
+      m_fileInfo = new FileInfo(fileName);
     }
-    string directoryName;
-    string fileName;
+    string m_directoryName;
+    string m_fileName;
 #pragma warning disable 0169
-    int length;
+    int m_length;
 #pragma warning restore 0169
-    byte[] fileBinaryData;
+    byte[] m_fileBinaryData;
   }
 }

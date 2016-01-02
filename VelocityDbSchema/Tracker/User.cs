@@ -11,36 +11,36 @@ namespace VelocityDbSchema.Tracker
   public class User : OptimizedPersistable
   {
 #pragma warning disable 0169
-    Organization company;
+    Organization m_company;
 #pragma warning restore 0169
-    DateTime dateTimeCreated;
-    User createdBy;
-    string email;
-    string firstName;
-    string lastName;
-    string userName;
+    DateTime m_dateTimeCreated;
+    User m_createdBy;
+    string m_email;
+    string m_firstName;
+    string m_lastName;
+    string m_userName;
 
     public User() 
     {     
-      createdBy = this;
+      m_createdBy = this;
     }
 
     public User(string email)
     {
-      this.email = email;
+      this.m_email = email;
     }
 
     public User(User createdBy, string email, string firstName, string lastName, string userName)
     {
       if (createdBy == null)
-        this.createdBy = this;
+        m_createdBy = this;
       else
-        this.createdBy = createdBy;
-      this.email = email;
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.userName = userName;
-      dateTimeCreated = DateTime.Now;
+        m_createdBy = createdBy;
+      m_email = email;
+      m_firstName = firstName;
+      m_lastName = lastName;
+      m_userName = userName;
+      m_dateTimeCreated = DateTime.Now;
     }
 
     public override int CompareTo(object obj)
@@ -48,7 +48,7 @@ namespace VelocityDbSchema.Tracker
       if (obj is User)
       {
         User otherUser = (User)obj;
-        return this.email.CompareTo(otherUser.email);
+        return this.m_email.CompareTo(otherUser.m_email);
       }
       else
       {
@@ -60,7 +60,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return createdBy.ToString();
+        return m_createdBy.ToString();
       }
     }
     
@@ -68,7 +68,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return dateTimeCreated;
+        return m_dateTimeCreated;
       } 
     }
     
@@ -76,12 +76,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return email;
+        return m_email;
       }
       set
       {
         Update();
-        email = value;
+        m_email = value;
       }
     }
     
@@ -89,12 +89,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return firstName;
+        return m_firstName;
       }
       set
       {
         Update();
-        firstName = value;
+        m_firstName = value;
       }
     }
 
@@ -102,12 +102,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return lastName;
+        return m_lastName;
       }
       set
       {
         Update();
-        lastName = value;
+        m_lastName = value;
       }    
     }
     
@@ -115,26 +115,18 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return userName;
+        return m_userName;
       }
       set
       {
         Update();
-        userName = value;
-      }
-    }
-
-    public override UInt32 PlacementDatabaseNumber
-    {
-      get
-      {
-        return 14;
+        m_userName = value;
       }
     }
 
     public override string ToString()
     {
-      return userName;
+      return m_userName;
     }
   }
 }

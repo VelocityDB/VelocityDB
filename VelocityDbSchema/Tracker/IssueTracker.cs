@@ -11,109 +11,108 @@ namespace VelocityDbSchema.Tracker
 {
   public class IssueTracker : OptimizedPersistable
   {
-    public const UInt32 PlaceInDatabase = 11;
-    SortedSetAny<Issue> issueSetByDescription; 
-    SortedSetAny<Issue> issueSetById;
-    SortedSetAny<Issue> issueSetByPriority;
-    SortedSetAny<Issue> issueSetByDateTimeCreated;
-    SortedSetAny<Issue> issueSetByDateTimeUpdated;
-    SortedSetAny<Issue> issueSetByStatus;
-    SortedSetAny<Issue> issueSetBySummary;
-    SortedSetAny<Issue> issueSetByProject;
-    SortedSetAny<Issue> issueSetByCategory;
-    SortedSetAny<Issue> issueSetByReportedBy;
-    SortedSetAny<Issue> issueSetByLastUpdatedBy;
-    SortedSetAny<Issue> issueSetByAssignedTo;
-    SortedSetAny<Issue> issueSetByDueDate;
-    SortedSetAny<Issue> issueSetByVersion;
-    SortedSetAny<Component> componentSet;
-    SortedSetAny<User> userSet;
-    SortedSetAny<Project> projectSet;
-    SortedSetAny<Organization> organizationSet;
+    SortedSetAny<Issue> m_issueSetByDescription; 
+    SortedSetAny<Issue> m_issueSetById;
+    SortedSetAny<Issue> m_issueSetByPriority;
+    SortedSetAny<Issue> m_issueSetByDateTimeCreated;
+    SortedSetAny<Issue> m_issueSetByDateTimeUpdated;
+    SortedSetAny<Issue> m_issueSetByStatus;
+    SortedSetAny<Issue> m_issueSetBySummary;
+    SortedSetAny<Issue> m_issueSetByProject;
+    SortedSetAny<Issue> m_issueSetByCategory;
+    SortedSetAny<Issue> m_issueSetByReportedBy;
+    SortedSetAny<Issue> m_issueSetByLastUpdatedBy;
+    SortedSetAny<Issue> m_issueSetByAssignedTo;
+    SortedSetAny<Issue> m_issueSetByDueDate;
+    SortedSetAny<Issue> m_issueSetByVersion;
+    SortedSetAny<Component> m_componentSet;
+    SortedSetAny<User> m_userSet;
+    SortedSetAny<Project> m_projectSet;
+    SortedSetAny<Organization> m_organizationSet;
 #pragma warning disable 0169
-    SortedSetAny<ProductLabel> labelSet;
+    SortedSetAny<ProductLabel> m_labelSet;
 #pragma warning restore 0169
-    SortedSetAny<ProductVersion> versionSet;
-    PermissionScheme permissions;
+    SortedSetAny<ProductVersion> m_versionSet;
+    PermissionScheme m_permissions;
 
     public IssueTracker(int capacity, SessionBase session)
     {
-      issueSetById = new SortedSetAny<Issue>(capacity);
-      CompareByField<Issue> descriptionCompare = new CompareByField<Issue>("description", session, true);
-      issueSetByDescription = new SortedSetAny<Issue>(descriptionCompare); 
+      m_issueSetById = new SortedSetAny<Issue>(capacity);
+      CompareByField<Issue> descriptionCompare = new CompareByField<Issue>("m_description", session, true);
+      m_issueSetByDescription = new SortedSetAny<Issue>(descriptionCompare); 
       ComparePriority priorityCompare = new ComparePriority();
-      issueSetByPriority = new SortedSetAny<Issue>(priorityCompare);
-      CompareByField<Issue> dateTimeCreatedCompare = new CompareByField<Issue>("dateTimeCreated", session, true);
-      issueSetByDateTimeCreated = new SortedSetAny<Issue>(dateTimeCreatedCompare);
-      CompareByField<Issue> dateTimeUpdatedCompare = new CompareByField<Issue>("dateTimeLastUpdated", session, true);
-      issueSetByDateTimeUpdated = new SortedSetAny<Issue>(dateTimeCreatedCompare);
-      CompareByField<Issue> compareStatus = new CompareByField<Issue>("status", session, true);
-      issueSetByStatus = new SortedSetAny<Issue>(compareStatus);
+      m_issueSetByPriority = new SortedSetAny<Issue>(priorityCompare);
+      CompareByField<Issue> dateTimeCreatedCompare = new CompareByField<Issue>("m_dateTimeCreated", session, true);
+      m_issueSetByDateTimeCreated = new SortedSetAny<Issue>(dateTimeCreatedCompare);
+      CompareByField<Issue> dateTimeUpdatedCompare = new CompareByField<Issue>("m_dateTimeLastUpdated", session, true);
+      m_issueSetByDateTimeUpdated = new SortedSetAny<Issue>(dateTimeCreatedCompare);
+      CompareByField<Issue> compareStatus = new CompareByField<Issue>("m_status", session, true);
+      m_issueSetByStatus = new SortedSetAny<Issue>(compareStatus);
       CompareSummary compareSummary = new CompareSummary();
-      issueSetBySummary = new SortedSetAny<Issue>(compareSummary);
-      CompareByField<Issue> compareProject = new CompareByField<Issue>("project", session, true);
-      issueSetByProject = new SortedSetAny<Issue>(compareProject);
+      m_issueSetBySummary = new SortedSetAny<Issue>(compareSummary);
+      CompareByField<Issue> compareProject = new CompareByField<Issue>("m_project", session, true);
+      m_issueSetByProject = new SortedSetAny<Issue>(compareProject);
       CompareCategory compareCategory = new CompareCategory();
-      issueSetByCategory = new SortedSetAny<Issue>(compareCategory);
+      m_issueSetByCategory = new SortedSetAny<Issue>(compareCategory);
       CompareReportedBy compareReportedBy = new CompareReportedBy();
-      issueSetByReportedBy = new SortedSetAny<Issue>(compareReportedBy);
+      m_issueSetByReportedBy = new SortedSetAny<Issue>(compareReportedBy);
       CompareLastUpdatedBy compareLastUpdatedBy = new CompareLastUpdatedBy();
-      issueSetByLastUpdatedBy = new SortedSetAny<Issue>(compareLastUpdatedBy);
+      m_issueSetByLastUpdatedBy = new SortedSetAny<Issue>(compareLastUpdatedBy);
       CompareAssignedTo compareAssignedTo = new CompareAssignedTo();
-      issueSetByAssignedTo = new SortedSetAny<Issue>(compareAssignedTo);
-      CompareByField<Issue> compareByDueDate = new CompareByField<Issue>("dueDate", session, true);
-      issueSetByDueDate = new SortedSetAny<Issue>(compareByDueDate);
+      m_issueSetByAssignedTo = new SortedSetAny<Issue>(compareAssignedTo);
+      CompareByField<Issue> compareByDueDate = new CompareByField<Issue>("m_dueDate", session, true);
+      m_issueSetByDueDate = new SortedSetAny<Issue>(compareByDueDate);
       CompareByVersion compareByVersion = new CompareByVersion();
-      issueSetByVersion = new SortedSetAny<Issue>(compareByVersion);
-      componentSet = new SortedSetAny<Component>(capacity);
-      userSet = new SortedSetAny<User>(capacity);
-      projectSet = new SortedSetAny<Project>(capacity);
-      versionSet = new SortedSetAny<ProductVersion>(capacity);
-      organizationSet = new SortedSetAny<Organization>(capacity);
-      permissions = null;
+      m_issueSetByVersion = new SortedSetAny<Issue>(compareByVersion);
+      m_componentSet = new SortedSetAny<Component>(capacity);
+      m_userSet = new SortedSetAny<User>(capacity);
+      m_projectSet = new SortedSetAny<Project>(capacity);
+      m_versionSet = new SortedSetAny<ProductVersion>(capacity);
+      m_organizationSet = new SortedSetAny<Organization>(capacity);
+      m_permissions = null;
     }
 
     public void Add(Issue issue)
     {
-      issueSetById.Add(issue); 
-      issueSetByDescription.Add(issue);
-      issueSetByPriority.Add(issue);
-      issueSetByDateTimeCreated.Add(issue);
-      issueSetByDateTimeUpdated.Add(issue);
-      issueSetByStatus.Add(issue);
-      issueSetBySummary.Add(issue);
-      issueSetByProject.Add(issue);
-      issueSetByCategory.Add(issue);
-      issueSetByReportedBy.Add(issue);
-      issueSetByLastUpdatedBy.Add(issue);
-      issueSetByAssignedTo.Add(issue);
-      issueSetByDueDate.Add(issue);
-      issueSetByVersion.Add(issue);
+      m_issueSetById.Add(issue); 
+      m_issueSetByDescription.Add(issue);
+      m_issueSetByPriority.Add(issue);
+      m_issueSetByDateTimeCreated.Add(issue);
+      m_issueSetByDateTimeUpdated.Add(issue);
+      m_issueSetByStatus.Add(issue);
+      m_issueSetBySummary.Add(issue);
+      m_issueSetByProject.Add(issue);
+      m_issueSetByCategory.Add(issue);
+      m_issueSetByReportedBy.Add(issue);
+      m_issueSetByLastUpdatedBy.Add(issue);
+      m_issueSetByAssignedTo.Add(issue);
+      m_issueSetByDueDate.Add(issue);
+      m_issueSetByVersion.Add(issue);
     }
 
    public bool Remove(Issue issue)
     {
-      return issueSetById.Remove(issue) &&
-             issueSetByDescription.Remove(issue) &&
-             issueSetByPriority.Remove(issue) &&
-             issueSetByDateTimeCreated.Remove(issue) &&
-             issueSetByDateTimeUpdated.Remove(issue) &&
-             issueSetByStatus.Remove(issue) &&
-             issueSetBySummary.Remove(issue) &&
-             issueSetByProject.Remove(issue) &&
-             issueSetByCategory.Remove(issue) &&
-             issueSetByReportedBy.Remove(issue) &&
-             issueSetByLastUpdatedBy.Remove(issue) &&
-             issueSetByAssignedTo.Remove(issue) &&
-             issueSetByDueDate.Remove(issue) &&
-             issueSetByVersion.Remove(issue);
+      return m_issueSetById.Remove(issue) &&
+             m_issueSetByDescription.Remove(issue) &&
+             m_issueSetByPriority.Remove(issue) &&
+             m_issueSetByDateTimeCreated.Remove(issue) &&
+             m_issueSetByDateTimeUpdated.Remove(issue) &&
+             m_issueSetByStatus.Remove(issue) &&
+             m_issueSetBySummary.Remove(issue) &&
+             m_issueSetByProject.Remove(issue) &&
+             m_issueSetByCategory.Remove(issue) &&
+             m_issueSetByReportedBy.Remove(issue) &&
+             m_issueSetByLastUpdatedBy.Remove(issue) &&
+             m_issueSetByAssignedTo.Remove(issue) &&
+             m_issueSetByDueDate.Remove(issue) &&
+             m_issueSetByVersion.Remove(issue);
     }
 
    public SortedSetAny<Issue> IssueSetById
     {
       get
       {
-        return issueSetById;
+        return m_issueSetById;
       }
     }
 
@@ -121,7 +120,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByAssignedTo;
+        return m_issueSetByAssignedTo;
       }
     }
 
@@ -129,7 +128,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByCategory;
+        return m_issueSetByCategory;
       }
     }
 
@@ -137,7 +136,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByDueDate;
+        return m_issueSetByDueDate;
       }
     }
 
@@ -145,7 +144,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByLastUpdatedBy;
+        return m_issueSetByLastUpdatedBy;
       }
     }
 
@@ -153,7 +152,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByProject;
+        return m_issueSetByProject;
       }
     }
 
@@ -161,7 +160,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByDateTimeCreated;
+        return m_issueSetByDateTimeCreated;
       }
     }
 
@@ -170,7 +169,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByDateTimeUpdated;
+        return m_issueSetByDateTimeUpdated;
       }
     }
 
@@ -178,7 +177,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByReportedBy;
+        return m_issueSetByReportedBy;
       }
     }
 
@@ -186,7 +185,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByStatus;
+        return m_issueSetByStatus;
       }
     }
 
@@ -194,7 +193,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetBySummary;
+        return m_issueSetBySummary;
       }
     }
 
@@ -202,7 +201,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByPriority;
+        return m_issueSetByPriority;
       }
     }
 
@@ -210,7 +209,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return issueSetByVersion;
+        return m_issueSetByVersion;
       }
     }
 
@@ -218,7 +217,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return componentSet;
+        return m_componentSet;
       }
     }
 
@@ -226,12 +225,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return permissions;
+        return m_permissions;
       }
       set
       {
         Update();
-        permissions = value;
+        m_permissions = value;
       }
     }
 
@@ -239,7 +238,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return projectSet;
+        return m_projectSet;
       }
     }
     
@@ -247,7 +246,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return userSet;
+        return m_userSet;
       }
     }
 
@@ -255,15 +254,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return versionSet;
-      }
-    }
-
-    public override UInt32 PlacementDatabaseNumber
-    {
-      get
-      {
-        return PlaceInDatabase;
+        return m_versionSet;
       }
     }
   }

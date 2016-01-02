@@ -10,28 +10,28 @@ namespace VelocityDbSchema.Tracker
 {
   public class Project : OptimizedPersistable
   {
-    string name; // used in combination with issue id
-    string description;
-    User createdBy;
+    string m_name; // used in combination with issue id
+    string m_description;
+    User m_createdBy;
 
     public Project() { }
     public Project(User user, string projectName, string projectDescription) 
     {
-      createdBy = user;
-      name = projectName;
-      description = projectDescription;
+      m_createdBy = user;
+      m_name = projectName;
+      m_description = projectDescription;
     }
 
     public string Name
     {
       get
       {
-        return name;
+        return m_name;
       }
       set
       {
         Update();
-        name = value;
+        m_name = value;
       }
     }
 
@@ -39,12 +39,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return description;
+        return m_description;
       }
       set
       {
         Update();
-        description = value;
+        m_description = value;
       }
     } 
 
@@ -52,21 +52,13 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return createdBy;
-      }
-    }
-
-    public override UInt32 PlacementDatabaseNumber
-    {
-      get
-      {
-        return 18;
+        return m_createdBy;
       }
     }
 
     public override string ToString()
     {
-      return name;
+      return m_name;
     }
   }
 }

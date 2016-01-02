@@ -10,7 +10,7 @@ namespace VelocityDbSchema.Tracker
   public class ProductLabel : OptimizedPersistable
   {   
 #pragma warning disable 0169
-    string label;
+    string m_label;
 #pragma warning restore 0169
   }
 }

@@ -10,33 +10,33 @@ namespace VelocityDbSchema.Tracker
 {
   public class ProductVersion : OptimizedPersistable
   {
-    DateTime releaseDate;
-    User createdBy;
-    string name;
-    string description;
+    DateTime m_releaseDate;
+    User m_createdBy;
+    string m_name;
+    string m_description;
 #pragma warning disable 0414
-    State state;
+    State m_state;
 #pragma warning restore 0414
     public enum State : byte { Released, Unreleased, Archived };
 
     public ProductVersion() { }
     public ProductVersion(User user, string version, string description, DateTime? releaseDate)
     {
-      createdBy = user;
-      name = version;
-      this.description = description;
-      this.releaseDate = releaseDate ?? DateTime.MaxValue;
+      m_createdBy = user;
+      m_name = version;
+      m_description = description;
+      m_releaseDate = releaseDate ?? DateTime.MaxValue;
       if (releaseDate != null)
-        state = State.Released;
+        m_state = State.Released;
       else
-        state = State.Unreleased;
+        m_state = State.Unreleased;
     }
 
     public User CreatedBy
     {
       get
       {
-        return createdBy;
+        return m_createdBy;
       }
     }
 
@@ -44,12 +44,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return description;
+        return m_description;
       }
       set
       {
         Update();
-        description = value;
+        m_description = value;
       }
     }
     
@@ -57,12 +57,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return name;
+        return m_name;
       }
       set
       {
         Update();
-        name = value;
+        m_name = value;
       }
     } 
     
@@ -70,26 +70,18 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return releaseDate;
+        return m_releaseDate;
       }
       set
       {
         Update();
-        releaseDate = value;
-      }
-    }
-
-    public override UInt32 PlacementDatabaseNumber
-    {
-      get
-      {
-        return 17;
+        m_releaseDate = value;
       }
     }
 
     public override string ToString()
     {
-      return name;
+      return m_name;
     }
   }
 }

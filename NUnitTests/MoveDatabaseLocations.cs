@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using VelocityDb;
 using VelocityDb.Session;
@@ -15,8 +16,8 @@ namespace NUnitTests
   {
     public const string systemDir = "MoveDatabaseLocationTest";
     public const string systemDir2 = "MoveDatabaseLocationTest2";
-    public string systemHost = "Asus";
-    public string systemHost2 = "FindPriceBuy";
+    public string systemHost = SessionBase.LocalHost;
+    public string systemHost2 = "Asus";
 
     public void verifyDatabaseLocations(SessionBase session)
     {
@@ -53,11 +54,15 @@ namespace NUnitTests
     //[Repeat(3)]
     public void moveDatabaseLocations()
     {
+      SessionBase.BaseDatabasePath = "d:/Databases"; // use same as VelocityDbServer.exe.config 
       DirectoryInfo info = new DirectoryInfo(Path.Combine(SessionBase.BaseDatabasePath,  systemDir));
-      if (info.Exists)
+     if (info.Exists)
         info.Delete(true);
+      DirectoryInfo newInfo = new DirectoryInfo(Path.Combine(SessionBase.BaseDatabasePath,  systemDir + "MovedTo"));
+      string newPath = newInfo.FullName;
+      if (newInfo.Exists)
+        newInfo.Delete(true);
       createDatabaseLocations(new SessionNoServer(systemDir));
-      string newPath = Path.Combine(SessionBase.BaseDatabasePath,  systemDir + "MovedTo");
       info.MoveTo(newPath);
       moveDatabaseLocations(new SessionNoServer(newPath, 2000, false, false), systemHost, newPath);
       verifyDatabaseLocations(new SessionNoServer(newPath));
@@ -70,7 +75,7 @@ namespace NUnitTests
       newPath = Path.Combine(SessionBase.BaseDatabasePath, systemDir + "MovedTo");
       info.MoveTo(newPath);
       moveDatabaseLocations(new ServerClientSession(newPath, systemHost, 2000, false, false), systemHost, newPath);
-      verifyDatabaseLocations(new ServerClientSession(newPath));
+      verifyDatabaseLocations(new ServerClientSession(newPath, systemHost));
       info.Delete(true);
 
       info = new DirectoryInfo(Path.Combine(SessionBase.BaseDatabasePath, systemDir));

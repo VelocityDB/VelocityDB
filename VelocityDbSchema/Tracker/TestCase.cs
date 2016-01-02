@@ -10,19 +10,19 @@ namespace VelocityDbSchema.Tracker
 {
   public class TestCase : OptimizedPersistable
   {
-    SortedSetAny<FileData> testCaseFiles;
-    string description;
+    SortedSetAny<FileData> m_testCaseFiles;
+    string m_description;
     public TestCase(string description)
     {
-      this.description = description;
+      this.m_description = description;
     }
     public void AddFile(string fileName)
     {
       FileInfo fileInfo = new FileInfo(fileName);
       FileData fileData = new FileData(fileInfo);
-      if (testCaseFiles == null)
-        testCaseFiles = new SortedSetAny<FileData>();
-      testCaseFiles.Add(fileData);
+      if (m_testCaseFiles == null)
+        m_testCaseFiles = new SortedSetAny<FileData>();
+      m_testCaseFiles.Add(fileData);
       fileData.SetFileBytes();
     }
   }

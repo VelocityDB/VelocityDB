@@ -10,12 +10,12 @@ namespace VelocityDbSchema.Tracker
 {
   public class PermissionScheme : OptimizedPersistable
   {
-    SortedSetAny<User> adminSet;
-    SortedSetAny<User> developerSet;
-    UInt32 adminPermissions;
-    UInt32 developerPermissions;
-    UInt32 userPermissions;
-    User superUser;
+    SortedSetAny<User> m_adminSet;
+    SortedSetAny<User> m_developerSet;
+    UInt32 m_adminPermissions;
+    UInt32 m_developerPermissions;
+    UInt32 m_userPermissions;
+    User m_superUser;
     public enum Permission
     {
       CreateProject = 1,
@@ -49,25 +49,25 @@ namespace VelocityDbSchema.Tracker
 
     public PermissionScheme(User superUser)
     {
-      this.superUser = superUser;
-      adminSet = new SortedSetAny<User>();
-      adminSet.Add(superUser);
-      developerSet = new SortedSetAny<User>();
-      adminPermissions = (uint) (Permission.CreateProject | Permission.DeleteProject | Permission.EditProject | Permission.CreateComponent | Permission.DeleteComponent | 
+      this.m_superUser = superUser;
+      m_adminSet = new SortedSetAny<User>();
+      m_adminSet.Add(superUser);
+      m_developerSet = new SortedSetAny<User>();
+      m_adminPermissions = (uint) (Permission.CreateProject | Permission.DeleteProject | Permission.EditProject | Permission.CreateComponent | Permission.DeleteComponent | 
         Permission.EditComponent | Permission.CreateIssue | Permission.DeleteIssue | Permission.EditIssue | Permission.EditOwnIssue | Permission.DeleteOwnIssue | 
         Permission.CreateVersion | Permission.DeleteVersion | Permission.EditVersion | Permission.AddLargeAttachment | Permission.AddSmallAttachment |
         Permission.DeleteAttachment | Permission.LinkIssues | Permission.EditUser | Permission.ScheduleIssues | Permission.DeleteUser | Permission.WorkOnIssues);
-      developerPermissions = (uint)(Permission.CreateIssue | Permission.DeleteIssue | Permission.EditIssue | Permission.EditOwnIssue | Permission.DeleteOwnIssue | 
+      m_developerPermissions = (uint)(Permission.CreateIssue | Permission.DeleteIssue | Permission.EditIssue | Permission.EditOwnIssue | Permission.DeleteOwnIssue | 
         Permission.EditVersion | Permission.AddLargeAttachment | Permission.AddSmallAttachment |
         Permission.DeleteAttachment | Permission.LinkIssues | Permission.ScheduleIssues | Permission.WorkOnIssues);
-      userPermissions = (uint)(Permission.CreateIssue | Permission.EditOwnIssue | Permission.DeleteOwnIssue | Permission.AddSmallAttachment);
+      m_userPermissions = (uint)(Permission.CreateIssue | Permission.EditOwnIssue | Permission.DeleteOwnIssue | Permission.AddSmallAttachment);
     }
 
     public SortedSetAny<User> AdminSet
     {
       get
       {
-        return adminSet;
+        return m_adminSet;
       }
     }
 
@@ -75,7 +75,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return developerSet;
+        return m_developerSet;
       }
     }
 
@@ -84,12 +84,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return adminPermissions;
+        return m_adminPermissions;
       }
       set
       {
         Update();
-        adminPermissions = value;
+        m_adminPermissions = value;
       }
     }
 
@@ -97,12 +97,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return developerPermissions;
+        return m_developerPermissions;
       }
       set
       {
         Update();
-        developerPermissions = value;
+        m_developerPermissions = value;
       }
     }
 
@@ -110,12 +110,12 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        return userPermissions;
+        return m_userPermissions;
       }
       set
       {
         Update();
-        userPermissions = value;
+        m_userPermissions = value;
       }
     }
   }
