@@ -31,7 +31,7 @@ namespace VelocityWeb
             updatedHostName = HostName.Text.ToLower();
           using (SessionNoServer session = new SessionNoServer(MapPath("~/Database").ToLower(), 2000, false, false))
           {
-            session.BeginUpdate(false, true);
+            session.BeginUpdate(false);
             DatabaseLocation bootLocation = session.DatabaseLocations.LocationForDb(0);
             DatabaseLocation locationNew = new DatabaseLocation(updatedHostName, MapPath("~/Database").ToLower(), bootLocation.StartDatabaseNumber, bootLocation.EndDatabaseNumber, session,
                 bootLocation.CompressPages, bootLocation.PageEncryption, bootLocation.IsBackupLocation, bootLocation.BackupOfOrForLocation);
@@ -41,7 +41,7 @@ namespace VelocityWeb
           }
           using (SessionNoServer session = new SessionNoServer(MapPath("~/IssuesDatabase").ToLower(), 2000, false, false))
           {
-            session.BeginUpdate(false, true);
+            session.BeginUpdate(false);
             DatabaseLocation bootLocation = session.DatabaseLocations.LocationForDb(0);
             DatabaseLocation locationNew = new DatabaseLocation(updatedHostName, MapPath("~/IssuesDatabase").ToLower(), bootLocation.StartDatabaseNumber, bootLocation.EndDatabaseNumber, session,
                 bootLocation.CompressPages, bootLocation.PageEncryption, bootLocation.IsBackupLocation, bootLocation.BackupOfOrForLocation);

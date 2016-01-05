@@ -19,10 +19,10 @@ namespace VelocityDbSchema.Tracker
 
     public Attachment(string filePath, string fileName, string note, byte[] content, string contentType, Issue issue)
     {
-      this.m_fileName = fileName;
-      this.m_filePath = filePath;
-      this.m_comment = note;
-      this.m_contentType = contentType;
+      m_fileName = fileName;
+      m_filePath = filePath;
+      m_comment = note;
+      m_contentType = contentType;
       m_fileContent = content;
       if (issue != null)
         m_issueAttachedTo = new WeakIOptimizedPersistableReference<Issue>(issue);
@@ -50,7 +50,6 @@ namespace VelocityDbSchema.Tracker
       set
       {
         Update();
-        LoadFields();
         m_comment = value;
       }
     }
@@ -72,7 +71,6 @@ namespace VelocityDbSchema.Tracker
       set
       {
         Update();
-        LoadFields();
         m_fileName = value;
       }
     }
@@ -94,7 +92,6 @@ namespace VelocityDbSchema.Tracker
       set
       {
         Update();
-        LoadFields();
         m_issueAttachedTo = value;
       }
     }

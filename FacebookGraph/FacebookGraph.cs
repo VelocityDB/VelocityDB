@@ -35,7 +35,6 @@ namespace FacebookGraph
 
     static void Main(string[] args)
     {
-      DataCache.MaximumMemoryUse = 12000000000; // 12 GB, set this to what fits your case
       FacebookGraph facebookGraph = new FacebookGraph();
       SessionBase.BaseDatabasePath = "d:/Databases";
       SessionBase.BTreeAddFastTransientBatchSize = 10; // reduces memory usage

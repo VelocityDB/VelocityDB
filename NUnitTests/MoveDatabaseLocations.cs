@@ -42,7 +42,7 @@ namespace NUnitTests
 
     public void moveDatabaseLocations(SessionBase session, string updatedHostName, string newPath)
     {
-        session.BeginUpdate(false, true);
+        session.BeginUpdate(false);
         DatabaseLocation bootLocation = session.DatabaseLocations.LocationForDb(0);
         DatabaseLocation locationNew = new DatabaseLocation(updatedHostName, newPath, bootLocation.StartDatabaseNumber, bootLocation.EndDatabaseNumber, session,
             bootLocation.CompressPages, bootLocation.PageEncryption, bootLocation.IsBackupLocation, bootLocation.BackupOfOrForLocation);
