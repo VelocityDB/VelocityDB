@@ -15,10 +15,10 @@ namespace UnitTests
     public class VelocityDB
     {
         /// <summary>
-        /// Tests the caching and re using of sessiosn to increase perfomance by avoding
+        /// Tests the caching and re using of sessions to increase performance by avoiding
         /// creating new sessions for each client request
         /// </summary>
-       // [Test]
+        [Test]
         public void CachedSessionTest()
         {
             ServerClientSession lSession = GetCachedSession();
@@ -27,13 +27,22 @@ namespace UnitTests
             lSession = GetCachedSession();
             TestClass lTestClass = new TestClass();
             lTestClass.SomeIntVar = 123;
-            lTestClass.SomeStringVar = "test";
-            lTestClass.Persist(lSession, lTestClass);
+            lTestClass.SomeStringVar = "test";          
+            UInt64 id =  lTestClass.Persist(lSession, lTestClass);
             lSession.Commit();
             //return to cache, get it again and query the object
-            //as this test is to verify it does not hang we do it in separate therad and kill after timeout
+            //as this test is to verify it does not hang we do it in separate thread and kill after timeout
             ReturnSessionToCache(lSession);
-            Thread lThread=new Thread(new ThreadStart(()=>
+            lSession = GetCachedSession();
+            lTestClass = lSession.Open<TestClass>(id);
+            lTestClass.SomeIntVar = 1234;
+            lTestClass.SomeStringVar = "test2";
+            lTestClass.Persist(lSession, lTestClass);
+            lSession.Commit();
+      //return to cache, get it again and query the object
+      //as this test is to verify it does not hang we do it in separate thread and kill after timeout
+      ReturnSessionToCache(lSession);
+      Thread lThread=new Thread(new ThreadStart(()=>
             {
                 lSession = GetCachedSession();
                 counter = lSession.AllObjects<TestClass>(true, false).Count();
@@ -42,7 +51,7 @@ namespace UnitTests
             lThread.Start();
             lEvent.WaitOne(5000);
             if(lThread.IsAlive)lThread.Abort();
-            Assert.AreNotEqual(0, counter, "Invalid nr of objects retreived");
+            Assert.AreNotEqual(0, counter, "Invalid number of objects retrieved");
         }
 
 
@@ -72,7 +81,7 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Returns a session to the cache.To be sure we have no transactiona ctive we abort in case
+        /// Returns a session to the cache.To be sure we have no transactions active we abort in case
         /// the caller of this method did not commit or abort
         /// </summary>
         void ReturnSessionToCache(ServerClientSession pSession)
@@ -86,7 +95,8 @@ namespace UnitTests
 
         private string GetDBDIrectory()
         {
-            string lDBLocation=System.Configuration.ConfigurationManager.AppSettings["DBURL"];
+      //string lDBLocation=System.Configuration.ConfigurationManager.AppSettings["DBURL"];
+            string lDBLocation = SessionBase.BaseDatabasePath + "/SessionPoolTest";
             Assert.IsNotNull(lDBLocation, "Missing DBURL in App.config");
             if (Directory.Exists(lDBLocation) == false)
             {

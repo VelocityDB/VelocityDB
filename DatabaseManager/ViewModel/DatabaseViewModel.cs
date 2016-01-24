@@ -40,10 +40,13 @@ namespace DatabaseManager
 
     protected override void LoadChildren()
     {
-      Database db = m_session.OpenDatabase(m_dbid, false, false);
-      if (db != null)
-        foreach (Page page in db)
-          base.Children.Add(new PageViewModel(page, this, m_session));
+      using (System.Windows.Application.Current.Dispatcher.DisableProcessing())
+      {
+        Database db = m_session.OpenDatabase(m_dbid, false, false);
+        if (db != null)
+          foreach (Page page in db)
+            base.Children.Add(new PageViewModel(page, this, m_session));
+      }
     }
   }
 }

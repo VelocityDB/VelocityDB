@@ -926,51 +926,21 @@ namespace NUnitTests
     public void sessionPoolTest()
     {
       const int numberOfSessions = 5;
-      SessionPool pool = new SessionPool(numberOfSessions, () => new SessionNoServer(systemDir));
+      using (SessionPool pool = new SessionPool(numberOfSessions, () => new SessionNoServer(systemDir)))
       {
-        int sessionId = -1;
-        SessionBase session = null;
-        try
-        {
-          session = pool.GetSession(out sessionId);
-          session.BeginUpdate();
-          for (int i = 0; i < 1000; i++)
-          {
-            Man man = new Man();
-            session.Persist(man);
-          }
-          session.Commit();
-        }
-        catch (Exception e)
-        {
-          if (session != null)
-            session.Abort();
-          Console.WriteLine(e.Message);
-          throw e;
-        }
-        finally
-        {
-          pool.FreeSession(sessionId, session);
-        }
-      }
-
-      Parallel.ForEach(Enumerable.Range(0, numberOfSessions * 5), 
-        x =>
         {
           int sessionId = -1;
           SessionBase session = null;
           try
           {
             session = pool.GetSession(out sessionId);
-            if (session.InTransaction == false)
-              session.BeginRead();
-            var allMen = session.AllObjects<Man>();
-            int allMenCt = allMen.Count();
-            foreach (Man man in allMen)
+            session.BeginUpdate();
+            for (int i = 0; i < 1000; i++)
             {
-              double lat = man.Lattitude;
+              Man man = new Man();
+              session.Persist(man);
             }
-            Console.WriteLine("Man Count is: " + allMenCt + " Session Id is: " + sessionId + " Current task id is: " + (Task.CurrentId.HasValue ? Task.CurrentId.Value.ToString() : "unknown"));
+            session.Commit();
           }
           catch (Exception e)
           {
@@ -983,8 +953,40 @@ namespace NUnitTests
           {
             pool.FreeSession(sessionId, session);
           }
-        });
+        }
+
+        Parallel.ForEach(Enumerable.Range(0, numberOfSessions * 5),
+          x =>
+          {
+            int sessionId = -1;
+            SessionBase session = null;
+            try
+            {
+              session = pool.GetSession(out sessionId);
+              if (session.InTransaction == false)
+                session.BeginRead();
+              var allMen = session.AllObjects<Man>();
+              int allMenCt = allMen.Count();
+              foreach (Man man in allMen)
+              {
+                double lat = man.Lattitude;
+              }
+              Console.WriteLine("Man Count is: " + allMenCt + " Session Id is: " + sessionId + " Current task id is: " + (Task.CurrentId.HasValue ? Task.CurrentId.Value.ToString() : "unknown"));
+            }
+            catch (Exception e)
+            {
+              if (session != null)
+                session.Abort();
+              Console.WriteLine(e.Message);
+              throw e;
+            }
+            finally
+            {
+              pool.FreeSession(sessionId, session);
+            }
+          });
       }
+    }
   }
 
   public class VersionManager<T> : VelocityDbList<WeakIOptimizedPersistableReference<T>> where T : IOptimizedPersistable

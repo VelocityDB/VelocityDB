@@ -72,8 +72,11 @@ namespace DatabaseManager
         dbs = m_databaseLocation.Session.OpenLocationDatabases(m_databaseLocation, false).OrderBy(db => db.Name);
       else
         dbs = m_databaseLocation.Session.OpenLocationDatabases(m_databaseLocation, false).OrderBy(db => db.Id);
-      foreach (Database database in dbs)
-        base.Children.Add(new DatabaseViewModel(this, database));
+      using (System.Windows.Application.Current.Dispatcher.DisableProcessing())
+      {
+        foreach (Database database in dbs)
+          base.Children.Add(new DatabaseViewModel(this, database));
+      }
     }
   }
 }

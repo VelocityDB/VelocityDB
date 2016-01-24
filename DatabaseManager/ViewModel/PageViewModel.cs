@@ -51,8 +51,11 @@ namespace DatabaseManager
     {
       Database db = m_session.OpenDatabase(m_dbNum, false, false);
       Page page = m_session.OpenPage(db, m_pageNum);
-      foreach (IOptimizedPersistable o in page)
-        base.Children.Add(new ObjectViewModel(o, this, m_session));
+      using (System.Windows.Application.Current.Dispatcher.DisableProcessing())
+      {
+        foreach (IOptimizedPersistable o in page)
+          base.Children.Add(new ObjectViewModel(o, this, m_session));
+      }
     }
   }
 }
