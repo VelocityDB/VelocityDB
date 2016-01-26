@@ -285,6 +285,34 @@ namespace NUnitTests
       VersionManagerTest(new ServerClientSession(systemDir));
     }
 
+    [Test]
+    public void GermanString()
+    {
+      UInt64 id = 0;
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        VelocityDbSchema.Person person = new VelocityDbSchema.Person();
+        person.LastName = "Med vänliga hälsningar";
+        id = session.Persist(person);
+        session.Commit();
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        VelocityDbSchema.Person person = session.Open<VelocityDbSchema.Person>(id);
+        person.LastName = "Mit freundlichen Grüßen";
+        session.Commit();
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        VelocityDbSchema.Person person = session.Open<VelocityDbSchema.Person>(id);
+        person.LastName = "Med vänliga hälsningar";
+        session.Commit();
+      }
+    }
+
     private VersionManager<VelocityDbSchema.Samples.Sample1.Person> GetVersionManager(SessionBase session)
     {
       Database db = session.OpenDatabase(VersionManager<VelocityDbSchema.Samples.Sample1.Person>.versionMangerDatabase, false, false);
@@ -934,13 +962,44 @@ namespace NUnitTests
           try
           {
             session = pool.GetSession(out sessionId);
-            session.BeginUpdate();
-            for (int i = 0; i < 1000; i++)
+            using (SessionBase.Transaction transaction = session.BeginUpdate())
             {
-              Man man = new Man();
-              session.Persist(man);
+              for (int i = 0; i < 1000; i++)
+              {
+                Man man = new Man();
+                session.Persist(man);
+              }
+              session.Commit();
             }
-            session.Commit();
+          }
+          catch (Exception e)
+          {
+            Console.WriteLine(e.Message);
+            throw e;
+          }
+          finally
+          {
+            pool.FreeSession(sessionId, session);
+          }
+      }
+
+      Parallel.ForEach(Enumerable.Range(0, numberOfSessions * 5),
+        x =>
+        {
+          int sessionId = -1;
+          SessionBase session = null;
+          try
+          {
+            session = pool.GetSession(out sessionId);
+            if (session.InTransaction == false)
+              session.BeginRead();
+            var allMen = session.AllObjects<Man>();
+            int allMenCt = allMen.Count();
+            foreach (Man man in allMen)
+            {
+              double lat = man.Lattitude;
+            }
+            Console.WriteLine("Man Count is: " + allMenCt + " Session Id is: " + sessionId + " Current task id is: " + (Task.CurrentId.HasValue ? Task.CurrentId.Value.ToString() : "unknown"));
           }
           catch (Exception e)
           {
@@ -953,83 +1012,52 @@ namespace NUnitTests
           {
             pool.FreeSession(sessionId, session);
           }
-        }
-
-        Parallel.ForEach(Enumerable.Range(0, numberOfSessions * 5),
-          x =>
-          {
-            int sessionId = -1;
-            SessionBase session = null;
-            try
-            {
-              session = pool.GetSession(out sessionId);
-              if (session.InTransaction == false)
-                session.BeginRead();
-              var allMen = session.AllObjects<Man>();
-              int allMenCt = allMen.Count();
-              foreach (Man man in allMen)
-              {
-                double lat = man.Lattitude;
-              }
-              Console.WriteLine("Man Count is: " + allMenCt + " Session Id is: " + sessionId + " Current task id is: " + (Task.CurrentId.HasValue ? Task.CurrentId.Value.ToString() : "unknown"));
-            }
-            catch (Exception e)
-            {
-              if (session != null)
-                session.Abort();
-              Console.WriteLine(e.Message);
-              throw e;
-            }
-            finally
-            {
-              pool.FreeSession(sessionId, session);
-            }
-          });
-      }
+        });
     }
   }
+}
 
-  public class VersionManager<T> : VelocityDbList<WeakIOptimizedPersistableReference<T>> where T : IOptimizedPersistable
+public class VersionManager<T> : VelocityDbList<WeakIOptimizedPersistableReference<T>> where T : IOptimizedPersistable
+{
+  public const UInt32 versionMangerDatabase = 100;
+
+  /// <summary>
+  ///   Initializes a new instance of the <see cref = "VersionManager&lt;T&gt;" /> class.
+  /// </summary>
+  /// <param name = "recType">Type of the record.</param>
+  public VersionManager(RecordType recType)
   {
-    public const UInt32 versionMangerDatabase = 100;
+    RecordType = recType;
+  }
 
-    /// <summary>
-    ///   Initializes a new instance of the <see cref = "VersionManager&lt;T&gt;" /> class.
-    /// </summary>
-    /// <param name = "recType">Type of the record.</param>
-    public VersionManager(RecordType recType)
+  public RecordType RecordType { get; private set; }
+
+  public override uint PlacementDatabaseNumber
+  {
+    get
     {
-      RecordType = recType;
-    }
-
-    public RecordType RecordType { get; private set; }
-
-    public override uint PlacementDatabaseNumber
-    {
-      get
-      {
-        return versionMangerDatabase;
-      }
-    }
-
-    /// <summary>
-    ///   Gets the Tip of the versioned item (that is the latest version).
-    /// </summary>
-    public WeakIOptimizedPersistableReference<T> Tip
-    {
-      get
-      {
-        WeakIOptimizedPersistableReference<T> tip = null;
-        if (Count > 0)
-        {
-          tip = this[Count - 1];
-        }
-        return tip;
-      }
-    }
-
-    public class TipManager : SortedMap<Oid, WeakIOptimizedPersistableReference<IOptimizedPersistable>>
-    {
+      return versionMangerDatabase;
     }
   }
+
+  /// <summary>
+  ///   Gets the Tip of the versioned item (that is the latest version).
+  /// </summary>
+  public WeakIOptimizedPersistableReference<T> Tip
+  {
+    get
+    {
+      WeakIOptimizedPersistableReference<T> tip = null;
+      if (Count > 0)
+      {
+        tip = this[Count - 1];
+      }
+      return tip;
+    }
+  }
+
+  public class TipManager : SortedMap<Oid, WeakIOptimizedPersistableReference<IOptimizedPersistable>>
+  {
+  }
+}
 }

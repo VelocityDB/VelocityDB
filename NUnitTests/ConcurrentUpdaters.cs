@@ -43,30 +43,30 @@ namespace NUnitTests
               for (int j = 0; j < 30; j++)
                 try
                 {
-                  session.BeginUpdate();
-                  session.SetTraceDbActivity(878);
-                  session.CrossTransactionCacheAllDatabases();
-                  for (int k = 0; k < 5000; k++)
+                  using (var transaction = session.BeginUpdate())
                   {
-                    FixedSize fixedSize = new FixedSize();
-                    session.Persist(fixedSize);
-                    if (k == 9000 && Thread.CurrentThread.ManagedThreadId % 3 != 0)
-                      session.FlushUpdates();
+                    session.SetTraceDbActivity(878);
+                    session.CrossTransactionCacheAllDatabases();
+                    for (int k = 0; k < 5000; k++)
+                    {
+                      FixedSize fixedSize = new FixedSize();
+                      session.Persist(fixedSize);
+                      if (k == 9000 && Thread.CurrentThread.ManagedThreadId % 3 != 0)
+                        session.FlushUpdates();
+                    }
+                    session.Commit();
+                    if (!serverSession)
+                      session.Compact();
+                    Console.WriteLine("Commit OK for thread " + Thread.CurrentThread.ManagedThreadId + " Transaction: " + j);
                   }
-                  session.Commit();
-                  if (!serverSession)
-                    session.Compact();
-                  Console.WriteLine("Commit OK for thread " + Thread.CurrentThread.ManagedThreadId + " Transaction: " + j);
                 }
                 catch (OptimisticLockingFailed ex)
                 {
-                  session.Abort();
                   Console.WriteLine("Commit failed (OptimisticLockingFailed) for thread " + Thread.CurrentThread.ManagedThreadId + " Transaction: " + j);
                   Console.WriteLine(ex.ToString());
                 }
                 catch (Exception ex)
                 {
-                  session.Abort();
                   Console.WriteLine("Commit failed for thread " + Thread.CurrentThread.ManagedThreadId + " Transaction: " + j);
                   Console.WriteLine(ex.ToString());
                 }

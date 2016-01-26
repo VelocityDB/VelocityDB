@@ -13,8 +13,8 @@ namespace VelocityDbSchema
     public override int Compare(Person aP, Person bP)
     {
       int i;
-      byte[] strBytes = SessionBase.TextEncoding.GetBytes(aP.m_lastName);
-      byte[] strBytes2 = SessionBase.TextEncoding.GetBytes(bP.m_lastName);
+      byte[] strBytes = SessionBase.TextEncoding.GetBytes(aP.LastName);
+      byte[] strBytes2 = SessionBase.TextEncoding.GetBytes(bP.LastName);
       for (i = 0; i < strBytes.Length; i++)
       {
         if (i == strBytes2.Length)
@@ -27,8 +27,8 @@ namespace VelocityDbSchema
       }
       if (strBytes2.Length > strBytes.Length)
         return -1;
-      strBytes = SessionBase.TextEncoding.GetBytes(aP.m_firstName);
-      strBytes2 = SessionBase.TextEncoding.GetBytes(bP.m_firstName);
+      strBytes = SessionBase.TextEncoding.GetBytes(aP.FirstName);
+      strBytes2 = SessionBase.TextEncoding.GetBytes(bP.FirstName);
       for (i = 0; i < strBytes.Length; i++)
       {
         if (i == strBytes2.Length)
@@ -46,7 +46,7 @@ namespace VelocityDbSchema
 
     public override void SetComparisonArrayFromObject(Person aP, byte[] comparisonArray, bool oidShort)
     {
-      byte[] strBytes = SessionBase.TextEncoding.GetBytes(aP.m_lastName);
+      byte[] strBytes = SessionBase.TextEncoding.GetBytes(aP.LastName);
       Array.Clear(comparisonArray, 0, comparisonArray.Length);
       if (strBytes.Length <= comparisonArray.Length)
         Buffer.BlockCopy(strBytes, 0, comparisonArray, 0, strBytes.Length);

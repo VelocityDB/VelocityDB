@@ -462,7 +462,7 @@ namespace NUnitTests
         {
           if (personPrior != null)
           {
-            Assert.LessOrEqual(personPrior.m_firstName, person.m_firstName);
+            Assert.LessOrEqual(personPrior.FirstName, person.FirstName);
           }
           ct++;
           personPrior = person;
@@ -473,7 +473,7 @@ namespace NUnitTests
         {
           if (personPrior != null)
           {
-            Assert.LessOrEqual(personPrior.m_firstName, pers.m_firstName);
+            Assert.LessOrEqual(personPrior.FirstName, pers.FirstName);
           }
           ct2++;
           personPrior = pers;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using VelocityDb;
@@ -14,8 +15,9 @@ namespace VelocityDbSchema
 	{
     static UInt64 NextNum = 0;
     //string schemaChange;
-		public string m_firstName;
-		public string m_lastName;
+    string m_firstName;
+    [StringLength(250)]
+		string m_lastName;
 		UInt16 m_age;
 		public long m_ssn;
     //[AutoIncrement] // comment out die to not working well in multithreaded tests - lock conflict
@@ -53,17 +55,17 @@ namespace VelocityDbSchema
 
     public Person(string firstName, string lastName, UInt16 age, long ssn, Person bestFriend, Person spouse)
 		{
-			this.m_firstName = firstName;
-			this.m_lastName = lastName;
-			this.m_age = age;
-			this.m_ssn = ssn;
+			m_firstName = firstName;
+			m_lastName = lastName;
+			m_age = age;
+			m_ssn = ssn;
       if (spouse != null)
-			  this.m_spouse = new WeakIOptimizedPersistableReference<Person>(spouse);
-      this.m_pets = new List<Pet>();
+			  m_spouse = new WeakIOptimizedPersistableReference<Person>(spouse);
+      m_pets = new List<Pet>();
       m_friends = new VelocityDbList<WeakIOptimizedPersistableReference<Person>>(0);
       if (bestFriend != null)
       {
-        this.m_bestFriend = new WeakIOptimizedPersistableReference<Person>(bestFriend);
+        m_bestFriend = new WeakIOptimizedPersistableReference<Person>(bestFriend);
         m_friends.Add(new WeakIOptimizedPersistableReference<Person>(bestFriend));
       }
 		}
@@ -120,6 +122,32 @@ namespace VelocityDbSchema
       {
         Update();
         m_age = value;
+      }
+    }
+
+    public string FirstName
+    {
+      get
+      {
+        return m_firstName;
+      }
+      set
+      {
+        Update();
+        m_firstName = value;
+      }
+    }
+
+    public string LastName
+    {
+      get
+      {
+        return m_lastName;
+      }
+      set
+      {
+        Update();
+        m_lastName = value;
       }
     }
 

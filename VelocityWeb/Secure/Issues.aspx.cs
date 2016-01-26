@@ -43,27 +43,27 @@ namespace VelocityWeb.Secure
         try
         {
           session = s_sessionPool.GetSession(out sessionId);
-          session.BeginUpdate();
-          bugTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
-          if (bugTracker == null)
+          using (var transaction = session.BeginUpdate())
           {
-            bugTracker = new IssueTracker(10, session);
-            session.Persist(bugTracker);
-            user = lookupUser(bugTracker, session);
-            PermissionScheme permissions = new PermissionScheme(user);
-            bugTracker.Permissions = permissions;
-            createInitialObjects(bugTracker, user, session);
-          }
-          else
-            user = lookupUser(bugTracker, session);
+            bugTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
+            if (bugTracker == null)
+            {
+              bugTracker = new IssueTracker(10, session);
+              session.Persist(bugTracker);
+              user = lookupUser(bugTracker, session);
+              PermissionScheme permissions = new PermissionScheme(user);
+              bugTracker.Permissions = permissions;
+              createInitialObjects(bugTracker, user, session);
+            }
+            else
+              user = lookupUser(bugTracker, session);
 
-          session.Commit();
-          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+            transaction.Commit();
+            s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+          }
         }
         catch (Exception ex)
         {
-          if (session != null)
-            session.Abort();
           Console.Out.WriteLine(ex.StackTrace);
         }
         finally
@@ -1234,18 +1234,18 @@ namespace VelocityWeb.Secure
         try
         {
           session = s_sessionPool.GetSession(out sessionId);
-          session.BeginUpdate();
-          IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
-          Issue existingIssue = (Issue)session.Open(id);
-          if (issueTracker.Remove(existingIssue))
-            existingIssue.Unpersist(session);
-          session.Commit();
-          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+          using (var transaction = session.BeginUpdate())
+          {
+            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
+            Issue existingIssue = (Issue)session.Open(id);
+            if (issueTracker.Remove(existingIssue))
+              existingIssue.Unpersist(session);
+            transaction.Commit();
+            s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+          }
         }
         catch (Exception ex)
         {
-          if (session != null)
-            session.Abort();
           this.errorLabel.Text = ex.ToString();
           Console.Out.WriteLine(ex.StackTrace);
         }
@@ -1267,21 +1267,20 @@ namespace VelocityWeb.Secure
           try
           {
             session = s_sessionPool.GetSession(out sessionId);
-            session.BeginUpdate();
-            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
-            Project existingProject = (Project)session.Open(id);
-            if (issueTracker.ProjectSet.Remove(existingProject))
+            using (var transaction = session.BeginUpdate())
             {
-              existingProject.Unpersist(session);
-              session.Commit();
-              s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+              IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
+              Project existingProject = (Project)session.Open(id);
+              if (issueTracker.ProjectSet.Remove(existingProject))
+              {
+                existingProject.Unpersist(session);
+                session.Commit();
+                s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+              }
             }
-            session.Abort();
           }
           catch (Exception ex)
           {
-            if (session != null)
-              session.Abort();
             Console.Out.WriteLine(ex.StackTrace);
           }
           finally
@@ -1307,21 +1306,20 @@ namespace VelocityWeb.Secure
           try
           {
             session = s_sessionPool.GetSession(out sessionId);
-            session.BeginUpdate();
-            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
-            Component existingComponent = (Component)session.Open(id);
-            if (issueTracker.ComponentSet.Remove(existingComponent))
+            using (var transaction = session.BeginUpdate())
             {
-              existingComponent.Unpersist(session);
-              session.Commit();
-              s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+              IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
+              Component existingComponent = (Component)session.Open(id);
+              if (issueTracker.ComponentSet.Remove(existingComponent))
+              {
+                existingComponent.Unpersist(session);
+                session.Commit();
+                s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+              }
             }
-            session.Abort();
           }
           catch (Exception ex)
           {
-            if (session != null)
-              session.Abort();
             Console.Out.WriteLine(ex.StackTrace);
           }
           finally
@@ -1347,21 +1345,20 @@ namespace VelocityWeb.Secure
           try
           {
             session = s_sessionPool.GetSession(out sessionId);
-            session.BeginUpdate();
-            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
-            ProductVersion existingVersion = (ProductVersion)session.Open(id);
-            if (issueTracker.VersionSet.Remove(existingVersion))
+            using (var transaction = session.BeginUpdate())
             {
-              existingVersion.Unpersist(session);
-              session.Commit();
-              s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+              IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
+              ProductVersion existingVersion = (ProductVersion)session.Open(id);
+              if (issueTracker.VersionSet.Remove(existingVersion))
+              {
+                existingVersion.Unpersist(session);
+                session.Commit();
+                s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+              }
             }
-            session.Abort();
           }
           catch (Exception ex)
           {
-            if (session != null)
-              session.Abort();
             Console.Out.WriteLine(ex.StackTrace);
           }
           finally
@@ -1387,21 +1384,20 @@ namespace VelocityWeb.Secure
           try
           {
             session = s_sessionPool.GetSession(out sessionId);
-            session.BeginUpdate();
-            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
-            User existingUser = (User)session.Open(id);
-            if (issueTracker.UserSet.Remove(existingUser))
+            using (var transaction = session.BeginUpdate())
             {
-              existingUser.Unpersist(session);
-              session.Commit();
-              s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+              IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
+              User existingUser = (User)session.Open(id);
+              if (issueTracker.UserSet.Remove(existingUser))
+              {
+                existingUser.Unpersist(session);
+                session.Commit();
+                s_sharedReadOnlySession.ForceDatabaseCacheValidation();
+              }
             }
-            session.Abort();
           }
           catch (Exception ex)
           {
-            if (session != null)
-              session.Abort();
             Console.Out.WriteLine(ex.StackTrace);
           }
           finally
@@ -1653,35 +1649,36 @@ namespace VelocityWeb.Secure
         try
         {
           session = s_sessionPool.GetSession(out sessionId);
-          session.BeginUpdate();
-          IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
-          Project project = issueTracker.ProjectSet.Keys[projectIndex];
-          if (newValues.Id == 0)
+          using (var transaction = session.BeginUpdate())
           {
-            if (newValues.Name == null)
-              Console.WriteLine("Component null storeName detected in Update method");
+
+            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
+            Project project = issueTracker.ProjectSet.Keys[projectIndex];
+            if (newValues.Id == 0)
+            {
+              if (newValues.Name == null)
+                Console.WriteLine("Component null storeName detected in Update method");
+              else
+              {
+                User user = lookupUser(issueTracker, session);
+                Component newComponent = new Component(user, newValues.Name, newValues.Description, project);
+                session.Persist(newComponent);
+                issueTracker.ComponentSet.Add(newComponent);
+              }
+            }
             else
             {
-              User user = lookupUser(issueTracker, session);
-              Component newComponent = new Component(user, newValues.Name, newValues.Description, project);
-              session.Persist(newComponent);
-              issueTracker.ComponentSet.Add(newComponent);
+              Component existingComponent = (Component)session.Open(newValues.Id);
+              existingComponent.Name = newValues.Name;
+              existingComponent.Description = newValues.Description;
+              existingComponent.Project = project;
             }
+            session.Commit();
+            s_sharedReadOnlySession.ForceDatabaseCacheValidation();
           }
-          else
-          {
-            Component existingComponent = (Component)session.Open(newValues.Id);
-            existingComponent.Name = newValues.Name;
-            existingComponent.Description = newValues.Description;
-            existingComponent.Project = project;
-          }
-          session.Commit();
-          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
         }
         catch (Exception ex)
         {
-          if (session != null)
-            session.Abort();
           Console.Out.WriteLine(ex.StackTrace);
         }
         finally
@@ -1704,30 +1701,30 @@ namespace VelocityWeb.Secure
         try
         {
           session = s_sessionPool.GetSession(out sessionId);
-          session.BeginUpdate();
-          if (newValues.Id == 0)
+          using (var transaction = session.BeginUpdate())
           {
-            IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
-            User user = lookupUser(issueTracker, session);
-            User newUser = new User(user, newValues.Email, newValues.FirstName, newValues.LastName, newValues.UserName);
-            session.Persist(newUser);
-            issueTracker.UserSet.Add(newUser);
+            if (newValues.Id == 0)
+            {
+              IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
+              User user = lookupUser(issueTracker, session);
+              User newUser = new User(user, newValues.Email, newValues.FirstName, newValues.LastName, newValues.UserName);
+              session.Persist(newUser);
+              issueTracker.UserSet.Add(newUser);
+            }
+            else
+            {
+              User existingUser = (User)session.Open(newValues.Id);
+              existingUser.FirstName = newValues.FirstName;
+              existingUser.LastName = newValues.LastName;
+              existingUser.Email = newValues.Email;
+              existingUser.UserName = newValues.UserName;
+            }
+            session.Commit();
+            s_sharedReadOnlySession.ForceDatabaseCacheValidation();
           }
-          else
-          {
-            User existingUser = (User)session.Open(newValues.Id);
-            existingUser.FirstName = newValues.FirstName;
-            existingUser.LastName = newValues.LastName;
-            existingUser.Email = newValues.Email;
-            existingUser.UserName = newValues.UserName;
-          }
-          session.Commit();
-          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
         }
         catch (Exception ex)
         {
-          if (session != null)
-            session.Abort();
           Console.Out.WriteLine(ex.StackTrace);
         }
         finally
@@ -1750,34 +1747,34 @@ namespace VelocityWeb.Secure
         try
         {
           session = s_sessionPool.GetSession(out sessionId);
-          session.BeginUpdate();
-          if (newValues.Id == 0)
+          using (var transaction = session.BeginUpdate())
           {
-            if (newValues.Name == null)
-              Console.WriteLine("ProductVersion null storeName detected in Update method");
+            if (newValues.Id == 0)
+            {
+              if (newValues.Name == null)
+                Console.WriteLine("ProductVersion null storeName detected in Update method");
+              else
+              {
+                IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
+                User user = lookupUser(issueTracker, session);
+                ProductVersion newVersion = new ProductVersion(user, newValues.Name, newValues.Description, newValues.ReleaseDate);
+                session.Persist(newVersion);
+                issueTracker.VersionSet.Add(newVersion);
+              }
+            }
             else
             {
-              IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();
-              User user = lookupUser(issueTracker, session);
-              ProductVersion newVersion = new ProductVersion(user, newValues.Name, newValues.Description, newValues.ReleaseDate);
-              session.Persist(newVersion);
-              issueTracker.VersionSet.Add(newVersion);
+              ProductVersion existingVersion = (ProductVersion)session.Open(newValues.Id);
+              existingVersion.Name = newValues.Name;
+              existingVersion.Description = newValues.Description;
+              existingVersion.ReleaseDate = newValues.ReleaseDate;
             }
+            session.Commit();
+            s_sharedReadOnlySession.ForceDatabaseCacheValidation();
           }
-          else
-          {
-            ProductVersion existingVersion = (ProductVersion)session.Open(newValues.Id);
-            existingVersion.Name = newValues.Name;
-            existingVersion.Description = newValues.Description;
-            existingVersion.ReleaseDate = newValues.ReleaseDate;
-          }
-          session.Commit();
-          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
         }
         catch (Exception ex)
         {
-          if (session != null)
-            session.Abort();
           Console.Out.WriteLine(ex.StackTrace);
         }
         finally
