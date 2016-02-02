@@ -30,15 +30,17 @@ namespace NUnitTests
           var classA = new BaseClassA();
           session.Persist(classA);
           baseClassAList.Add(classA);
-        }
+        }        
         WeakReferenceList<ClassB> classBList = new WeakReferenceList<ClassB>();
         session.Persist(classBList);
         for (int i = 0; i < 5; i++)
         {
           var classB = new ClassB();
           classBList.Add(classB);
+          baseClassAList.Add(classB);
         }
-        WeakReferenceList<ClassC> classCList = new WeakReferenceList<ClassC>();
+        var aList = (from aClass in baseClassAList orderby aClass.RandomOrder select aClass).ToList();
+        WeakReferenceList < ClassC > classCList = new WeakReferenceList<ClassC>();
         session.Persist(classCList);
         for (int i = 0; i < 5; i++)
         {
