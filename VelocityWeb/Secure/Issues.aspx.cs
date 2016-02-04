@@ -17,22 +17,14 @@ namespace VelocityWeb.Secure
   public partial class Issues : System.Web.UI.Page
   {
     static readonly string s_dataPath = HttpContext.Current.Server.MapPath("~/IssuesDatabase");
-    static SessionPool s_sessionPool = null;
-    static SessionNoServerShared s_sharedReadOnlySession = null;
-    static object s_lockObject = new object();
+    static SessionPool s_sessionPool = new SessionPool(1, () => new SessionNoServer(s_dataPath));
+    static SessionNoServerShared s_sharedReadOnlySession = new SessionNoServerShared(s_dataPath);
     private string viewString;
     protected void Page_Load(object sender, EventArgs e)
     {
       if (!IsPostBack)
       {
         Response.Cache.SetCacheability(HttpCacheability.NoCache);
-        lock (s_lockObject)
-        {
-          if (s_sessionPool == null)
-            s_sessionPool = new SessionPool(1, () => new SessionNoServer(s_dataPath));
-          if (s_sharedReadOnlySession == null)
-            s_sharedReadOnlySession = new SessionNoServerShared(s_dataPath);
-        }
         Page.Header.Title = "VelocityWeb - Issue Tracking";
         HtmlGenericControl menu = (HtmlGenericControl)Master.FindControl("liIssues");
         menu.Attributes.Add("class", "active");
