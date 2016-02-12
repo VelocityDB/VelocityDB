@@ -6,7 +6,13 @@ using VelocityDb;
 
 namespace VelocityDbSchema.NUnit
 {
-  public class BaseClassA : OptimizedPersistable
+
+  public interface IHasClassName
+  {
+    string ClassName { get;}
+  }
+
+  public class BaseClassA : OptimizedPersistable, IHasClassName
   {
     static readonly Random random = new Random(5);
     string m_baseClassA = "BaseClassA";
@@ -19,15 +25,49 @@ namespace VelocityDbSchema.NUnit
         return m_randOrder;
       }
     }
+
+    public virtual string ClassName
+    {
+      get
+      {
+        return m_baseClassA;
+      }
+    }
   }
 
   public class ClassB : BaseClassA
   {
     string m_classB = "ClassB";
+    public override string ClassName
+    {
+      get
+      {
+        return m_classB;
+      }
+    }
   }
 
   public class ClassC : BaseClassA
   {
     string m_classC = "ClassC";
+    public override string ClassName
+    {
+      get
+      {
+        return m_classC;
+      }
+    }
+  }
+
+  public class ClassD : IHasClassName
+  {
+    string m_className = "ClassD";
+    public string ClassName
+    {
+      get
+      {
+        return m_className;
+      }
+    }
   }
 }

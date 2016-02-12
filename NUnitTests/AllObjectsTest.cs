@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using VelocityDb;
 using VelocityDb.Collection;
 using VelocityDb.Session;
 using VelocityDbSchema.NUnit;
@@ -47,6 +48,8 @@ namespace NUnitTests
           var classC = new ClassC();
           classCList.Add(classC);
         }
+        ClassD d = new ClassD();
+        session.Persist(d);
         session.Commit();
       }
 
@@ -75,6 +78,15 @@ namespace NUnitTests
         foreach (var o in session.AllObjects<ClassC>())
           ++ct;
         Assert.AreEqual(5, ct);
+        ct = 0;
+        foreach (var o in session.AllObjects<IOptimizedPersistable>())
+          ++ct;
+        int ct2 = 0;
+        foreach (var o in session.AllObjects<OptimizedPersistable>())
+          ++ct2;
+        int ct3 = 0;
+        foreach (var o in session.AllObjects<IHasClassName>())
+          ++ct3;
         session.Commit();
       }
 
@@ -87,10 +99,13 @@ namespace NUnitTests
           o.Unpersist(session);
         foreach (var o in session.AllObjects<WeakReferenceList<ClassC>>())
           o.Unpersist(session);
-        foreach (var o in session.AllObjects<BaseClassA>())
-          o.Unpersist(session);
+        //foreach (var o in session.AllObjects<BaseClassA>())
+        //  o.Unpersist(session);
+        foreach (var o in session.AllObjects<IHasClassName>())
+          session.Unpersist(o);
         Assert.AreEqual(0, session.AllObjects<WeakReferenceList<BaseClassA>>().Count);
         Assert.AreEqual(0, session.AllObjects<BaseClassA>().Count);
+        Assert.AreEqual(0, session.AllObjects<IHasClassName>().Count);
         session.Commit();
       }
     }
