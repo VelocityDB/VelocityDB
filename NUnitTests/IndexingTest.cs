@@ -13,6 +13,7 @@ using VelocityDb.Indexing;
 using VelocityDbSchema.Indexes;
 using System.Diagnostics;
 using VelocityDb.Collection;
+using VelocityDBExtensions;
 namespace NUnitTests
 {
   [TestFixture]

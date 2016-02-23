@@ -28,8 +28,14 @@ namespace NUnitTests
       UInt16 pagesPerDatabase = 65000;
       int j;
       if (Directory.Exists(backupDir))
-        Directory.Delete(backupDir, true); // remove systemDir from prior runs and all its databases.
-      Directory.CreateDirectory(backupDir);
+      {
+        foreach (string s in Directory.GetFiles(backupDir))
+          File.Delete(s);
+        foreach (string s in Directory.GetDirectories(backupDir))
+          Directory.Delete(s, true);
+      }
+      else
+        Directory.CreateDirectory(systemDir);
       using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
       {
         Placement place = new Placement(11, 1, 1, objectsPerPage, pagesPerDatabase);

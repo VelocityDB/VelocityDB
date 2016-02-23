@@ -5,6 +5,7 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.Session;
 using VelocityDb.TypeInfo;
+using VelocityDBExtensions;
 
 namespace VelocityDbBrowser.ViewModel
 {
@@ -15,7 +16,7 @@ namespace VelocityDbBrowser.ViewModel
     public FieldViewModelNoExpansions(IOptimizedPersistable parentObj, DataMember member, ObjectViewModel parentView, SessionBase session)
       : base(parentView, true)
     {
-      fieldAsString = OptimizedPersistable.ToStringDetails(member, parentObj.WrappedObject, parentObj, parentObj.Page, true);
+      fieldAsString = Utilities.ToStringDetails(member, parentObj.WrappedObject, parentObj, parentObj.Page, true);
     }
 
     public string FieldName

@@ -7,6 +7,7 @@ using VelocityDb;
 using VelocityDb.Session;
 using VelocityDb.TypeInfo;
 using VelocityDb.Collection.BTree;
+using VelocityDBExtensions;
 
 namespace VelocityDbBrowser.ViewModel
 {
@@ -24,7 +25,7 @@ namespace VelocityDbBrowser.ViewModel
       page = parentObj.Page;
       memberObj = member.GetMemberValue(parentObj.WrappedObject);
       isEncodedOidArray = (parentObj as BTreeNode) != null && memberObj != null && (memberObj as Array) != null && (member.Field.Name == "keysArray" || member.Field.Name == "valuesArray");
-      fieldAsString = OptimizedPersistable.ToStringDetails(member, parentObj.WrappedObject, parentObj, parentObj.Page, true);
+      fieldAsString = Utilities.ToStringDetails(member, parentObj.WrappedObject, parentObj, parentObj.Page, true);
     }
 
     public string FieldName

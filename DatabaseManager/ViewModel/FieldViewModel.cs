@@ -8,6 +8,7 @@ using VelocityDb.Session;
 using VelocityDb.TypeInfo;
 using VelocityDb.Collection.BTree;
 using VelocityDb.Collection;
+using VelocityDBExtensions;
 
 namespace DatabaseManager
 {
@@ -27,7 +28,7 @@ namespace DatabaseManager
       object memberObj = member.GetMemberValue(parentObj.WrappedObject);
       m_isEncodedOidArray = (parentObj as BTreeNode) != null && memberObj != null && (memberObj as Array) != null && (member.Field.Name == "keysArray" || member.Field.Name == "valuesArray");
       m_isEncodedOidArray = m_isEncodedOidArray || parentObj.GetType().IsGenericType && parentObj.GetType().GetGenericTypeDefinition() == typeof(WeakReferenceList<>);
-      m_fieldAsString = OptimizedPersistable.ToStringDetails(member, parentObj.WrappedObject, parentObj, parentObj.Page, true);
+      m_fieldAsString = Utilities.ToStringDetails(member, parentObj.WrappedObject, parentObj, parentObj.Page, true);
     }
 
     public string FieldName

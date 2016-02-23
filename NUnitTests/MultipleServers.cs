@@ -6,6 +6,7 @@ using System.Net;
 using VelocityDb;
 using VelocityDb.Session;
 using VelocityDb.Collection;
+using VelocityDBExtensions;
 using VelocityDbSchema;
 using VelocityDbSchema.Samples.AllSupportedSample;
 using NUnit.Framework;

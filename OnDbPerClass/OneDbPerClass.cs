@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using VelocityDb;
 using VelocityDb.Session;
 using VelocityDb.TypeInfo;
+using VelocityDBExtensions;
 using VelocityDbSchema.OneDbPerClass;
 
 namespace OneDbPerClass

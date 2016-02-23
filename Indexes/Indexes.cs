@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VelocityDb;
 using VelocityDb.Collection.BTree;
 using VelocityDb.Session;
+using VelocityDBExtensions;
 using VelocityDbSchema.Indexes;
 
 namespace Indexes

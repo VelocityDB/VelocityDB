@@ -7,6 +7,7 @@ using VelocityDb;
 using VelocityDb.Session;
 using VelocityDb.Collection;
 using VelocityDbSchema;
+using VelocityDBExtensions;
 using NUnit.Framework;
 
 namespace NUnitTests
@@ -16,7 +17,7 @@ namespace NUnitTests
   {
     const UInt32 locationStartDbNum = 10000;
     const UInt32 locationEndDbNum = 20000; 
-    const string systemDir = "c:\\NUnitTestDbs\\";
+    const string systemDir = @"c:/NUnitTestDbs/";
     string location2Dir = systemDir + locationStartDbNum + "To" + locationEndDbNum;
 
     [Test]

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using VelocityDb;
 using VelocityDb.Session;
+using VelocityDBExtensions;
 
 namespace DatabaseManager
 {
@@ -15,7 +16,7 @@ namespace DatabaseManager
     public ArrayViewModelNoExpansions(Array a, FieldViewModel parentObject, bool isEncodedOidArray, Page page, SessionBase session)
       : base(parentObject, true)
     {
-      m_arrayAsString = OptimizedPersistable.ArrayToString(a, isEncodedOidArray, page, "");
+      m_arrayAsString = Utilities.ArrayToString(a, isEncodedOidArray, page, "");
     }
 
     public string ArrayName

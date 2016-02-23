@@ -45,8 +45,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=5.0.39.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.0.39\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=5.1.0.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.5.1\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -59,6 +59,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\VelocityDBExtensions\VelocityDBExtensions.csproj">
+      <Project>{a2e1e184-5303-4a75-9133-546631f4a63c}</Project>
+      <Name>VelocityDBExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VelocityDbSchema\VelocityDbSchema.csproj">
       <Project>{5f615bd4-bf1a-4ed7-b6e2-10e7fa57205c}</Project>
       <Name>VelocityDbSchema</Name>
