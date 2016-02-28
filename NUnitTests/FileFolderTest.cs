@@ -41,7 +41,6 @@ namespace NUnitTests
       foreach (DirectoryInfo dir in dirInfo.GetDirectories())
       {
         Folder subFolder = new Folder(dir.Name, folder, session);
-        folder.Folders.AddFast(subFolder);
         CreateDirectoriesAndFiles(dir, subFolder, session);
       }
       foreach (FileInfo fileInfo in dirInfo.GetFiles())
@@ -51,7 +50,6 @@ namespace NUnitTests
         FileContent fileContent = new FileContent(bytes);
         session.Persist(fileContent);
         file.Content = fileContent;
-        folder.Files.AddFast(file);
       }
     }
 
@@ -64,7 +62,6 @@ namespace NUnitTests
         session.BeginUpdate();
         DirectoryInfo dirInfo = new DirectoryInfo(s_sampleFolder);
         Folder folder = new Folder(dirInfo.Name, null, session);
-        session.Persist(folder);
         CreateDirectoriesAndFiles(dirInfo, folder, session);
         session.Commit();
       }

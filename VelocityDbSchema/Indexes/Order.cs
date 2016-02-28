@@ -6,6 +6,7 @@ using VelocityDb;
 using VelocityDb.Collection;
 using VelocityDb.Collection.BTree;
 using VelocityDb.Indexing;
+using VelocityDb.TypeInfo;
 
 namespace VelocityDbSchema.Indexes
 {

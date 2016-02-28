@@ -1,43 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using VelocityDb;
-using VelocityDb.Collection;
-using VelocityDb.Session;
+using VelocityDb.TypeInfo;
 
 namespace VelocityDbSchema.Samples.Sample3
 {
   public class Person : OptimizedPersistable
   {
-    string firstName;
-    string lastName;
-    UInt16 age;
-    Person bestFriend;
-    List<Person> friends;
+    string m_firstName;
+    string m_lastName;
+    UInt16 m_age;
+    Person m_bestFriend;
+    List<Person> m_friends;
     [AutoIncrement]
 #pragma warning disable 0169
-    UInt64 autoIncrement;
+    UInt64 m_autoIncrement;
 #pragma warning restore 0169 
     public Person(string firstName, string lastName, UInt16 age, Person bestFriend = null)
     {
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.age = age;
-      this.bestFriend = bestFriend;
-      friends = new List<Person>();
+      m_firstName = firstName;
+      m_lastName = lastName;
+      m_age = age;
+      m_bestFriend = bestFriend;
+      m_friends = new List<Person>();
     }
 
     public Person BestFriend
     {
       get
       {
-        return bestFriend;
+        return m_bestFriend;
       }
       set
       {
         Update();
-        bestFriend = value;
+        m_bestFriend = value;
       }
     }
 
@@ -45,12 +42,12 @@ namespace VelocityDbSchema.Samples.Sample3
     {
       get
       {
-        return firstName;
+        return m_firstName;
       }
       set
       {
         Update();
-        firstName = value;
+        m_firstName = value;
       }
     }
 
@@ -58,7 +55,7 @@ namespace VelocityDbSchema.Samples.Sample3
     {
       get
       {
-        return friends;
+        return m_friends;
       }
     }
   }

@@ -7,6 +7,7 @@ using VelocityDb;
 using VelocityDb.Collection;
 using VelocityDb.Collection.BTree;
 using VelocityDb.Session;
+using VelocityDb.TypeInfo;
 
 namespace VelocityDbSchema.Samples.AllSupportedSample
 {

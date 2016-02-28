@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using VelocityDb;
+using VelocityDb.TypeInfo;
 
 namespace VelocityDbSchema.NUnit
 {
-  public class FileOrFolder : OptimizedPersistable
+  public abstract class FileOrFolder : OptimizedPersistable
   {
     string m_name;
-    Folder m_parentFolder;
 
-    public FileOrFolder(string name, Folder parentFolder)
+    public FileOrFolder(string name)
     {
-      m_parentFolder = parentFolder;
       m_name = name;
     }
 
@@ -25,12 +24,6 @@ namespace VelocityDbSchema.NUnit
       }
     }
 
-    public Folder ParentFolder
-    {
-      get
-      {
-        return m_parentFolder;
-      }
-    }
+    public abstract Folder ParentFolder { get;  }
   }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using VelocityDb;
 using VelocityDb.Indexing;
+using VelocityDb.TypeInfo;
 
 namespace VelocityDbSchema.Indexes
 { [Index("modelYear,brandName,modelName,color")]

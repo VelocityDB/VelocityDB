@@ -5,6 +5,7 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.Collection;
 using VelocityDb.Session;
+using VelocityDb.TypeInfo;
 using VelocityDbSchema.Samples.AllSupportedSample;
 
 namespace VelocityDbSchema
