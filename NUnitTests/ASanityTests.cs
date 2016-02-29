@@ -1014,7 +1014,27 @@ namespace NUnitTests
         });
     }
   }
-}
+
+    [Test]
+    public void NonPersistentTest()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        Test_Persist2 persistable2 = new Test_Persist2();
+        persistable2.date_time_field = DateTime.Parse("1/1/1970");
+        Test_Non_Persist non_persist = new Test_Non_Persist();
+        non_persist.string_field = "bbb";
+        non_persist.date_field = DateTime.Parse("1/1/1960");
+        Test_Persist1 persistable1 = new Test_Persist1();
+        persistable1.Field1 = "aaaa";
+        persistable1.my_test_class = persistable2;
+        persistable1.My_NonPersistable_Thing = non_persist;
+        session.Persist(persistable1);
+        session.Commit();
+      }
+    }
+  }
 
 public class VersionManager<T> : VelocityDbList<WeakIOptimizedPersistableReference<T>> where T : IOptimizedPersistable
 {
@@ -1059,4 +1079,23 @@ public class VersionManager<T> : VelocityDbList<WeakIOptimizedPersistableReferen
   {
   }
 }
+
+  public class Test_Persist1 : OptimizedPersistable
+  {
+    public string Field1;
+    public Test_Persist2 my_test_class;
+    public Test_Non_Persist My_NonPersistable_Thing;
+
+  }
+  public class Test_Persist2 : OptimizedPersistable
+  {
+    public DateTime date_time_field;
+  }
+
+  public class Test_Non_Persist
+  {
+    public string string_field;
+    public DateTime date_field;
+    public Test_Persist2 my_test_class;
+  }
 }
