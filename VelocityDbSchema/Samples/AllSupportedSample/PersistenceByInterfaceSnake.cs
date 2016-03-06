@@ -304,6 +304,26 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       }
     }
 
+    /// <summary>
+    /// Removes an object from the persistent store and makes the object a transient object. It does not automatically make referenced objects unpersisted. Best way to do so is to override this virtual function in your own classes.
+    /// </summary>
+    /// <param name="session">The managing session</param>
+    /// <param name="disableFlush">Prevent possible flush of updated pages</param>
+    public virtual void Unpersist(SessionBase session, bool disableFlush = true)
+    {
+      if (!IsPersistent)
+        return;
+      if (session == null)
+        throw new UnexpectedException("SessionBase parameter passed to Unpersist is null");
+      this.Update(disableFlush);
+      if (Page != null)
+      {
+        Page.UnpersistObject(this);
+        Page = null;
+      }
+      Id = 0;
+    }
+
     public bool Update(bool disableFlush = false)
     {
       if (page != null && (!IsUpdated || !page.IsUpdated))

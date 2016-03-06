@@ -114,7 +114,6 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.Verify();
-        session.Commit();
         session.BeginUpdate();
         UInt32 dbNum = session.DatabaseNumberOf(typeof(NotSharingPage));
         Database db = session.OpenDatabase(dbNum, true, false);
@@ -134,7 +133,6 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.Verify();
-        session.Commit();
         session.BeginUpdate();
         UInt32 dbNum = session.DatabaseNumberOf(typeof(SharingPageTypeB));
         Placement place = new Placement(dbNum, 100);
@@ -159,6 +157,7 @@ namespace NUnitTests
 
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
+        session.BeginRead();
         session.Verify();
         UInt32 dbNum = session.DatabaseNumberOf(typeof(NotSharingPage));
         Database db = session.OpenDatabase(dbNum);
