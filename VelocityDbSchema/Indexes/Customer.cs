@@ -17,6 +17,7 @@ namespace VelocityDbSchema.Indexes
     string m_name;
     [AutoIncrement]
     UInt32 m_customerId;
+    string m_streetAddress;
     VelocityDbList<Order> m_orders;
 
     public Customer(string name)
@@ -55,6 +56,20 @@ namespace VelocityDbSchema.Indexes
       get
       {
         return m_orders;
+      }
+    }
+
+    public string StreetAddress
+    {
+      get
+      {
+        return m_streetAddress;
+      }
+      set
+      {
+        if (IsPersistent)
+          Session.UpdateObject(this, false, false); // Use instead of Update() to avoid removing object from indices, OK when only updating a non indexed field
+        m_streetAddress = value;
       }
     }
   }

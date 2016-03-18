@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Synchronization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -124,6 +125,171 @@ namespace VelocityDBExtensions
           }
         }
       }
+    }
+
+    static public SyncOperationStatistics MicrosoftSync(this SessionBase sessionToUpdate, SessionBase sessionToRead)
+    {
+      SyncProvider sourceProvider = new SyncProvider(sessionToRead);
+      SyncProvider destProvider = new SyncProvider(sessionToUpdate);
+      SyncOrchestrator syncAgent = new SyncOrchestrator();
+      syncAgent.LocalProvider = sourceProvider;
+      syncAgent.RemoteProvider = destProvider;
+      return syncAgent.Synchronize();
+    }
+  }
+
+  /// <summary>
+  /// VelocityDB standard Microsoft Sync provider as described in https://msdn.microsoft.com/en-us/library/bb902826(v=sql.110).aspx
+  /// </summary>
+  public class SyncProvider : KnowledgeSyncProvider, IChangeDataRetriever, INotifyingChangeApplierTarget
+  {
+    SessionBase m_session;
+    SyncIdFormatGroup m_idFormatGroup;
+
+    public SyncProvider(SessionBase session)
+    {
+      m_session = session;
+      m_idFormatGroup = new SyncIdFormatGroup();
+
+      m_idFormatGroup.ChangeUnitIdFormat.IsVariableLength = false;
+      m_idFormatGroup.ChangeUnitIdFormat.Length = sizeof(UInt64);
+
+      m_idFormatGroup.ItemIdFormat.IsVariableLength = false;
+      m_idFormatGroup.ItemIdFormat.Length = sizeof(UInt64);
+
+      m_idFormatGroup.ReplicaIdFormat.IsVariableLength = false;
+      m_idFormatGroup.ReplicaIdFormat.Length = sizeof(UInt64);
+    }
+
+    /// <inheritdoc />
+    public override SyncIdFormatGroup IdFormats
+    {
+      get
+      {
+        return m_idFormatGroup;
+      }
+    }
+
+    /// <inheritdoc />
+    public override void BeginSession(SyncProviderPosition position, SyncSessionContext syncSessionContext)
+    {
+      if (!syncSessionContext.IsCanceled())
+      {
+        if (position == SyncProviderPosition.Local)
+          m_session.BeginUpdate();
+        else
+          m_session.BeginRead();
+      }
+    }
+
+    /// <inheritdoc />
+    public override void EndSession(SyncSessionContext syncSessionContext)
+    {
+      if (syncSessionContext.IsCanceled())
+        m_session.Abort();
+      else
+        m_session.Commit();
+    }
+
+    /// <inheritdoc />
+    public override bool Equals(object obj)
+    {
+      return base.Equals(obj);
+    }
+
+    /// <inheritdoc />
+    public override ChangeBatch GetChangeBatch(uint batchSize, SyncKnowledge destinationKnowledge, out object changeDataRetriever)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public override FullEnumerationChangeBatch GetFullEnumerationChangeBatch(uint batchSize, SyncId lowerEnumerationBound, SyncKnowledge knowledgeForDataRetrieval, out object changeDataRetriever)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
+    }
+
+    /// <inheritdoc />
+    public override void GetSyncBatchParameters(out uint batchSize, out SyncKnowledge knowledge)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public override void ProcessChangeBatch(ConflictResolutionPolicy resolutionPolicy, ChangeBatch sourceChanges, object changeDataRetriever, SyncCallbacks syncCallbacks, SyncSessionStatistics sessionStatistics)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public override void ProcessFullEnumerationChangeBatch(ConflictResolutionPolicy resolutionPolicy, FullEnumerationChangeBatch sourceChanges, object changeDataRetriever, SyncCallbacks syncCallbacks, SyncSessionStatistics sessionStatistics)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public override string ToString()
+    {
+      return base.ToString();
+    }
+
+    public object LoadChangeData(LoadChangeContext loadChangeContext)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    public ulong GetNextTickCount()
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    public IChangeDataRetriever GetDataRetriever()
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    public bool TryGetDestinationVersion(ItemChange sourceChange, out ItemChange destinationVersion)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    public void SaveItemChange(SaveChangeAction saveChangeAction, ItemChange change, SaveChangeContext context)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    public void SaveChangeWithChangeUnits(ItemChange change, SaveChangeWithChangeUnitsContext context)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    public void SaveConflict(ItemChange conflictingChange, object conflictingChangeData, SyncKnowledge conflictingChangeKnowledge)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
+    }
+
+    public void StoreKnowledgeForScope(SyncKnowledge knowledge, ForgottenKnowledge forgottenKnowledge)
+    {
+      // anyone know how to implement ???
+      throw new NotImplementedException();
     }
   }
 }

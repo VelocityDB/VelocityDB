@@ -11,22 +11,22 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
   public class PersistenceByInterfaceSnake : Pet, IOptimizedPersistable
   {
     [NonSerialized]
-    internal byte opFlags;
+    internal byte m_opFlags;
     [NonSerialized]
-    internal Page page;
+    internal Page m_page;
     [NonSerialized]
-    internal UInt64 id;
+    internal UInt64 m_id;
     [NonSerialized]
-    TypeVersion shape;
+    TypeVersion m_shape;
    
-    UInt16 lengthCm;
-    bool poisonous;
+    UInt16 m_lengthCm;
+    bool m_poisonous;
 
     public PersistenceByInterfaceSnake(string aName, short anAge, bool poisonous, UInt16 lengthCm)
       : base(aName, anAge)
     {
-      this.lengthCm = lengthCm;
-      this.poisonous = poisonous;
+      m_lengthCm = lengthCm;
+      m_poisonous = poisonous;
     }
 
     public virtual bool AllowOtherTypesOnSamePage
@@ -50,9 +50,9 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       IOptimizedPersistable otherPersistentObject = obj as IOptimizedPersistable;
       if (otherPersistentObject != null)
       {
-        if (otherPersistentObject.Id == 0 || id == 0)
+        if (otherPersistentObject.Id == 0 || m_id == 0)
           throw new PersistedObjectExcpectedException("When comparing IOptimizedPersistable objects, both objects must first be persisted (have a non 0 Id)");
-        return id.CompareTo(otherPersistentObject.Id);
+        return m_id.CompareTo(otherPersistentObject.Id);
       }
       else
         throw new ArgumentException("Object is not a IOptimizedPersistable");
@@ -77,11 +77,11 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        return id;
+        return m_id;
       }
       set
       {
-        id = value;
+        m_id = value;
       }
     }
 
@@ -105,7 +105,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        return page != null;
+        return m_page != null;
       }
     }
     
@@ -117,14 +117,14 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        return (opFlags & (byte)OpFlags.isUpdated) > 0;
+        return (m_opFlags & (byte)OpFlags.IsUpdated) > 0;
       }
       set
       {
         if (value)
-          opFlags |= (byte)OpFlags.isUpdated;
+          m_opFlags |= (byte)OpFlags.IsUpdated;
         else
-          opFlags &= (byte)~OpFlags.isUpdated;
+          m_opFlags &= (byte)~OpFlags.IsUpdated;
       }
     }
 
@@ -146,7 +146,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       {
         FieldsLoaded = true;
         Schema schema = Session.OpenSchema(false);
-        List<IOptimizedPersistable> toLoadMembers = new List<IOptimizedPersistable>(shape.DataMemberArray.Length);
+        List<IOptimizedPersistable> toLoadMembers = new List<IOptimizedPersistable>(m_shape.DataMemberArray.Length);
         toLoadMembers.Add(this);
         while (toLoadMembers.Count > 0)
         {
@@ -173,14 +173,14 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        return (opFlags & (byte)OpFlags.membersLoaded) > 0;
+        return (m_opFlags & (byte)OpFlags.MembersLoaded) > 0;
       }
       set
       {
         if (value)
-          opFlags |= (byte)OpFlags.membersLoaded;
+          m_opFlags |= (byte)OpFlags.MembersLoaded;
         else
-          opFlags &= (byte)~OpFlags.membersLoaded;
+          m_opFlags &= (byte)~OpFlags.MembersLoaded;
       }
     }
 
@@ -196,11 +196,11 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        return page;
+        return m_page;
       }
       set
       {
-        page = value;
+        m_page = value;
       }
     }
 
@@ -246,7 +246,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     }
     public virtual void PersistMyReferences(SessionBase session, bool inFlush)
     {
-      Shape.PersistRefences(WrappedObject, page.PageInfo, this, session, inFlush);
+      Shape.PersistRefences(WrappedObject, m_page.PageInfo, this, session, inFlush);
     }
 
     /// <summary>
@@ -267,6 +267,22 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       OptimizedPersistable.ReadMeUsingSchemaReflection(typeVersion, memberBytes, ref offset, this, session, page, useOidShort, schema, openRefs, toLoadMembers, graphDepth, graphDepthToLoad, primitivesOnly);
     }
 
+    /// <inheritdoc />
+    public bool RemovedFromIndices
+    {
+      get
+      {
+        return (m_opFlags & (byte)OpFlags.RemovedFromIndices) > 0;
+      }
+      set
+      {
+        if (value)
+          m_opFlags |= (byte)OpFlags.RemovedFromIndices;
+        else
+          m_opFlags &= (byte)~OpFlags.RemovedFromIndices;
+      }
+    }
+
     public virtual byte[] WriteMe(TypeVersion typeVersion, bool addShapeNumber, PageInfo pageInfo, IOptimizedPersistable owner, SessionBase session, bool inFlush)
     {
       return OptimizedPersistable.WriteMeUsingSchemaReflection(typeVersion, this, addShapeNumber, pageInfo, owner, session, inFlush);
@@ -279,9 +295,9 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        if (this.page == null)
+        if (this.m_page == null)
           return null;
-        return this.page.Database.Session;
+        return this.m_page.Database.Session;
       }
     }
 
@@ -296,11 +312,11 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        return shape;
+        return m_shape;
       }
       set
       {
-        shape = value;
+        m_shape = value;
       }
     }
 
@@ -326,7 +342,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
 
     public bool Update(bool disableFlush = false)
     {
-      if (page != null && (!IsUpdated || !page.IsUpdated))
+      if (m_page != null && (!IsUpdated || !m_page.IsUpdated))
         return this.Page.Database.Session.UpdateObject(this, disableFlush);
       return true;
     }

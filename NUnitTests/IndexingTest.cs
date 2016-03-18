@@ -97,7 +97,7 @@ namespace NUnitTests
         }
         catch (Exception ex)
         {
-          return ("Exception occured prior to loop: " + ex.Message);
+          return ("Exception occurred prior to loop: " + ex.Message);
           // examine problem using breakpoint.
         }
         finally
@@ -151,14 +151,14 @@ namespace NUnitTests
           }
           catch (Exception ex)
           {
-            throw new Exception("Exception occured while commiting records: " + ex.Message);
+            throw new Exception("Exception occurred while commiting records: " + ex.Message);
           }
 
         }
         catch (Exception ex)
         {
           // examine problem using breakpoint.
-          throw new Exception("Exception occured while persisting records: " + ex.Message);
+          throw new Exception("Exception occurred while persisting records: " + ex.Message);
         }
         finally
         {

@@ -271,6 +271,10 @@ namespace Indexes
           var karimOrders = karim.Orders;
           var karimOrderFromOrders = (from order in session.Index<Order>("m_customer") where order.Customer == karim select order).ToArray();
           session.Commit();
+          session.BeginUpdate();
+          karim = (from customer in session.Index<Customer>("m_name") where customer.Name == "Karim" select customer).FirstOrDefault();
+          karim.StreetAddress = "1623 Bonita Ave";
+          session.Commit();
           sw.Stop();
           Console.WriteLine(sw.Elapsed);
         }

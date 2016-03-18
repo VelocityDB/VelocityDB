@@ -876,7 +876,7 @@ namespace NUnitTests
         VelocityDbSchema.Samples.AllSupportedSample.Person person;
         session.BeginUpdate();
         //mySession.SetTraceAllDbActivity();
-        CompareByField<VelocityDbSchema.Samples.AllSupportedSample.Person> compareByField = new CompareByField<VelocityDbSchema.Samples.AllSupportedSample.Person>("idNumber", session, addIdCompareIfEqual);
+        CompareByField<VelocityDbSchema.Samples.AllSupportedSample.Person> compareByField = new CompareByField<VelocityDbSchema.Samples.AllSupportedSample.Person>("m_idNumber", session, addIdCompareIfEqual);
         BTreeSet<VelocityDbSchema.Samples.AllSupportedSample.Person> bTree = new BTreeSet<VelocityDbSchema.Samples.AllSupportedSample.Person>(compareByField, session, nodeMaxSize, comparisonByteArraySize, comparisonArrayIsCompleteKey);
         session.Persist(bTree); // Persist the root of the BTree so that we have something persisted that can be flushed to disk if memory available becomes low
         for (int i = 0; i < numberOfPersons; i++)

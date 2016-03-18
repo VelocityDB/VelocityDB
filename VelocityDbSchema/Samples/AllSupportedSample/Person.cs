@@ -11,51 +11,51 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
 {
   public class Person : OptimizedPersistable
   {
-    string firstName;
-    string lastName;
-    ushort age;
-    UInt64 idNumber;
-    Person bestFriend;
+    string m_firstName;
+    string m_lastName;
+    ushort m_age;
+    UInt64 m_idNumber;
+    Person m_bestFriend;
     [AutoIncrement]
 #pragma warning disable 0169
-    UInt64 autoIncrement;
+    UInt64 m_autoIncrement;
 #pragma warning restore 0169
-    SortedSetAny<Person> friends;
-    static Random randGen = new Random(5);
+    SortedSetAny<Person> m_friends;
+    static Random s_randGen = new Random(5);
     public Person()
     {
-      int r = randGen.Next(9999);
-      firstName = r.ToString();
-      r = randGen.Next(999999);
-      lastName = r.ToString();
-      age = (ushort)randGen.Next(150);
-      idNumber = (ulong) randGen.Next();
-      idNumber <<= 32;
-      idNumber += (ulong) randGen.Next();
+      int r = s_randGen.Next(9999);
+      m_firstName = r.ToString();
+      r = s_randGen.Next(999999);
+      m_lastName = r.ToString();
+      m_age = (ushort)s_randGen.Next(150);
+      m_idNumber = (ulong) s_randGen.Next();
+      m_idNumber <<= 32;
+      m_idNumber += (ulong) s_randGen.Next();
     }
     public Person(UInt64 idNumber)
     {
-      this.idNumber = idNumber;
+      m_idNumber = idNumber;
     }
     public Person(string firstName, string lastName, ushort age, Person bestFriend = null)
     {
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.age = age;
-      this.bestFriend = bestFriend;
-      friends = new SortedSetAny<Person>();
+      m_firstName = firstName;
+      m_lastName = lastName;
+      m_age = age;
+      m_bestFriend = bestFriend;
+      m_friends = new SortedSetAny<Person>();
     }
 
     public Person BestFriend
     {
       get
       {
-        return bestFriend;
+        return m_bestFriend;
       }
       set
       {
         Update();
-        bestFriend = value;
+        m_bestFriend = value;
       }
     }
 
@@ -63,12 +63,12 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        return firstName;
+        return m_firstName;
       }
       set
       {
         Update();
-        firstName = value;
+        m_firstName = value;
       }
     }
 
@@ -76,17 +76,17 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        return friends;
+        return m_friends;
       }
     }
 
-    // Required to make automatic use of BTreeSet lookup use binary search instead of linear search (must know what field this propert accesses)
-    [FieldAccessor("idNumber")]
+    // Required to make automatic use of BTreeSet lookup use binary search instead of linear search (must know what field this property accesses)
+    [FieldAccessor("m_idNumber")]
     public UInt64 IdNumber
     {
       get
       {
-        return idNumber;
+        return m_idNumber;
       }
     }
     
@@ -100,7 +100,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
 
     public override string ToString()
     {
-        return base.ToString() + " FirstName: " + FirstName + " LastName: " + lastName + "Age: " + age + " IdNumber: " + IdNumber;
+        return base.ToString() + " FirstName: " + FirstName + " LastName: " + m_lastName + "Age: " + m_age + " IdNumber: " + IdNumber;
     }
   }
 }
