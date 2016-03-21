@@ -194,11 +194,11 @@ namespace DatabaseManager.Model
       }
     }
 
-    public override void Unpersist(SessionBase session, bool disableFlush = true)
+    public override void Unpersist(SessionBase session)
     {
       if (Id == 0)
         return;
-      base.Unpersist(session, disableFlush);
+      base.Unpersist(session);
     }
 
     /// <summary>

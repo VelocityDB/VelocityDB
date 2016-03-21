@@ -70,12 +70,12 @@ namespace VelocityDbSchema.NUnit
       }
     }
 
-    public override void Unpersist(SessionBase session, bool disableFlush = true)
+    public override void Unpersist(SessionBase session)
     {
       m_folderRelation.Unpersist(session);
       if (m_fileContent != null)
         Content.Unpersist(session);
-      base.Unpersist(session, disableFlush);
+      base.Unpersist(session);
     }
   }
 }

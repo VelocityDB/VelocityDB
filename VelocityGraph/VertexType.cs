@@ -1351,16 +1351,16 @@ namespace VelocityGraph
     }
 
     /// <inheritdoc />
-    public override void Unpersist(SessionBase session, bool disableFlush = true)
+    public override void Unpersist(SessionBase session)
     {
       if (IsPersistent == false)
         return;
-      Vertices.Unpersist(session, disableFlush);
-      m_stringToPropertyType.Unpersist(session, disableFlush);
-      m_edgeTypes.Unpersist(session, disableFlush);
-      m_tailToHeadEdges.Unpersist(session, disableFlush);
-      m_headToTailEdges.Unpersist(session, disableFlush);
-      base.Unpersist(session, disableFlush);
+      Vertices.Unpersist(session);
+      m_stringToPropertyType.Unpersist(session);
+      m_edgeTypes.Unpersist(session);
+      m_tailToHeadEdges.Unpersist(session);
+      m_headToTailEdges.Unpersist(session);
+      base.Unpersist(session);
       MyGraph.RemoveVertexTypeRef(this);
     }
 

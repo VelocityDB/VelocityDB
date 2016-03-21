@@ -972,7 +972,7 @@ namespace VelocityGraph
       }
       Update();
       PropertyTypes[pt.PropertyId] = null;
-      pt.Unpersist(Session, true);
+      pt.Unpersist(Session);
     }
 
     /// <summary>
@@ -1453,17 +1453,17 @@ namespace VelocityGraph
     }
 
     /// <inheritdoc />
-    public override void Unpersist(SessionBase session, bool disableFlush = true)
+    public override void Unpersist(SessionBase session)
     {
       if (IsPersistent == false)
         return;
       if (m_vertices != null)
-        Vertices.Unpersist(session, disableFlush);
-      m_stringToVertexType.Unpersist(session, disableFlush);
-      m_stringToEdgeType.Unpersist(session, disableFlush);
+        Vertices.Unpersist(session);
+      m_stringToVertexType.Unpersist(session);
+      m_stringToEdgeType.Unpersist(session);
       if (m_vertexIdToVertexType != null)
-        m_vertexIdToVertexType.Unpersist(session, disableFlush);
-      base.Unpersist(session, disableFlush);
+        m_vertexIdToVertexType.Unpersist(session);
+      base.Unpersist(session);
     }
 
     /// <summary>

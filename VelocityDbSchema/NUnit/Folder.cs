@@ -46,7 +46,7 @@ namespace VelocityDbSchema.NUnit
       }
     }
 
-    public override void Unpersist(SessionBase session, bool disableFlush = true)
+    public override void Unpersist(SessionBase session)
     {
       if (IsPersistent)
       {

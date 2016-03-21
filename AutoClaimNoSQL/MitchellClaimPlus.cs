@@ -184,15 +184,15 @@ namespace AutoClaimUsingNoSQL
       }
     }
 
-    public override void Unpersist(SessionBase session, bool disableFlush = true)
+    public override void Unpersist(SessionBase session)
     {
       if (IsPersistent == false)
         return;
       foreach (var v in m_vehicles)
-        v.Unpersist(session, disableFlush);
+        v.Unpersist(session);
       if (m_lossInfo != null)
-        m_lossInfo.Unpersist(session, disableFlush);
-      base.Unpersist(session, disableFlush);
+        m_lossInfo.Unpersist(session);
+      base.Unpersist(session);
     }
   }
 

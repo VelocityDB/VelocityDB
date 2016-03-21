@@ -248,11 +248,11 @@ namespace VelocityDbSchema.VelocityWeb
       return UserName + " " + Oid.ToString();
     }
 
-    public override void Unpersist(SessionBase session, bool disableFlush = true)
+    public override void Unpersist(SessionBase session)
     {
       if (IsPersistent == false)
         return;
-      base.Unpersist(session, disableFlush);
+      base.Unpersist(session);
     }
   }
 }

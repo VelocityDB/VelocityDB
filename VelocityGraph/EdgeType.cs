@@ -596,17 +596,17 @@ namespace VelocityGraph
     }
 
     /// <inheritdoc />
-    public override void Unpersist(SessionBase session, bool disableFlush = true)
+    public override void Unpersist(SessionBase session)
     {
       if (IsPersistent == false)
         return;
       if (m_unrestrictedEdges != null)
-        m_unrestrictedEdges.Unpersist(session, disableFlush);
+        m_unrestrictedEdges.Unpersist(session);
       if (m_restrictedEdges != null)
-        m_restrictedEdges.Unpersist(session, disableFlush);
-      m_stringToPropertyType.Unpersist(session, disableFlush);
-      EdgeRanges.Unpersist(session, disableFlush);
-      base.Unpersist(session, disableFlush);
+        m_restrictedEdges.Unpersist(session);
+      m_stringToPropertyType.Unpersist(session);
+      EdgeRanges.Unpersist(session);
+      base.Unpersist(session);
       MyGraph.RemoveEdgeTypeRef(this);
     }
 

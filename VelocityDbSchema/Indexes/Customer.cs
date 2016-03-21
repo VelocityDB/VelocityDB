@@ -67,8 +67,7 @@ namespace VelocityDbSchema.Indexes
       }
       set
       {
-        if (IsPersistent)
-          Session.UpdateObject(this, false, false); // Use instead of Update() to avoid removing object from indices, OK when only updating a non indexed field
+        UpdateNonIndexField();
         m_streetAddress = value;
       }
     }
