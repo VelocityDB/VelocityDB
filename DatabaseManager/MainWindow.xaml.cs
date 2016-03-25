@@ -32,6 +32,7 @@ namespace DatabaseManager
       InitializeComponent();
       m_viewModel = new AllFederationsViewModel();
       DirectoryInfo dirInfo = m_viewModel.Initialize(dbFilePath);
+      DataCache.MaximumMemoryUse = 3000000000; // 3 GB, set this to what fits your case
       bool addedFd = false;
       if (dirInfo != null)
         addedFd = AddFederation(dirInfo);
@@ -76,6 +77,7 @@ namespace DatabaseManager
       if (session.InTransaction)
         session.Commit();
       session.BeginUpdate();
+      //session.EnableSyncByTrackingChanges = true;
       try
       {
         for (int i = 0; i < 1000; i++)

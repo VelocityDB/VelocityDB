@@ -70,7 +70,8 @@ namespace DatabaseManager
             int i = 0;
             foreach (object arrayObj in a)
             {
-              base.Children.Add(new ObjectViewModel(arrayObj, this, i++, m_isEncodedOidArray, m_session));
+              if (arrayObj != null)
+                base.Children.Add(new ObjectViewModel(arrayObj, this, i++, m_isEncodedOidArray, m_session));
             }
           }
         }

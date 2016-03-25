@@ -18,8 +18,8 @@ namespace NUnitTests
   [TestFixture]
   public class BTreeTest
   {
-    public const string systemDir = "c:\\NUnitTestDbs";
-    public const string location2Dir = "c:\\NUnitTestDbsLocation2";
+    public const string systemDir = "c:/NUnitTestDbs";
+    public const string location2Dir = "c:/NUnitTestDbsLocation2";
 
     [Test]
     public void hashCodeComparerIntTest()
