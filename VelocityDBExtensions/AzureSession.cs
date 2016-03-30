@@ -11,6 +11,14 @@ using VelocityDb.Session;
 
 namespace VelocityDBExtensions
 {
+  /// <summary>
+  /// Prototype for using Windows Azure API and Steams directly. Currently running into <see cref="Stream"/> related issues.
+  /// Possibly related to positioning within stream not always working correctly
+  /// Instead of using AzureSession, use other session classes with shared Azure drive
+  /// See https://azure.microsoft.com/en-us/documentation/articles/storage-dotnet-how-to-use-files/
+  /// example :
+  /// net use z: \\samples.file.core.windows.net\logs /u:samples<storage-account-key>
+  /// </summary>
   public class AzureSession : SessionNoServer
   {
     static readonly Int64 s_initialFileSize = 10000000;
@@ -29,7 +37,6 @@ namespace VelocityDBExtensions
       if (Path.IsPathRooted(systemDir) == false)
         SystemDirectory = systemDir;
       m_shareName = shareName;
-      m_cloudStorageAccount = m_cloudStorageAccount;
       m_cloudFileClient = m_cloudStorageAccount.CreateCloudFileClient();
       m_cloudShare = m_cloudFileClient.GetShareReference(shareName);
       if (m_cloudShare.Exists())
@@ -89,7 +96,7 @@ namespace VelocityDBExtensions
             CloudFile cloudFile = m_databaseDir.GetFileReference(fileInfo.Name);
             if (cloudFile.Exists())
               throw new DatabaseAlreadyExistsException(fileInfo.FullName);
-            cloudFile.Create(100000);
+            cloudFile.Create(s_initialFileSize);
             FileRequestOptions fileRequestOptions = new FileRequestOptions();
             fileRequestOptions.ServerTimeout = TimeSpan.FromMilliseconds(waitForLockMilliseconds);
             fileRequestOptions.ParallelOperationThreadCount = 1;

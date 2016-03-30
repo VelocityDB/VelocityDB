@@ -29,6 +29,15 @@ namespace UnitTests
       lTestClass.SomeIntVar = 123;
       lTestClass.SomeStringVar = "test";
       UInt64 id = lTestClass.Persist(lSession, lTestClass);
+      var c = new Class_A();
+      UInt64 id2 = lSession.Persist(c);
+      Class_B class_b = new Class_B();
+      class_b.IntField = 11;
+      class_b.StringField = "sss";
+      Class_A class_a = new Class_A();
+      class_a.string_field = "xxx";
+      class_a.b_field = class_b;
+      UInt64 id3 = lSession.Persist(class_a);
       lSession.Commit();
       //return to cache, get it again and query the object
       //as this test is to verify it does not hang we do it in separate thread and kill after timeout
@@ -36,6 +45,8 @@ namespace UnitTests
       lSession = GetCachedSession();
       lSession.Abort();
       lSession.BeginUpdate();
+      Class_A cA = lSession.Open<Class_A>(id2);
+      cA = lSession.Open<Class_A>(id3);
       lTestClass = lSession.Open<TestClass>(id);
       Assert.NotNull(lTestClass.GeoCord);
       Assert.NotNull(lTestClass.StoredStructInObjectField);

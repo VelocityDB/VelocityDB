@@ -101,7 +101,7 @@ namespace VelocityDbSchema.NUnit
     Double Longitude { get; set; }
   }
 
-  public struct Geo_Co_Ord  : IGeo_Co_Ord
+  public struct Geo_Co_Ord : IGeo_Co_Ord
   {
     Double _Lat;
     public Double Latitude
@@ -133,4 +133,34 @@ namespace VelocityDbSchema.NUnit
       return "Longitude: " + Longitude + " Latitude: " + Latitude;
     }
   };
+
+  public class Class_A : OptimizedPersistable
+  {
+    public string string_field;
+    public IClass_B b_field;
+  }
+
+  public interface IClass_B
+  {
+    int IntField { get; set; }
+    string StringField { get; set; }
+  }
+
+  public class Class_B : OptimizedPersistable, IClass_B
+  {
+    private string string_field;
+    private int int_field;
+
+
+    public int IntField
+    {
+      get { return int_field; }
+      set { int_field = value; }
+    }
+    public string StringField
+    {
+      get { return string_field; }
+      set { string_field = value; }
+    }
+  }
 }
