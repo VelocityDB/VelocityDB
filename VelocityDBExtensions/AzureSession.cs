@@ -182,6 +182,13 @@ namespace VelocityDBExtensions
     }
 
     /// <inheritdoc />
+    public override bool DatabaseStillExist(Database db)
+    {
+      CloudFile cloudFile = m_databaseDir.GetFileReference(db.FileInfo.Name);
+      return cloudFile.Exists();
+    }
+
+    /// <inheritdoc />
     public override void DeleteFile(FileInfo fileInfo)
     {
       var share = m_rootDir.GetDirectoryReference(fileInfo.Directory.Name);

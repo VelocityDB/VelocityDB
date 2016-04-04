@@ -68,8 +68,8 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=5.3.6.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.3.6\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=5.3.7.0, Culture=neutral, PublicKeyToken=9d412ecd5a0c8179, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.5.3.7\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -113,6 +113,7 @@
     <Compile Include="NUnit\CastRecord2.cs" />
     <Compile Include="NUnit\ComputerFileData.cs" />
     <Compile Include="NUnit\Counter.cs" />
+    <Compile Include="NUnit\Dokument.cs" />
     <Compile Include="NUnit\Entity.cs" />
     <Compile Include="NUnit\FileContent.cs" />
     <Compile Include="NUnit\FileInDb.cs" />

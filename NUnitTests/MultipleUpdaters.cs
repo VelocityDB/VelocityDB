@@ -10,6 +10,7 @@ using VelocityDbSchema;
 using VelocityDbSchema.Samples.AllSupportedSample;
 using VelocityDbSchema.NUnit;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace NUnitTests
 {
@@ -17,6 +18,7 @@ namespace NUnitTests
   public class MultipleUpdaters
   {
     public const string systemDir = "c:\\NUnitTestDbs";
+    static object s_lockObj = new object();
 
     [Test]
     public void AppendFile()
@@ -59,7 +61,7 @@ namespace NUnitTests
     [Test]
     public void TwoUpdaters1()
     {
-      Assert.Throws<TryingToBeginReadOnlyTransactionWhileInUpdateTransactionException>(() =>
+      Assert.Throws<OptimisticLockingFailed>(() =>
       {
         UInt64 id;
         using (SessionNoServer session = new SessionNoServer(systemDir))
@@ -156,6 +158,134 @@ namespace NUnitTests
           System.GC.Collect();
         }
       });
+    }
+
+    [Test]
+    public void MultipleThreadsAdding()
+    {
+      bool doClearAll = SessionBase.ClearAllCachedObjectsWhenDetectingUpdatedDatabase;
+      SessionBase.ClearAllCachedObjectsWhenDetectingUpdatedDatabase = false;
+      try
+      {
+        Parallel.ForEach(Enumerable.Range(1, 3), (num) => LockConflict());
+      }
+      finally
+      {
+        SessionBase.ClearAllCachedObjectsWhenDetectingUpdatedDatabase = doClearAll;
+      }
+    }
+
+    void LockConflict()
+    {
+      string host = null;
+      Random r = new Random(5);
+      SessionPool sessionPool = new SessionPool(2, () => new ServerClientSession(systemDir, host, 5000, false));
+      int sessionId0 = -1;
+      SessionBase Session0 = null;
+      try
+      {
+        int iCounter = 0;
+        Placement Place_A = new Placement(100, (UInt16)Math.Max(r.Next() % UInt16.MaxValue, 1));
+        Placement Place_B = new Placement(1001, (UInt16)Math.Max(r.Next() % UInt16.MaxValue, 1));
+        lock (s_lockObj)
+        {
+          try
+          {
+            Session0 = sessionPool.GetSession(out sessionId0);
+            Session0.BeginUpdate();
+            Session0.RegisterClass(typeof(Dokument));
+            Session0.Commit();
+          }
+          finally
+          {
+            sessionPool.FreeSession(sessionId0, Session0);
+          }
+        }
+
+        int sessionId1 = -1;
+        SessionBase Session1 = null;
+        for (int i = 0; i < 80; i++)
+        {
+          try
+          {
+            Session1 = sessionPool.GetSession(out sessionId1);
+            Session1.BeginUpdate();
+            Dokument Doc_A = new Dokument();
+            Doc_A.Name = "Test A";
+            while (true)
+            {
+              try
+              {
+                Doc_A.Persist(Place_A, Session1);
+                Console.WriteLine(Doc_A.ToString());
+                break;
+              }
+              catch (Exception ex)
+              {
+                if (ex is PageUpdateLockException || ex is PageReadLockException)
+                {
+                  Place_A.TryPageNumber = (UInt16)Math.Max(r.Next() % UInt16.MaxValue, 1);
+                }
+                else
+                  throw;
+                Console.WriteLine(ex.Message);
+              }
+            }
+            int sessionId2 = -1;
+            SessionBase Session2 = null;
+            try
+            {
+              Session2 = sessionPool.GetSession(out sessionId2);
+              Session2.BeginUpdate();
+              Dokument Doc_B = new Dokument();
+              Doc_B.Name = "Test_B";
+              while (true)
+              {
+                try
+                {
+                  Doc_B.Persist(Place_B, Session2);
+                  Console.WriteLine(Doc_B.ToString());
+                  break;
+                }
+                catch (Exception ex)
+                {
+                  if (ex is PageUpdateLockException || ex is PageReadLockException)
+                  {
+                    Place_B.TryPageNumber = (UInt16)Math.Max(r.Next() % UInt16.MaxValue, 1);
+                  }
+                  else
+                    throw;
+                  Console.WriteLine(ex.Message);
+                }
+              }
+              Session2.Commit();
+            }
+            finally
+            {
+              sessionPool.FreeSession(sessionId2, Session2);
+            }
+            Session1.Commit();
+            Session1.BeginRead();
+            Database db = Session1.OpenDatabase(100);
+            ulong ct = db.AllObjects<Dokument>(false).Count;
+            db = Session1.OpenDatabase(1001);
+            ct += db.AllObjects<Dokument>(false).Count;
+            Console.WriteLine("Number of Dokument found: " + ct);
+            Session1.Commit();
+          }
+          finally
+          {
+            sessionPool.FreeSession(sessionId1, Session1);
+          }
+          iCounter++;
+          Console.WriteLine(" -> " + iCounter.ToString());
+        }
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex.Message);
+        throw;
+      }
     }
   }
 }
