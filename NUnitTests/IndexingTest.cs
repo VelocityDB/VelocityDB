@@ -188,10 +188,10 @@ namespace NUnitTests
       CreateDirectoryAndCopyLicenseDb();
       SessionBase.DefaultCompressPages = PageInfo.compressionKind.LZ4;
     }
-
-    [TestCase(true)]
-    [TestCase(false)]
-    public void IndexSample(bool useServerSession)
+    [Repeat(2)]
+    [TestCase(true, false)]
+    [TestCase(false, false)]
+    public void IndexSample(bool useServerSession, bool optimisticLocking)
     {
       string brandName = "Toyota";
       string color = "Blue";
@@ -211,7 +211,7 @@ namespace NUnitTests
       Car car = new Car(color, maxPassengers, fuelCapacity, litresPer100Kilometers, modelYear, brandName, modelName, maxSpeed,
         odometer, registrationState, registrationPlate, insuranceCompany, insurancePolicy);
 
-      using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
+      using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir, null, 2000, optimisticLocking) : (SessionBase)new SessionNoServer(systemDir, 5000, optimisticLocking))
       {
         session.BeginUpdate();
         foreach (Database db in session.OpenAllDatabases(true))

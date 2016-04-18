@@ -175,7 +175,7 @@ namespace VelocityDBExtensions
           PageInfo.compressionKind compressed = (PageInfo.compressionKind)Enum.Parse(typeof(PageInfo.compressionKind), pageInfo[i++]);
           UInt32 typeVersion = UInt32.Parse(pageInfo[i]);
           Database db = session.OpenDatabase(dbNum, false, false);
-          Page page = db.PageCache[pageNum];
+          Page page = db.CachedPage(pageNum);
           if (page == null)
           {
             page = new Page(db, pageNum, typeVersion, numberOfSlots);

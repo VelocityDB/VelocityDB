@@ -161,6 +161,7 @@ namespace NUnitTests
     }
 
     [Test]
+    [Repeat(2)]
     public void MultipleThreadsAdding()
     {
       bool doClearAll = SessionBase.ClearAllCachedObjectsWhenDetectingUpdatedDatabase;
@@ -178,7 +179,7 @@ namespace NUnitTests
             db = session.NewDatabase(dbNum, 0, typeof(Dokument).ToGenericTypeString());
           session.Commit();
         }
-        Parallel.ForEach(Enumerable.Range(1, 3), (num) => LockConflict());
+        Parallel.ForEach(Enumerable.Range(1, 5), (num) => LockConflict());
       }
       finally
       {
