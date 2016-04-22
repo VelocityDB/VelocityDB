@@ -184,6 +184,7 @@ namespace VelocityDBExtensions
             page.PageInfo.VersionNumber = versionNumber;
             page.PageInfo.NumberOfSlots = numberOfSlots;
             page.PageInfo.FirstFreeSlot = firstFreeSlot;
+            session.UpdatePage(ref page);
           }
           pageInfoString = textReader.ReadLine();
         }
