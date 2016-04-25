@@ -27,7 +27,7 @@ namespace NUnitTests
     [TestFixture]
     public class CountExceptionTest
     {
-      static readonly string testDir = "d:/CountExceptionTest/";
+      static readonly string testDir = "g:/CountExceptionTest/";
       static readonly string licensePath = "C:/4.odb";
 
       private SessionBase _session;

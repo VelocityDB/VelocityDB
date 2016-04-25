@@ -19,7 +19,7 @@ namespace NUnitTests
   [TestFixture]
   public class IndexingTest
   {
-    public const string systemDir = @"d:/IndexingTestDbs";
+    public const string systemDir = "g:/IndexingTestDbs";
     static readonly string licenseDbFile = @"D:/4.odb";
 
     private string RandomString(int size)
@@ -151,7 +151,7 @@ namespace NUnitTests
           }
           catch (Exception ex)
           {
-            throw new Exception("Exception occurred while commiting records: " + ex.Message);
+            throw new Exception("Exception occurred while committing records: " + ex.Message);
           }
 
         }
@@ -168,26 +168,6 @@ namespace NUnitTests
       Console.WriteLine(DisplayData(useServerSession));
     }
 
-    void CreateDirectoryAndCopyLicenseDb()
-    {
-      try
-      {
-        if (Directory.Exists(systemDir) == false)
-          Directory.CreateDirectory(systemDir);
-        File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"), true);
-      }
-      catch (DirectoryNotFoundException)
-      {
-        Directory.CreateDirectory(systemDir);
-        File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"), true);
-      }
-    }
-    [Test]
-    public void CleanupPriorRun()
-    {
-      CreateDirectoryAndCopyLicenseDb();
-      SessionBase.DefaultCompressPages = PageInfo.compressionKind.LZ4;
-    }
     [Repeat(2)]
     [TestCase(true, false)]
     [TestCase(false, false)]
@@ -213,12 +193,12 @@ namespace NUnitTests
 
       using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir, null, 2000, optimisticLocking) : (SessionBase)new SessionNoServer(systemDir, 5000, optimisticLocking))
       {
+        File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"), true);
         session.BeginUpdate();
         foreach (Database db in session.OpenAllDatabases(true))
           if (db.DatabaseNumber >= 10 || db.DatabaseNumber == SessionBase.IndexDescriptorDatabaseNumber)
             session.DeleteDatabase(db);
         session.Commit();
-
         session.BeginUpdate();
         DatabaseLocation defaultLocation = session.DatabaseLocations.Default();
         List<Database> dbList = session.OpenLocationDatabases(defaultLocation, true);
@@ -227,12 +207,12 @@ namespace NUnitTests
             session.DeleteDatabase(db);
         session.DeleteLocation(defaultLocation);
         session.Commit();
-        CreateDirectoryAndCopyLicenseDb();
       }
 
       using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
+        File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"), true);
         session.Commit();
       }
 
@@ -743,7 +723,6 @@ namespace NUnitTests
     [TestCase(true)]
     public void IndexSample2(bool useServerSession)
     {
-      CreateDirectoryAndCopyLicenseDb();
       Random rd = new Random();
       using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
       {

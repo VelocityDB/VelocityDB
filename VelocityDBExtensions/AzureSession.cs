@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using VelocityDb;
 using VelocityDb.Session;
+using VelocityDb.TypeInfo;
 
 namespace VelocityDBExtensions
 {
@@ -52,7 +53,8 @@ namespace VelocityDBExtensions
     {
       if (waitOverride == -1)
         waitOverride = WaitForLockMilliseconds;
-      if (db.FileStream != null && (db.FileStream.CanRead == false || (db.FileStream.CanWrite == false && (excusiveAccess || fileAccess == FileAccess.ReadWrite))))
+      if (db.FileStream != null && ((db.FileStream.CanRead == false && fileAccess == FileAccess.Read) ||
+                                    (db.FileStream.CanWrite == false && (excusiveAccess || fileAccess == FileAccess.ReadWrite))))
       {
         db.FileStream.Dispose();
         db.FileStream = null;
@@ -204,8 +206,69 @@ namespace VelocityDBExtensions
       CloudFile cloudFile = m_databaseDir.GetFileReference(db.FileInfo.Name);
       CloudFile destFile = m_databaseDir.GetFileReference(newFileInfo.Name);
       destFile.StartCopy(cloudFile); // Azure provides NO rename/move functionality !!!
+      while (destFile.CopyState.Status == Microsoft.WindowsAzure.Storage.Blob.CopyStatus.Pending)
+        Thread.Sleep(100);
       cloudFile.Delete();
       db.FileInfo = newFileInfo;
+    }
+
+    /// <inheritdoc />
+    public override List<Database> OpenAllDatabases(bool update = false)
+    {
+      SortedSet<Database> dbSet = new SortedSet<Database>();
+      foreach (Database db in NewDatabases)
+        dbSet.Add(db);
+      foreach (DatabaseLocation location in (IEnumerable<DatabaseLocation>)DatabaseLocations)
+      {
+        m_databaseDir = m_rootDir.GetDirectoryReference(location.DirectoryPath);
+        foreach (CloudFile file in m_databaseDir.ListFilesAndDirectories())
+        {
+          string fileName = file.Name;
+          int indexEnd = fileName.IndexOf('.');
+          string dbNumStr = fileName.Substring(0, indexEnd);
+          UInt32 dbNum;
+          if (UInt32.TryParse(dbNumStr, out dbNum) && dbNum >= location.StartDatabaseNumber && dbNum <= location.EndDatabaseNumber)
+          {
+            Database db = OpenDatabase(dbNum, update);
+            dbSet.Add(db);
+          }
+        }
+      }
+      return dbSet.ToList<Database>();
+    }
+
+    /// <inheritdoc />
+    protected override Database reopenDatabaseForUpdate(Database dbReadOnly, Schema schema, out bool updated, bool forceReplace = false)
+    {
+      if (dbReadOnly.IsNew && forceReplace == false)
+      {
+        updated = false;
+        return dbReadOnly;
+      }
+      string errorMessage = String.Empty;
+      Stream fStream = null;
+      try
+      {
+        fStream = OpenStreamForUpdate(dbReadOnly, ref errorMessage, false);
+        if (fStream == null)
+          if (OptimisticLocking)
+            throw new OptimisticLockingFailed(errorMessage + "for Database: " + dbReadOnly.DatabaseNumber.ToString());
+          else
+            throw new PageUpdateLockException(errorMessage + "for Database: " + dbReadOnly.DatabaseNumber.ToString());
+        if (OptimisticLocking)
+        {
+          if (dbReadOnly.FileStream == null)
+            fStream.Dispose();
+          fStream = OpenStreamForRead(dbReadOnly, ref errorMessage);
+        }
+        //Stream fStream = FileOpen(dbReadOnly, FileAccess.ReadWrite, ref errorMessage, FileMode.Open, false, m_waitForLockMilliseconds);
+        return LoadUpToDateDatabasePageFromStream(dbReadOnly, schema, fStream, out updated, forceReplace, true, true);
+      }
+      finally
+      {
+        if (fStream != null && dbReadOnly.FileStream == null) // don't close if SessionNoServer (locks tryDatabaseNumber by keeping file Open)
+          fStream.Dispose();
+      }
     }
   }
 }
