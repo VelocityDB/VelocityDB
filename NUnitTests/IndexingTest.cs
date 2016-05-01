@@ -193,8 +193,8 @@ namespace NUnitTests
 
       using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir, null, 2000, optimisticLocking) : (SessionBase)new SessionNoServer(systemDir, 5000, optimisticLocking))
       {
-        File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"), true);
         session.BeginUpdate();
+        File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"), true);
         foreach (Database db in session.OpenAllDatabases(true))
           if (db.DatabaseNumber >= 10 || db.DatabaseNumber == SessionBase.IndexDescriptorDatabaseNumber)
             session.DeleteDatabase(db);
@@ -524,7 +524,7 @@ namespace NUnitTests
         BTreeSet<Car> bTree = session.Index<Car>("color");
         foreach (Car c in (from aCar in bTree where aCar.Color == "Blue" select aCar))
           Console.WriteLine(c.ToStringDetails(session));
-        Console.WriteLine("Cars in fuel efficierncy order");
+        Console.WriteLine("Cars in fuel efficiency order");
         foreach (Car c in session.Index<Car>("litresPer100Kilometers"))
           Console.WriteLine(c.ToStringDetails(session));
         Console.WriteLine("Vehicles ordered modelYear, brandName, modelName, color");
@@ -536,7 +536,7 @@ namespace NUnitTests
       using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        // these LINQ statements will trigger a binary search lookup (not a linear serach) of the matching Car objects in the BTreeSet
+        // these LINQ statements will trigger a binary search lookup (not a linear search) of the matching Car objects in the BTreeSet
         Car c = (from aCar in session.Index<Car>("color") where aCar.Color == "Blue" select aCar).First();
         c.Color = "Green";
         session.Commit();
@@ -545,7 +545,7 @@ namespace NUnitTests
       using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        // these LINQ statements will trigger a binary search lookup (not a linear serach) of the matching Car objects in the BTreeSet
+        // these LINQ statements will trigger a binary search lookup (not a linear search) of the matching Car objects in the BTreeSet
         Car c = (from aCar in session.Index<Car>("color") where aCar.Color == "Green" select aCar).First();
         UInt64 id = c.Id;
         session.DeleteObject(id);
@@ -560,7 +560,7 @@ namespace NUnitTests
         Stopwatch sw = new Stopwatch();
         sw.Start();
         session.BeginRead();
-        // these LINQ statements will trigger a binary search lookup (not a linear serach) of the matching Car objects in the BTreeSet
+        // these LINQ statements will trigger a binary search lookup (not a linear search) of the matching Car objects in the BTreeSet
         Console.WriteLine("Blue Cars");
         foreach (Car c in (from aCar in session.Index<Car>("color") where aCar.Color == "Blue" select aCar))
           Console.WriteLine(c.ToStringDetails(session));
@@ -584,7 +584,7 @@ namespace NUnitTests
       using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
       {
         session.BeginRead();
-        // these LINQ statements will trigger a binary search lookup (not a linear serach) of the matching Car objects in the BTreeSet
+        // these LINQ statements will trigger a binary search lookup (not a linear search) of the matching Car objects in the BTreeSet
         Console.WriteLine("Blue Cars");
         foreach (Car c in (from aCar in session.Index<Car>("color") where aCar.Color == "Blue" select aCar))
           Console.WriteLine(c.ToStringDetails(session));
