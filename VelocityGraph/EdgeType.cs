@@ -252,7 +252,7 @@ namespace VelocityGraph
     {
       get
       {
-        return m_headType.GetTarget(false, Session);
+        return m_headType !=null ? m_headType.GetTarget(false, Session) : null;
       }
     }
 
@@ -585,7 +585,7 @@ namespace VelocityGraph
     {
       get
       {
-        return m_tailType.GetTarget(false, Session);
+        return m_tailType != null ? m_tailType.GetTarget(false, Session) : null;
       }
     }
 

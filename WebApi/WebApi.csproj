@@ -132,12 +132,12 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="VelocityDb, Version=5.3.14.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.3.14\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=5.3.15.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.5.3.15\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="VelocityGraph, Version=2.8.39.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.2.8.39\lib\Net40\VelocityGraph.dll</HintPath>
+    <Reference Include="VelocityGraph, Version=2.8.40.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.2.8.40\lib\Net40\VelocityGraph.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
