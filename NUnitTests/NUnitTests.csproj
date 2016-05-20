@@ -86,9 +86,11 @@
     <Compile Include="FileFolderTest.cs" />
     <Compile Include="FixedSizeData.cs" />
     <Compile Include="IndexingTest.cs" />
+    <Compile Include="LargePage.cs" />
     <Compile Include="LazyLoad.cs" />
     <Compile Include="LinqTest.cs" />
     <Compile Include="MoveDatabaseLocations.cs" />
+    <Compile Include="MultipleFederations.cs" />
     <Compile Include="MultipleServers.cs" />
     <Compile Include="MultipleSessions.cs" />
     <Compile Include="MultipleUpdaters.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="RtreeTest.cs" />
     <Compile Include="ASanityTests.cs" />
     <Compile Include="SchemaTests.cs" />
+    <Compile Include="StructWrapper.cs" />
     <Compile Include="SyncTest.cs" />
     <Compile Include="TrackerTests.cs" />
     <Compile Include="VelocityDB.cs" />

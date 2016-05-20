@@ -132,6 +132,18 @@ namespace DatabaseManager
       }
     }
 
+    public bool EnableSyncByTrackingChanges
+    {
+      get
+      {
+        return m_federationInfo.EnableSyncByTrackingChanges;
+      }
+      set
+      {
+        m_federationInfo.EnableSyncByTrackingChanges = value;
+      }
+    }
+
     bool CreateNew { get; set; }
 
     //int WaitForMilliSeconds { get; set; }
@@ -145,6 +157,7 @@ namespace DatabaseManager
       m_federationInfo.HostName = HostTextBox.Text;
       m_federationInfo.UsePessimisticLocking = (bool) PessimisticBox.IsChecked;
       m_federationInfo.WindowsAuthentication = (bool) WindowsAuthenticationBox.IsChecked;
+      m_federationInfo.EnableSyncByTrackingChanges = (bool) EnableChangeTrackingBox.IsChecked;
       m_federationInfo.WaitForMilliSeconds = int.Parse(WaitForMilliSecondsTextBox.Text);
       bool createNew = (bool)CreateNewBox.IsChecked;
       string restoreFromPath = BackupDirTextBox.Text;
@@ -156,6 +169,8 @@ namespace DatabaseManager
           session = new ServerClientSession(m_federationInfo.SystemDbsPath, m_federationInfo.HostName);
         else
           session = new SessionNoServer(m_federationInfo.SystemDbsPath);
+        if (m_federationInfo.EnableSyncByTrackingChanges)
+          session.EnableSyncByTrackingChanges = true;
         session.BeginUpdate();
         if (restoreFromPath != null && restoreFromPath.Length > 0)
         {

@@ -68,6 +68,8 @@ namespace DatabaseManager
     {
       base.Children.Add(new ObjectViewModel(m_databaseLocation, this, m_databaseLocation.Session));
       IOrderedEnumerable<Database> dbs;
+      if (!m_databaseLocation.Session.InTransaction)
+        m_databaseLocation.Session.BeginRead();
       if (m_orderDatabasesByName)
         dbs = m_databaseLocation.Session.OpenLocationDatabases(m_databaseLocation, false).OrderBy(db => db.Name);
       else

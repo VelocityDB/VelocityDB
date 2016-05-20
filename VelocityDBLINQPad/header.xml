@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataContextDriver>
+  <MainAssembly>VelocityDBLINQPad.dll</MainAssembly>
+  <!--SupportUri>http://www.VelocityDB.com</SupportUri-->
+</DataContextDriver>
+

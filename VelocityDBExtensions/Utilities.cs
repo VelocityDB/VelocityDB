@@ -213,14 +213,17 @@ namespace VelocityDBExtensions
                 Type fieldType = o as Type;
                 sb.Append("  " + field.Name + " : " + fieldType.ToGenericTypeString());
               }
-              else if (field.FieldType.GetTypeInfo().IsPrimitive || member.HasId || !field.FieldType.GetTypeInfo().IsSerializable || field.FieldType == CommonTypes.s_typeOfString || field.FieldType.GetTypeInfo().IsEnum ||
-                  schema.LookupByType.TryGetValue(field.FieldType, out t) == false ||
-                  (field.FieldType.GetTypeInfo().IsGenericType && field.FieldType.GetGenericTypeDefinition() == CommonTypes.s_typeOfWeakIOptimizedPersistableReference))
-                sb.Append("  " + field.Name + " : " + o.ToString());
               else
               {
-                TypeVersion memberShape = t.LastShape();
-                sb.Append("  " + field.Name + " : " + ToStringDetails(o, schema, page, memberShape, skipArrays));
+                bool cond1 = field.FieldType.GetTypeInfo().IsPrimitive || member.HasId || field.FieldType == CommonTypes.s_typeOfString || field.FieldType.GetTypeInfo().IsEnum;
+                if (cond1 || schema.LookupByType.TryGetValue(field.FieldType, out t) == false ||
+                  (field.FieldType.GetTypeInfo().IsGenericType && field.FieldType.GetGenericTypeDefinition() == CommonTypes.s_typeOfWeakIOptimizedPersistableReference))
+                  sb.Append("  " + field.Name + " : " + o.ToString());
+                else
+                {
+                  TypeVersion memberShape = t.LastShape();
+                  sb.Append("  " + field.Name + " : " + ToStringDetails(o, schema, page, memberShape, skipArrays));
+                }
               }
             }
           }

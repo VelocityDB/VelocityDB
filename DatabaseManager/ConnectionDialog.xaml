@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              Title="VelocityDB Connection"
-             Height="380" Width="900" Icon="Images/Earth.ico" MinHeight="360" MinWidth="700">
+             Height="400" Width="900" Icon="Images/Earth.ico" MinHeight="400" MinWidth="700">
     <DockPanel>
         <DockPanel Margin="0,5,1,5" LastChildFill="False" DockPanel.Dock="Bottom">
             <Button Margin="5,0,0,0" Content="Cancel" DockPanel.Dock="Right" MinWidth="70" VerticalAlignment="Top" TabIndex="2" IsCancel="True" Padding="3"/>
@@ -44,6 +44,7 @@
               <Label>WaitForMilliseconds</Label>
               <TextBox x:Name="WaitForMilliSecondsTextBox"/>
             </DockPanel>
+            <CheckBox x:Name="EnableChangeTrackingBox" IsChecked="{Binding Path=EnableChangeTracking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Enable Change Tracking (used by Sync)" Margin="0,5,0,0"/>
           </StackPanel>
         </GroupBox>
       </DockPanel>

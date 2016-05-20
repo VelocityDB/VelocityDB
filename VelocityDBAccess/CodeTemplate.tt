@@ -1,0 +1,79 @@
+﻿<#@ template language="C#" visibility="internal" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Reflection" #>
+
+namespace <#=NameSpace#>
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using VelocityDb.Session;
+<# foreach(var lAssemblyName in Schema.LoadedAssembliesNames)
+  {#>
+    using <#=lAssemblyName#>;
+<#}#>
+
+ /*   public static class <#=TypeName#>Static
+    {
+        
+<# foreach(KeyValuePair<string, string> lPair in Schema.TypesNameToPluralName)
+   {#>
+        static IEnumerable< <#=lPair.Key#> > IEnumerable< <#=lPair.Key#> >(this <#=lPair.Key#> source)
+        {
+				  Session.BeginRead();
+					return Session.AllObjects< <#=lPair.Key#> >();
+        }
+<# }#>
+}*/
+
+    public class <#=TypeName#>
+    {
+        private SessionBase session;
+        
+<# foreach(KeyValuePair<string, string> lPair in Schema.TypesNameToPluralName)
+   {#>
+        public virtual IEnumerable< <#=lPair.Key#> > <#=lPair.Value#>
+        {
+            get
+            {
+                session.BeginRead();
+                return this.session.AllObjects< <#=lPair.Key#> >();
+            }
+        }
+<# }#>
+
+        public void CloseSession()
+        {
+            if (session.InTransaction)
+							session.Commit();
+					  session = null;
+        }
+
+        public <#=TypeName#>()
+        {
+            session = null;
+            bool lPessimistic = Convert.ToBoolean("<#=SessionInfo.PessimisticLocking#>");
+            //bool lAuth = Convert.ToBoolean("<#=SessionInfo.WindowsAuth#>");
+<#          switch (SessionInfo.SessionType)
+            {
+                case SessionInfo.SessionTypeEnum.NoServerSession:#>
+                    session = new SessionNoServer(@"<#=SessionInfo.DBFolder#>", 5000, !lPessimistic);
+<#                  break;
+                case SessionInfo.SessionTypeEnum.NoServerSharedSession:#>
+                    session = new SessionNoServerShared(@"<#=SessionInfo.DBFolder#>", 5000, !lPessimistic);
+<#                  break;
+                case SessionInfo.SessionTypeEnum.ServerClientSession:#>
+                    IPHostEntry lHostEntry = Dns.GetHostEntry(@"<#=SessionInfo.Host#>");
+                    session = new ServerClientSession(@"<#=SessionInfo.DBFolder#>", lHostEntry.HostName, 2000, !lPessimistic);
+<#                  break;
+                default:#>
+                    throw new InvalidDataException("Invalid Session Type");
+<#                  break;
+            }#>
+            /*if (session != null)
+            {
+                SessionBase.DoWindowsAuthentication = lAuth;
+            }*/
+        }
+    }
+}
