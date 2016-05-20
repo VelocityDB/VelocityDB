@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VelocityDBExtensions;
 using DatabaseManager.Model;
 using VelocityDb.Session;
 using System.Net;
@@ -273,6 +274,31 @@ namespace DatabaseManager
         info.FederationCopies.Add(copyInfo);
         session.Commit();
         MessageBox.Show("Databases copied to " + copyDir + " at " + DateTime.Now);
+      }
+    }
+
+    private void SyncFederationMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      FederationViewModel view = (FederationViewModel)menuItem.DataContext;
+      FederationInfo info = view.Federationinfo;
+      SessionBase session = view.Session;
+      var lDialog = new System.Windows.Forms.FolderBrowserDialog()
+      {
+        Description = "Choose Federation Sync Destination Folder",
+      };
+      if (lDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+      {
+        string destdir = lDialog.SelectedPath;
+        if (session.InTransaction)
+          session.Commit(); // must not be in transaction while copying databases
+        using (SessionBase sessionDestination = new SessionNoServer(destdir))
+        {
+          sessionDestination.SyncWith(session);
+        }
+        m_viewModel = new AllFederationsViewModel();
+        base.DataContext = m_viewModel;
+        MessageBox.Show("Databases synced with " + destdir + " at " + DateTime.Now);
       }
     }
 

@@ -121,8 +121,10 @@
     <Compile Include="NUnit\FixedSize.cs" />
     <Compile Include="NUnit\Folder.cs" />
     <Compile Include="NUnit\FourPerPage.cs" />
+    <Compile Include="NUnit\LargeObject.cs" />
     <Compile Include="NUnit\LazyLoadByDepth.cs" />
     <Compile Include="NUnit\LazyLoadPropertyClass.cs" />
+    <Compile Include="NUnit\ListWrapper.cs" />
     <Compile Include="NUnit\MeasurePoint.cs" />
     <Compile Include="NUnit\ObjWithArray.cs" />
     <Compile Include="NUnit\RDerby1.cs" />

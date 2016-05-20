@@ -23,6 +23,7 @@ namespace DatabaseManager.Model
     bool m_windowsAuthentication;
     bool m_usesServerClient;
     bool m_usePessimisticLocking;
+    bool m_enableSyncByTrackingChanges;
     List<DateTime> m_validated;
     string[] m_typesAssemblies;
     string[] m_typesDependencyAssemblies;
@@ -38,10 +39,11 @@ namespace DatabaseManager.Model
       m_usesServerClient = false;
       m_validated = new List<DateTime>();
       m_federationCopies = new List<FederationCopyInfo>();
+      m_enableSyncByTrackingChanges = false;
     }
 
     public FederationInfo(string hostName, string systemDbsPath, int portNumber, bool windowsAuthentication, string[] assemblyDirectory, int waitForLockMilliseconds,
-      bool usesServerClient = false, string name = null):this()
+      bool usesServerClient, string name):this()
     {
       m_hostName = hostName;
       m_sytemDbsPath = systemDbsPath;
@@ -96,6 +98,19 @@ namespace DatabaseManager.Model
       set
       {
         m_typesDependencyAssemblies = value;
+      }
+    }
+
+    public bool EnableSyncByTrackingChanges
+    {
+      get
+      {
+        return m_enableSyncByTrackingChanges;
+      }
+      set
+      {
+        Update();
+        m_enableSyncByTrackingChanges = value;
       }
     }
 

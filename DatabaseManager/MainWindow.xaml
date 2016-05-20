@@ -50,8 +50,13 @@
                       <MenuItem.Icon>
                         <Image Source="/DatabaseManager;component/Images/removeIcon.png" />
                      </MenuItem.Icon>
-                   </MenuItem>                    
-                   <MenuItem Header="Validate" Click="ValidateFederationMenuItem_Click">
+                   </MenuItem>
+                  <MenuItem Header="Sync..." Click="SyncFederationMenuItem_Click">
+                    <MenuItem.Icon>
+                      <Image Source="/DatabaseManager;component/Images/Sync.ico" />
+                    </MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Validate" Click="ValidateFederationMenuItem_Click">
                       <MenuItem.Icon>
                       <Image Source="/DatabaseManager;component/Images/Search.ico" />
                      </MenuItem.Icon>
