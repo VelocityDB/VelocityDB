@@ -1002,8 +1002,7 @@ namespace NUnitTests
           }
           catch (Exception e)
           {
-            if (session != null)
-              session.Abort();
+            session?.Abort();
             Console.WriteLine(e.Message);
             throw e;
           }

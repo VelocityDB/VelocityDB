@@ -22,7 +22,7 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(s_systemDir))
       {
         session.BeginUpdate(); 
-        var large = new LargeObject((int) Math.Pow(2, 27));
+        var large = new LargeObject((int) Math.Pow(2, 25)); // Math.Pow(2, 27) too large to handle with ToBase64String for csv export
         id = session.Persist(large);
         Assert.True(large.IsOK());
         session.Commit();

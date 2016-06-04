@@ -1578,8 +1578,7 @@ namespace VelocityWeb.Secure
         }
         catch (Exception ex)
         {
-          if (session != null)
-            session.Abort();
+          session?.Abort();
           Console.Out.WriteLine(ex.StackTrace);
         }
         finally
@@ -2016,8 +2015,7 @@ namespace VelocityWeb.Secure
             }
             catch (Exception ex)
             {
-              if (session != null)
-                session.Abort();
+              session?.Abort();
               Console.Out.WriteLine(ex.StackTrace);
             }
             finally
@@ -2074,8 +2072,7 @@ namespace VelocityWeb.Secure
             }
             catch (Exception ex)
             {
-              if (session != null)
-                session.Abort();
+              session?.Abort();
               Console.Out.WriteLine(ex.StackTrace);
             }
             finally
@@ -2212,8 +2209,7 @@ namespace VelocityWeb.Secure
       }
       catch (Exception ex)
       {
-        if (session != null)
-          session.Abort();
+        session?.Abort();
         Console.Out.WriteLine(ex.StackTrace);
       }
       finally
@@ -2260,8 +2256,7 @@ namespace VelocityWeb.Secure
       }
       catch (Exception ex)
       {
-        if (session != null)
-          session.Abort();
+        session?.Abort();
         Console.Out.WriteLine(ex.StackTrace);
       }
       finally

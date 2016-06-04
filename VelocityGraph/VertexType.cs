@@ -1347,7 +1347,7 @@ namespace VelocityGraph
     /// <inheritdoc />
     public override string ToString()
     {
-      return "VertexType: " + m_typeName;
+      return $"VertexType: {m_typeName}";
     }
 
     /// <inheritdoc />

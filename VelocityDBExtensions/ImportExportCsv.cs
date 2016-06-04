@@ -38,14 +38,14 @@ namespace VelocityDBExtensions
         string filePath = "Database.csv";
         FileStream dbStream = new FileStream(Path.Combine(directory, filePath), FileMode.Create);
         dbWriter = new StreamWriter(dbStream);
-        dbWriter.WriteLine("Number" + fieldSeperator + "Name");
+        dbWriter.WriteLine($"Number{fieldSeperator}Name");
         filePath = "Page.csv";
         FileStream pageStream = new FileStream(Path.Combine(directory, filePath), FileMode.Create);
         pageWriter = new StreamWriter(pageStream);
-        pageWriter.WriteLine("DatabaseNumber" + fieldSeperator + "PageNumber" + fieldSeperator + "NumberOfSlots" + fieldSeperator + "FirstFreeSlot" + fieldSeperator + "Version" + fieldSeperator + "Encryption" + fieldSeperator + "Compression" + fieldSeperator + "TypeVersion");
+        pageWriter.WriteLine($"DatabaseNumber{fieldSeperator}PageNumber{fieldSeperator}NumberOfSlots{fieldSeperator}FirstFreeSlot{fieldSeperator}Version{fieldSeperator}Encryption{fieldSeperator}Compression{fieldSeperator}TypeVersion");
         foreach (Database db in dbs)
         {
-          if (db != null && db.DatabaseNumber != 4 && db.DatabaseNumber != 0) // we skip the license database because we can't restrore it without encryption key
+          if (db != null && db.DatabaseNumber != 4 && db.DatabaseNumber != 0) // we skip the license database because we can't restore it without encryption key
           {
             dbWriter.WriteLine(db.DatabaseNumber.ToString() + fieldSeperator + "\"" + db.Name + "\"");
             foreach (Page page in db)
@@ -77,11 +77,11 @@ namespace VelocityDBExtensions
                     writer = new StreamWriter(fStream);
                     files[pObj.Shape.ShortId] = writer;
                     List<DataMember> members = tv.GetDataMemberList();
-                    byte[] bytes = Page.StringToByteArray("id" + fieldSeperator); // special transient member
+                    byte[] bytes = Page.StringToByteArray($"id{fieldSeperator}"); // special transient member
                     fStream.Write(bytes, 0, bytes.Length);
                     if (tv.IsString)
                     {
-                      bytes = Page.StringToByteArray("String" + fieldSeperator);
+                      bytes = Page.StringToByteArray($"String{fieldSeperator}");
                       fStream.Write(bytes, 0, bytes.Length);
                     }
                     else
@@ -113,15 +113,11 @@ namespace VelocityDBExtensions
 #endif
         }
 #if WINDOWS_UWP
-        if (pageWriter != null)
-          pageWriter.Dispose();
-        if (dbWriter != null)
-          dbWriter.Dispose();
+        pageWriter?.Dispose();
+        dbWriter?.Dispose();
 #else
-        if (pageWriter != null)
-          pageWriter.Close();
-        if (dbWriter != null)
-          dbWriter.Close();
+        pageWriter?.Close();
+        dbWriter?.Close();
 #endif
       }
     }
@@ -208,7 +204,7 @@ namespace VelocityDBExtensions
                   string[] fileldNames = csvReader.GetFieldHeaders();
                   foreach (string[] record in csvReader)
                   {
-                    tv.ObjectFromStrings(record, fileldNames, session, schema);
+                    tv.ObjectBytesFromStrings(record, fileldNames, session, schema);
                   }
                 }
               }

@@ -59,7 +59,7 @@ namespace VelocityDB.geohash
     {
       if (numberOfCharacters > MAX_CHARACTER_PRECISION)
       {
-        throw new System.ArgumentException("A geohash can only be " + MAX_CHARACTER_PRECISION + " character long.");
+        throw new System.ArgumentException($"A geohash can only be {MAX_CHARACTER_PRECISION} character long.");
       }
       int desiredPrecision = (numberOfCharacters * 5 <= 60) ? numberOfCharacters * 5 : 60;
       return new GeoHash(latitude, longitude, desiredPrecision);
@@ -73,7 +73,7 @@ namespace VelocityDB.geohash
     {
       if (numberOfBits > MAX_BIT_PRECISION)
       {
-        throw new System.ArgumentException("A Geohash can only be " + MAX_BIT_PRECISION + " bits long!");
+        throw new System.ArgumentException($"A Geohash can only be {MAX_BIT_PRECISION} bits long!");
       }
       if (Math.Abs(latitude) > 90.0 || Math.Abs(longitude) > 180.0)
       {

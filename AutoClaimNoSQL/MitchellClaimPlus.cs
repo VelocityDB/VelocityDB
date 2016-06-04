@@ -190,8 +190,7 @@ namespace AutoClaimUsingNoSQL
         return;
       foreach (var v in m_vehicles)
         v.Unpersist(session);
-      if (m_lossInfo != null)
-        m_lossInfo.Unpersist(session);
+      m_lossInfo?.Unpersist(session);
       base.Unpersist(session);
     }
   }

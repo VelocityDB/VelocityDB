@@ -198,7 +198,7 @@ namespace VelocityGraph
           int pos = vertecis.BinarySearch(range, out isEqual);
           int originalPos = pos;
           if (isEqual)
-            throw new VertexAllreadyExistException("Vertex with id " + vId + " allready exist");
+            throw new VertexAllreadyExistException($"Vertex with id {vId} already exist");
           Range<VertexId> existingRange = vertecis[pos == vertecis.Count ? pos - 1 : pos];
           if (existingRange.Min == 0 && existingRange.Max == 0 || (pos > 0 && existingRange.Min > vId + 1))
             existingRange = vertecis[--pos];
@@ -240,7 +240,7 @@ namespace VelocityGraph
           }
           else if (vId >= existingRange.Min && vId <= existingRange.Max)
           {
-            throw new VertexAllreadyExistException("Vertex with id " + vId + " allready exist");
+            throw new VertexAllreadyExistException($"Vertex with id {vId} already exist");
           }
           else
             vertecis.Insert(originalPos, range);

@@ -47,7 +47,6 @@ namespace VelocityWeb
         HowFoundRadioButtonList.DataSource = AllHowFound();
         HowFoundRadioButtonList.SelectedIndex = 0;
         HowFoundRadioButtonList.DataBind();
-        DataCache.UnauthorizedPerformanceCounter = true;
         try
         {
           using (SessionNoServer session = new SessionNoServer(s_dataPath, 2000, true, true))

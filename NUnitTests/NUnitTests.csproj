@@ -65,8 +65,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
-    <Reference Include="VelocityDb, Version=5.3.15.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.3.15\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=5.3.17.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.5.3.17\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -85,6 +85,7 @@
     <Compile Include="ElectionTest.cs" />
     <Compile Include="FileFolderTest.cs" />
     <Compile Include="FixedSizeData.cs" />
+    <Compile Include="HashSetTest.cs" />
     <Compile Include="IndexingTest.cs" />
     <Compile Include="LargePage.cs" />
     <Compile Include="LazyLoad.cs" />

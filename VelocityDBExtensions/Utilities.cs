@@ -90,12 +90,12 @@ namespace VelocityDBExtensions
               else if (isEncodedOidArray)
               {
                 if (tCode == TypeCode.UInt32)
-                  sb.Append("\t" + new OidShort((UInt32)arrayObj).ToString());
+                  sb.Append($"\t{new OidShort((UInt32)arrayObj).ToString()}");
                 else
                   sb.Append("\t" + new Oid((UInt64)arrayObj).ToString());
               }
               else
-                sb.Append("\t" + arrayObj.ToString());
+                sb.Append($"\t{arrayObj.ToString()}");
             }
           }
         }

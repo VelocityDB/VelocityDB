@@ -118,8 +118,7 @@ namespace VelocityDBExtensions
         }
         catch (FileNotFoundException e)
         {
-          if (fStream != null)
-            fStream.Dispose();
+          fStream?.Dispose();
           if (signalError)
             throw e;
           errorMessage += e.Message;
@@ -132,8 +131,7 @@ namespace VelocityDBExtensions
           {
             if (signalError)
             {
-              if (fStream != null)
-                fStream.Dispose();
+              fStream?.Dispose();
               throw e;
             }
             else

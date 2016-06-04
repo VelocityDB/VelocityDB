@@ -55,7 +55,7 @@ namespace Baseball
       {
         using (SessionNoServer session = new SessionNoServer(s_systemDir))
         {
-          Console.WriteLine("Running with databases in directory: " + session.SystemDirectory);
+          Console.WriteLine($"Running with databases in directory: {session.SystemDirectory}");
           session.BeginUpdate();
           File.Copy(s_licenseDbFile, System.IO.Path.Combine(session.SystemDirectory, "4.odb"), true);
           string line;

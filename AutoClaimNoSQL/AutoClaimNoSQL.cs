@@ -18,8 +18,7 @@ namespace AutoClaimUsingNoSQL
       {
         session.BeginUpdate();
         var claim = ReadClaim(claimNumber, session);
-        if (claim != null)
-          claim.Unpersist(session);
+        claim?.Unpersist(session);
         session.Commit();
       }
     }
