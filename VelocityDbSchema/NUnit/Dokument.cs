@@ -9,9 +9,12 @@ namespace VelocityDbSchema.NUnit
   public class Dokument : OptimizedPersistable
   {
     private string m_Name;
+    ObservableList<int> m_observableList;
 
     public Dokument()
     {
+      m_observableList = new ObservableList<int>();
+      m_observableList.Add(5);
     }
 
     public bool IsDataInUpdateTransaction

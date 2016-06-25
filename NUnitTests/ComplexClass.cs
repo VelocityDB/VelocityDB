@@ -15,7 +15,7 @@ namespace NUnitTests
   [TestFixture]
   public class ComplexClass
   {
-    public const string systemDir = "d:\\NUnitTestDbs";
+    public const string systemDir = "c:\\NUnitTestDbs";
     [Test]
     public void AllSupported()
     {
@@ -102,6 +102,8 @@ namespace NUnitTests
         session.BeginUpdate();
         allSuported = new AllSupported(3);
         allSuported.Persist(session, allSuported);
+        allSuported.m_weakRefArray[0] = new WeakIOptimizedPersistableReference<IOptimizedPersistable>(allSuported);
+        allSuported.m_objectArray[0] = new WeakIOptimizedPersistableReference<IOptimizedPersistable>(allSuported);
         id = allSuported.Id;
         session.Commit();
       }

@@ -1033,9 +1033,45 @@ namespace NUnitTests
         session.Commit();
       }
     }
+
+    [Test]
+    public void VelocityDB_SaveKunde_Test()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        try
+        {
+          session.BeginUpdate();
+          var kunde = new KundeVelocityDB();
+          kunde.Kto = "4711";
+          kunde.KtoFoerderer = "4712";
+          kunde.Periode = 2016006;
+          session.Persist(kunde);
+          session.Commit();
+        }
+        catch (Exception e)
+        {
+          session.Abort();
+        }
+      }
+
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginRead();
+
+        var kunden = session.AllObjects<KundeVelocityDB>();
+        var query = from k in kunden
+                    where k.Kto.Contains("4711")
+                    select k;
+
+        Assert.AreEqual("4711", query.First()?.Kto);
+        Assert.AreEqual("4712", query.First()?.KtoFoerderer);
+        Assert.AreEqual(2016006, query.First()?.Periode);
+      }
+    }
   }
 
-public class VersionManager<T> : VelocityDbList<WeakIOptimizedPersistableReference<T>> where T : IOptimizedPersistable
+  public class VersionManager<T> : VelocityDbList<WeakIOptimizedPersistableReference<T>> where T : IOptimizedPersistable
 {
   public const UInt32 versionMangerDatabase = 100;
 

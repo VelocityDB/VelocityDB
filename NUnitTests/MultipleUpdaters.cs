@@ -172,14 +172,21 @@ namespace NUnitTests
         {
           session.BeginUpdate();
           session.RegisterClass(typeof(AutoPlacement)); // build in type but not yet registered as a one
+          session.RegisterClass(typeof(ObservableList<int>));
           session.RegisterClass(typeof(Dokument));
           UInt32 dbNum = session.DatabaseNumberOf(typeof(Dokument));
           Database db = session.OpenDatabase(dbNum, false, false);
           if (db == null)
             db = session.NewDatabase(dbNum, 0, typeof(Dokument).ToGenericTypeString());
+          Dokument doc = new Dokument();
+          session.Persist(doc);
           session.Commit();
         }
-        Parallel.ForEach(Enumerable.Range(1, 5), (num) => LockConflict());
+        using (ServerClientSessionShared sharedReadSession = new ServerClientSessionShared(systemDir))
+        {
+          sharedReadSession.BeginRead();
+          Parallel.ForEach(Enumerable.Range(1, 3), (num) => LockConflict(sharedReadSession));
+        }
       }
       finally
       {
@@ -187,17 +194,17 @@ namespace NUnitTests
       }
     }
 
-    void LockConflict()
+    void LockConflict(SessionBase sharedReadSession)
     {
       string host = null;
       Random r = new Random(5);
-      SessionPool sessionPool = new SessionPool(2, () => new ServerClientSession(systemDir, host, 2000, false));
+      SessionPool sessionPool = new SessionPool(3, () => new ServerClientSession(systemDir, host, 2000, false));
       try
       {
         int iCounter = 0;
         int sessionId1 = -1;
         SessionBase session1 = null;
-        for (int i = 0; i < 80; i++)
+        for (int i = 0; i < 50; i++)
         {
           try
           {
@@ -224,10 +231,13 @@ namespace NUnitTests
               sessionPool.FreeSession(sessionId2, session2);
             }
             session1.Commit();
+            sharedReadSession.ForceDatabaseCacheValidation();
             session1.BeginRead();
             ulong ct = session1.AllObjects<Dokument>(false).Count;
-            Console.WriteLine("Number of Dokument found: " + ct);
+            Console.WriteLine("Number of Dokument found by normal session: " + ct);
             session1.Commit();
+            ct = sharedReadSession.AllObjects<Dokument>(false).Count;
+            Console.WriteLine("Number of Dokument found by shared read session: " + ct);
           }
           finally
           {

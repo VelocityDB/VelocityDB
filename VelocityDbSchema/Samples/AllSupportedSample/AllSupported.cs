@@ -67,15 +67,23 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     }
   }
 
-  public class AllSupported : OptimizedPersistable
+  public interface ISomeStuff
+  {
+    List<Int16> Int16List { get; }
+  }
+
+  public class AllSupported : OptimizedPersistable, ISomeStuff
   {
     public enum ByteEnum : byte { a, b, c };
     public enum Int16Enum : short { a, b, c, d, e, f };
     public enum Int32Enum : int { a, b, c, d, e, f, g, h };
     public enum Int64Enum : long { a, b, c, dd, ee, ff };
+    ISomeStuff m_objectInterface;
     List<Int16Enum> enum16list;
     int[][] jaggedArray = new int[3][];
-    Person person; 
+    Person person;
+    object m_object;
+    public WeakIOptimizedPersistableReference<IOptimizedPersistable>[] m_weakRefArray;
     Pet aPet; // just a sample using a class that is not a subclass of OptimizedPersistable
     ByteEnum m_enumByte;
     public ByteEnum EnumByte
@@ -90,8 +98,10 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
         m_enumByte = value;
       }
     }
+    public object[] m_objectArray;
     Int16Enum m_enumInt16;
     Int32Enum m_enumInt32;
+    ISomeStuff[] m_objectInterfaceArray;
     public Int32Enum EnumInt32
     {
       get
@@ -573,6 +583,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       public Person value;
       public int next;
     }
+
     public AllSupported(Int32 arraySize)
     {
       enum16list = new List<Int16Enum>(arraySize);
@@ -586,8 +597,11 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       m_enumInt16 = Int16Enum.c;
       m_enumInt32 = Int32Enum.f;
       m_enumInt64 = Int64Enum.ff;
+      m_objectArray = new object[arraySize];
+      m_objectInterfaceArray = new ISomeStuff[arraySize];
       byteArray = new byte[arraySize];
       charArray = new char[arraySize];
+      m_weakRefArray = new WeakIOptimizedPersistableReference<IOptimizedPersistable>[arraySize];
       uint16Array = new UInt16[arraySize];
       uint32Array = new UInt32[arraySize];
       uint64Array = new UInt64[arraySize];
@@ -657,6 +671,8 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       }
       if (arraySize > 2)
       {
+        m_objectArray[1] = this;
+        m_objectInterfaceArray[2] = this;
         oidArray[2] = new Oid((ulong)66666);
         nullableOidArray[2] = new Oid((ulong)66666);
         nullableint32Array[2] = 6;
