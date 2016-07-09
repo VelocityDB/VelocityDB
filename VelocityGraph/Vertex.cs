@@ -520,16 +520,7 @@ namespace VelocityGraph
             }
           }
         }
-        if (pathInfo.EdgePath.Count >= maxHops || friends.Count == 0)
-        {
-          if (toVertex == null && pathInfo.EdgePath.Count <= maxHops)
-          {
-            resultPaths.Add(pathInfo.EdgePath);
-            if (!all)
-              return resultPaths;
-          }
-        }
-        else
+        if (pathInfo.EdgePath.Count < maxHops || friends.Count == 0)
           foreach (KeyValuePair<Vertex, HashSet<Edge>> v in friends)
           {
             if (pathInfo.Visited.Contains(v.Key) == false)
@@ -572,7 +563,15 @@ namespace VelocityGraph
                     if (validateEdges == null || validateEdges(path))
                     {
                       if (validateVertex == null || validateVertex(v.Key))
+                      {
                         q.Enqueue(newPath);
+                        if (toVertex == null && newPath.EdgePath.Count <= maxHops)
+                        {
+                          resultPaths.Add(newPath.EdgePath);
+                          if (!all)
+                            return resultPaths;
+                        }
+                      }
                     }
                   }
                 }

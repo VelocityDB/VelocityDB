@@ -503,7 +503,11 @@ namespace NUnitTests
         edge_set.Add(origin_for);
         edge_set.Add(arrives_at);
 
+        var toNull = sydney.Traverse(99, true, Direction.Out, null);
+
         var to_madrid = sydney.Traverse(99, true, Direction.Out, madrid); // (madrid, 99, false, edge_set);
+
+        Assert.GreaterOrEqual(toNull.Count, to_madrid.Count);
 
         foreach (List<Edge> list_edge in to_madrid)
         {
