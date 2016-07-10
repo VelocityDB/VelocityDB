@@ -34,6 +34,48 @@ namespace NUnitTests
       _count = 0;
     }
 
+    [Test]
+    public void ISerializableTest()
+    {
+      UInt64 id;
+      TestISerializable iser1 = null;
+      TestISerializableStruct isers1;
+      // UInt64 autoIncrement = 0;
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        iser1 = new TestISerializable();
+        id = session.Persist(iser1);
+        session.Commit();
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginRead();
+        var iser = session.Open<TestISerializable>(id);
+        Assert.AreEqual(iser1.m_intOne, iser.m_intOne);
+        Assert.AreEqual(iser1.m_stringOne, iser.m_stringOne);
+        Assert.AreNotEqual(iser1.m_notSerialized, iser.m_notSerialized);
+        session.Commit();
+      }
+
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        isers1 = new TestISerializableStruct("not");
+        id = session.Persist(isers1);
+        session.Commit();
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginRead();
+        var iser = session.Open<TestISerializableStruct>(id);
+        Assert.AreEqual(isers1.m_intOne, iser.m_intOne);
+        Assert.AreEqual(isers1.m_stringOne, iser.m_stringOne);
+        Assert.AreNotEqual(isers1.m_notSerialized, iser.m_notSerialized);
+        session.Commit();
+      }
+    }
+
     [TestCase(false, (UInt32)8676)]
     [TestCase(true, (UInt32)8677)]
     public void DatabaseVersion(bool standalone, UInt32 dbNumber)

@@ -60,6 +60,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NodaTime.1.3.2\lib\net35-Client\NodaTime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -68,8 +72,8 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=5.3.18.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.3.18\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=5.4.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.5.4\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -126,6 +130,7 @@
     <Compile Include="NUnit\LazyLoadByDepth.cs" />
     <Compile Include="NUnit\LazyLoadPropertyClass.cs" />
     <Compile Include="NUnit\ListWrapper.cs" />
+    <Compile Include="NUnit\LocalDateField.cs" />
     <Compile Include="NUnit\MeasurePoint.cs" />
     <Compile Include="NUnit\ObjWithArray.cs" />
     <Compile Include="NUnit\ObservableList.cs" />
@@ -135,6 +140,7 @@
     <Compile Include="NUnit\StringRecord.cs" />
     <Compile Include="NUnit\StringRecord2.cs" />
     <Compile Include="NUnit\TestClass.cs" />
+    <Compile Include="NUnit\TestISerializable.cs" />
     <Compile Include="NUnit\TestRec.cs" />
     <Compile Include="NUnit\TestRecord.cs" />
     <Compile Include="NUnit\Tick.cs" />
