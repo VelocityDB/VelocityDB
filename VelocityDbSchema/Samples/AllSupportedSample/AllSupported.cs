@@ -16,11 +16,16 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     Pet aPet;
     [UseOidShort]
     List<Pet> petListOidShort;
+    public Type[] m_type;
     public AllSuportedSub1(Int32 arraySize)
     {
       petListOidShort = new List<Pet>(arraySize);
       aPet = new Cat("Boze", 5);
       petListOidShort.Add(aPet);
+      m_type = new Type[5];
+      m_type[0] = typeof(Pet);
+      m_type[1] = typeof(AllSuportedSub1);
+      m_type[3] = typeof(OptimizedPersistable);
     }
   }
 
