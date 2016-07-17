@@ -144,8 +144,8 @@
       <HintPath>..\packages\VelocityDB.5.4.1\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="VelocityGraph, Version=2.8.45.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.2.8.45\lib\Net40\VelocityGraph.dll</HintPath>
+    <Reference Include="VelocityGraph, Version=2.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.2.9\lib\Net40\VelocityGraph.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

@@ -185,17 +185,17 @@ namespace VelocityGraph
       switch (direction)
       {
         case Direction.Out:
-          foreach (IEdge edge in GetOutEdges(labels).ToArray())
+          foreach (IEdge edge in GetOutEdges(labels))
             yield return edge;
           break;
         case Direction.In:
-          foreach (IEdge edge in GetInEdges(labels).ToArray())
+          foreach (IEdge edge in GetInEdges(labels))
             yield return edge;
           break;
         default:
-          foreach (IEdge edge in GetInEdges(labels).ToArray())
+          foreach (IEdge edge in GetInEdges(labels))
             yield return edge;
-          foreach (IEdge edge in GetOutEdges(labels).ToArray())
+          foreach (IEdge edge in GetOutEdges(labels))
             yield return edge;
           break;
       };
@@ -421,7 +421,7 @@ namespace VelocityGraph
       if (includedVertexProperty != null)
       {
         vertexPropertyTypesToFind = new HashSet<PropertyType>(includedVertexProperty);
-        foreach (PropertyType pt in vertexPropertyTypesToFind.ToArray())
+        foreach (PropertyType pt in vertexPropertyTypesToFind)
         {
           if (pt.HasPropertyValue(VertexId))
             vertexPropertyTypesToFind.Remove(pt);
@@ -482,7 +482,7 @@ namespace VelocityGraph
                 {
                   foreach (Edge edgeInPath in edgePath)
                   {
-                    foreach (PropertyType pt in vertexPropertyTypesToFind.ToArray())
+                    foreach (PropertyType pt in vertexPropertyTypesToFind)
                     {
                       if (pt.HasPropertyValue(edgeInPath.Tail.VertexId))
                         vertexPropertyTypesToFind.Remove(pt);
@@ -497,7 +497,7 @@ namespace VelocityGraph
                 {
                   foreach (Edge edgeInPath in edgePath)
                   {
-                    foreach (PropertyType pt in edgePropertyTypesToFind.ToArray())
+                    foreach (PropertyType pt in edgePropertyTypesToFind)
                     {
                       if (pt.HasPropertyValue(edgeInPath.EdgeId))
                         edgePropertyTypesToFind.Remove(pt);

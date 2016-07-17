@@ -915,9 +915,9 @@ namespace NUnitTests
         //define schema                       Trace.Wri
 
 
-        VertexType[] vertexTypes = graph.FindVertexTypes();
+        var vertexTypes = graph.FindVertexTypes();
         //vertexTypes.Select(x => x.TypeName).PrintDump();
-        EdgeType[] edgeTypes = graph.FindEdgeTypes();
+        var edgeTypes = graph.FindEdgeTypes();
 
         VertexType concept = vertexTypes.FirstOrDefault(x => x.TypeName == "Concept") ?? graph.NewVertexType("Concept");
 

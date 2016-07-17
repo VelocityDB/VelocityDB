@@ -1300,18 +1300,18 @@ namespace VelocityGraph
     /// Get an array of all vertex types in this graph
     /// </summary>
     /// <returns>an array of vertex types</returns>
-    public VertexType[] FindVertexTypes()
+    public IEnumerable<VertexType> FindVertexTypes()
     {
-      return VertexTypes.Where(vt => vt != null).ToArray(); // null if VertexType was unpersisted;
+      return VertexTypes.Where(vt => vt != null); // null if VertexType was unpersisted;
     }
 
     /// <summary>
     /// Get an array of all edge types in this graph
     /// </summary>
     /// <returns>an array of edge types</returns>
-    public EdgeType[] FindEdgeTypes()
+    public IEnumerable<EdgeType> FindEdgeTypes()
     {
-      return EdgeTypes.Where(et => et != null).ToArray(); // null if EdgeType was unpersisted
+      return EdgeTypes.Where(et => et != null); // null if EdgeType was unpersisted
     }
 
     /// <summary>
