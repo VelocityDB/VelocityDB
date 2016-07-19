@@ -191,7 +191,7 @@ namespace SupplierTracking
       foreach (IEdge wareHouseEdge in supplier.GetEdges(supplierWarehouseEdgeType, Direction.Out))
       {
         Vertex supplierWareHouse = (Vertex)wareHouseEdge.GetVertex(Direction.In);
-        var allPaths = supplierWareHouse.Traverse(10, true, Direction.Out, toVertex, edgeTypesToTraverse, null, excludeSet);
+        var allPaths = supplierWareHouse.Traverse(10, true, Direction.Out, toVertex, edgeTypesToTraverse, null, null, null, excludeSet);
         foreach (List<Edge> path in allPaths)
         {
           if (path.Count > 0)

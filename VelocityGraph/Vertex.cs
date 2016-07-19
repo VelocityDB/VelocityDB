@@ -367,6 +367,8 @@ namespace VelocityGraph
     /// <param name="dir">Direction to traverse edges</param>
     /// <param name="toVertex">the goal Vertex. If null, finds all paths</param>
     /// <param name="edgeTypesToTraverse">the type of edges to follow, by default null which means follow all edge types</param>
+    /// <param name="includedVertexTypes">the type of vertices's to follow, by default null which means follow all vertex types</param>
+    /// <param name="excludedVertexTypes">the type of vertices's not to follow, by default null</param>
     /// <param name="includedVertices">one or more Vertex instances that MUST be in the path for the path to be traversed i.e. if a path does exist
     /// to the specified toVertex, but does not include all the instances in includedVertices set, the Traverse method will exclude that path</param>
     /// <param name="excludedVertices">one or more Vertex instances that MUST NOT be in the path for the path to be traversed i.e. if a path does exist
@@ -387,7 +389,8 @@ namespace VelocityGraph
     /// <param name="validateEdge">A function that will be called before accepting an Edge in path to toVertex. If function returns true then this Edge is accepted in path; otherwise edge is rejected</param>
     /// <param name="validateEdges">A function that will be called before accepting a candidate Edges list in path to toVertex. If function returns true then this Edge list is accepted in path; otherwise edge list is rejected</param>
     /// <returns>List of paths to goal Vertex</returns>
-    public List<List<Edge>> Traverse(int maxHops, bool all = true, Direction dir = Direction.Both, Vertex toVertex = null, ISet<EdgeType> edgeTypesToTraverse = null, ISet<Vertex> includedVertices = null, ISet<Vertex> excludedVertices = null,
+    public List<List<Edge>> Traverse(int maxHops, bool all = true, Direction dir = Direction.Both, Vertex toVertex = null, ISet<EdgeType> edgeTypesToTraverse = null,
+      ISet<VertexType> includedVertexTypes = null, ISet<VertexType> excludedVertexTypes = null, ISet<Vertex> includedVertices = null, ISet<Vertex> excludedVertices = null,
       ISet<Edge> includedEdges = null, ISet<Edge> excludedEdges = null, ISet<PropertyType> includedVertexProperty = null, ISet<PropertyType> excludedVertexProperty = null,
       ISet<PropertyType> includedEdgeProperty = null, ISet<PropertyType> excludedEdgeProperty = null, Func<Vertex, bool> validateVertex = null, Func<Edge, bool> validateEdge = null,
       Func<List<Edge>, bool> validateEdges = null)
@@ -562,7 +565,10 @@ namespace VelocityGraph
                     newPath.Visited.Add(v.Key);
                     if (validateEdges == null || validateEdges(path))
                     {
-                      if (validateVertex == null || validateVertex(v.Key))
+                      bool vertexTypeIncluded = includedVertexTypes == null || includedVertexTypes.Contains(v.Key.VertexType);
+                      bool vertexTypeExcluded = excludedVertexTypes != null && excludedVertexTypes.Contains(v.Key.VertexType);
+                      bool validVertex = validateVertex == null || validateVertex(v.Key);
+                      if (vertexTypeIncluded && validVertex && !vertexTypeExcluded)
                       {
                         q.Enqueue(newPath);
                         if (toVertex == null && newPath.EdgePath.Count <= maxHops)

@@ -13,6 +13,7 @@ using VelocityDbSchema.NUnit;
 using VelocityDb.Collection.Comparer;
 using VelocityDb.Collection.BTree;
 using System.Threading.Tasks;
+using NMoneys;
 
 namespace NUnitTests
 {
@@ -40,7 +41,7 @@ namespace NUnitTests
       UInt64 id;
       TestISerializable iser1 = null;
       TestISerializableStruct isers1;
-      // UInt64 autoIncrement = 0;
+      MoneyTest money;
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
@@ -72,6 +73,32 @@ namespace NUnitTests
         Assert.AreEqual(isers1.m_intOne, iser.m_intOne);
         Assert.AreEqual(isers1.m_stringOne, iser.m_stringOne);
         Assert.AreNotEqual(isers1.m_notSerialized, iser.m_notSerialized);
+        session.Commit();
+      }
+
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        money = new MoneyTest("def", new Money(100, CurrencyIsoCode.AUD));
+        id = session.Persist(money);
+        MoneyTest test = new MoneyTest("abc", new Money(100, CurrencyIsoCode.AUD));
+
+        var res = test.Field3.Equals(money.Field3);
+
+        foreach (var test_value in session.AllObjects<MoneyTest>()) // this works
+        {
+          Trace.WriteLine(test_value);
+        }
+        session.Commit();
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginRead();
+        var iser = session.Open<MoneyTest>(id);
+        foreach (var test_value in session.AllObjects<MoneyTest>()) // this fails
+        {
+          Trace.WriteLine(test_value);
+        }
         session.Commit();
       }
     }
@@ -457,6 +484,34 @@ namespace NUnitTests
         var comp = dict.Comparer;
         if (dict["Mats"] != 52)
           throw new Exception("failed");
+        session.Commit();
+      }
+    }
+
+    void DictionaryTestTony()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        Test test1 = new Test("def", 1);
+        session.Persist(test1);
+        Test test = new Test("abc", 2);
+        session.Persist(test);
+        var res = test.Field3.Equals(test1.Field3);
+        foreach (var test_value in session.AllObjects<Test>()) // this works
+          Trace.WriteLine(test_value);
+        Test2 t2 = new Test2("xxxx");
+        session.Persist(t2);
+        t2.Dict_Field.Add(test1, 1);
+        t2.Dict_Field.Add(test, 2);
+        session.Commit();
+      }
+
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        foreach (var test_value in session.AllObjects<Test2>()) // this fails
+          Trace.WriteLine(test_value);
         session.Commit();
       }
     }
