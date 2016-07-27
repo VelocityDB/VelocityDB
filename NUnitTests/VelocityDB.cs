@@ -58,12 +58,12 @@ namespace UnitTests
       //as this test is to verify it does not hang we do it in separate thread and kill after timeout
       ReturnSessionToCache(lSession);
       lSession = GetCachedSession();
-      counter = lSession.AllObjects<TestClass>(true, false).Count();
+      counter = (int) lSession.AllObjects<TestClass>(true, false).Count();
       ReturnSessionToCache(lSession);
       Thread lThread = new Thread(new ThreadStart(() =>
               {
                 lSession = GetCachedSession();
-                counter = lSession.AllObjects<TestClass>(true, false).Count();
+                counter = (int) lSession.AllObjects<TestClass>(true, false).Count();
                 ReturnSessionToCache(lSession);
               }));
       lThread.Start();

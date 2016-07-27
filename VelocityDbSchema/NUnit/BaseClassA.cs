@@ -46,6 +46,17 @@ namespace VelocityDbSchema.NUnit
       }
     }
   }
+  public class ClassFromB : ClassB
+  {
+    string m_classfromB = "ClassFromB";
+    public override string ClassName
+    {
+      get
+      {
+        return m_classfromB;
+      }
+    }
+  }
 
   public class ClassC : BaseClassA
   {

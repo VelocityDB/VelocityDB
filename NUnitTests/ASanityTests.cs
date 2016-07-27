@@ -199,7 +199,7 @@ namespace NUnitTests
       session.BeginRead();
       Database db = session.OpenDatabase(dbNumber);
       AllObjects<VelocityDbSchema.Samples.Sample1.Person> allPersons = db.AllObjects<VelocityDbSchema.Samples.Sample1.Person>();
-      int ct = allPersons.Count();
+      ulong ct = allPersons.Count();
       List<VelocityDbSchema.Samples.Sample1.Person> personList = db.AllObjects<VelocityDbSchema.Samples.Sample1.Person>().ToList();
       Assert.IsEmpty(personList);
       session.Commit();
@@ -1090,7 +1090,7 @@ namespace NUnitTests
             if (session.InTransaction == false)
               session.BeginRead();
             var allMen = session.AllObjects<Man>();
-            int allMenCt = allMen.Count();
+            ulong allMenCt = allMen.Count();
             foreach (Man man in allMen)
             {
               double lat = man.Lattitude;

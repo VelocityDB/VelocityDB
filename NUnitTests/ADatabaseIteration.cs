@@ -162,10 +162,10 @@ namespace NUnitTests
         UInt32 dbNum = session.DatabaseNumberOf(typeof(NotSharingPage));
         Database db = session.OpenDatabase(dbNum);
         AllObjects<NotSharingPage> all = db.AllObjects<NotSharingPage>();
-        int ct = all.Count();
+        ulong ct = all.Count();
         dbNum = session.DatabaseNumberOf(typeof(SharingPageTypeA));
         OfType ofType = db.OfType(typeof(NotSharingPage));
-        int ct2 = (int)ofType.Count;
+        ulong ct2 = ofType.Count();
         Assert.AreEqual(ct, ct2);
         Database dbA = session.OpenDatabase(dbNum);
         dbNum = session.DatabaseNumberOf(typeof(SharingPageTypeB));
@@ -198,7 +198,7 @@ namespace NUnitTests
           sB = allB.ElementAt(i);
         for (int i = 0; i < numObj; i += 45000)
           ns = all.ElementAt(i);
-        int allB_count = allB.Count();
+        int allB_count = (int) allB.Count();
         for (int i = 0; i < allB_count - 1; i++)
         {
           Assert.NotNull(allB.ElementAt(i));
@@ -270,8 +270,8 @@ namespace NUnitTests
         AllObjects<SharingPageTypeA> allA = session.AllObjects<SharingPageTypeA>(true, false);
         AllObjects<SharingPageTypeB> allB = session.AllObjects<SharingPageTypeB>(true, false);
         int start = numObj / 2;
-        NotSharingPage ns = all.ElementAt(numObj);
-        NotSharingPage ns2 = (NotSharingPage)all2.ElementAt(numObj);
+        NotSharingPage ns = all.ElementAt(numObj - 1); // zero based index so deduct one
+        NotSharingPage ns2 = (NotSharingPage)all2.ElementAt(numObj - 1);
         Assert.AreEqual(ns, ns2);
         SharingPageTypeA sA = allA.ElementAt(15);
         SharingPageTypeB sB = allB.ElementAt(10);

@@ -50,6 +50,12 @@ namespace NUnitTests
         }
         ClassD d = new ClassD();
         session.Persist(d);
+
+        for (int i = 0; i < 5; i++)
+        {
+          var classFromB = new ClassFromB();
+          session.Persist(classFromB);
+        }
         session.Commit();
       }
 
@@ -57,23 +63,35 @@ namespace NUnitTests
       {
         session.BeginRead();
         Assert.AreEqual(5, session.AllObjects<BaseClassA>(false).Count);
-        Assert.AreEqual(15, session.AllObjects<BaseClassA>().Count);
+        int ct = session.AllObjects<BaseClassA>(true).Skip(5).Count();
+        Assert.Less(5, ct);
+        object obj = session.AllObjects<BaseClassA>(true).Skip(5).First();
+        Assert.NotNull(obj);
+        obj = session.AllObjects<BaseClassA>(true).Skip(6).First();
+        Assert.NotNull(obj);
+        Assert.AreEqual(20, session.AllObjects<BaseClassA>().Count);
         Assert.AreEqual(5, session.AllObjects<ClassB>(false).Count);
-        Assert.AreEqual(5, session.AllObjects<ClassB>().Count);
+        Assert.AreEqual(10, session.AllObjects<ClassB>().Count);
+        obj = session.AllObjects<ClassB>(true).Skip(5).First();
+        Assert.NotNull(obj);
+        obj = session.AllObjects<ClassB>(true).Skip(4).First();
+        Assert.NotNull(obj);
+        obj = session.AllObjects<ClassB>(true).Skip(6).First();
+        Assert.NotNull(obj);
         Assert.AreEqual(5, session.AllObjects<ClassC>(false).Count);
         Assert.AreEqual(5, session.AllObjects<ClassC>().Count);
-        int ct = 0;
+        ct = 0;
         foreach (var o in session.AllObjects<BaseClassA>(false))
           ++ct;
         Assert.AreEqual(5, ct);
         ct = 0;
         foreach (var o in session.AllObjects<BaseClassA>())
           ++ct;
-        Assert.AreEqual(15, ct);
+        Assert.AreEqual(20, ct);
         ct = 0;
         foreach (var o in session.AllObjects<ClassB>())
           ++ct;
-        Assert.AreEqual(5, ct);
+        Assert.AreEqual(10, ct);
         ct = 0;
         foreach (var o in session.AllObjects<ClassC>())
           ++ct;
