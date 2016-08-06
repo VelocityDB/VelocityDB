@@ -1499,6 +1499,7 @@ namespace VelocityWeb.Secure
           else
           {
             Issue existingIssue = (Issue)session.Open(newValues.Id);
+            User user = lookupUser(issueTracker, session);
             if (existingIssue.Summary != newValues.Summary)
             {
               issueTracker.IssueSetBySummary.Remove(existingIssue);
@@ -1513,7 +1514,12 @@ namespace VelocityWeb.Secure
               existingIssue.DueDate = newValues.DueDate;
               issueTracker.IssueSetByDueDate.Add(existingIssue);
             }
-
+            if (existingIssue.LastUpdatedBy != user)
+            {
+              issueTracker.IssueSetByLastUpdatedBy.Remove(existingIssue);
+              existingIssue.LastUpdatedBy = user;
+              issueTracker.IssueSetByLastUpdatedBy.Add(existingIssue);
+            }
             issueTracker.IssueSetByDateTimeUpdated.Remove(existingIssue);
             existingIssue.DateTimeLastUpdated = DateTime.Now;
             issueTracker.IssueSetByDateTimeUpdated.Add(existingIssue);
@@ -1621,6 +1627,7 @@ namespace VelocityWeb.Secure
             existingProject.Description = newValues.Description;
           }
           session.Commit();
+          s_sharedReadOnlySession.ForceDatabaseCacheValidation();
         }
       }
       catch (System.Exception ex)

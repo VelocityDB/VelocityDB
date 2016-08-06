@@ -248,6 +248,11 @@ namespace VelocityDbSchema.Tracker
       {
         return m_lastUpdatedBy;
       }
+      set
+      {
+        Update();
+        m_lastUpdatedBy = value;
+      }
     }
 
 
