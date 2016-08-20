@@ -76,14 +76,15 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=5.4.6.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.4.6\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=5.5.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.5.5.0\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayOfWeakrefs.cs" />
     <Compile Include="EntityNewsData.cs" />
+    <Compile Include="GeoObj.cs" />
     <Compile Include="Imdb\ActingByNameComparer.cs" />
     <Compile Include="Imdb\Actor.cs" />
     <Compile Include="Imdb\Actress.cs" />
@@ -315,6 +316,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VelocityDBExtensions\VelocityDBExtensions.csproj">
+      <Project>{a2e1e184-5303-4a75-9133-546631f4a63c}</Project>
+      <Name>VelocityDBExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

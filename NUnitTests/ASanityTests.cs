@@ -26,10 +26,10 @@ namespace NUnitTests
   [TestFixture]
   public class ASanityTests
   {
-    public const string systemDir = "c:\\NUnitTestDbs";
+    public const string systemDir = "c:/NUnitTestDbs";
     private int _count;
 
-    [TestFixtureSetUp]
+    [OneTimeSetUp]
     public void TestFixtureSetUp()
     {
       _count = 0;
@@ -1146,7 +1146,7 @@ namespace NUnitTests
           session.Persist(kunde);
           session.Commit();
         }
-        catch (Exception e)
+        catch (Exception)
         {
           session.Abort();
         }

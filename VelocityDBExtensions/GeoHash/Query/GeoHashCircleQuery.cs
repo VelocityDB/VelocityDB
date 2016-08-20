@@ -87,5 +87,7 @@ namespace VelocityDB.geohash.query
     {
       return m_query.Contains(point);
     }
+
+    public BoundingBox BoundingBox => m_query.BoundingBox;
   }
 }

@@ -67,14 +67,15 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
-    <Reference Include="VelocityDb, Version=5.4.6.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.4.6\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=5.5.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.5.5.0\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -91,6 +92,7 @@
     <Compile Include="DatabaseLocationTest.cs" />
     <Compile Include="DatabaseTest.cs" />
     <Compile Include="DateTimeTest.cs" />
+    <Compile Include="DynamicObjectTest.cs" />
     <Compile Include="ElectionTest.cs" />
     <Compile Include="FileFolderTest.cs" />
     <Compile Include="FixedSizeData.cs" />

@@ -121,5 +121,7 @@ namespace VelocityDB.geohash.query
         return "BOX(" + m_boundingBox.MinLon + " " + m_boundingBox.MinLat + "," + m_boundingBox.MaxLon + " " + m_boundingBox.MaxLat + ")";
       }
     }
+
+    public BoundingBox BoundingBox => m_boundingBox;
   }
 }
