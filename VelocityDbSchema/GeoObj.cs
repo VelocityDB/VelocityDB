@@ -13,14 +13,14 @@ namespace VelocityDbSchema
   {
     public static Random s_randGen = new Random(5);
     double m_longitude;
-    double m_lattitude;
+    double m_latitude;
     long m_geoHash;
 
     public GeoObj()
     {
       m_longitude = (s_randGen.Next(360) - 180) * s_randGen.NextDouble();
-      m_lattitude = (s_randGen.Next(180) - 90) * s_randGen.NextDouble();
-      m_geoHash = VelocityDB.geohash.GeoHash.WithBitPrecision(m_lattitude, m_longitude).LongValue;
+      m_latitude = (s_randGen.Next(180) - 90) * s_randGen.NextDouble();
+      m_geoHash = VelocityDB.geohash.GeoHash.WithBitPrecision(m_latitude, m_longitude).LongValue;
     }
 
     public GeoObj(long geoHash)
@@ -28,16 +28,16 @@ namespace VelocityDbSchema
       m_geoHash = geoHash;
     }
 
-    public double Lattitude
+    public double Latitude
     {
       get
       {
-        return m_lattitude;
+        return m_latitude;
       }
       set
       {
         Update();
-        m_lattitude = value;
+        m_latitude = value;
       }
     }
 

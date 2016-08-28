@@ -54,6 +54,179 @@ namespace NUnitTests
         Console.WriteLine("***************Complete***************");
       }
 
+      #region Dynamic DateTime Tests
+
+      [Test]
+      [Category("VelocityDb Dynamic")]
+      [Property("Time", "Short")]
+      public void DynamicDictionaryDateTimeTest()
+      {
+        ExecuteDateTimeTests<DynamicDictionary>();
+      }
+
+      [Test]
+      [Category("VelocityDb Dynamic")]
+      [Property("Time", "Short")]
+      public void PersistableDynamicDictionaryDateTimeTest()
+      {
+        ExecuteDateTimeTests<PersistableDynamicDictionary>();
+      }
+
+      private void ExecuteDateTimeTests<T>()
+          where T : DynamicDictionary, new()
+      {
+        Console.WriteLine("\n***************Saving...***************");
+
+        ulong id = 0;
+        using (var session = new SessionNoServer(SystemDir))
+        {
+          session.BeginUpdate();
+
+          var person = CreateScheduledPerson<T>();
+
+          id = session.Persist(person);
+
+          session.Commit();
+        }
+
+        Console.WriteLine("***************Complete***************");
+
+        Console.WriteLine("\n***************Loading...***************");
+
+        using (var session = new SessionNoServer(SystemDir))
+        {
+          session.BeginRead();
+
+          var person = session.Open(id);
+
+          AssertScheduledPerson(person);
+
+          session.Commit();
+        }
+
+        using (var session = new SessionNoServer(SystemDir))
+        {
+          session.BeginRead();
+
+          var persons = session.AllObjects<T>().ToList();
+
+          Assert.IsNotNull(persons);
+          Assert.IsTrue(persons.Count == 1);
+
+          AssertScheduledPerson(persons[0]);
+
+          session.Commit();
+        }
+
+        Console.WriteLine("***************Complete***************");
+      }
+
+      private dynamic CreateScheduledPerson<T>()
+          where T : DynamicDictionary, new()
+      {
+        dynamic person = new T();
+
+        GenerateRandomDateTimes();
+
+        person.TypeName = s_TestDynamicPerson;
+        person.FirstName = "Jake";
+        person.LastName = "Scheduled";
+        person.Default = new DateTime();
+        person.Random1 = _randomDateTimes[0];
+        person.Random2 = _randomDateTimes[1];
+        person.Random3 = _randomDateTimes[2];
+        person.Random4 = _randomDateTimes[3];
+        person.Random5 = _randomDateTimes[4];
+        person.Random6 = _randomDateTimes[5];
+        person.Random7 = _randomDateTimes[6];
+        person.Random8 = _randomDateTimes[7];
+        person.Random9 = _randomDateTimes[8];
+        person.Random10 = _randomDateTimes[9];
+        person.Now = DateTime.Now;
+        person.UtcNow = DateTime.UtcNow;
+        person.Today = DateTime.Today;
+        person.TenYearsAgo = DateTime.Today.AddYears(-10);
+        person.TenYearsFromToday = DateTime.Today.AddYears(10);
+        person.NextMonth = DateTime.Today.AddMonths(1);
+        person.LastMonth = DateTime.Today.AddMonths(-1);
+        person.Yesterday = DateTime.Today.AddDays(-1);
+        person.Tomorrow = DateTime.Today.AddDays(1);
+        person.ThirtyDaysLater = DateTime.Today.AddDays(30);
+        person.FortyFiveDaysLater = DateTime.Today.AddDays(45);
+        person.NintyDaysLater = DateTime.Today.AddDays(90);
+        person.NowTomorrow = DateTime.Now.AddDays(1);
+        person.NowYesterday = DateTime.Now.AddDays(-1);
+        person.UtcNowIn30Days = DateTime.UtcNow.AddDays(30);
+        person.UtcNow30DaysAgo = DateTime.UtcNow.AddDays(-30);
+        person.UtcNowNextYear = DateTime.UtcNow.AddYears(1);
+        person.UtcNowLastYear = DateTime.UtcNow.AddYears(-1);
+        person.UtcNowNextMonth = DateTime.UtcNow.AddMonths(1);
+        person.UtcNowLastMonth = DateTime.UtcNow.AddMonths(-1);
+
+        return person;
+      }
+
+      private void GenerateRandomDateTimes()
+      {
+        for (var idx = 0; idx < 10; idx++)
+          _randomDateTimes[idx] = CreateDateTime();
+      }
+
+      private readonly Random _randGenerator = new Random();
+      private readonly DateTime[] _randomDateTimes = new DateTime[10];
+      private DateTime CreateDateTime()
+      {
+        var year = _randGenerator.Next(DateTime.MinValue.Year, DateTime.MaxValue.Year);
+        var month = _randGenerator.Next(1, 12);
+        var day = _randGenerator.Next(1, DateTime.DaysInMonth(year, month));
+
+        return new DateTime(year, month, day);
+      }
+
+      private void AssertScheduledPerson(dynamic dynamicTestPerson)
+      {
+        // Person 3 Asserts
+        Assert.IsNotNull(dynamicTestPerson, "Null Person3");
+        Assert.IsTrue(dynamicTestPerson.TypeName == s_TestDynamicPerson, "TypeName");
+        Assert.IsTrue(dynamicTestPerson.FirstName == "Jake", "FirstName");
+        Assert.IsTrue(dynamicTestPerson.LastName == "Scheduled", "LastName");
+
+        Assert.IsTrue(dynamicTestPerson.Default == new DateTime(), "Default");
+
+        Assert.IsTrue(dynamicTestPerson.Random1 == _randomDateTimes[0], "Random1");
+        Assert.IsTrue(dynamicTestPerson.Random2 == _randomDateTimes[1], "Random2");
+        Assert.IsTrue(dynamicTestPerson.Random3 == _randomDateTimes[2], "Random3");
+        Assert.IsTrue(dynamicTestPerson.Random4 == _randomDateTimes[3], "Random4");
+        Assert.IsTrue(dynamicTestPerson.Random5 == _randomDateTimes[4], "Random5");
+        Assert.IsTrue(dynamicTestPerson.Random6 == _randomDateTimes[5], "Random6");
+        Assert.IsTrue(dynamicTestPerson.Random7 == _randomDateTimes[6], "Random7");
+        Assert.IsTrue(dynamicTestPerson.Random8 == _randomDateTimes[7], "Random8");
+        Assert.IsTrue(dynamicTestPerson.Random9 == _randomDateTimes[8], "Random9");
+        Assert.IsTrue(dynamicTestPerson.Random10 == _randomDateTimes[9], "Random10");
+
+        Assert.IsTrue(dynamicTestPerson.Now <= DateTime.Now, "Now");
+        Assert.IsTrue(dynamicTestPerson.UtcNow <= DateTime.UtcNow, "UtcNow");
+        Assert.IsTrue(dynamicTestPerson.Today == DateTime.Today, "Today");
+        Assert.IsTrue(dynamicTestPerson.TenYearsAgo == DateTime.Today.AddYears(-10), "TenYearsAgo");
+        Assert.IsTrue(dynamicTestPerson.TenYearsFromToday == DateTime.Today.AddYears(10), "TenYearsFromToday");
+        Assert.IsTrue(dynamicTestPerson.NextMonth == DateTime.Today.AddMonths(1), "NextMonth");
+        Assert.IsTrue(dynamicTestPerson.LastMonth == DateTime.Today.AddMonths(-1), "LastMonth");
+        Assert.IsTrue(dynamicTestPerson.Yesterday == DateTime.Today.AddDays(-1), "Yesterday");
+        Assert.IsTrue(dynamicTestPerson.Tomorrow == DateTime.Today.AddDays(1), "Tomorrow");
+        Assert.IsTrue(dynamicTestPerson.ThirtyDaysLater == DateTime.Today.AddDays(30), "ThirtyDaysLater");
+        Assert.IsTrue(dynamicTestPerson.FortyFiveDaysLater == DateTime.Today.AddDays(45), "FortyFiveDaysLater");
+        Assert.IsTrue(dynamicTestPerson.NintyDaysLater == DateTime.Today.AddDays(90), "NintyDaysLater");
+        Assert.IsTrue(dynamicTestPerson.NowTomorrow <= DateTime.Now.AddDays(1), "NowTomorrow");
+        Assert.IsTrue(dynamicTestPerson.NowYesterday <= DateTime.Now.AddDays(-1), "NowYesterday");
+        Assert.IsTrue(dynamicTestPerson.UtcNowIn30Days <= DateTime.UtcNow.AddDays(30), "UtcNowIn30Days");
+        Assert.IsTrue(dynamicTestPerson.UtcNow30DaysAgo <= DateTime.UtcNow.AddDays(-30), "UtcNow30DaysAgo");
+        Assert.IsTrue(dynamicTestPerson.UtcNowNextYear <= DateTime.UtcNow.AddYears(1), "UtcNowNextYear");
+        Assert.IsTrue(dynamicTestPerson.UtcNowLastYear <= DateTime.UtcNow.AddYears(-1), "UtcNowLastYear");
+        Assert.IsTrue(dynamicTestPerson.UtcNowNextMonth <= DateTime.UtcNow.AddMonths(1), "UtcNowNextMonth");
+        Assert.IsTrue(dynamicTestPerson.UtcNowLastMonth <= DateTime.UtcNow.AddMonths(-1), "UtcNowLastMonth");
+      }
+      #endregion Dynamic DateTime Tests
+
       [Test]
       [Category("VelocityDb Dynamic")]
       [Property("Time", "Short")]

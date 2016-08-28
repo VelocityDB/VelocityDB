@@ -21,7 +21,7 @@ namespace Verify
       {
         using (SessionNoServer session = new SessionNoServer(args[0]))
         {
-          DataCache.MaximumMemoryUse = 5000000000; // 5 GB, set this to what fits your case
+          DataCache.MaximumMemoryUse = 10000000000; // 10 GB, set this to what fits your case
           session.BeginRead();
           List<Database> dbList = session.OpenAllDatabases();
           foreach (Database db in dbList)
@@ -36,10 +36,10 @@ namespace Verify
                   OptimizedPersistable pObj = iPers as OptimizedPersistable;
                   if (pObj != null)
                   {
-                    pObj.LoadFields();
+                    session.LoadFields(pObj);
                     foreach (OptimizedPersistable fObj in pObj.OptimizedPersistableFieldValues())
                     {
-                      fObj.LoadFields();
+                      session.LoadFields(fObj);
                     }
                     foreach (object value in pObj.GetFieldValues())
                     {

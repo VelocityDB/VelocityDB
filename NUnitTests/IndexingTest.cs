@@ -38,7 +38,7 @@ namespace NUnitTests
 
     string DisplayData(bool useServerSession)
     {
-      using (SessionBase session = useServerSession ? (SessionBase) new ServerClientSession(systemDir) : (SessionBase) new SessionNoServer(systemDir))
+      using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
       {
         StringBuilder sb = new StringBuilder();
         session.BeginRead();
@@ -255,7 +255,7 @@ namespace NUnitTests
         {
           Assert.NotNull(p);
           ++ct;
-        } 
+        }
         session.Commit();
         session.BeginRead();
         ct = 0;
@@ -263,7 +263,7 @@ namespace NUnitTests
         {
           Assert.NotNull(mc);
           ++ct;
-        } 
+        }
         Assert.AreEqual(ct, 10000);
         session.Commit();
         session.BeginRead();
@@ -272,7 +272,7 @@ namespace NUnitTests
         {
           Assert.NotNull(mc);
           ++ct;
-        } 
+        }
         Assert.AreEqual(ct, 10000);
         session.Abort();
         session.BeginRead();
@@ -281,7 +281,7 @@ namespace NUnitTests
         {
           Assert.NotNull(mc);
           ++ct;
-        } 
+        }
         Assert.AreEqual(ct, 10000);
         session.Commit();
         session.BeginRead();
@@ -290,8 +290,8 @@ namespace NUnitTests
         {
           Assert.NotNull(mc);
           ++ct;
-        } 
-        Assert.AreEqual(ct, 10000);  
+        }
+        Assert.AreEqual(ct, 10000);
         session.Abort();
         session.BeginRead();
         ct = 0;
@@ -299,7 +299,7 @@ namespace NUnitTests
         {
           Assert.NotNull(mc);
           ++ct;
-        } 
+        }
         Assert.AreEqual(ct, 10000);
         session.Commit();
         try
@@ -309,7 +309,7 @@ namespace NUnitTests
           {
             Assert.NotNull(mc);
             ++ct;
-          } 
+          }
           Assert.AreEqual(ct, 10000);
         }
         catch (NotInTransactionException ex)
@@ -336,7 +336,7 @@ namespace NUnitTests
         {
           Assert.NotNull(mc);
           ++ct;
-        } 
+        }
         Assert.AreEqual(ct, 5000);
         ct = 0;
         foreach (Motorcycle mc in session.Index<Motorcycle>("cc"))
@@ -381,7 +381,7 @@ namespace NUnitTests
         {
           Assert.NotNull(mc);
           ++ct;
-        } 
+        }
         Assert.AreEqual(ct, 100000);
         session.Abort();
         session.BeginUpdate();
@@ -500,7 +500,7 @@ namespace NUnitTests
         for (int i = 0; i < 1; i++)
         {
           registrationState = RandomString(2);
-          registrationPlate = RandomString(12);         
+          registrationPlate = RandomString(12);
           car = new Car(color, maxPassengers, fuelCapacity, litresPer100Kilometers, modelYear, brandName, modelName, maxSpeed, odometer, registrationState, registrationPlate, insuranceCompany, insurancePolicy);
           session.Persist(car);
           color = null;
@@ -748,6 +748,33 @@ namespace NUnitTests
             Console.WriteLine(obj.Key + " " + obj.Data.Count);
           }
         }
+        session.Commit();
+      }
+    }
+
+    [TestCase(false)]
+    public void IOptimizedPersistableField(bool useServerSession)
+    {
+      using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        for (int i = 0; i < 10; i++)
+        {
+          var dict = new PersistableDynamicDictionary();
+          session.Persist(dict);
+        }
+        session.Commit();
+      }
+
+      using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
+      {
+        session.BeginRead();
+        session.TraceIndexUsage = true;
+        DateTime now = DateTime.UtcNow;
+        var q = from dict in session.Index<PersistableDynamicDictionary>("m_creationTime") where dict.CreationTime < now && dict.CreationTime >= now.AddYears(-1) select dict;
+        Assert.GreaterOrEqual(q.Count(), 10);
+        q = from dict in session.Index<PersistableDynamicDictionary>("m_creationTime") where dict.CreationTime > DateTime.UtcNow.AddYears(-1) select dict;
+        Assert.GreaterOrEqual(q.Count(), 10);
         session.Commit();
       }
     }

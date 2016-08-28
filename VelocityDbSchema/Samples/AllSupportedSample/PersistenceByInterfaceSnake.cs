@@ -137,28 +137,6 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     }
 
     /// <summary>
-    /// Loads all fields of an object if they are not already loaded.
-    /// </summary>
-    /// <param name="depth">Set this if you want to limit the depth of the graph loaded by this open.
-    public virtual void LoadFields(int depth = Int32.MaxValue)
-    {
-      if (FieldsLoaded == false)
-      {
-        FieldsLoaded = true;
-        Schema schema = Session.OpenSchema(false);
-        List<IOptimizedPersistable> toLoadMembers = new List<IOptimizedPersistable>(m_shape.DataMemberArray.Length);
-        toLoadMembers.Add(this);
-        while (toLoadMembers.Count > 0)
-        {
-          IOptimizedPersistable toLoad = toLoadMembers[toLoadMembers.Count - 1];
-          toLoadMembers.RemoveAt(toLoadMembers.Count - 1);
-          toLoad.Shape.LoadMembers(toLoad, schema, toLoadMembers, 0, depth, Session);
-        }
-        InitializeAfterRead(Session);
-      }
-    }
-
-    /// <summary>
     /// Possibly restrict instances of to a single Database. By default this property is UInt32.MaxValue but classes like BTreeSetOidShort, BTreeMapShortOid ... override this property to return 1 since short references are restricted to a single Database.
     /// </summary>
     public virtual UInt32 MaxNumberOfDatabases

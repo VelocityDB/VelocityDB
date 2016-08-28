@@ -293,7 +293,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_weakIOptimizedPersistableReferenceList;
       }
       set
@@ -306,7 +306,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session.LoadFields(this);
         return m_int16List;
       }
       set
@@ -320,7 +320,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_uint16List;
       }
       set
@@ -336,7 +336,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_int64List;
       }
       set
@@ -351,7 +351,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_stringList;
       }
       set
@@ -374,7 +374,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_odblistByte;
       }
       set
@@ -388,7 +388,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_personGenericList;
       }
       set
@@ -402,7 +402,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_weakIOptimizedPersistableReferenceOdbList;
       }
       set
@@ -415,7 +415,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_int16OdbList;
       }
       set
@@ -429,7 +429,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_uint16OdbList;
       }
       set
@@ -444,7 +444,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_int32OdbList;
       }
       set
@@ -458,7 +458,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_uint32OdbList;
       }
       set
@@ -472,7 +472,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_int64OdbList;
       }
       set
@@ -486,7 +486,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_uint64OdbList;
       }
       set
@@ -500,7 +500,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_stringOdbList;
       }
       set
@@ -514,7 +514,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_petOdbList;
       }
       set
@@ -531,7 +531,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_bTreePerson;
       }
       set
@@ -545,7 +545,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_sortedSetPerson;
       }
       set

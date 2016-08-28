@@ -34,7 +34,7 @@ namespace VelocityDbSchema
     public WeakIOptimizedPersistableReference<Person> m_bestFriend;
     public VelocityDbList<WeakIOptimizedPersistableReference<Person>> m_friends;
     double m_longitude;
-    double m_lattitude;
+    double m_latitude;
     public static Random s_randGen = new Random(5);
 
     public Person(int arrayCapacity = 0) 
@@ -50,7 +50,7 @@ namespace VelocityDbSchema
       this.m_pets = new List<Pet>(arrayCapacity);
       PersonID = Guid.NewGuid();
       m_longitude = (s_randGen.Next(360) - 180) * s_randGen.NextDouble();
-      m_lattitude = (s_randGen.Next(180) - 90) * s_randGen.NextDouble();
+      m_latitude = (s_randGen.Next(180) - 90) * s_randGen.NextDouble();
     }
 
     public Person(string firstName, string lastName, UInt16 age, long ssn, Person bestFriend, Person spouse)
@@ -151,16 +151,16 @@ namespace VelocityDbSchema
       }
     }
 
-    public double Lattitude
+    public double Latitude
     {
       get
       {
-        return m_lattitude;
+        return m_latitude;
       }
       set
       {
         Update();
-        m_lattitude = value;
+        m_latitude = value;
       }
     }
 

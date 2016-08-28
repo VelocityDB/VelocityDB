@@ -78,7 +78,7 @@ namespace VelocityDbSchema.Tracker
     {
       get
       {
-        LoadFields();
+        Session?.LoadFields(this);
         return m_fileContent;
       }
     }

@@ -26,10 +26,10 @@ namespace NUnitTests
   [TestFixture]
   public class ASanityTests
   {
-    public const string systemDir = "c:/NUnitTestDbs";
+    public const string systemDir = "c:\\NUnitTestDbs";
     private int _count;
 
-    [OneTimeSetUp]
+    [TestFixtureSetUp]
     public void TestFixtureSetUp()
     {
       _count = 0;
@@ -1093,7 +1093,7 @@ namespace NUnitTests
             ulong allMenCt = allMen.Count();
             foreach (Man man in allMen)
             {
-              double lat = man.Lattitude;
+              double lat = man.Latitude;
             }
             Console.WriteLine("Man Count is: " + allMenCt + " Session Id is: " + sessionId + " Current task id is: " + (Task.CurrentId.HasValue ? Task.CurrentId.Value.ToString() : "unknown"));
           }
@@ -1146,7 +1146,7 @@ namespace NUnitTests
           session.Persist(kunde);
           session.Commit();
         }
-        catch (Exception)
+        catch (Exception e)
         {
           session.Abort();
         }

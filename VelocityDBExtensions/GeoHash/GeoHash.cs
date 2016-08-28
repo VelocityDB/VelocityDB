@@ -247,7 +247,8 @@ namespace VelocityDB.geohash
     public Int64 Ord()
     {
       int insignificantBits = MAX_BIT_PRECISION - m_significantBits;
-      return (m_bits >> insignificantBits);
+      long bitMask = (1L << m_significantBits) - 1;
+      return (m_bits >> insignificantBits) & bitMask;
     }
 
     /// <summary>

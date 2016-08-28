@@ -21,12 +21,12 @@ namespace VelocityDbSchema.NUnit
     {
       get
       {
-        LoadFields(0);
+        Session?.LoadFields(this, 0);
         return myRef;
       }
       set
       {
-        LoadFields(0);
+        Session?.LoadFields(this, 0);
         Update();
         myRef = value;
       }

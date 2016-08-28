@@ -81,15 +81,21 @@ namespace VelocityDBExtensions
                     fStream.Write(bytes, 0, bytes.Length);
                     if (tv.IsString)
                     {
-                      bytes = Page.StringToByteArray($"String{fieldSeperator}");
+                      bytes = Page.StringToByteArray($"String");
                       fStream.Write(bytes, 0, bytes.Length);
                     }
                     else
-                      foreach (DataMember member in members)
-                      {
-                        bytes = Page.StringToByteArray(member.FieldName + fieldSeperator);
-                        fStream.Write(bytes, 0, bytes.Length);
-                      }
+                    {
+                      int l = members.Count;
+                      for (int i = 0; i < l; i++)
+                        {
+                          if (i + 1 < l)
+                            bytes = Page.StringToByteArray(members[i].FieldName + fieldSeperator);
+                          else
+                            bytes = Page.StringToByteArray(members[i].FieldName);
+                          fStream.Write(bytes, 0, bytes.Length);
+                        }
+                    }
                     //writer.Write("\"" + pObj.Shape.velocityDbType.type.AssemblyQualifiedName + "\"");
                     writer.WriteLine();
                   }

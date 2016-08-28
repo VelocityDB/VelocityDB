@@ -106,6 +106,9 @@ namespace VelocityDbSchema.NUnit
     // Can't put Field Indexes when not Inheriting from OptimizedPersistable
     private string _typeName = nameof(PersistableDynamicDictionary);
 
+    [Index]
+    DateTime m_creationTime = DateTime.UtcNow;
+
     #endregion Fields
 
     #region Properties
@@ -114,6 +117,17 @@ namespace VelocityDbSchema.NUnit
     /// Gets the session of this object or null if this object isn't yet persisted.
     /// </summary>
     public virtual SessionBase Session => _page?.Database.Session;
+
+    [FieldAccessor("m_creationTime")]
+    public DateTime CreationTime
+    {
+      get { return m_creationTime; }
+      set
+      {
+        Update();
+        m_creationTime = value;
+      }
+    }   
 
     // This property stores the dynamic typename
     [FieldAccessor("_typeName")]
@@ -261,29 +275,6 @@ namespace VelocityDbSchema.NUnit
     /// <param name="session">The active session managing this object</param>
     public void InitializeAfterRecreate(SessionBase session)
     {
-    }
-
-    /// <summary>
-    /// Loads all fields of an object if they are not already loaded.
-    /// </summary>
-    /// <param name="depth">Set this if you want to limit the depth of the graph loaded by this open.</param>
-    public void LoadFields(int depth = int.MaxValue)
-    {
-      if (FieldsLoaded == false)
-      {
-        FieldsLoaded = true;
-        Schema schema = Session.OpenSchema(false);
-        List<IOptimizedPersistable> toLoadMembers =
-            new List<IOptimizedPersistable>(_shape.DataMemberArray.Length);
-        toLoadMembers.Add(this);
-        while (toLoadMembers.Count > 0)
-        {
-          IOptimizedPersistable toLoad = toLoadMembers[toLoadMembers.Count - 1];
-          toLoadMembers.RemoveAt(toLoadMembers.Count - 1);
-          toLoad.Shape.LoadMembers(toLoad, schema, toLoadMembers, 0, depth, Session);
-        }
-        InitializeAfterRead(Session);
-      }
     }
 
     /// <summary>

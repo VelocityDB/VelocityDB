@@ -109,7 +109,7 @@ namespace DatabaseManager
       IOptimizedPersistable pObj = (IOptimizedPersistable)m_session.Open(m_objectId, false, null, false, 0, Int32.MaxValue);
       if (pObj != null)
       {
-        pObj.LoadFields();
+        m_session.LoadFields(pObj);
         object o = pObj.WrappedObject;
         TypeVersion baseShape = pObj.Shape.BaseShape;
         while (baseShape != null)
