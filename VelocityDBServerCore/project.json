@@ -1,0 +1,26 @@
+﻿{
+  "copyright": "VelocityDB, Inc.",
+  "description": "Code for VelocityDB object database",
+  "title": "VelocityDB .net core",
+  "buildOptions": {
+    "define": [ "NET_CORE" ],
+    "allowUnsafe": true,
+    "warningsAsErrors": false,
+    "xmlDoc": true,
+    "emitEntryPoint": true
+  },
+
+  "dependencies": {
+    "Microsoft.IdentityModel.Protocols": "2.0.0",
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.0.0"
+    },
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
+    "VelocityDB": "5.6.3"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {}
+  }
+}
