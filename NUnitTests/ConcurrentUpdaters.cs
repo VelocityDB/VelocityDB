@@ -56,6 +56,7 @@ namespace NUnitTests
                   using (var transaction = session.BeginUpdate())
                   {
                     session.SetTraceDbActivity(FixedSize.PlaceInDatabase);
+                    session.SetTraceDbActivity(2);
                     session.CrossTransactionCacheAllDatabases();
                     for (int k = 0; k < 4200; k++)
                     {
@@ -101,7 +102,7 @@ namespace NUnitTests
           if (thread.IsAlive)
           {
             keepWaiting = true;
-            thread.Join(5000);
+            thread.Join(500);
           }
       }
       using (SessionBase session = new SessionNoServer(systemDir))

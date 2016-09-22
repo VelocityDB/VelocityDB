@@ -155,7 +155,8 @@ namespace NUnitTests
         for (uint i = 50000000; i < 50000100; i++)
         {
           database = session.OpenDatabase(i);
-          session.DeleteDatabase(database);
+          if (database != null)
+            session.DeleteDatabase(database);
         }
         session.Commit();
       }
