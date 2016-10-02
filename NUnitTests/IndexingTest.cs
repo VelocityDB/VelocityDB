@@ -14,6 +14,8 @@ using VelocityDbSchema.Indexes;
 using System.Diagnostics;
 using VelocityDb.Collection;
 using VelocityDBExtensions;
+using static VelocityDb.Collection.BTree.Extensions.BTreeExtensions;
+
 namespace NUnitTests
 {
   [TestFixture]
@@ -710,11 +712,16 @@ namespace NUnitTests
       using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
       {
         session.BeginRead();
+        session.TraceIndexUsage = true;
         Database db = session.OpenDatabase(session.DatabaseNumberOf(typeof(InsuranceCompanySpecial)));
         var q = from company in session.Index<InsuranceCompany>("name", db) where company.Name == "AAA" select company;
         foreach (InsuranceCompany company in q)
           Console.WriteLine(company.ToStringDetails(session)); // only one will match
         bool exists = (from anEntry in session.Index<InsuranceCompanySpecial>("name", db) where anEntry.Name == "AAA" select 0).Any();
+        Assert.IsTrue(exists);
+        exists = (from anEntry in session.Index<InsuranceCompanySpecial>("name", db) where String.Equals(anEntry.Name, "AAA", StringComparison.OrdinalIgnoreCase) select anEntry).Any();
+        Assert.IsTrue(exists);
+        exists = (from anEntry in session.Index<InsuranceCompanySpecial>("name", db) where String.Equals(anEntry.Name, "AAA", StringComparison.OrdinalIgnoreCase) == true select anEntry).Any();
         Assert.IsTrue(exists);
         session.Commit();
       }

@@ -10,6 +10,8 @@ using VelocityDb.Collection.BTree;
 using VelocityDb.Session;
 using VelocityDBExtensions;
 using VelocityDbSchema.Indexes;
+using static VelocityDBExtensions.Extensions.BTree.BTreeExtensions;
+//using static VelocityDb.Collection.BTree.Extensions.BTreeExtensions;
 
 namespace Indexes
 {
@@ -22,6 +24,7 @@ namespace Indexes
     {
       try
       {
+        Trace.Listeners.Add(new ConsoleTraceListener());
         string brandName = "Toyota";
         string color = "Blue";
         int maxPassengers = 5;

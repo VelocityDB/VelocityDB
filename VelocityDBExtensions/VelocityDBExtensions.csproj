@@ -73,12 +73,13 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="VelocityDb, Version=5.7.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.7.0\lib\net40\VelocityDb.dll</HintPath>
+      <HintPath>..\packages\VelocityDB.5.8.0\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureSession.cs" />
+    <Compile Include="BTreeExtensions.cs" />
     <Compile Include="GeoHash\BoundingBox.cs" />
     <Compile Include="GeoHash\GeoHash.cs" />
     <Compile Include="GeoHash\Query\GeoHashBoundingBoxQuery.cs" />
