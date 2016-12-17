@@ -24,6 +24,7 @@ using VelocityDb.Session;
 using VelocityDbSchema.TextIndexer;
 using VelocityDb.Collection.BTree;
 using HtmlAgilityPack;
+using VelocityDb.Exceptions;
 
 namespace TextIndexer
 {

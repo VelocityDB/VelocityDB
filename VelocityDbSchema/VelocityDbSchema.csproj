@@ -77,8 +77,8 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=5.7.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.5.8.0\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=6.0.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.6.0.0\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -191,6 +191,9 @@
     <Compile Include="Samples\Forex\ForexBrokerAccount.cs" />
     <Compile Include="Samples\Forex\ForexDom.cs" />
     <Compile Include="Samples\Forex\ForexTick.cs" />
+    <Compile Include="Samples\Relations\Customer.cs" />
+    <Compile Include="Samples\Relations\Interaction.cs" />
+    <Compile Include="Samples\Relations\User.cs" />
     <Compile Include="Samples\Sample4\Person.cs" />
     <Compile Include="Samples\AllSupportedSample\AllSupported.cs" />
     <Compile Include="Samples\AllSupportedSample\Bird.cs" />

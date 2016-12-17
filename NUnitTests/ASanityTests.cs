@@ -14,6 +14,7 @@ using VelocityDb.Collection.Comparer;
 using VelocityDb.Collection.BTree;
 using System.Threading.Tasks;
 using NMoneys;
+using VelocityDb.Exceptions;
 
 namespace NUnitTests
 {

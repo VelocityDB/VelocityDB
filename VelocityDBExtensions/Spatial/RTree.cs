@@ -6,6 +6,7 @@ using System.Linq;
 #endif
 using System.Text;
 using VelocityDb;
+using VelocityDb.Exceptions;
 
 namespace VelocityDb.Collection.Spatial
 {
@@ -542,7 +543,7 @@ namespace VelocityDb.Collection.Spatial
       // go through the tree, and check that the internal data structures of the tree are not corrupted.        
 
       if (n == null)
-        throw new UnexpectedException("Error: Could not read node " + this);
+        throw new UnexpectedException($"Error: Could not read node {this}");
 
       // if tree is empty, then there should be exactly one node, at level 1
       // TODO: also check the MBR is as for a new node
@@ -560,13 +561,13 @@ namespace VelocityDb.Collection.Spatial
       if (!actualMBR.Equals(calculatedMBR))
       {
         if (actualMBR.MinX != n.minimumBoundingRectangle.MinX)
-          throw new UnexpectedException("  actualMinX=" + actualMBR.MinX + ", calc=" + calculatedMBR.MinX);
+          throw new UnexpectedException($"  actualMinX={actualMBR.MinX}, calc={calculatedMBR.MinX}");
         if (actualMBR.MinY != n.minimumBoundingRectangle.MinY)
-          throw new UnexpectedException("  actualMinY=" + actualMBR.MinY + ", calc=" + calculatedMBR.MinY);
+          throw new UnexpectedException($"  actualMinY={actualMBR.MinY}, calc={calculatedMBR.MinY}");
         if (actualMBR.MaxX != n.minimumBoundingRectangle.MaxX)
-          throw new UnexpectedException("  actualMaxX=" + actualMBR.MaxX + ", calc=" + calculatedMBR.MaxX);
+          throw new UnexpectedException($"  actualMaxX={actualMBR.MaxX}, calc={calculatedMBR.MaxX}");
         if (actualMBR.MaxY != n.minimumBoundingRectangle.MaxY)
-          throw new UnexpectedException("  actualMaxY=" + actualMBR.MaxY + ", calc=" + calculatedMBR.MaxY);
+          throw new UnexpectedException($"  actualMaxY={actualMBR.MaxY}, calc={calculatedMBR.MaxY}");
         throw new UnexpectedException("Error: Node " + this + ", calculated MBR does not equal stored MBR");
       }
 

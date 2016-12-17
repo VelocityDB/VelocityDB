@@ -11,6 +11,7 @@ using VelocityDbSchema;
 using VelocityDbSchema.Samples.AllSupportedSample;
 using NUnit.Framework;
 using System.IO;
+using VelocityDb.Exceptions;
 
 namespace NUnitTests
 {
@@ -102,7 +103,7 @@ namespace NUnitTests
     }
 
     [Test]
-    [Repeat(3)] // remove when propagtion of optimistic locking flag is done to slave database locations TO DO (issue caused by CopyAllDatabasdesTo that uses pessimistic locking)
+    [Repeat(3)] // remove when propagation of optimistic locking flag is done to slave database locations TO DO (issue caused by CopyAllDatabasdesTo that uses pessimistic locking)
     public void multipleServersOK()
     {
       using (SessionNoServer session = new SessionNoServer(systemDir))

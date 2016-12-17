@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using VelocityDb;
+using VelocityDb.Exceptions;
 using VelocityDb.Indexing;
 using VelocityDb.Session;
 using VelocityDb.TypeInfo;

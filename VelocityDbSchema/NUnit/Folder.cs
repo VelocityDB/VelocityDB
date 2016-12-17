@@ -10,23 +10,22 @@ using VelocityDb.TypeInfo;
 
 namespace VelocityDbSchema.NUnit
 {
-  public class Folder : FileOrFolder, IRelation<Folder, FileInDb>, IRelation<Folder, Folder>
+  public class Folder : FileOrFolder
   {
-    Relation<Folder, Folder> m_folderRelation;
+    BTreeSet<Folder> m_subFolders;
     BTreeSet<FileInDb> m_files;
-    BTreeSet<Folder> m_folders;
+    Folder m_parentFolder;
 
     public Folder(string name, Folder parentFolder, SessionBase session) : base(name)
     {
       CompareByField<FileInDb> comparerByFileName = new CompareByField<FileInDb>("m_name", session, false, true);
       m_files = new BTreeSet<FileInDb>(comparerByFileName, session, 10000, CommonTypes.s_sizeOfUInt32);
       CompareByField<Folder> comparerByFolderName = new CompareByField<Folder>("m_name", session, false, true);
-      m_folders = new BTreeSet<Folder>(comparerByFolderName, session, 10000, CommonTypes.s_sizeOfUInt32);
-      session.Persist(this);
+      m_subFolders = new BTreeSet<Folder>(comparerByFolderName, session, 10000, CommonTypes.s_sizeOfUInt32);
       if (parentFolder != null)
       {
-        Update();
-        m_folderRelation = new Relation<Folder, Folder>(this, parentFolder);
+        m_parentFolder = parentFolder;
+        m_parentFolder.Folders.AddFast(this);
       }
     }
 
@@ -42,7 +41,7 @@ namespace VelocityDbSchema.NUnit
     {
       get
       {
-        return m_folders;
+        return m_subFolders;
       }
     }
 
@@ -50,54 +49,21 @@ namespace VelocityDbSchema.NUnit
     {
       if (IsPersistent)
       {
-        if (m_folderRelation != null)
-          m_folderRelation.Unpersist(session);
-        foreach (FileInDb file in m_files.ToArray()) // ToArray because file.Unpersist modifies m_files.
+        foreach (var file in m_files.ToArray())
           file.Unpersist(session);
         m_files.Unpersist(session);
-        foreach (Folder folder in m_folders.ToArray())
+        foreach (var folder in m_subFolders.ToArray())
           folder.Unpersist(session);
-        m_folders.Unpersist(session);
+        m_subFolders.Unpersist(session);
         base.Unpersist(session);
       }
-    }
-
-    public void AddRelation(Relation<FileInDb, Folder> relation)
-    {
-      m_files.AddFast(relation.RelationFrom);
-    }
-
-    public void AddRelation(Relation<Folder, Folder> relation)
-    {
-      m_folders.AddFast(relation.RelationFrom);
-    }
-    public bool RelationExist(Relation<FileInDb, Folder> relation)
-    {
-      return m_files.Contains(relation.RelationFrom);
-    }
-
-    public bool RelationExist(Relation<Folder, Folder> relation)
-    {
-      return m_folders.Contains(relation.RelationFrom);
-    }
-
-    public void RemoveRelation(Relation<FileInDb, Folder> relation)
-    {
-      m_files.Remove(relation.RelationFrom);
-    }
-
-    public void RemoveRelation(Relation<Folder, Folder> relation)
-    {
-      m_folders.Remove(relation.RelationFrom);
     }
 
     public override Folder ParentFolder
     {
       get
       {
-        if (m_folderRelation != null)
-          return m_folderRelation.RelationTo;
-        return null;
+        return m_parentFolder;
       }
     }
   }

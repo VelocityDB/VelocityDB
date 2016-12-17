@@ -8,14 +8,15 @@ using VelocityDb.TypeInfo;
 
 namespace VelocityDbSchema.NUnit
 {
-  public class FileInDb : FileOrFolder, IRelation<FileInDb, Folder>
+  public class FileInDb : FileOrFolder
   {
-    Relation<FileInDb, Folder> m_folderRelation;
+    Folder m_folder;
     WeakIOptimizedPersistableReference<FileContent> m_fileContent;
 
     public FileInDb(string name, Folder parentFolder):base(name)
     {
-      m_folderRelation = new Relation<FileInDb, Folder>(this, parentFolder);
+      m_folder = parentFolder;
+      m_folder.Files.AddFast(this);
     }
 
     public FileContent Content
@@ -36,26 +37,6 @@ namespace VelocityDbSchema.NUnit
           m_fileContent.Id = value.Id;
       }
     }
-    public void AddRelation(Relation<Folder, FileInDb> reverseRelation)
-    {
-      if (m_folderRelation != null)
-        m_folderRelation.RelationTo = reverseRelation.RelationFrom;
-      else
-      {
-        Update();
-        m_folderRelation = new Relation<FileInDb, Folder>(this, reverseRelation.RelationFrom);
-      }
-    }
-
-    public void RemoveRelation(Relation<Folder, FileInDb> reverseRelation)
-    {
-      Unpersist(Session);
-    }
-
-    public bool RelationExist(Relation<Folder, FileInDb> reverseRelation)
-    {
-      return m_folderRelation != null;
-    }
 
     public static byte[] ReadAllBytes(string fullName)
     {
@@ -66,13 +47,13 @@ namespace VelocityDbSchema.NUnit
     {
       get
       {
-        return m_folderRelation.RelationTo;
+        return m_folder;
       }
     }
 
     public override void Unpersist(SessionBase session)
     {
-      m_folderRelation.Unpersist(session);
+      m_folder.Files.Remove(this);
       if (m_fileContent != null)
         Content.Unpersist(session);
       base.Unpersist(session);

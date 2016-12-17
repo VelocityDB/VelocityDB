@@ -11,6 +11,7 @@ using VelocityDbSchema.Samples.AllSupportedSample;
 using NUnit.Framework;
 using System.Collections;
 using VelocityDBExtensions;
+using VelocityDb.Exceptions;
 
 namespace NUnitTests
 {

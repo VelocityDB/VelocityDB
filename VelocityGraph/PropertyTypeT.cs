@@ -13,6 +13,7 @@ using EdgeId = System.Int32;
 using Frontenac.Blueprints;
 using VelocityDb.Collection;
 using VelocityDb;
+using VelocityDb.Exceptions;
 
 namespace VelocityGraph
 {

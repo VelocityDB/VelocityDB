@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using VelocityDb;
 using VelocityDb.Session;
 using VelocityDbSchema.Samples.WorldCities;
+using VelocityDb.Exceptions;
 
 namespace WorldCities
 {

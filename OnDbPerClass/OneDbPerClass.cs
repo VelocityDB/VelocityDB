@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VelocityDb;
+using VelocityDb.Exceptions;
 using VelocityDb.Session;
 using VelocityDb.TypeInfo;
 using VelocityDBExtensions;

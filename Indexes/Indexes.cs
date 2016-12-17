@@ -7,11 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using VelocityDb;
 using VelocityDb.Collection.BTree;
+using VelocityDb.Exceptions;
 using VelocityDb.Session;
 using VelocityDBExtensions;
 using VelocityDbSchema.Indexes;
-using static VelocityDBExtensions.Extensions.BTree.BTreeExtensions;
+
 //using static VelocityDb.Collection.BTree.Extensions.BTreeExtensions;
+using static VelocityDBExtensions.Extensions.BTree.BTreeExtensions;
 
 namespace Indexes
 {

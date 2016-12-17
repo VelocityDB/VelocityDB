@@ -15,6 +15,7 @@ using System.Diagnostics;
 using VelocityDb.Collection;
 using VelocityDBExtensions;
 using static VelocityDb.Collection.BTree.Extensions.BTreeExtensions;
+using VelocityDb.Exceptions;
 
 namespace NUnitTests
 {

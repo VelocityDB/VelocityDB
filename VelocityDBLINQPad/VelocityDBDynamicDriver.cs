@@ -69,7 +69,7 @@ namespace VelocityDB.LINQPad
                 string[] lKeep = SchemaExtractor
                     .GetDataMembers(lType)
                     .Select(lMember => lMember.Name).ToArray();
-                // Select to exclude all members that should not be keeped...
+                // Select to exclude all members that should not be kept...
                 options.MembersToExclude = lType.GetMembers()
                     .Select(lMember => lMember.Name)
                     .Where(lName => !lKeep.Contains(lName))
@@ -77,7 +77,7 @@ namespace VelocityDB.LINQPad
                 // If a OptimizedPersistable (i.e. the type being used is the 
                 // same as the object's instead of a element type) 
                 // is send to render on grid,
-                // an exception is rised because LINQPad assumes to be an
+                // an exception is raised because LINQPad assumes to be an
                 // enumerable of only one kind, which is not true for
                 // OptimizedPersistable. In this case, wrap on a list.
                 if(lType.Equals(objectToDisplay.GetType()))

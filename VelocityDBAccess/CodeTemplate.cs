@@ -17,7 +17,7 @@ namespace VelocityDBAccess
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+    #line 1 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
     internal partial class CodeTemplate : CodeTemplateBase
     {
@@ -29,7 +29,7 @@ namespace VelocityDBAccess
         {
             this.Write("\r\nnamespace ");
             
-            #line 5 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 5 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(NameSpace));
             
             #line default
@@ -37,7 +37,7 @@ namespace VelocityDBAccess
             this.Write("\r\n{\r\n    using System;\r\n    using System.Collections.Generic;\r\n    using System.N" +
                     "et;\r\n    using VelocityDb.Session;\r\n");
             
-            #line 11 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 11 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
  foreach(var lAssemblyName in Schema.LoadedAssembliesNames)
   {
             
@@ -45,28 +45,28 @@ namespace VelocityDBAccess
             #line hidden
             this.Write("    using ");
             
-            #line 13 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 13 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lAssemblyName));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 14 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 14 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
 }
             
             #line default
             #line hidden
             this.Write("\r\n /*   public static class ");
             
-            #line 16 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 16 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("Static\r\n    {\r\n        \r\n");
             
-            #line 19 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 19 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
  foreach(KeyValuePair<string, string> lPair in Schema.TypesNameToPluralName)
    {
             
@@ -74,21 +74,21 @@ namespace VelocityDBAccess
             #line hidden
             this.Write("        static IEnumerable< ");
             
-            #line 21 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 21 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lPair.Key));
             
             #line default
             #line hidden
             this.Write(" > IEnumerable< ");
             
-            #line 21 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 21 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lPair.Key));
             
             #line default
             #line hidden
             this.Write(" >(this ");
             
-            #line 21 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 21 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lPair.Key));
             
             #line default
@@ -96,28 +96,28 @@ namespace VelocityDBAccess
             this.Write(" source)\r\n        {\r\n\t\t\t\t  Session.BeginRead();\r\n\t\t\t\t\treturn Session.AllObjects< " +
                     "");
             
-            #line 24 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 24 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lPair.Key));
             
             #line default
             #line hidden
             this.Write(" >();\r\n        }\r\n");
             
-            #line 26 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 26 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("}*/\r\n\r\n    public class ");
             
-            #line 29 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 29 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("\r\n    {\r\n        private SessionBase session;\r\n        \r\n");
             
-            #line 33 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 33 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
  foreach(KeyValuePair<string, string> lPair in Schema.TypesNameToPluralName)
    {
             
@@ -125,14 +125,14 @@ namespace VelocityDBAccess
             #line hidden
             this.Write("        public virtual IEnumerable< ");
             
-            #line 35 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 35 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lPair.Key));
             
             #line default
             #line hidden
             this.Write(" > ");
             
-            #line 35 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 35 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lPair.Value));
             
             #line default
@@ -140,14 +140,14 @@ namespace VelocityDBAccess
             this.Write("\r\n        {\r\n            get\r\n            {\r\n                session.BeginRead();" +
                     "\r\n                return this.session.AllObjects< ");
             
-            #line 40 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 40 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lPair.Key));
             
             #line default
             #line hidden
             this.Write(" >();\r\n            }\r\n        }\r\n");
             
-            #line 43 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 43 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
  }
             
             #line default
@@ -156,7 +156,7 @@ namespace VelocityDBAccess
                     "ction)\r\n\t\t\t\t\t\t\tsession.Commit();\r\n\t\t\t\t\t  session = null;\r\n        }\r\n\r\n        p" +
                     "ublic ");
             
-            #line 52 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 52 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
@@ -164,21 +164,21 @@ namespace VelocityDBAccess
             this.Write("()\r\n        {\r\n            session = null;\r\n            bool lPessimistic = Conve" +
                     "rt.ToBoolean(\"");
             
-            #line 55 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 55 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(SessionInfo.PessimisticLocking));
             
             #line default
             #line hidden
             this.Write("\");\r\n            //bool lAuth = Convert.ToBoolean(\"");
             
-            #line 56 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 56 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(SessionInfo.WindowsAuth));
             
             #line default
             #line hidden
             this.Write("\");\r\n");
             
-            #line 57 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 57 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
           switch (SessionInfo.SessionType)
             {
                 case SessionInfo.SessionTypeEnum.NoServerSession:
@@ -187,14 +187,14 @@ namespace VelocityDBAccess
             #line hidden
             this.Write("                    session = new SessionNoServer(@\"");
             
-            #line 60 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 60 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(SessionInfo.DBFolder));
             
             #line default
             #line hidden
             this.Write("\", 5000, !lPessimistic);\r\n");
             
-            #line 61 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 61 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
                   break;
                 case SessionInfo.SessionTypeEnum.NoServerSharedSession:
             
@@ -202,14 +202,14 @@ namespace VelocityDBAccess
             #line hidden
             this.Write("                    session = new SessionNoServerShared(@\"");
             
-            #line 63 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 63 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(SessionInfo.DBFolder));
             
             #line default
             #line hidden
             this.Write("\", 5000, !lPessimistic);\r\n");
             
-            #line 64 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 64 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
                   break;
                 case SessionInfo.SessionTypeEnum.ServerClientSession:
             
@@ -217,21 +217,21 @@ namespace VelocityDBAccess
             #line hidden
             this.Write("                    IPHostEntry lHostEntry = Dns.GetHostEntry(@\"");
             
-            #line 66 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 66 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(SessionInfo.Host));
             
             #line default
             #line hidden
             this.Write("\");\r\n                    session = new ServerClientSession(@\"");
             
-            #line 67 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 67 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(SessionInfo.DBFolder));
             
             #line default
             #line hidden
             this.Write("\", lHostEntry.HostName, 2000, !lPessimistic);\r\n");
             
-            #line 68 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 68 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
                   break;
                 default:
             
@@ -239,7 +239,7 @@ namespace VelocityDBAccess
             #line hidden
             this.Write("                    throw new InvalidDataException(\"Invalid Session Type\");\r\n");
             
-            #line 71 "G:\VelocityDbSetup\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
+            #line 71 "C:\VelocityDB\VelocityDBAccess\CodeTemplate.tt"
                   break;
             }
             

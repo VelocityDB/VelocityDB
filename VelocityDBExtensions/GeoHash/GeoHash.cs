@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using VelocityDb;
+using VelocityDb.Exceptions;
 
 /*
  * Ported to C# from Java by Mats Persson, VelocityDB, Inc.

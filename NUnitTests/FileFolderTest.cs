@@ -63,6 +63,7 @@ namespace NUnitTests
         DirectoryInfo dirInfo = new DirectoryInfo(s_sampleFolder);
         Folder folder = new Folder(dirInfo.Name, null, session);
         CreateDirectoriesAndFiles(dirInfo, folder, session);
+        session.Persist(folder);
         session.Commit();
       }
     }

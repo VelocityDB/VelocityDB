@@ -7,6 +7,7 @@ using VelocityDb.Collection.BTree;
 using VelocityDb.Collection.Comparer;
 using VelocityDbSchema.Samples.AllSupportedSample;
 using System.IO;
+using VelocityDb.Exceptions;
 
 namespace SortedObjects
 {
@@ -23,7 +24,7 @@ namespace SortedObjects
         UInt64 someRandomPersonsIdNumber = 0;
         using (SessionNoServer session = new SessionNoServer(s_systemDir))
         {
-          Console.WriteLine("Running with databases in directory: " + session.SystemDirectory);
+          Console.WriteLine($"Running with databases in directory: {session.SystemDirectory}");
           const UInt32 numberOfPersons = 1000000;
           const ushort nodeMaxSize = 5000;
           const ushort comparisonByteArraySize = sizeof(UInt64); // enough room to hold entire idNumber of a Person

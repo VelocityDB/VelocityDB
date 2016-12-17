@@ -1,12 +1,14 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using VelocityDb;
+using VelocityDb.Exceptions;
 using VelocityDb.Session;
 using VelocityDbSchema.NUnit;
 
@@ -57,6 +59,7 @@ namespace NUnitTests
                   {
                     session.SetTraceDbActivity(FixedSize.PlaceInDatabase);
                     session.SetTraceDbActivity(2);
+                    Trace.Listeners.Add(new ConsoleTraceListener());
                     session.CrossTransactionCacheAllDatabases();
                     for (int k = 0; k < 4200; k++)
                     {

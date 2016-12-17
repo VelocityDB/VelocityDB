@@ -49,7 +49,7 @@ namespace UtilitiesModule
                     {
                         return ((IEnumerable)pObj).GetEnumerator();
                     }
-                    return pProp.GetValue(pObj);
+                    return pProp.GetValue(pObj, null);
                 default:
                     throw new ArgumentException("Input MemberInfo must be of type FieldInfo or PropertyInfo.");
             }

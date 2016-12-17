@@ -23,6 +23,7 @@ using System.Threading;
 using System.Net;
 using System.Diagnostics;
 using VelocityDbSchema;
+using VelocityDb.Exceptions;
 
 namespace NUnitTests
 {

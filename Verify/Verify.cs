@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using VelocityDb;
+using VelocityDb.Exceptions;
 using VelocityDb.Session;
 
 namespace Verify

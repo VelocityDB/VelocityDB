@@ -10,6 +10,7 @@ using VelocityDb.Collection.BTree;
 using VelocityDb.Session;
 using VelocityDb.Collection.Comparer;
 using System.Diagnostics;
+using VelocityDb.Exceptions;
 
 namespace VelocityDbSchema.TextIndexer
 {

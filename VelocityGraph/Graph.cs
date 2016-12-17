@@ -25,6 +25,7 @@ using System.Diagnostics.Contracts;
 using Newtonsoft.Json; // temp Until Frontenac.Blueprints is updated with extensions added by VelocityGraph
 using Newtonsoft.Json.Linq;// temp Until Frontenac.Blueprints is updated with extensions added by VelocityGraph
 using Newtonsoft.Json.Serialization;// temp Until Frontenac.Blueprints is updated with extensions added by VelocityGraph
+using VelocityDb.Exceptions;
 
 namespace VelocityGraph
 {

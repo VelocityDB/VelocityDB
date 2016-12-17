@@ -5,6 +5,7 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.TypeInfo;
 using VelocityDb.Session;
+using VelocityDb.Exceptions;
 
 namespace VelocityDbSchema.Samples.AllSupportedSample
 {

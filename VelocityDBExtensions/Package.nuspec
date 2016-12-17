@@ -2,20 +2,20 @@
 <package >
   <metadata>
     <id>VelocityDBExtensions</id>
-    <version>5.8</version>
+    <version>6.0</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
-    <licenseUrl>http://www.velocitydb.com/Eula.htm</licenseUrl>
-    <projectUrl>http://www.velocitydb.com</projectUrl>
-    <iconUrl>http://www.VelocityDB.com/images/VelocityDbLogo.svg</iconUrl>
+    <licenseUrl>http://Velocitydb.com/Eula.htm</licenseUrl>
+    <projectUrl>http://VelocityDB.com</projectUrl>
+    <iconUrl>http://VelocityDB.com/images/VelocityDbLogo.svg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Extensions to VelocityDB.</summary>
     <description>Extensions to VelocityDB for efficient LINQ index/BTree queries, AzureSession file API usage with Microsoft Azure, import/export to/from CSV and JSON, Sync, GeoHash and RTree.</description>
-    <releaseNotes>Initial open source version of BTreeExtensions.</releaseNotes>
+    <releaseNotes>Use latest version of VelocityDB.</releaseNotes>
     <copyright>Copyright 2016</copyright>
-    <tags>Object Database NoSQL .NET C# F# VB.NET C++ CLI Universal Windows NET CORE Xamarin Mono Android iOS Mac Xbox cross-platform web asp.net identity persistence client csv json server oodb key-value scalable fast flexible distributable embedded Database sync big data events geo hash Azure</tags>
+    <tags>Object Database NoSQL .NET C# F# VB.NET C++ CLI Universal Windows NET CORE Standard Xamarin Mono Android iOS Mac Xbox cross-platform web asp.net identity persistence client csv json server oodb key-value scalable fast flexible distributable embedded Database sync big data events geo hash Azure</tags>
     <dependencies>
-      <dependency id="VelocityDB" version="5.8" />
+      <dependency id="VelocityDB" version="6.0" />
       <dependency id="LumenWorksCsvReader" version="3.9.1" />
       <dependency id="Microsoft.Azure.KeyVault.Core" version="1.0.0" />
       <dependency id="Microsoft.Data.Edm" version="5.7.0" />

@@ -54,7 +54,7 @@ namespace VelocityDBAccess
       using (var lCodeProvider = new CSharpCodeProvider(lProviderOpt))
       {
         // Obtain list of dependencies from properties.
-        List<string> lAssemblies = new List<string> { "System.dll" };
+        List<string> lAssemblies = new List<string> { "System.dll", "System.Transactions.dll", "System.Core.dll" };
         lAssemblies.AddRange(schema.LoadedAssemblies);
         // Create options.
         var lOptions = new CompilerParameters(lAssemblies.ToArray(), pName.CodeBase, true);
@@ -67,7 +67,7 @@ namespace VelocityDBAccess
       }
       if (lResults.Errors.Count > 0)
       {
-        throw new SystemException("Could not generate VelocityDB Access Assembly.\nAre there any missing dependencies?");
+        throw new SystemException($@"Could not generate VelocityDB Access Assembly.\nAre there any missing dependencies? {lResults.Errors.ToString()}");
       }
       return lResults.CompiledAssembly;
     }

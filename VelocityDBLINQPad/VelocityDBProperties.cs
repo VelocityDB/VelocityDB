@@ -69,7 +69,7 @@ namespace VelocityDB.LINQPad
 
         /// <summary>
         /// File name (with path) of dependency assemblies.
-        /// File names are separeted by Separator.
+        /// File names are separated by Separator.
         /// </summary>
         public string DependencyFiles
         {
