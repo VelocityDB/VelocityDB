@@ -109,13 +109,10 @@ namespace VelocityDBAccess
       };
       // Already loaded assemblies sometimes get not found! register
       // resolver.
-      AppDomain.CurrentDomain.AssemblyResolve += SchemaExtractor
-          .AssemblyResolve;
-      GetAssembliesAndTypes(pClassesFilenames, pDependenciesFilenames,
-          ref lSchema);
+      AppDomain.CurrentDomain.AssemblyResolve += SchemaExtractor.AssemblyResolve;
+      GetAssembliesAndTypes(pClassesFilenames, pDependenciesFilenames, ref lSchema);
       CreateNamesDictionary(lSchema.PersistableTypes, ref lSchema);
-      AppDomain.CurrentDomain.AssemblyResolve -= SchemaExtractor
-          .AssemblyResolve;
+      AppDomain.CurrentDomain.AssemblyResolve -= SchemaExtractor.AssemblyResolve;
       return lSchema;
     }
     /// <summary>
@@ -131,34 +128,28 @@ namespace VelocityDBAccess
       // Creates a SchemaExtractor instance on a new domain. This is done
       // so that no assembly is loaded on process start, and at the end,
       // only needed assemblies are loaded.
-      AppDomain lDomain = AppDomain
-          .CreateDomain("User assemblies domain.");
-      SchemaExtractor lExtractor;
-      lExtractor = (SchemaExtractor)lDomain.CreateInstanceFromAndUnwrap(
+      AppDomain lDomain = AppDomain.CreateDomain("User assemblies domain.");
+      SchemaExtractor lExtractor = (SchemaExtractor)lDomain.CreateInstanceFromAndUnwrap(
                               typeof(SchemaExtractor).Assembly.CodeBase,
                               typeof(SchemaExtractor).FullName);
       // Load assemblies and types on the new domain.
-      List<string> lTypeNames = null;
-      List<string> lAssemblyNames = null;
-      List<string> lActualDependencies = null;
-      lExtractor.GetAssembliesAndTypesHelper(
-          pClassFilenames, pDependencyFilenames, ref lAssemblyNames,
-          ref lTypeNames, ref lActualDependencies);
+      List<string> typeNames = null;
+      List<string> assemblyNames = null;
+      List<string> actualDependencies = null;
+      lExtractor.GetAssembliesAndTypesHelper(pClassFilenames, pDependencyFilenames, ref assemblyNames, ref typeNames, ref actualDependencies);
       AppDomain.Unload(lDomain);
 
       // Load assemblies on this domain (to be able to access types).
       Assembly l;
-      foreach (string lDep in lActualDependencies)
+      foreach (string lDep in actualDependencies)
       {
         l = Assembly.LoadFrom(lDep);
       }
 
       // Obtain types from names and fill in schema.
-      pSchema.PersistableTypes = lTypeNames
-          .Select(lTypeName => Type.GetType(lTypeName, true))
-          .ToArray();
-      pSchema.LoadedAssemblies = lActualDependencies.ToArray();
-      pSchema.LoadedAssembliesNames = lAssemblyNames.ToArray();
+      pSchema.PersistableTypes = typeNames.Select(lTypeName => Type.GetType(lTypeName, true)).ToArray();
+      pSchema.LoadedAssemblies = actualDependencies.ToArray();
+      pSchema.LoadedAssembliesNames = assemblyNames.ToArray();
     }
     /// <summary>
     /// Internal method to be used on a clean domain.
@@ -171,10 +162,9 @@ namespace VelocityDBAccess
     /// <param name="pTypes">Persistable types found</param>
     /// <param name="pActualDependencies">Full names of loaded
     /// assemblies</param>
-    internal void GetAssembliesAndTypesHelper(
-        string[] pClassFilenames, string[] pDependencyFilenames,
-        ref List<string> pAssemblyNames, ref List<string> pTypes,
-        ref List<string> pActualDependencies)
+    internal void GetAssembliesAndTypesHelper(string[] pClassFilenames, string[] pDependencyFilenames,
+                                              ref List<string> pAssemblyNames, ref List<string> pTypes,
+                                              ref List<string> pActualDependencies)
     {
       // Get initially loaded assemblies.
       string[] lInitialAssemblies = GetLoadedAssemblies();
@@ -206,10 +196,11 @@ namespace VelocityDBAccess
           pAssemblyNames.Add(lAssembly.GetName().Name);
           try
           {
+            var exportedTypes = lAssembly.GetExportedTypes();
             pTypes.AddRange(
-                from lType in lAssembly.GetExportedTypes()
-                where lType
-                    .GetInterface("IOptimizedPersistable") != null
+                from lType in exportedTypes
+                where !lType.IsEnum && !lType.IsNested && !(lType.IsAbstract && lType.IsSealed)
+                //where lType.GetInterface("IOptimizedPersistable") != null
                 where !lType.IsGenericType
                 select lType.AssemblyQualifiedName);
           }

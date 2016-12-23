@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using VelocityDb;
 using VelocityDb.Session;
-using VelocityDBExtensions;
+using VelocityDBExtensions2;
 using VelocityDbSchema.Samples.AllSupportedSample;
 
 namespace NUnitTests

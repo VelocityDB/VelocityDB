@@ -367,7 +367,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     [UseOidShort]
     List<Person> personListShort;
     [UseOidShort]
-    List<Pet> petListOidShort;
+    List<Pet> m_petListOidShort;
     List<Pet> petListLongOid;
     VelocityDbList<byte> m_odblistByte; // VelocityDbList is like List but is a subclass of OptimizedPersistable which makes it perform better by avoiding collection lookup
     public VelocityDbList<byte> OdblistByte
@@ -633,7 +633,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       nullableOidArray = new Oid?[arraySize];
       listByte = new List<byte>(arraySize); // just samples of what Key can be
       personList = new List<Person>(arraySize);
-      petListOidShort = new List<Pet>(arraySize);
+      m_petListOidShort = new List<Pet>(arraySize);
       petListLongOid = new List<Pet>(arraySize);
       petList2 = new ArrayList(arraySize);
       int32List = new List<Int32>(arraySize);
@@ -653,8 +653,9 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       personListShort.Add(null);
       personListShort.Add(new Person());
       aPet = new Cat("Boze", 5);
-      petListOidShort.Add(aPet);
-      petListOidShort.Add(null);
+      m_petListOidShort.Add(aPet);
+      m_petListOidShort.Add(null);
+      aPet = new Cat("Fendy", 4); // create a new cat so that first cat is created within same database as owner (OidShort)
       petListLongOid.Add(aPet);
       petList2.Add(aPet);
       uint32List.Add(5555);

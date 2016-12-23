@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using VelocityDb;
 using VelocityDb.Collection.BTree;
+using VelocityDb.Exceptions;
 using VelocityDb.Session;
 using Xunit;
 

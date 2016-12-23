@@ -11,7 +11,7 @@ using VelocityDb.Exceptions;
 using VelocityDb.Session;
 using VelocityDb.TypeInfo;
 
-namespace VelocityDBExtensions
+namespace VelocityDBExtensions2
 {
   /// <summary>
   /// Prototype for using Windows Azure API and Steams directly. Currently running into <see cref="Stream"/> related issues.
