@@ -15,17 +15,25 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
   {
     Pet aPet;
     [UseOidShort]
-    List<Pet> petListOidShort;
+    List<Pet> _petListOidShort;
     public Type[] m_type;
     public AllSuportedSub1(Int32 arraySize)
     {
-      petListOidShort = new List<Pet>(arraySize);
+      _petListOidShort = new List<Pet>(arraySize);
       aPet = new Cat("Boze", 5);
-      petListOidShort.Add(aPet);
+      _petListOidShort.Add(aPet);
       m_type = new Type[5];
       m_type[0] = typeof(Pet);
       m_type[1] = typeof(AllSuportedSub1);
       m_type[3] = typeof(OptimizedPersistable);
+    }
+
+    public List<Pet> PetListOidShort
+    {
+      get
+      {
+        return _petListOidShort;
+      }
     }
   }
 
@@ -83,6 +91,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     public enum Int16Enum : short { a, b, c, d, e, f };
     public enum Int32Enum : int { a, b, c, d, e, f, g, h };
     public enum Int64Enum : long { a, b, c, dd, ee, ff };
+    public enum UInt64Enum : ulong { a, b, c, dd, ee, ff };
     ISomeStuff m_objectInterface;
     List<Int16Enum> enum16list;
     int[][] jaggedArray = new int[3][];
@@ -132,6 +141,48 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
         m_enumInt64 = value;
       }
     }
+
+    UInt64Enum m_enumUInt64;
+    public UInt64Enum EnumUInt64
+    {
+      get
+      {
+        return m_enumUInt64;
+      }
+      set
+      {
+        Update();
+        m_enumUInt64 = value;
+      }
+    }
+
+    List<UInt64Enum> m_ListenumUInt64;
+    public List<UInt64Enum> ListEnumUInt64
+    {
+      get
+      {
+        return m_ListenumUInt64;
+      }
+      set
+      {
+        Update();
+        m_ListenumUInt64 = value;
+      }
+    }
+    List<UInt64Enum?> m_ListenumUInt64Nullable;
+    public List<UInt64Enum?> ListEnumUInt64Nullable
+    {
+      get
+      {
+        return m_ListenumUInt64Nullable;
+      }
+      set
+      {
+        Update();
+        m_ListenumUInt64Nullable = value;
+      }
+    }
+
     PersistenceByInterfaceSnake aSnake;
     byte m_aByte;
     public byte AByte
@@ -602,6 +653,12 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       m_enumInt16 = Int16Enum.c;
       m_enumInt32 = Int32Enum.f;
       m_enumInt64 = Int64Enum.ff;
+      m_enumUInt64 = UInt64Enum.ff;
+      ListEnumUInt64 = new List<UInt64Enum>();
+      ListEnumUInt64.Add(m_enumUInt64);
+      ListEnumUInt64Nullable = new List<UInt64Enum?>();
+      ListEnumUInt64Nullable.Add(null);
+      ListEnumUInt64Nullable.Add(m_enumUInt64);
       m_objectArray = new object[arraySize];
       m_objectInterfaceArray = new ISomeStuff[arraySize];
       byteArray = new byte[arraySize];

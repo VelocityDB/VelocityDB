@@ -24,11 +24,29 @@ namespace NUnitTests
       AllSuportedSub1 allSuportedSub1, allSuportedSub2;
       AllSuportedSub2 allSuportedSub2_1, allSuportedSub2_2;
       AllSuportedSub3 allSuportedSub3_1, allSuportedSub3_2;
+      AllSuportedSub4 allSuportedSub4;
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        allSuportedSub4 = new AllSuportedSub4();
+        session.Persist(allSuportedSub4);
+        id = allSuportedSub4.Id;
+        session.Commit();
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginRead();
+        allSuportedSub4 = (AllSuportedSub4)session.Open(id);
+        Assert.NotNull(allSuportedSub4);
+        session.Commit();
+      }
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
         allSuportedSub1 = new AllSuportedSub1(3);
         allSuportedSub1.Persist(session, allSuportedSub1);
+        foreach (var o in allSuportedSub1.PetListOidShort)
+          session.Persist(o, allSuportedSub1);
         id = allSuportedSub1.Id;
         session.Commit();
       }
@@ -37,8 +55,9 @@ namespace NUnitTests
         session.BeginRead();
         allSuportedSub2 = (AllSuportedSub1)session.Open(id);
         Assert.NotNull(allSuportedSub2);
+        Assert.AreEqual(allSuportedSub2.m_type[0], typeof(Pet));
         session.Commit();
-      }     
+      }
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
