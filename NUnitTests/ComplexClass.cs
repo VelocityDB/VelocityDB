@@ -9,6 +9,7 @@ using VelocityDb.Collection;
 using VelocityDbSchema;
 using VelocityDbSchema.Samples.AllSupportedSample;
 using NUnit.Framework;
+using VelocityDb.TypeInfo;
 
 namespace NUnitTests
 {
@@ -25,9 +26,27 @@ namespace NUnitTests
       AllSuportedSub2 allSuportedSub2_1, allSuportedSub2_2;
       AllSuportedSub3 allSuportedSub3_1, allSuportedSub3_2;
       AllSuportedSub4 allSuportedSub4;
+
+      AllSupported[,] a1 = new AllSupported[10, 5];
+      AllSupported[,,] a2 = new AllSupported[8, 4, 3];
+      AllSupported[,,,] a3 = new AllSupported[7, 6, 2, 1];
+      Dictionary<int, string>[,,] a4 = new Dictionary<int, string>[2, 4, 33];
+      string s1str = DataMember.TypeToString(a1.GetType());
+      string s2str = DataMember.TypeToString(a2.GetType());
+      string s3str = DataMember.TypeToString(a3.GetType());
+      string s4str = DataMember.TypeToString(a4.GetType());
+      bool typeUpdated;
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
+        Type t1 = DataMember.StringToType(s1str, session, out typeUpdated);
+        Type t2 = DataMember.StringToType(s2str, session, out typeUpdated);
+        Type t3 = DataMember.StringToType(s3str, session, out typeUpdated);
+        Type t4 = DataMember.StringToType(s4str, session, out typeUpdated);
+        Assert.AreEqual(t1, a1.GetType());
+        Assert.AreEqual(t2, a2.GetType());
+        Assert.AreEqual(t3, a3.GetType());
+        Assert.AreEqual(t4, a4.GetType());
         allSuportedSub4 = new AllSuportedSub4();
         session.Persist(allSuportedSub4);
         id = allSuportedSub4.Id;

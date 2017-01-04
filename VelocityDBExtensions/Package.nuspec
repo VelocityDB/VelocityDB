@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>VelocityDBExtensions</id>
-    <version>6.0.2</version>
+    <version>6.0.3</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
     <licenseUrl>http://Velocitydb.com/Eula.htm</licenseUrl>
@@ -12,10 +12,10 @@
     <summary>Extensions to VelocityDB.</summary>
     <description>Extensions to VelocityDB for efficient LINQ index/BTree queries, AzureSession file API usage with Microsoft Azure, import/export to/from CSV and JSON, Sync, GeoHash and RTree.</description>
     <releaseNotes>Use latest version of VelocityDB.</releaseNotes>
-    <copyright>Copyright 2016</copyright>
+    <copyright>Copyright 2017</copyright>
     <tags>Object Database NoSQL .NET C# F# VB.NET C++ CLI Universal Windows NET CORE Standard Xamarin Mono Android iOS Mac Xbox cross-platform web asp.net identity persistence client csv json server oodb key-value scalable fast flexible distributable embedded Database sync big data events geo hash Azure</tags>
     <dependencies>
-      <dependency id="VelocityDB" version="6.0.2" />
+      <dependency id="VelocityDB" version="6.0.3" />
       <dependency id="LumenWorksCsvReader" version="3.9.1" />
       <dependency id="Microsoft.Data.Edm" version="5.8.1" />
       <dependency id="Microsoft.Data.OData" version="5.8.1" />
