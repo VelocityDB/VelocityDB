@@ -21,17 +21,17 @@ namespace VelocityDBExtensions
     /// <param name="array">The array to represent as a string</param>
     /// <param name="isEncodedOidArray">True if <see cref="Oid"/> is encoded as a UInt32 or UInt64</param>
     /// <param name="page">The page containing the array</param>
+    /// <param name="elementType">The element <see cref="Type"/></param>
     /// <param name="prefix">A prefix to use before each array element in the output string</param>
     ///<returns>
     /// A <see cref="string"/> representing the array.
     ///</returns>
-    public static string ArrayToString(Array array, bool isEncodedOidArray, Page page, string prefix = "\t")
+    public static string ArrayToString(Array array, bool isEncodedOidArray, Page page, Type elementType, string prefix = "\t")
     {
       IOptimizedPersistable pObj;
       StringBuilder sb = new StringBuilder(100);
       int i = 0;
       SessionBase session = page.Database.Session;
-      Type elementType = array.GetType().GetElementType();
       TypeCode tCode = elementType.GetTypeCode();
       bool isValueType = elementType.GetTypeInfo().IsValueType;
       foreach (object arrayObj in array)
@@ -68,6 +68,8 @@ namespace VelocityDBExtensions
                   sb.Append(prefix + "[" + i.ToString() + "]\t" + new Oid((UInt64)arrayObj).ToString());
 
               }
+              else if (elementType.IsEnum)
+                sb.Append(prefix + "[" + i.ToString() + "]\t" + Enum.ToObject(elementType, arrayObj).ToString());
               else
                 sb.Append(prefix + "[" + i.ToString() + "]\t" + arrayObj.ToString());
             }
@@ -94,6 +96,8 @@ namespace VelocityDBExtensions
                 else
                   sb.Append("\t" + new Oid((UInt64)arrayObj).ToString());
               }
+              else if (elementType.IsEnum)
+                sb.Append($"\t{Enum.ToObject(elementType, arrayObj).ToString()}");
               else
                 sb.Append($"\t{arrayObj.ToString()}");
             }
@@ -175,9 +179,10 @@ namespace VelocityDBExtensions
           Array array = o as Array;
           if (array != null)
           {
+            Type elementType = member.FieldType.GetElementType();
             sb.Append("  " + member.FieldName + " " + field.FieldType.ToGenericTypeString() + " size: " + array.Length.ToString());
             if (!skipArrays)
-              sb.Append(ArrayToString(array, false, page));
+              sb.Append(ArrayToString(array, false, page, elementType));
           }
           else
           {
@@ -313,9 +318,10 @@ namespace VelocityDBExtensions
               array = o as Array;
               if (array != null)
               {
+                Type elementType = m.FieldType.GetElementType();
                 sb.Append("  " + field.Name + " " + field.FieldType.ToGenericTypeString());
                 if (!skipArrays)
-                  sb.Append(ArrayToString(array, false, page));
+                  sb.Append(ArrayToString(array, false, page, elementType));
               }
               else
               {

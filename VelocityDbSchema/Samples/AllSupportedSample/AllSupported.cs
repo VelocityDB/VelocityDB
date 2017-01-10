@@ -92,6 +92,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     public enum Int32Enum : int { a, b, c, d, e, f, g, h };
     public enum Int64Enum : long { a, b, c, dd, ee, ff };
     public enum UInt64Enum : ulong { a, b, c, dd, ee, ff };
+    UInt64Enum[] _uint64EnumArray;
     ISomeStuff m_objectInterface;
     List<Int16Enum> enum16list;
     int[][] jaggedArray = new int[3][];
@@ -642,6 +643,9 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
 
     public AllSupported(Int32 arraySize)
     {
+      _uint64EnumArray = new UInt64Enum[arraySize];
+      if (arraySize > 1)
+        _uint64EnumArray[1] = UInt64Enum.dd;
       enum16list = new List<Int16Enum>(arraySize);
       aSnake = new PersistenceByInterfaceSnake("Curly", 1, true, 58);
       jaggedArray[0] = new int[] { 1, 3, 5, 7, 9 };

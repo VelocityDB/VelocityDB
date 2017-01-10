@@ -60,11 +60,11 @@ namespace DatabaseManager
         Array a = memberObj as Array;
         if (a != null)
         {
-          Type elementType = a.GetType().GetElementType();
+          Type elementType = m_member.FieldType.GetElementType();
           TypeCode tCode = elementType.GetTypeCode();
           bool isValueType = elementType.GetTypeInfo().IsValueType;
           if ((isValueType || elementType.IsArray) && !m_isEncodedOidArray)
-            base.Children.Add(new ArrayViewModelNoExpansions(a, this, m_isEncodedOidArray, parentObj.Page, m_session));
+            base.Children.Add(new ArrayViewModelNoExpansions(a, elementType, this, m_isEncodedOidArray, parentObj.Page, m_session));
           else
           {
             int i = 0;

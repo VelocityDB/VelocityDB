@@ -13,10 +13,10 @@ namespace DatabaseManager
     readonly string m_arrayAsString;
 
 
-    public ArrayViewModelNoExpansions(Array a, FieldViewModel parentObject, bool isEncodedOidArray, Page page, SessionBase session)
+    public ArrayViewModelNoExpansions(Array a, Type elementType, FieldViewModel parentObject, bool isEncodedOidArray, Page page, SessionBase session)
       : base(parentObject, true)
     {
-      m_arrayAsString = Utilities.ArrayToString(a, isEncodedOidArray, page, "");
+      m_arrayAsString = Utilities.ArrayToString(a, isEncodedOidArray, page, elementType, "");
     }
 
     public string ArrayName
