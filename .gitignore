@@ -11,7 +11,6 @@ packages
 pba
 *.dll
 *.exe
-*.Designer.cs
 *.psess
 packages - Copy
 Backup
