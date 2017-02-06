@@ -2355,7 +2355,7 @@
           "lib/netstandard1.3/_._": {}
         }
       },
-      "VelocityDB/6.0.6": {
+      "VelocityDB/6.0.7": {
         "type": "package",
         "compile": {
           "lib/netcoreapp1.1/VelocityDBCore.dll": {}
@@ -7526,12 +7526,12 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "VelocityDB/6.0.6": {
-      "sha512": "ryqwYIM0D5LEnwHBJd35adCRxpn0QSm3NmMTqCJOVzUWG397zzEQzeQiQBpGqHIdA1WAoKcvj1iGi1jmGhAr3w==",
+    "VelocityDB/6.0.7": {
+      "sha512": "XnARNZAe/oXNU04K9ks1JLwEWpza0RfGTXjKSL/rho58/q++znm8gCmsoo9kZ55fcx9Gcnf6vbSZpAOQS54hsQ==",
       "type": "package",
-      "path": "VelocityDB/6.0.6",
+      "path": "VelocityDB/6.0.7",
       "files": [
-        "VelocityDB.6.0.6.nupkg.sha512",
+        "VelocityDB.6.0.7.nupkg.sha512",
         "VelocityDB.nuspec",
         "lib/MonoAndroid10/VelocityDBAndroid.dll",
         "lib/Xamarin.iOS10/VelocityDBiOS.XML",
@@ -7550,7 +7550,7 @@
     "": [
       "Microsoft.IdentityModel.Protocols >= 2.1.2",
       "Microsoft.NETCore.Portable.Compatibility >= 1.0.1",
-      "VelocityDB >= 6.0.6"
+      "VelocityDB >= 6.0.7"
     ],
     ".NETCoreApp,Version=v1.1": [
       "Microsoft.NETCore.App >= 1.1.0"
