@@ -132,7 +132,8 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        DatabaseLocation backupLocation = session.DatabaseLocations.LocationForDb(backupLocationStartDbNum);
+        DatabaseLocation backupLocation = new DatabaseLocation(Dns.GetHostName(), backupDir, backupLocationStartDbNum, UInt32.MaxValue, session,
+          PageInfo.compressionKind.None, PageInfo.encryptionKind.noEncryption, true, session.DatabaseLocations.Default());
         session.RestoreFrom(backupLocation, DateTime.UtcNow);
         session.Commit(false, true);
       }

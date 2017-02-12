@@ -68,11 +68,11 @@ namespace NUnitTests
                       if (k == 4000 && Thread.CurrentThread.ManagedThreadId % 3 != 0)
                         session.FlushUpdates();
                     }
-                    session.Commit();
-                    if (!serverSession)
-                      session.Compact();
-                    Console.WriteLine("Commit OK for thread " + Thread.CurrentThread.ManagedThreadId + " Transaction: " + j);
+                    transaction.Commit();
                   }
+                  if (!serverSession)
+                    session.Compact();
+                  Console.WriteLine("Commit OK for thread " + Thread.CurrentThread.ManagedThreadId + " Transaction: " + j);
                 }
                 catch (PageUpdateLockException ex)
                 {
