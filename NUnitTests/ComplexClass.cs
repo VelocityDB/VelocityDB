@@ -125,13 +125,20 @@ namespace NUnitTests
         x.nullableaDouble = 0.5;
         session.Commit();
       }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        var x = new AllSuportedSub6();
+        session.Persist(x);
+        id = x.Id;
+        session.Commit();
+      }
 
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
-        session.BeginRead();
-        var x = (AllSuportedSub5)session.Open(id);
-        Assert.NotNull(x);
-        Assert.AreEqual(x.nullableaDouble, 0.5);
+        session.BeginUpdate();
+        var x = (AllSuportedSub6)session.Open(id);
+        x.Update();
         session.Commit();
       }
 

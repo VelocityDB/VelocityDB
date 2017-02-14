@@ -72,11 +72,26 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       array2[0, 1, 2] = 9;
     }
   }
-  public class AllSuportedSub5 : OptimizedPersistable
+  public interface IAllSuportedSub : IOptimizedPersistable
+  {
+  }
+
+  public class AllSuportedSub5 : OptimizedPersistable, IAllSuportedSub
   {
     public double? nullableaDouble = null;
     public AllSuportedSub5()
     {     
+    }
+  }
+
+  public class AllSuportedSub6 : OptimizedPersistable
+  {
+    IAllSuportedSub _myInterface;
+    AllSuportedSub5 _sub5;
+    public AllSuportedSub6()
+    {
+      _sub5 = new AllSuportedSub5();
+      _myInterface = _sub5;
     }
   }
 

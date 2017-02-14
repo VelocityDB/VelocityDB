@@ -227,6 +227,13 @@ namespace VelocityDBExtensions
                 else
                 {
                   TypeVersion memberShape = t.LastShape();
+                  bool isNullable = memberShape.Type.GetTypeInfo().IsGenericType && memberShape.Type.GetGenericTypeDefinition() == CommonTypes.s_typeOfNullable;
+                  if (isNullable)
+                  {
+                    Type elementType = memberShape.Type.GetTypeInfo().GetGenericArguments()[0];
+                    schema.LookupByType.TryGetValue(elementType, out t);
+                    memberShape = t.LastShape();
+                  }
                   sb.Append("  " + field.Name + " : " + ToStringDetails(o, schema, page, memberShape, skipArrays));
                 }
               }
