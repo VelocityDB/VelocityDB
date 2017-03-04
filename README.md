@@ -13,3 +13,11 @@ Licensing
 ---------
              
 VelocityGraph is an open source product but the back end database engine is [VelocityDB](http://www.VelocityDB.com). See [VelocityDB license info](http://www.VelocityDB.com/License.aspx)
+
+Building Prerequisites
+---------
+
+If you prefer not to use our [installer](https://velocitydb.com/Download.aspx) and instead want to build our extensions, drivers, server and samples from the source code as in our GitHub repository then you need to manually first install
+
+1.	[Microsoft Sync Framework](https://www.microsoft.com/en-us/download/details.aspx?id=23217) (used by our extensions project VelocityDBExtensions2)
+2.	[LinqPad5](https://www.linqpad.net/Download.aspx) (used by our LinqPad driver)
