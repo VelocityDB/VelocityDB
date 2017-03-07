@@ -266,7 +266,7 @@ namespace NUnitTests
     {
       const UInt32 dbNum = 567;
       using (ServerClientSession updater = new ServerClientSession(systemDir))
-      using (ServerClientSession reader = new ServerClientSession(systemDir, null, 2000, true, false, CacheEnum.No)) // CacheEnum.No or cache validating on session.Begin() - makes test fail
+      using (ServerClientSession reader = new ServerClientSession(systemDir, null, 2000, true, false, false, CacheEnum.No)) // CacheEnum.No or cache validating on session.Begin() - makes test fail
       {
         updater.BeginUpdate();
         Database db = updater.OpenDatabase(dbNum, true, false);

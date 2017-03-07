@@ -7,7 +7,7 @@
     "Microsoft.IdentityModel.Protocols": "2.1.2",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "VelocityDB": "6.0.9"
+    "VelocityDB": "6.0.10"
   },
   "frameworks": {
     "netcoreapp1.1": {

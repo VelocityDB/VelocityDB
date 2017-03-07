@@ -12,7 +12,7 @@
   "dependencies": {
     "Microsoft.IdentityModel.Protocols": "2.1.2",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
-    "VelocityDB": "6.0.9"
+    "VelocityDB": "6.0.10"
   },
   "frameworks": {
     "netcoreapp1.1": {

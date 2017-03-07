@@ -75,8 +75,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
-    <Reference Include="VelocityDb, Version=6.0.9.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.6.0.9\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=6.0.10.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.6.0.10\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -120,6 +120,7 @@
     <Compile Include="TrackerTests.cs" />
     <Compile Include="VelocityDB.cs" />
     <Compile Include="VelocityGraphTest.cs" />
+    <Compile Include="ZeroSizeObjectTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VelocityDBExtensions2\VelocityDBExtensions2.csproj">

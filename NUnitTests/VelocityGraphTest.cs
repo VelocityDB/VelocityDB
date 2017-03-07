@@ -30,7 +30,7 @@ namespace NUnitTests
   [TestFixture]
   public class VelocityGraphTest
   {
-    static readonly string drive = "D:\\";
+    static readonly string drive = "F:\\";
     static readonly string systemDir = Path.Combine(drive, "VelocityGraphNunit");
     static readonly string inputData = Path.Combine(drive, "bfs-1-socialgraph-release");
     static readonly string licenseDbFile = Path.Combine(drive, "4.odb");
@@ -489,7 +489,7 @@ namespace NUnitTests
         anEdge = g.NewEdge(origin_for, london, ba888);
         anEdge = g.NewEdge(arrives_at, ba888, sydney);
 
-        g.ExportToGraphJson(@"c:/Temp/testTraverse.json");
+        g.ExportToGraphJson(@"d:/Temp/testTraverse.json");
 
         Dictionary<Vertex, HashSet<Edge>> to_sydney = sydney.Traverse(Direction.In);
         Dictionary<Vertex, HashSet<Edge>> from_sydney = sydney.Traverse(Direction.Out);
@@ -720,7 +720,7 @@ namespace NUnitTests
     // [Test]
     public void TestVelecoityBuildLocal()
     {
-      using (var session = new SessionNoServer(@"d:\graphtest"))
+      using (var session = new SessionNoServer(Path.Combine(drive, "graphtest2")))
       {
         session.BeginUpdate();
         session.DefaultDatabaseLocation().CompressPages = PageInfo.compressionKind.LZ4;
@@ -779,7 +779,7 @@ namespace NUnitTests
         //vx2.SetProperty("bla", "name");
         //Edge edge = graph.NewEdge(cooccurence, vx1, vx2);
 
-        using (var llz = new StreamReader(@"d:\isa_core.txt"))
+        using (var llz = new StreamReader(Path.Combine(drive, "isa_core.txt")))
         {
           string lastConcept = string.Empty;
           while (!llz.EndOfStream)
@@ -829,7 +829,7 @@ namespace NUnitTests
     [Test]
     public void AddVertices()
     {
-      using (var session = new SessionNoServer(@"d:\graphtest2"))
+      using (var session = new SessionNoServer(Path.Combine(drive, "graphtest2")))
       {
         session.DefaultDatabaseLocation().CompressPages = PageInfo.compressionKind.LZ4;
         DataCache.MaximumMemoryUse = 4000000000;
@@ -902,7 +902,7 @@ namespace NUnitTests
 
         session.Commit();
       }
-      using (var session = new SessionNoServer(@"d:\graphtest2"))
+      using (var session = new SessionNoServer(Path.Combine(drive, "graphtest2")))
       {
         //session.DefaultDatabaseLocation().CompressPages = true;
         DataCache.MaximumMemoryUse = 4000000000;
