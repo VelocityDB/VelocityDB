@@ -1,6 +1,6 @@
 using System;
 
-namespace VelocityDB.geohash.util
+namespace VelocityDBExtensions.geohash.util
 {
 
   public class LongUtil

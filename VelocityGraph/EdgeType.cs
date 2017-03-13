@@ -13,6 +13,7 @@ using VelocityDb.Collection.BTree;
 using Frontenac.Blueprints;
 using Frontenac.Blueprints.Util;
 using VelocityDb.Collection;
+using VelocityGraph.Exceptions;
 
 namespace VelocityGraph
 {
@@ -390,6 +391,9 @@ namespace VelocityGraph
       return eId;
     }
 
+    /// <summary>
+    /// <see cref="Graph"/> for which this <see cref="EdgeType"/> belongs to
+    /// </summary>
     public Graph MyGraph
     {
       get
@@ -571,6 +575,9 @@ namespace VelocityGraph
       property.SetPropertyValue(elementId, m_typeId, v);
     }
 
+    /// <summary>
+    /// Sub types of this <see cref="EdgeType"/> 
+    /// </summary>
     public List<EdgeType> SubTypes
     {
       get

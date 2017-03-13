@@ -14,6 +14,7 @@ using Frontenac.Blueprints;
 using VelocityDb.Collection;
 using VelocityDb;
 using VelocityDb.Exceptions;
+using VelocityGraph.Exceptions;
 
 namespace VelocityGraph
 {

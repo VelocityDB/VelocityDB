@@ -315,7 +315,7 @@ namespace VelocityGraph
     /// </summary>
     /// <param name="dir">Direction to traverse edges</param>
     /// <param name="edgeTypesToTraverse">the type of edges to follow, by default null which means follow all edge types</param>
-    /// <returns></returns>
+    /// <returns>All paths to neighbor vertices </returns>
     public Dictionary<Vertex, HashSet<Edge>> Traverse(Direction dir, ISet<EdgeType> edgeTypesToTraverse = null)
     {
       return m_vertexType.Traverse(this, dir, edgeTypesToTraverse);
@@ -599,7 +599,9 @@ namespace VelocityGraph
       return new DefaultVertexQuery(this);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Removes this <see cref="Vertex"/> from the <see cref="Graph"/>  
+    /// </summary>
     public override void Remove()
     {
       m_vertexType.RemoveVertex(this);

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using VelocityDb.Session;
 
-namespace VelocityDB.AspNet.Identity
+namespace VelocityDBExtensions2.AspNet.Identity
 {
 
   /// <summary>

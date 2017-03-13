@@ -1,4 +1,4 @@
-namespace VelocityDB.geohash.util
+namespace VelocityDBExtensions.geohash.util
 {
   /// <summary>
   /// Ported to C# from Java by Mats Persson, VelocityDB, Inc.

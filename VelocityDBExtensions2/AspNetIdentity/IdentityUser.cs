@@ -5,7 +5,7 @@ using Microsoft.AspNet.Identity;
 using VelocityDb;
 using VelocityDb.Collection;
 
-namespace VelocityDB.AspNet.Identity
+namespace VelocityDBExtensions2.AspNet.Identity
 {
     /// <summary>
     /// Represents a user on the system and properties associated with that user.

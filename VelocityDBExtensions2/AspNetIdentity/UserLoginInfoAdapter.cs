@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using VelocityDb;
 
-namespace VelocityDB.AspNet.Identity
+namespace VelocityDBExtensions2.AspNet.Identity
 {
     public class UserLoginInfoAdapter : OptimizedPersistable
     {

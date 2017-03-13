@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
-using VelocityDB.AspNet.Identity;
+using VelocityDBExtensions2.AspNet.Identity;
 using VelocityDb.Session;
 using System;
 

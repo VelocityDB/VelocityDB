@@ -5,7 +5,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VelocityDB.AspNet.Identity
+namespace VelocityDBExtensions2.AspNet.Identity
 {
     public static class KeyFormats
     {

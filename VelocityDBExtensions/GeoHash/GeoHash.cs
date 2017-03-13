@@ -15,8 +15,11 @@ using VelocityDb.Exceptions;
  * in the LICENSE file. If you have not, see
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-namespace VelocityDB.geohash
+namespace VelocityDBExtensions.geohash
 {
+  /// <summary>
+  /// See https://en.wikipedia.org/wiki/Geohash
+  /// </summary>
   [Serializable]
   public sealed class GeoHash : IComparable<GeoHash>
   {
@@ -26,7 +29,7 @@ namespace VelocityDB.geohash
     private const long SerialVersionUID = -8553214249630252175L;
     private static readonly int[] s_bits = new int[] {16, 8, 4, 2, 1};
     private const int BASE32_BITS = 5;
-    public const Int64 FIRST_BIT_FLAGGED = unchecked((long) 0x8000000000000000L);
+    const Int64 FIRST_BIT_FLAGGED = unchecked((long) 0x8000000000000000L);
     private static readonly char[] s_base32 = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
     private static readonly IDictionary<char?, int?> DecodeMap = new Dictionary<char?, int?>();
@@ -83,12 +86,23 @@ namespace VelocityDB.geohash
       return new GeoHash(latitude, longitude, numberOfBits);
     }
 
+    /// <summary>
+    /// create a new <seealso cref="GeoHash"/> with the given number of bits accuracy. This
+    /// at the same time defines this hash's bounding box.
+    /// </summary>
+    /// <param name="point">Location to create <seealso cref="GeoHash"/> for</param>
+    /// <param name="numberOfBits">How may bits precision to use (64 is recommended)</param>
+    /// <returns></returns>
     public static GeoHash withBitPrecision(WGS84Point point, int numberOfBits)
     {
       return WithBitPrecision(point.Latitude, point.Longitude, numberOfBits);
     }
 
-
+    /// <summary>
+    /// Recreates a <see cref="GeoHash"/> from a string of 0's and 1's
+    /// </summary>
+    /// <param name="binaryString"><see cref="string"/> of 0's and 1's</param>
+    /// <returns>A <see cref="GeoHash"/></returns>
     public static GeoHash FromBinaryString(string binaryString)
     {
       GeoHash geohash = new GeoHash();
@@ -114,10 +128,12 @@ namespace VelocityDB.geohash
     }
 
     /// <summary>
-    /// build a new <seealso cref="GeoHash"/> from a base32-encoded <seealso cref="String"/>.<br>
+    /// build a new <seealso cref="GeoHash"/> from a base32-encoded <seealso cref="String"/>.
     /// This will also set up the hashes bounding box and other values, so it can
     /// also be used with functions like within().
     /// </summary>
+    /// <param name="geohash">base32-encoded <see cref="String"/></param>
+    /// <returns>A <see cref="GeoHash"/></returns>
     public static GeoHash FromGeohashString(string geohash)
     {
       double[] latitudeRange = new double[] {-90.0, 90.0};
@@ -153,6 +169,12 @@ namespace VelocityDB.geohash
       return hash;
     }
 
+    /// <summary>
+    /// Creates a <see cref="GeoHash"/> from a long value
+    /// </summary>
+    /// <param name="hashVal">the <see cref="GeoHash"/> as a <see cref="long"/></param>
+    /// <param name="significantBits">How many bits to use from the long value (64 recommended and is default)</param>
+    /// <returns>A <see cref="GeoHash"/></returns>
     public static GeoHash FromLongValue(Int64 hashVal, int significantBits = MAX_BIT_PRECISION)
     {
       double[] latitudeRange = new double[] {-90.0, 90.0};
@@ -230,21 +252,38 @@ namespace VelocityDB.geohash
       hash.m_boundingBox = new BoundingBox(new WGS84Point(latitudeRange[0], longitudeRange[0]), new WGS84Point(latitudeRange[1], longitudeRange[1]));
     }
 
+    /// <summary>
+    /// ?
+    /// </summary>
+    /// <param name="step">?</param>
+    /// <returns></returns>
     public GeoHash Next(int step)
     {
       return FromOrd(Ord() + (long) step, m_significantBits);
     }
 
+    /// <summary>
+    /// ?
+    /// </summary>
+    /// <returns>The next <see cref="GeoHash"/></returns>
     public GeoHash Next()
     {
       return Next(1);
     }
 
+    /// <summary>
+    /// ?
+    /// </summary>
+    /// <returns>The previous <see cref="GeoHash"/></returns>
     public GeoHash Prev()
     {
       return Next(-1);
     }
 
+    /// <summary>
+    /// ?
+    /// </summary>
+    /// <returns>?</returns>
     public Int64 Ord()
     {
       int insignificantBits = MAX_BIT_PRECISION - m_significantBits;
@@ -270,6 +309,12 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ord"></param>
+    /// <param name="significantBits"></param>
+    /// <returns></returns>
     public static GeoHash FromOrd(Int64 ord, int significantBits)
     {
       int insignificantBits = MAX_BIT_PRECISION - significantBits;
@@ -325,7 +370,7 @@ namespace VelocityDB.geohash
 
     /// <summary>
     /// returns the 8 adjacent hashes for this one. They are in the following
-    /// order:<br>
+    /// order:
     /// N, NE, E, SE, S, SW, W, NW
     /// </summary>
     public GeoHash[] Adjacent
@@ -351,6 +396,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// <see cref="long"/> representation of this <see cref="GeoHash"/> 
+    /// </summary>
     public Int64 LongValue
     {
       get
@@ -360,7 +408,7 @@ namespace VelocityDB.geohash
     }
 
     /// <summary>
-    /// get the base32 string for this <seealso cref="GeoHash"/>.<br>
+    /// get the base32 string for this <seealso cref="GeoHash"/>.
     /// this method only makes sense, if this hash has a multiple of 5
     /// significant bits.
     /// </summary>
@@ -388,7 +436,7 @@ namespace VelocityDB.geohash
     }
 
     /// <summary>
-    /// returns true iff this is within the given geohash bounding box.
+    /// returns true if this is within the given geohash bounding box.
     /// </summary>
     public bool Within(GeoHash boundingBox)
     {
@@ -396,7 +444,7 @@ namespace VelocityDB.geohash
     }
 
     /// <summary>
-    /// find out if the given point lies within this hashes bounding box.<br>
+    /// find out if the given point lies within this hashes bounding box.
     /// <i>Note: this operation checks the bounding boxes coordinates, i.e. does
     /// not use the <seealso cref="GeoHash"/>s special abilities.s</i>
     /// </summary>
@@ -406,7 +454,7 @@ namespace VelocityDB.geohash
     }
 
     /// <summary>
-    /// returns the <seealso cref="WGS84Point"/> that was originally used to set up this.<br>
+    /// returns the <seealso cref="WGS84Point"/> that was originally used to set up this.
     /// If it was built from a base32-<seealso cref="String"/>, this is the center point of
     /// the bounding box.
     /// </summary>
@@ -431,6 +479,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Get <see cref="BoundingBox"/> for this <see cref="GeoHash"/> 
+    /// </summary>
     public BoundingBox BoundingBox
     {
       get
@@ -439,6 +490,12 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// ?
+    /// </summary>
+    /// <param name="point">?</param>
+    /// <param name="radius">?</param>
+    /// <returns>?</returns>
     public bool EnclosesCircleAroundPoint(WGS84Point point, double radius)
     {
       return false;
@@ -475,6 +532,9 @@ namespace VelocityDB.geohash
       return hash;
     }
 
+    /// <summary>
+    /// Nearest <see cref="GeoHash"/> Neighbor to the North
+    /// </summary>
     public GeoHash NorthernNeighbour
     {
       get
@@ -487,6 +547,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Nearest <see cref="GeoHash"/> Neighbor to the South
+    /// </summary>
     public GeoHash SouthernNeighbour
     {
       get
@@ -499,6 +562,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Nearest <see cref="GeoHash"/> Neighbor to the East
+    /// </summary>
     public GeoHash EasternNeighbour
     {
       get
@@ -511,6 +577,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Nearest <see cref="GeoHash"/> Neighbor to the West
+    /// </summary>
     public GeoHash WesternNeighbour
     {
       get
@@ -587,6 +656,7 @@ namespace VelocityDB.geohash
       m_bits <<= 1;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
       if (m_significantBits % 5 == 0)
@@ -599,6 +669,10 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Get binary <see cref="string"/> representation of this <see cref="GeoHash"/> 
+    /// </summary>
+    /// <returns><see cref="string"/> representation</returns>
     public string ToBinaryString()
     {
       StringBuilder bui = new StringBuilder();
@@ -618,6 +692,7 @@ namespace VelocityDB.geohash
       return bui.ToString();
     }
 
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
       if (obj == this)
@@ -635,6 +710,7 @@ namespace VelocityDB.geohash
       return false;
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
       int f = 17;

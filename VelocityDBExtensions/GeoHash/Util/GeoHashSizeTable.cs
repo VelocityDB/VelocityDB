@@ -11,7 +11,7 @@ using System;
  * in the LICENSE file. If you have not, see
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-namespace VelocityDB.geohash.util
+namespace VelocityDBExtensions.geohash.util
 {
 
   public class GeoHashSizeTable

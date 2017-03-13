@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace VelocityDB.geohash.query
+namespace VelocityDBExtensions.geohash.query
 {
 
 
@@ -8,7 +8,7 @@ namespace VelocityDB.geohash.query
   {
 
     /// <summary>
-    /// check wether a geohash is within the hashes that make up this query.
+    /// check whether a geohash is within the hashes that make up this query.
     /// </summary>
     bool Contains(GeoHash hash);
 

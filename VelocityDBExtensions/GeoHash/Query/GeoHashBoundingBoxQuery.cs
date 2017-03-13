@@ -13,9 +13,9 @@ using System.Text;
  * in the LICENSE file. If you have not, see
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-namespace VelocityDB.geohash.query
+namespace VelocityDBExtensions.geohash.query
 {
-  using GeoHashSizeTable = VelocityDB.geohash.util.GeoHashSizeTable;
+  using GeoHashSizeTable = VelocityDBExtensions.geohash.util.GeoHashSizeTable;
 
   /// <summary>
   /// This class returns the hashes covering a certain bounding box. There are

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using VelocityDb.Session;
 
-namespace VelocityDB.AspNet.Identity
+namespace VelocityDBExtensions2.AspNet.Identity
 {
   /// <summary>
   /// Contains methods for adding, removing, updating and retrieving users from VelocityDB.

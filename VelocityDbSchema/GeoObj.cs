@@ -20,7 +20,7 @@ namespace VelocityDbSchema
     {
       m_longitude = (s_randGen.Next(360) - 180) * s_randGen.NextDouble();
       m_latitude = (s_randGen.Next(180) - 90) * s_randGen.NextDouble();
-      m_geoHash = VelocityDB.geohash.GeoHash.WithBitPrecision(m_latitude, m_longitude).LongValue;
+      m_geoHash = VelocityDBExtensions.geohash.GeoHash.WithBitPrecision(m_latitude, m_longitude).LongValue;
     }
 
     public GeoObj(long geoHash)

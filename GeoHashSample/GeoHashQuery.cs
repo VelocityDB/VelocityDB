@@ -6,8 +6,8 @@ using VelocityDb.Collection;
 using VelocityDb.Collection.BTree;
 using VelocityDb.Session;
 using VelocityDb.TypeInfo;
-using VelocityDB.geohash;
-using VelocityDB.geohash.query;
+using VelocityDBExtensions.geohash;
+using VelocityDBExtensions.geohash.query;
 using VelocityDbSchema;
 
 namespace GeoHashSample

@@ -2,7 +2,7 @@
 using Microsoft.AspNet.Identity;
 using VelocityDb;
 
-namespace VelocityDB.AspNet.Identity
+namespace VelocityDBExtensions2.AspNet.Identity
 {
   /// <summary>
   /// Contains properties for roles that can be assigned to a user.

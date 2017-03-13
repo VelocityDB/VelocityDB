@@ -11,9 +11,11 @@ using System;
  * in the LICENSE file. If you have not, see
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-namespace VelocityDB.geohash
+namespace VelocityDBExtensions.geohash
 {
-
+  /// <summary>
+  ///  Rectangular bounding box which is used to describe the bounds of a GeoHash query
+  /// </summary>
   [Serializable]
   public class BoundingBox
   {
@@ -30,6 +32,13 @@ namespace VelocityDB.geohash
     {
     }
 
+    /// <summary>
+    /// create a bounding box defined by four <see cref="double"/>s
+    /// </summary>
+    /// <param name="y1">Y axis number 1</param>
+    /// <param name="y2">Y axis number 2</param>
+    /// <param name="x1">X axis number 1</param>
+    /// <param name="x2">X axis number 2</param>
     public BoundingBox(double y1, double y2, double x1, double x2)
     {
       m_minLon = Math.Min(x1, x2);
@@ -38,10 +47,17 @@ namespace VelocityDB.geohash
       m_maxLat = Math.Max(y1, y2);
     }
 
+    /// <summary>
+    /// Clones an existing <see cref="BoundingBox"/> 
+    /// </summary>
+    /// <param name="that">to be cloned</param>
     public BoundingBox(BoundingBox that) : this(that.m_minLat, that.m_maxLat, that.m_minLon, that.m_maxLon)
     {
     }
 
+    /// <summary>
+    /// Upper left corner
+    /// </summary>
     public virtual WGS84Point UpperLeft
     {
       get
@@ -50,6 +66,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Lower right corner
+    /// </summary>
     public virtual WGS84Point LowerRight
     {
       get
@@ -58,6 +77,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Max Latitude - Min Latitude
+    /// </summary>
     public virtual double LatitudeSize
     {
       get
@@ -66,6 +88,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Max Longitude - Min Longitude
+    /// </summary>
     public virtual double LongitudeSize
     {
       get
@@ -74,6 +99,7 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
       if (this == obj)
@@ -91,6 +117,7 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
       int result = 17;
@@ -107,21 +134,35 @@ namespace VelocityDB.geohash
       return (int)(f ^ ((long)((ulong)f >> 32)));
     }
 
+    /// <summary>
+    /// Is <see cref="WGS84Point"/> within <see cref="BoundingBox"/>
+    /// </summary>
+    /// <param name="point"><see cref="WGS84Point"/> for containment check</param>
+    /// <returns><c>true</c> if contained; otherwise <c>false</c></returns>
     public virtual bool Contains(WGS84Point point)
     {
       return (point.Latitude >= m_minLat) && (point.Longitude >= m_minLon) && (point.Latitude <= m_maxLat) && (point.Longitude <= m_maxLon);
     }
 
+    /// <summary>
+    /// Does this <see cref="BoundingBox"/> intersect (overlap) with other <see cref="BoundingBox"/>
+    /// </summary>
+    /// <param name="other">Other <see cref="BoundingBox"/></param>
+    /// <returns><c>true</c> if intersect; otherwise <c>false</c></returns>
     public virtual bool Intersects(BoundingBox other)
     {
       return !(other.m_minLon > m_maxLon || other.m_maxLon < m_minLon || other.m_minLat > m_maxLat || other.m_maxLat < m_minLat);
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
       return UpperLeft + " -> " + LowerRight;
     }
 
+    /// <summary>
+    /// Center <see cref="WGS84Point"/> of this <see cref="BoundingBox"/>
+    /// </summary>
     public virtual WGS84Point CenterPoint
     {
       get
@@ -132,6 +173,10 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Expand this <see cref="BoundingBox"/> to include other <see cref="BoundingBox"/>
+    /// </summary>
+    /// <param name="other">Other <see cref="BoundingBox"/> to be included</param>
     public virtual void ExpandToInclude(BoundingBox other)
     {
       if (other.m_minLon < m_minLon)
@@ -152,6 +197,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Minimum Longitude of this <see cref="BoundingBox"/>
+    /// </summary>
     public virtual double MinLon
     {
       get
@@ -160,6 +208,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Minimum Latitude of this <see cref="BoundingBox"/>
+    /// </summary>
     public virtual double MinLat
     {
       get
@@ -168,6 +219,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Maximum Latitude of this <see cref="BoundingBox"/>
+    /// </summary>
     public virtual double MaxLat
     {
       get
@@ -176,6 +230,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// Maximum Longitude of this <see cref="BoundingBox"/>
+    /// </summary>
     public virtual double MaxLon
     {
       get

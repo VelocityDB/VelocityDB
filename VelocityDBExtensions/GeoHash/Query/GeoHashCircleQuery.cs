@@ -12,9 +12,9 @@ using System.Collections.Generic;
  * in the LICENSE file. If you have not, see
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-namespace VelocityDB.geohash.query
+namespace VelocityDBExtensions.geohash.query
 {
-  using VincentyGeodesy = VelocityDB.geohash.util.VincentyGeodesy;
+  using VincentyGeodesy = VelocityDBExtensions.geohash.util.VincentyGeodesy;
 
   /// <summary>
   /// represents a radius search around a specific point via geohashes.

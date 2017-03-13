@@ -11,10 +11,10 @@ using System;
  * in the LICENSE file. If you have not, see
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-namespace VelocityDB.geohash
+namespace VelocityDBExtensions.geohash
 {
   /// <summary>
-  /// <seealso cref="WGS84Point"/> encapsulates coordinates on the earths surface.<br>
+  /// <seealso cref="WGS84Point"/> encapsulates coordinates on the earths surface.
   /// Coordinate projections might end up using this class...
   /// </summary>
   [Serializable]
@@ -24,6 +24,11 @@ namespace VelocityDB.geohash
     private readonly double m_longitude;
     private readonly double m_latitude;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="latitude"></param>
+    /// <param name="longitude"></param>
     public WGS84Point(double latitude, double longitude)
     {
       m_latitude = latitude;
@@ -34,10 +39,17 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="other"></param>
     public WGS84Point(WGS84Point other) : this(other.m_latitude, other.m_longitude)
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public virtual double Latitude
     {
       get
@@ -46,6 +58,9 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public virtual double Longitude
     {
       get
@@ -54,11 +69,13 @@ namespace VelocityDB.geohash
       }
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
       return string.Format("(" + m_latitude + "," + m_longitude + ")");
     }
 
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
       if (obj is WGS84Point)
@@ -69,6 +86,7 @@ namespace VelocityDB.geohash
       return false;
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
       int result = 42;

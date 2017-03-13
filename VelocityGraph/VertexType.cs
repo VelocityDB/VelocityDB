@@ -13,6 +13,7 @@ using TypeId = System.Int32;
 using EdgeIdVertexId = System.UInt64;
 using Frontenac.Blueprints;
 using VelocityDb.Collection;
+using VelocityGraph.Exceptions;
 
 namespace VelocityGraph
 {
@@ -123,6 +124,9 @@ namespace VelocityGraph
       return null;
     }
 
+    /// <summary>
+    /// <see cref="Graph"/> for which this <see cref="VertexType"/> belongs to
+    /// </summary>
     public Graph MyGraph
     {
       get
@@ -1326,6 +1330,9 @@ namespace VelocityGraph
       propertyType.SetPropertyValue(vertexId, m_typeId, v);
     }
 
+    /// <summary>
+    /// Sub types of this <see cref="VertexType"/> 
+    /// </summary>
     public List<VertexType> SubTypes
     {
       get

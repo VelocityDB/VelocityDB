@@ -9,7 +9,7 @@ using VelocityDb.Collection.BTree;
 using VelocityDb.Collection.Comparer;
 using VelocityDb.Session;
 using VelocityDb.TypeInfo;
-using VelocityDB.geohash;
+using VelocityDBExtensions.geohash;
 using VelocityDbSchema;
 
 namespace GeoHashSample

@@ -23,9 +23,7 @@ namespace VelocityDBExtensions
     /// <param name="page">The page containing the array</param>
     /// <param name="elementType">The element <see cref="Type"/></param>
     /// <param name="prefix">A prefix to use before each array element in the output string</param>
-    ///<returns>
-    /// A <see cref="string"/> representing the array.
-    ///</returns>
+    /// <returns>A <see cref="string"/> representing the array.</returns>
     public static string ArrayToString(Array array, bool isEncodedOidArray, Page page, Type elementType, string prefix = "\t")
     {
       IOptimizedPersistable pObj;
@@ -125,11 +123,10 @@ namespace VelocityDBExtensions
     /// <summary>
     /// Object details as a string
     /// </summary>
+    /// <param name="pObj">The object extended</param>
     /// <param name="session">The session managing this object</param>
     /// <param name="skipArrays">Indicates if string should contain detailed array data.</param>
-    ///<returns>
-    /// A <see cref="string"/> containing all details of this object.
-    ///</returns>
+    ///<returns><see cref="string"/> containing all details of this object.</returns>
     static public string ToStringDetails(this OptimizedPersistable pObj, SessionBase session, bool skipArrays = true)
     {
       Schema schema = session.OpenSchema(false);
@@ -150,10 +147,9 @@ namespace VelocityDBExtensions
     /// </summary>
     /// <param name="member">A field in an object</param>
     /// <param name="obj">The object containing the field</param>
-    /// <param name="pObj">The object containing the field or the owner of the object containing the field</param>
     /// <param name="page">The page of the object</param>
     /// <param name="skipArrays">Option to skip arrays of the object</param>
-    /// <returns></returns>
+    /// <returns>A <see cref="string"/> containing all details of this field.</returns>
     public static string ToStringDetails(DataMember member, object obj, IOptimizedPersistable pObj, Page page, bool skipArrays)
     {
       SessionBase session = pObj.Page.Database.Session;

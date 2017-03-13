@@ -48,8 +48,9 @@
     <AssemblyOriginatorKeyFile>VelocityDbKeyFile.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LINQPad">
-      <HintPath>C:\Program Files (x86)\LINQPad5\LINQPad.exe</HintPath>
+    <Reference Include="LINQPad, Version=1.0.0.0, Culture=neutral, PublicKeyToken=21353812cd2a2db5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\LINQPad5\LINQPad.exe</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

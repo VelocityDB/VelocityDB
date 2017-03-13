@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace VelocityDB.geohash.util
+namespace VelocityDBExtensions.geohash.util
 {
   /// <summary>
   /// Select random samples of geohashes within a bounding box, without replacement

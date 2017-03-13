@@ -8,8 +8,11 @@ using VelocityDb;
 using VelocityDb.Collection.BTree;
 using VelocityDb.Session;
 
-namespace VelocityDB.AspNet.Identity
+namespace VelocityDBExtensions2.AspNet.Identity
 {
+  /// <summary>
+  /// Maintains user profiles for Asp.Identity VelocityDB Driver
+  /// </summary>
   public class AspNetIdentity : OptimizedPersistable
   {
     string m_name;
@@ -19,6 +22,10 @@ namespace VelocityDB.AspNet.Identity
     BTreeMap<string, UInt64> m_emailToId;
     BTreeMap<string, UInt64> m_userNameToId;
 
+    /// <summary>
+    /// Creates a new Asp.Net VelocityDB identity manager
+    /// </summary>
+    /// <param name="session"></param>
     public AspNetIdentity(SessionBase session)
     {
       m_adapterMap = new BTreeMap<string, UserLoginInfoAdapter>(null, session);
@@ -28,6 +35,9 @@ namespace VelocityDB.AspNet.Identity
       m_userNameToId = new BTreeMap<string, ulong>(null, session);
     }
 
+    /// <summary>
+    /// Map from adapter key to adapter
+    /// </summary>
     public BTreeMap<string, UserLoginInfoAdapter> AdapterMap
     {
       get
@@ -36,6 +46,9 @@ namespace VelocityDB.AspNet.Identity
       }
     }
 
+    /// <summary>
+    /// Set of <see cref="IdentityRole"/> used
+    /// </summary>
     public BTreeSet<IdentityRole> RoleSet
     {
       get
@@ -43,6 +56,9 @@ namespace VelocityDB.AspNet.Identity
         return m_roleSet;
       }
     }
+    /// <summary>
+    /// Set of <see cref="IdentityUser"/> used
+    /// </summary>
     public BTreeSet<IdentityUser> UserSet
     {
       get
@@ -51,6 +67,9 @@ namespace VelocityDB.AspNet.Identity
       }
     }
 
+    /// <summary>
+    /// Map from Email address to user object id
+    /// </summary>
     public BTreeMap<string, UInt64> EmailToId
     {
       get
@@ -58,6 +77,10 @@ namespace VelocityDB.AspNet.Identity
         return m_emailToId;
       }
     }
+
+    /// <summary>
+    /// Map from user name to user object id
+    /// </summary>
     public BTreeMap<string, UInt64> UserNameToId
     {
       get
@@ -66,6 +89,9 @@ namespace VelocityDB.AspNet.Identity
       }
     }
 
+    /// <summary>
+    /// Name of this identity manager
+    /// </summary>
     public string Name
     {
       get
@@ -79,6 +105,7 @@ namespace VelocityDB.AspNet.Identity
       }
     }
 
+    /// <inheritdoc />
     public override UInt64 Persist(Placement place, SessionBase session, bool persistRefs = true, bool disableFlush = false, Queue<IOptimizedPersistable> toPersist = null)
     {
       if (IsPersistent == false)
