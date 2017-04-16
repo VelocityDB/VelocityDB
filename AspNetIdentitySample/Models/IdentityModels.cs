@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using VelocityDBExtensions2.AspNet.Identity;
 using VelocityDb.Session;
 using System;
+using System.IO;
 
 namespace AspNetIdentitySample.Models
 {
@@ -22,10 +23,13 @@ namespace AspNetIdentitySample.Models
 
   public class ApplicationDbContext: SessionNoServer
   {
+    static readonly string s_licenseDbFile = "c:/4.odb"; // (download from https://www.velocitydb.com/Secure/Download.aspx)
+
     AspNetIdentity m_aspNetIdentity;
     public ApplicationDbContext():base("AspNetIdentitySample")
     {
       BeginUpdate();
+      File.Copy(s_licenseDbFile, Path.Combine(SystemDirectory, "4.odb"), true);
       m_aspNetIdentity = AllObjects<AspNetIdentity>().FirstOrDefault();
       if (m_aspNetIdentity == null)
       {
