@@ -41,7 +41,7 @@ namespace GeoHashSample
         var current = itr.Current();
         while (current != null)
         {
-          GeoHash geoHash = GeoHash.FromLongValue(current.GeoHash);
+          GeoHash geoHash = GeoHash.FromLongValue(current.GeoHashAsLong);
           if ((geoHash.SignificantBits >= hash.SignificantBits && geoHash.Within(hash)) || (geoHash.SignificantBits < hash.SignificantBits && hash.Within(geoHash)))
           {
             if (!(current.Latitude < bbox.MinLat || current.Latitude > bbox.MaxLat || current.Longitude < bbox.MinLon || current.Longitude > bbox.MaxLon))
@@ -69,7 +69,7 @@ namespace GeoHashSample
         var current = itr.Current();
         while (current != null)
         {
-          GeoHash geoHash = GeoHash.FromLongValue(current.GeoHash);
+          GeoHash geoHash = GeoHash.FromLongValue(current.GeoHashAsLong);
           if ((geoHash.SignificantBits >= hash.SignificantBits && geoHash.Within(hash)) || (geoHash.SignificantBits < hash.SignificantBits && hash.Within(geoHash)))
           {
             if (!(current.Latitude < bbox.MinLat || current.Latitude > bbox.MaxLat || current.Longitude < bbox.MinLon || current.Longitude > bbox.MaxLon))

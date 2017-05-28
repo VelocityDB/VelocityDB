@@ -84,7 +84,6 @@
   <ItemGroup>
     <Compile Include="ArrayOfWeakrefs.cs" />
     <Compile Include="EntityNewsData.cs" />
-    <Compile Include="GeoObj.cs" />
     <Compile Include="Imdb\ActingByNameComparer.cs" />
     <Compile Include="Imdb\Actor.cs" />
     <Compile Include="Imdb\Actress.cs" />

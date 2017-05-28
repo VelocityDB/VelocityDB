@@ -58,9 +58,8 @@
       <HintPath>..\packages\Frontenac.Blueprints.2.4\lib\net40\Frontenac.Gremlinq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -80,6 +79,7 @@
     <Compile Include="Exceptions\EdgeTypeDoesNotExistException.cs" />
     <Compile Include="Exceptions\EdgeTypeInUseException.cs" />
     <Compile Include="Exceptions\NamespaceDoc.cs" />
+    <Compile Include="PropertyTypeNoDuplicateValues.cs" />
     <Compile Include="UnrestrictedEdge.cs" />
     <Compile Include="EdgeType.cs" />
     <Compile Include="Element.cs" />

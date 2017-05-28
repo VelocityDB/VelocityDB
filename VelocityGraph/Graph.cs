@@ -1360,7 +1360,7 @@ namespace VelocityGraph
         case DataType.DateTime:
           return new PropertyTypeT<DateTime>(isVertexProperty, typeId, pos, name, kind, this);
         case DataType.String:
-          return new PropertyTypeT<string>(isVertexProperty, typeId, pos, name, kind, this);
+          return new PropertyTypeNoDuplicateValues<string>(isVertexProperty, typeId, pos, name, kind, this);
         case DataType.Object:
           return new PropertyTypeT<IComparable>(isVertexProperty, typeId, pos, name, kind, this);
         case DataType.IOptimizedPersistable:
@@ -1443,12 +1443,15 @@ namespace VelocityGraph
       session.RegisterClass(typeof(BTreeMap<string, BTreeSet<ElementId>>));
       session.RegisterClass(typeof(BTreeMap<int, BTreeSet<ElementId>>));
       session.RegisterClass(typeof(BTreeMap<Int64, BTreeSet<ElementId>>));
+      session.RegisterClass(typeof(BTreeMap<string, UInt64>)); // PropertyTypeNoDuplicateValues
+      session.RegisterClass(typeof(BTreeMap<UInt64, string>)); // PropertyTypeNoDuplicateValues
+      session.RegisterClass(typeof(PropertyTypeT<UInt64>)); // PropertyTypeNoDuplicateValues
       session.RegisterClass(typeof(PropertyTypeT<bool>));
       session.RegisterClass(typeof(PropertyTypeT<int>));
       session.RegisterClass(typeof(PropertyTypeT<long>));
       session.RegisterClass(typeof(PropertyTypeT<double>));
       session.RegisterClass(typeof(PropertyTypeT<DateTime>));
-      session.RegisterClass(typeof(PropertyTypeT<string>));
+      session.RegisterClass(typeof(PropertyTypeNoDuplicateValues<string>));
       session.RegisterClass(typeof(PropertyTypeT<IComparable>));
       session.RegisterClass(typeof(AutoPlacement));
       return base.Persist(place, session, persistRefs, disableFlush, toPersist);

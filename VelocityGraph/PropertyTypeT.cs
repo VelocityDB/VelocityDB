@@ -44,7 +44,13 @@ namespace VelocityGraph
       }
     }
 
-    bool GetPropertyValueT(ElementId oid, ref T pv)
+    /// <summary>
+    /// Internally gets a property value
+    /// </summary>
+    /// <param name="oid">element id</param>
+    /// <param name="pv">a value</param>
+    /// <returns></returns>
+    protected bool GetPropertyValueT(ElementId oid, ref T pv)
     {
       if (m_propertyValue.TryGetValue(oid, out pv))
         return true;
@@ -86,7 +92,12 @@ namespace VelocityGraph
       return false;
     }
 
-    void SetPropertyValueX(ElementId element, T aValue)
+    /// <summary>
+    /// Internally sets a property value
+    /// </summary>
+    /// <param name="element">element id</param>
+    /// <param name="aValue">value</param>
+    virtual protected void SetPropertyValueX(ElementId element, T aValue)
     {
       Update();
       m_propertyValue[element] = aValue;

@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="GeoHashQuery.cs" />
     <Compile Include="GeoHashSample.cs" />
+    <Compile Include="GeoObj.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -324,7 +324,7 @@ namespace VelocityGraph
             aType = new PropertyTypeT<DateTime>(false, this.TypeId, pos, name, kind, MyGraph);
             break;
           case TypeCode.String:
-            aType = new PropertyTypeT<string>(false, this.TypeId, pos, name, kind, MyGraph);
+            aType = new PropertyTypeNoDuplicateValues<string>(false, this.TypeId, pos, name, kind, MyGraph);
             break;
           case TypeCode.Object:
             aType = new PropertyTypeT<IComparable>(false, this.TypeId, pos, name, kind, MyGraph);

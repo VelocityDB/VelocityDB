@@ -424,7 +424,7 @@ namespace VelocityGraph
       if (includedVertexProperty != null)
       {
         vertexPropertyTypesToFind = new HashSet<PropertyType>(includedVertexProperty);
-        foreach (PropertyType pt in vertexPropertyTypesToFind)
+        foreach (PropertyType pt in vertexPropertyTypesToFind.ToArray())
         {
           if (pt.HasPropertyValue(VertexId))
             vertexPropertyTypesToFind.Remove(pt);
@@ -483,29 +483,31 @@ namespace VelocityGraph
                 bool foundVertexPropertyTypesToInclude = includedVertexPropertySize == 0;
                 if (includedVertexPropertySize > 0)
                 {
+                  var vertexPropertyTypesToFindClone = new HashSet<PropertyType>(vertexPropertyTypesToFind);
                   foreach (Edge edgeInPath in edgePath)
                   {
                     foreach (PropertyType pt in vertexPropertyTypesToFind)
                     {
                       if (pt.HasPropertyValue(edgeInPath.Tail.VertexId))
-                        vertexPropertyTypesToFind.Remove(pt);
+                        vertexPropertyTypesToFindClone.Remove(pt);
                     }
-                    if (vertexPropertyTypesToFind.Count == 0)
+                    if (vertexPropertyTypesToFindClone.Count == 0)
                       break;
                   }
-                  foundVertexPropertyTypesToInclude = vertexPropertyTypesToFind.Count == 0;
+                  foundVertexPropertyTypesToInclude = vertexPropertyTypesToFindClone.Count == 0;
                 }
                 bool foundEdgePropertyTypesToInclude = includedEdgePropertySize == 0;
                 if (includedEdgePropertySize > 0)
                 {
+                  var edgePropertyTypesToFindClone = new HashSet<PropertyType>(edgePropertyTypesToFind);
                   foreach (Edge edgeInPath in edgePath)
                   {
                     foreach (PropertyType pt in edgePropertyTypesToFind)
                     {
                       if (pt.HasPropertyValue(edgeInPath.EdgeId))
-                        edgePropertyTypesToFind.Remove(pt);
+                        edgePropertyTypesToFindClone.Remove(pt);
                     }
-                    if (edgePropertyTypesToFind.Count == 0)
+                    if (edgePropertyTypesToFindClone.Count == 0)
                       break;
                   }
                   foundEdgePropertyTypesToInclude = edgePropertyTypesToFind.Count == 0;
