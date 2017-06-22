@@ -13,18 +13,16 @@ namespace VelocityDbSchema.TextIndexer
   public class IndexRoot : OptimizedPersistable
   {
     public const UInt32 PlaceInDatabase = 11;
-    public Lexicon lexicon;
-    public Repository repository;
-    public HashCodeComparer<Word> hashCodeComparer;
+    Lexicon<string> _lexicon;
+    Repository _repository;
     //public BTreeMap<Word, UInt32> globalWordCount;
 
     public IndexRoot(ushort nodeSize, SessionBase session)
     {
-      hashCodeComparer = new HashCodeComparer<Word>();
-      lexicon = new Lexicon(nodeSize, hashCodeComparer, session);
-      lexicon.Persist(session, lexicon);
-      repository = new Repository(nodeSize, session);
-      repository.Persist(session, repository, true);
+      _lexicon = new Lexicon<string>(nodeSize, session);
+      session.Persist(_lexicon);
+      _repository = new Repository(nodeSize, session);
+      _repository.Persist(session, _repository, true);
       //globalWordCount = new BTreeMap<Word, uint>(null, session);
     }
 
@@ -43,5 +41,9 @@ namespace VelocityDbSchema.TextIndexer
         return false;
       }
     }
+
+    public Lexicon<string> Lexicon => _lexicon;
+
+    public Repository Repository => _repository;
   }
 }

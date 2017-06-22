@@ -10,12 +10,11 @@ namespace VelocityDbSchema.TextIndexer
 {
   public class Repository : OptimizedPersistable
   {
-    public const UInt32 PlaceInDatabase = 12; 
-    public BTreeSet<Document> documentSet;
+    BTreeSet<Document> _documentSet;
 
     public Repository(ushort nodeSize, SessionBase session)   
     {
-      documentSet = new BTreeSet<Document>(null, session, nodeSize);
+      _documentSet = new BTreeSet<Document>(null, session, nodeSize);
     }
 
     public override bool AllowOtherTypesOnSamePage
@@ -26,12 +25,6 @@ namespace VelocityDbSchema.TextIndexer
       }
     }
 
-    public override UInt32 PlacementDatabaseNumber
-    {
-      get
-      {
-        return PlaceInDatabase;
-      }
-    }
+    public BTreeSet<Document> DocumentSet => _documentSet;
   }
 }

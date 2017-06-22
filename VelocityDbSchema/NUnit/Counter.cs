@@ -40,12 +40,6 @@ namespace VelocityDbSchema.NUnit
       }
     }
 
-    public override CacheEnum Cache
-    {
-      get
-      {
-        return CacheEnum.Yes;
-      }
-    }
+    public override CacheEnum Cache => CacheEnum.Yes;
   }
 }

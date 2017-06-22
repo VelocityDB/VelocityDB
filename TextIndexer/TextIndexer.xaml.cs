@@ -34,7 +34,7 @@ namespace TextIndexer
   public partial class MainWindow : Window
   {
     static readonly string s_systemDir = "TextIndexer"; // appended to SessionBase.BaseDatabasePath
-    static readonly string s_booksDir = "d:/Books";
+    static readonly string s_booksDir = "f:/Books";
     static readonly string s_licenseDbFile = "c:/4.odb";
 
     SessionNoServer session;
@@ -52,17 +52,11 @@ namespace TextIndexer
       session.BeginUpdate();
       Console.WriteLine("Running with databases in directory: " + session.SystemDirectory);
       File.Copy(s_licenseDbFile, Path.Combine(session.SystemDirectory, "4.odb"), true);
-      IndexRoot indexRoot;
+      IndexRoot _indexRoot;
       Database db = session.OpenDatabase(IndexRoot.PlaceInDatabase, false, false);
       if (db == null)
       {
-        session.NewDatabase(IndexRoot.PlaceInDatabase, 0, "IndexRoot");
-        session.NewDatabase(Lexicon.PlaceInDatabase, 0, "Lexicon");
-        session.NewDatabase(Document.PlaceInDatabase, 0, "Document");
-        session.NewDatabase(Repository.PlaceInDatabase, 0, "Repository");
-        session.NewDatabase(DocumentText.PlaceInDatabase, 0, "DocumentText");
-        session.NewDatabase(Word.PlaceInDatabase, 0, "Word");
-        indexRoot = new IndexRoot(btreeNodeSize, session);
+        _indexRoot = new IndexRoot(btreeNodeSize, session);
         if (Directory.Exists(s_booksDir))
         {
           string[] directoryTextFiles = Directory.GetFiles(s_booksDir, "*.txt");
@@ -98,85 +92,44 @@ namespace TextIndexer
           listBoxPagesToAdd.Items.Add("http://vistadb.net/");
           listBoxPagesToAdd.Items.Add("http://www.google.com/search?q=object+database&sourceid=ie7&rls=com.microsoft:en-us:IE-SearchBox&ie=&oe=");
         }
-        indexRoot.Persist(session, indexRoot);
+        _indexRoot.Persist(session, _indexRoot);
       }
       else
-        indexRoot = (IndexRoot)session.Open(Oid.Encode(IndexRoot.PlaceInDatabase, 1, 1));
+        _indexRoot = (IndexRoot)session.Open(Oid.Encode(IndexRoot.PlaceInDatabase, 1, 1));
 
-      if (indexRoot.repository.documentSet.Count > 0)
+      if (_indexRoot.Repository.DocumentSet.Count > 0)
       {
-        List<Document> docs = indexRoot.repository.documentSet.ToList<Document>().Take(50).ToList<Document>();
+        List<Document> docs = _indexRoot.Repository.DocumentSet.ToList<Document>().Take(50).ToList<Document>();
         inDbListBox.ItemsSource = docs;
       }
-      updateDataGrids(indexRoot);
+      updateDataGrids(_indexRoot);
       session.Commit();
       //verify();
     }
 
-    public void createLocalInvertedIndex(Document doc, Word word, UInt64 wordCt, Placement wordPlacement, Placement wordHitPlacement)
+    public void createLocalInvertedIndex(IndexRoot indexRoot, Document doc, string word)
     {
-      WordHit wordHit;
-      BTreeSetOidShort<Word> wordSet = doc.WordSet;
-      if (wordSet.TryGetKey(word, ref word))
-      {
-        wordHit = doc.WordHit[word];
-        wordHit.Add(wordCt);
-      }
+      UInt32 wordHit;
+      var id = indexRoot.Lexicon.PossiblyAddToken(word, doc);
+      var wordHits = doc.WordHit;
+      if (!wordHits.TryGetValue(id, out wordHit))
+        wordHits.Add(id, 1);
       else
-      {
-        word.Persist(wordPlacement, session);
-        wordSet.Add(word);
-        wordHit = new WordHit(doc, wordCt++, session);
-        doc.WordHit.ValuePlacement = wordHitPlacement;
-        doc.WordHit.AddFast(word, wordHit);
-      }
+        wordHits[id] = ++wordHit;
     }
 
-    public void createGlobalInvertedIndex(IndexRoot indexRoot)
-    {
-      Placement wordPlacement = new Placement(Lexicon.PlaceInDatabase, 2);
-      BTreeSetOidShort<Word> wordSet = indexRoot.lexicon.WordSet;
-      BTreeSet<Document> docSet = indexRoot.repository.documentSet;
-      Word existingWord = null;
-      foreach (Document doc in docSet)
-      {
-        if (doc.Indexed == false)
-        {
-          foreach (Word word in doc.WordSet)
-          {
-            WordHit wordHit = doc.WordHit[word];
-            if (wordSet.TryGetKey(word, ref existingWord))
-            {
-              existingWord.GlobalCount = existingWord.GlobalCount + (uint)wordHit.Count;
-            }
-            else
-            {
-              existingWord = new WordGlobal(word.aWord, session, (uint)wordHit.Count);
-              existingWord.Persist(wordPlacement, session);
-              wordSet.Add(existingWord);
-            }
-            existingWord.DocumentHit.AddFast(doc);
-          }
-          doc.Indexed = true;
-        }
-      }
-    }
-
-    public void textToWords(Document doc, IndexRoot indexRoot, string docTextString, Placement documentPlacement,
-      Placement documentTextPlacement, Placement wordPlacement, Placement wordHitPlacement)
+    public void textToWords(Document doc, IndexRoot indexRoot, string docTextString)
     {
       DocumentText docText = new DocumentText(docTextString, doc);
-      Word word;
-      doc.Persist(documentPlacement, session);
+      session.Persist(doc);
       doc.Page.Database.Name = doc.Name;
-      docText.Persist(documentTextPlacement, session);
-      indexRoot.repository.documentSet.Add(doc);
+      session.Persist(docText);
+      indexRoot.Repository.DocumentSet.Add(doc);
       doc.Content = docText;
       docTextString = docTextString.ToLower();
       string[] excludedWords = new string[] { "and", "the" };
       char[] splitChars = new char[] { ' ', '\n', '(', '"', '!', ',', '(', ')', '\t' };
       string[] words = docTextString.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
-      UInt64 wordCt = 0;
       int i = 0;
       string aWord;
       char[] trimEndChars = new char[] { ';', '.', '"', ',', '\r', ':', ']', '!', '?', '+', '(', ')', '\'', '{', '}', '-', '`', '/', '=' };
@@ -186,11 +139,9 @@ namespace TextIndexer
         i++;
         aWord = wordStr.TrimEnd(trimEndChars);
         aWord = aWord.TrimStart(trimStartChars);
-        word = new Word(aWord);
         if (aWord.Length > 1 && excludedWords.Contains(aWord) == false)
         {
-          createLocalInvertedIndex(doc, word, wordCt, wordPlacement, wordHitPlacement);
-          ++wordCt;
+          createLocalInvertedIndex(indexRoot, doc, aWord);
         }
       }
     }
@@ -198,10 +149,6 @@ namespace TextIndexer
     public Document parseHtml(string url, IndexRoot indexRoot)
     {
       Document doc = new Document(url, indexRoot, session);
-      Placement docPlacement = new Placement(Document.PlaceInDatabase);
-      Placement docTextPlacement = new Placement(Document.PlaceInDatabase, 2);
-      Placement wordPlacement = new Placement(Document.PlaceInDatabase, 3);
-      Placement wordHitPlacement = new Placement(Document.PlaceInDatabase, 100);
       using (WebClient client = new WebClient())
       {
         string html = client.DownloadString(url);
@@ -210,20 +157,17 @@ namespace TextIndexer
         htmlDoc.LoadHtml(html);
         foreach (HtmlNode node in htmlDoc.DocumentNode.SelectNodes("//text()"))
           pageBody += " " + node.InnerText;
-        textToWords(doc, indexRoot, pageBody, docPlacement, docTextPlacement, wordPlacement, wordHitPlacement);
+        textToWords(doc, indexRoot, pageBody);
       }
       return doc;
     }
 
-    public Document parseTextFile(string url, IndexRoot indexRoot, Placement docPlacement)
+    public Document parseTextFile(string url, IndexRoot indexRoot)
     {
       Document doc = new Document(Path.GetFileName(url), indexRoot, session);
-      Placement docTextPlacement = new Placement(docPlacement.TryDatabaseNumber, (ushort)(docPlacement.TryPageNumber + 1));
-      Placement wordPlacement = new Placement(docPlacement.TryDatabaseNumber, (ushort)(docPlacement.TryPageNumber + 2));
-      Placement wordHitPlacement = new Placement(docPlacement.TryDatabaseNumber, (ushort)(docPlacement.TryPageNumber + 10));
       using (StreamReader reader = new StreamReader(url))
       {
-        textToWords(doc, indexRoot, reader.ReadToEnd(), docPlacement, docTextPlacement, wordPlacement, wordHitPlacement);
+        textToWords(doc, indexRoot, reader.ReadToEnd());
       }
       return doc;
     }
@@ -232,7 +176,7 @@ namespace TextIndexer
     {
       if (indexRoot == null)
         return;
-      if (indexRoot.lexicon.WordSet.Count == 0)
+      if (indexRoot.Lexicon.TokenMap.Count == 0)
         return;
       stackPanel.IsEnabled = false;
       bool aRefresh = stackPanel.Children.Count > 0;
@@ -253,13 +197,14 @@ namespace TextIndexer
       int pageIndex = 0;
       int min = 3;
       int.TryParse(wordMinCt.Text, out min);
-      foreach (Word word in indexRoot.lexicon.WordSet)
+      foreach (var p in indexRoot.Lexicon.TokenMap)
       {
-        if (word.GlobalCount >= min)
+        var ct = indexRoot.Lexicon.IdToGlobalCount[p.Key];
+        if (ct >= min)
         {
           newRow = table.NewRow();
-          newRow[0] = word.aWord;
-          newRow[1] = word.GlobalCount;
+          newRow[0] = indexRoot.Lexicon.IdToValue[p.Key];
+          newRow[1] = ct;
           table.Rows.Add(newRow);
         }
       }
@@ -271,12 +216,12 @@ namespace TextIndexer
         stackPanel.Children.RemoveAt(indexOfRemoved + 1);
       else
       {
-        List<Document> docs = indexRoot.repository.documentSet.ToList<Document>().ToList<Document>();
+        List<Document> docs = indexRoot.Repository.DocumentSet.ToList<Document>().ToList<Document>();
         foreach (Document page in docs)
         {
           DataTable pageTable = new DataTable();
           dataTableList.Add(pageTable);
-          string pageName = page.url.TrimEnd('/');
+          string pageName = page._url.TrimEnd('/');
           int index = pageName.IndexOf("//");
           if (index >= 0)
             pageName = pageName.Remove(0, index + 2);
@@ -289,14 +234,14 @@ namespace TextIndexer
           DataColumn countColumnPage = new DataColumn("Count", Type.GetType("System.Int32"));
           pageTable.Columns.Add(wordColumnPage);
           pageTable.Columns.Add(countColumnPage);
-          foreach (KeyValuePair<Word, WordHit> pair in page.WordHit)
+          foreach (KeyValuePair<UInt32, UInt32> pair in page.WordHit)
           {
-            if ((int)pair.Value.Count >= min)
+            if ((int)pair.Value >= min)
             {
               newRow = pageTable.NewRow();
-              string aString = pair.Key.aWord;
+              string aString = indexRoot.Lexicon.IdToValue[pair.Key];
               newRow.SetField<string>(wordColumnPage, aString);
-              newRow.SetField<int>(countColumnPage, (int)pair.Value.Count);
+              newRow.SetField<int>(countColumnPage, (int)pair.Value);
               //wc.Add(new WordCount(aString, (uint) hit.wordPositionSet.Count));
               pageTable.Rows.Add(newRow);
             }
@@ -324,7 +269,6 @@ namespace TextIndexer
     {
       session.BeginUpdate();
       IndexRoot indexRoot = (IndexRoot)session.Open(Oid.Encode(IndexRoot.PlaceInDatabase, 1, 1));
-      Placement docPlacement = new Placement(Document.PlaceInDatabase);
       foreach (string str in listBoxPagesToAdd.Items)
       {
         Document doc = null;
@@ -333,16 +277,15 @@ namespace TextIndexer
           if (str.Contains(".html") || str.Contains(".htm") || str.Contains("http") || str.Contains("aspx"))
             doc = parseHtml(str, indexRoot);
           else
-            doc = parseTextFile(str, indexRoot, docPlacement);
+            doc = parseTextFile(str, indexRoot);
         }
         catch (WebException ex)
         {
           Console.WriteLine(ex.ToString());
         }
       }
-      createGlobalInvertedIndex(indexRoot);
       listBoxPagesToAdd.Items.Clear();
-      List<Document> docs = indexRoot.repository.documentSet.ToList<Document>().Take(50).ToList<Document>();
+      List<Document> docs = indexRoot.Repository.DocumentSet.ToList<Document>().Take(50).ToList<Document>();
       inDbListBox.ItemsSource = docs;
       session.Commit();
       session.BeginRead();
@@ -364,11 +307,11 @@ namespace TextIndexer
       {
         IndexRoot indexRoot = (IndexRoot)session.Open(Oid.Encode(IndexRoot.PlaceInDatabase, 1, 1));
         int index;
-        if (indexRoot.repository.documentSet.TryGetKey(myItem, ref myItem))
+        if (indexRoot.Repository.DocumentSet.TryGetKey(myItem, ref myItem))
           index = myItem.Remove(indexRoot, session);
         else
           index = -1; // weird case - should not happen
-        inDbListBox.ItemsSource = indexRoot.repository.documentSet.ToList<Document>();
+        inDbListBox.ItemsSource = indexRoot.Repository.DocumentSet.ToList<Document>();
         updateDataGrids(indexRoot, index);
         session.Commit();
       }
@@ -386,20 +329,20 @@ namespace TextIndexer
       int i = 0;
       int j = 0;
       int k = 0;
-      foreach (Word word in indexRoot.lexicon.WordSet)
+      foreach (var pair in indexRoot.Lexicon.TokenMap)
       {
         i++;
-        foreach (Document doc in word.DocumentHit)
+        foreach (Document doc in pair.Value)
         {
           j++;
           if (doc == null)
             throw new UnexpectedException("bad documentHit BTreeSet");
-          foreach (KeyValuePair<Word, WordHit> pair in doc.WordHit)
+          foreach (KeyValuePair<UInt32, UInt32> pair2 in doc.WordHit)
           {
             k++;
-            if (pair.Value == null || pair.Key == null)
+            if (pair2.Value == 0)
               throw new UnexpectedException("bad document WordHit");
-            if (indexRoot.lexicon.WordSet.Contains(pair.Key) == false)
+            if (indexRoot.Lexicon.IdToValue.Contains(pair2.Key) == false)
               throw new UnexpectedException("missing lexicon word");
           }
         }

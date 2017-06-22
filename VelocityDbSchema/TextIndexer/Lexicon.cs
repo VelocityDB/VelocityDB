@@ -9,39 +9,92 @@ using VelocityDb.Session;
 
 namespace VelocityDbSchema.TextIndexer
 {
-  public class Lexicon : OptimizedPersistable
+  public class Lexicon<T> : OptimizedPersistable where T : IComparable
   {
-    public const UInt32 PlaceInDatabase = 13;
-
-    BTreeSetOidShort<Word> wordSet;
-
-    public Lexicon(ushort nodeSize, HashCodeComparer<Word> hashComparer, SessionBase session)
+    BTreeMap<T, UInt32> _valueToId;
+    BTreeMap<UInt32, T> _IdToValue;
+    BTreeMap<UInt32, UInt32> _idToGlobalCount;
+    UInt32 _nextId;
+    BTreeMap<UInt32, BTreeSet<Document>> _tokenMap;
+    public Lexicon(ushort nodeSize, SessionBase session)
     {
-      wordSet = new BTreeSetOidShort<Word>(hashComparer, session, nodeSize, sizeof(int));
+      _valueToId = new BTreeMap<T, UInt32>(null, session);
+      _IdToValue = new BTreeMap<UInt32, T>(null, session);
+      _idToGlobalCount = new BTreeMap<uint, uint>(null, session);
+      _nextId = 0;
+      _tokenMap = new BTreeMap<UInt32, BTreeSet<Document>>(null, session);
     }
 
-    public override bool AllowOtherTypesOnSamePage
+    public BTreeMap<T, UInt32> ValueToId => _valueToId;
+    public BTreeMap<UInt32, T> IdToValue => _IdToValue;
+
+    public BTreeMap<UInt32, BTreeSet<Document>> TokenMap => _tokenMap;
+
+    public BTreeMap<UInt32, UInt32> IdToGlobalCount => _idToGlobalCount;
+
+    public UInt32 PossiblyAddToken(T token, Document doc)
     {
-      get
+      UInt32 id;
+      BTreeSet<Document> docSet;
+      if (!ValueToId.TryGetValue(token, out id))
       {
-        return false;
+        Update();
+        id = ++_nextId;
+        _IdToValue.AddFast(id, token);
+        _valueToId.Add(token, id);
+        docSet = new BTreeSet<Document>();
+        _tokenMap.AddFast(id, docSet);
+      }
+      else
+        docSet = _tokenMap[id];
+      UInt32 wordHit;
+      if (!doc.WordHit.TryGetValue(id, out wordHit))
+      {
+        docSet.AddFast(doc);
+        doc.WordHit.Add(id, 1);
+      }
+      else
+        doc.WordHit[id] = ++wordHit;
+      UpdateGlobalCount(id, 1);
+      return id;
+    }
+
+    public void RemoveToken(T token)
+    {
+      UInt32 id;
+      if (ValueToId.TryGetValue(token, out id))
+      {
+        _IdToValue.Remove(id);
+        _valueToId.Remove(token);
+        var v = _tokenMap[id];
+        v.Unpersist(Session);
+        _tokenMap.Remove(id);
       }
     }
 
-    public override UInt32 PlacementDatabaseNumber
+    public void RemoveToken(UInt32 id)
     {
-      get
+      T token;
+      if (_IdToValue.TryGetValue(id, out token))
       {
-        return PlaceInDatabase;
+        _IdToValue.Remove(id);
+        _valueToId.Remove(token);
+        var v = _tokenMap[id];
+        v.Unpersist(Session);
+        _tokenMap.Remove(id);
       }
     }
 
-    public BTreeSetOidShort<Word> WordSet
+    public void UpdateGlobalCount(UInt32 id, int countDiff)
     {
-      get
-      {
-        return wordSet;
-      }
+      UInt32 count;
+      if (!_idToGlobalCount.TryGetValue(id, out count))
+        _idToGlobalCount[id] = (UInt32) countDiff;
+      else
+        _idToGlobalCount[id] = (UInt32) (count + countDiff);
+
     }
+
+    public override CacheEnum Cache => CacheEnum.Yes;
   }
 }

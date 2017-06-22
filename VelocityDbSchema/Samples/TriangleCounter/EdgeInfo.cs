@@ -37,12 +37,6 @@ namespace VelocityDbSchema.Samples.TriangleCounter
       Array.Sort(to);
     }
 
-    public override CacheEnum Cache
-    {
-      get
-      {
-        return CacheEnum.Yes;
-      }
-    }
+    public override CacheEnum Cache => CacheEnum.Yes;
   }
 }

@@ -231,7 +231,6 @@
     <Compile Include="SharingPageTypeA.cs" />
     <Compile Include="SharingPageTypeB.cs" />
     <Compile Include="StringTest.cs" />
-    <Compile Include="TextIndexer\WordGlobal.cs" />
     <Compile Include="IndexedTimeSeries\VelocityDB.cs" />
     <Compile Include="UnknownSex.cs" />
     <Compile Include="UserR.cs" />
@@ -261,7 +260,6 @@
     <Compile Include="TextIndexer\IndexRoot.cs" />
     <Compile Include="TextIndexer\Lexicon.cs" />
     <Compile Include="TextIndexer\Repository.cs" />
-    <Compile Include="TextIndexer\Word.cs" />
     <Compile Include="TextIndexer\WordHit.cs" />
     <Compile Include="Tracker\Attachment.cs" />
     <Compile Include="Tracker\CompareAssignedTo.cs" />

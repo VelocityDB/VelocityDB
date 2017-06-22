@@ -10,26 +10,24 @@ namespace VelocityDbSchema.TextIndexer
 {
   public class WordHit : OptimizedPersistable
   {
-    UInt64[] wordPositionArray;
+    List<UInt64> _wordPositionArray;
 
-    public WordHit(Document doc, UInt64 position, SessionBase session)
+    public WordHit()
     {
-      wordPositionArray = new UInt64[1];
-      wordPositionArray[0] = position;
+      _wordPositionArray = new List<UInt64>();
     }
 
     public void Add(UInt64 position)
     {
       Update();
-      Array.Resize(ref wordPositionArray, wordPositionArray.Length + 1);
-      wordPositionArray[wordPositionArray.Length - 1] = position;
+      _wordPositionArray.Add(position);
     }
     
     public int Count
     {
       get
       {
-        return wordPositionArray.Length;
+        return _wordPositionArray.Count;
       }
     }
 

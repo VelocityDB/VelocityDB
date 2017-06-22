@@ -53,12 +53,6 @@ namespace VelocityDbSchema.NUnit
     public string WebPassword { get; set; }
     public string MachineName { get; set; }
 
-    public override CacheEnum Cache
-    {
-      get
-      {
-        return CacheEnum.Yes;
-      }
-    }
+    public override CacheEnum Cache => CacheEnum.Yes;
   }
 }

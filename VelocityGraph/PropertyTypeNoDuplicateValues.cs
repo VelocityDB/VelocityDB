@@ -102,6 +102,7 @@ namespace VelocityGraph
       return null;
     }
 
+    /// <inheritdoc />
     public override Vertex GetPropertyVertex(IComparable value, bool polymorphic = false, bool errorIfNotFound = true)
     {
       if (IsVertexProperty == false)
