@@ -55,7 +55,7 @@ namespace VelocityDbSchema.TextIndexer
       }
       else
         doc.WordHit[id] = ++wordHit;
-      UpdateGlobalCount(id, 1);
+      AddToGlobalCount(id, 1);
       return id;
     }
 
@@ -85,14 +85,22 @@ namespace VelocityDbSchema.TextIndexer
       }
     }
 
-    public void UpdateGlobalCount(UInt32 id, int countDiff)
+    public void ReduceGlobalCount(UInt32 id, UInt32 countReduce)
     {
       UInt32 count;
       if (!_idToGlobalCount.TryGetValue(id, out count))
-        _idToGlobalCount[id] = (UInt32) countDiff;
+        _idToGlobalCount[id] = countReduce;
       else
-        _idToGlobalCount[id] = (UInt32) (count + countDiff);
+        _idToGlobalCount[id] = count - countReduce;
+    }
 
+    public void AddToGlobalCount(UInt32 id, UInt32 countAdd)
+    {
+      UInt32 count;
+      if (!_idToGlobalCount.TryGetValue(id, out count))
+        _idToGlobalCount[id] = countAdd;
+      else
+        _idToGlobalCount[id] = count + countAdd;
     }
 
     public override CacheEnum Cache => CacheEnum.Yes;

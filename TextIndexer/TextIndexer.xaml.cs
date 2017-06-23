@@ -107,17 +107,6 @@ namespace TextIndexer
       //verify();
     }
 
-    public void createLocalInvertedIndex(IndexRoot indexRoot, Document doc, string word)
-    {
-      UInt32 wordHit;
-      var id = indexRoot.Lexicon.PossiblyAddToken(word, doc);
-      var wordHits = doc.WordHit;
-      if (!wordHits.TryGetValue(id, out wordHit))
-        wordHits.Add(id, 1);
-      else
-        wordHits[id] = ++wordHit;
-    }
-
     public void textToWords(Document doc, IndexRoot indexRoot, string docTextString)
     {
       DocumentText docText = new DocumentText(docTextString, doc);
@@ -140,9 +129,7 @@ namespace TextIndexer
         aWord = wordStr.TrimEnd(trimEndChars);
         aWord = aWord.TrimStart(trimStartChars);
         if (aWord.Length > 1 && excludedWords.Contains(aWord) == false)
-        {
-          createLocalInvertedIndex(indexRoot, doc, aWord);
-        }
+          indexRoot.Lexicon.PossiblyAddToken(aWord, doc);
       }
     }
 
