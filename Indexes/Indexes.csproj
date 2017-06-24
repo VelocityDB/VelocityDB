@@ -79,13 +79,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=6.1.4.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.6.1.4\lib\net40\VelocityDb.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="VelocityDb, Version=6.2.2.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.6.2.2\lib\net40\VelocityDb.dll</HintPath>
     </Reference>
     <Reference Include="VelocityDBExtensions, Version=6.0.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDBExtensions.6.1.4\lib\net40\VelocityDBExtensions.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\VelocityDBExtensions.6.2.2\lib\net40\VelocityDBExtensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

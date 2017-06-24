@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>VelocityGraph</id>
-    <version>6.2</version>
+    <version>6.2.2</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
     <licenseUrl>http://VelocityDB.com/Eula.htm</licenseUrl>
@@ -11,11 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>VelocityGraph is a property graph database for .NET.</summary>
     <description>Pure, fast and scalable .NET property graph and object hybrid database. No new graph language to learn, all accomplished with a .NET API.</description>
-    <releaseNotes>Avoid storing duplicate string property values for each property type and a fix for Traverse API.</releaseNotes>
+    <releaseNotes>Use latest version of VelocityDB.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>Hybrid Object Property Graph Database .NET Blueprints Distributable Embeddable</tags>
     <dependencies>
-      <dependency id="VelocityDB" version="6.1.4" />
+      <dependency id="VelocityDB" version="6.2.2" />
       <dependency id="Frontenac.Blueprints" version="2.4.0" />
     </dependencies>
   </metadata>
