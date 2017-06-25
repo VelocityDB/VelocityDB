@@ -56,8 +56,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="VelocityDb, Version=6.2.2.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.6.2.2\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=6.2.3.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.6.2.3\lib\net40\VelocityDb.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -152,12 +153,6 @@
     <Resource Include="Images\Earth.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VelocityDBExtensions\VelocityDBExtensions.csproj">
-      <Project>{a2e1e184-5303-4a75-9133-546631f4a63c}</Project>
-      <Name>VelocityDBExtensions</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\removeIcon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +181,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Sync.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VelocityDBExtensions\VelocityDBExtensions.csproj">
+      <Project>{8856fdc1-b759-4e3f-a5dc-47f1aa1bde81}</Project>
+      <Name>VelocityDBExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,7 +6,7 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.Collection.Comparer;
 using VelocityDb.TypeInfo;
-using VelocityDBExtensions.geohash;
+using VelocityDBExtensions.Geo;
 
 namespace GeoHashSample
 {

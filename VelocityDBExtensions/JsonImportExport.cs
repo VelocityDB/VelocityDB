@@ -26,7 +26,7 @@ namespace VelocityDBExtensions
     {
       object obj = session.Open(id);
       JsonSerializerSettings jsonSettings = new JsonSerializerSettings();
-      jsonSettings.TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Full;
+      jsonSettings.TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple;
       jsonSettings.TypeNameHandling = TypeNameHandling.All;
       jsonSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
       jsonSettings.ContractResolver = new FieldsOnlyContractResolver();
@@ -36,7 +36,7 @@ namespace VelocityDBExtensions
     static public IEnumerable<string> ExportToJson<T>(this SessionBase session, bool includeSubclasses = false, bool databasePerType = true)
     {
       JsonSerializerSettings jsonSettings = new JsonSerializerSettings();
-      jsonSettings.TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Full;
+      jsonSettings.TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple;
       jsonSettings.TypeNameHandling = TypeNameHandling.All;
       jsonSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
       jsonSettings.ContractResolver = new FieldsOnlyContractResolver();
@@ -48,7 +48,7 @@ namespace VelocityDBExtensions
     }
   }
 
-  public class FieldsOnlyContractResolver : Newtonsoft.Json.Serialization.DefaultContractResolver
+  public class FieldsOnlyContractResolver : DefaultContractResolver
   {
     protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
     {

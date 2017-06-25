@@ -1,4 +1,4 @@
-namespace VelocityDBExtensions.geohash
+namespace VelocityDBExtensions.Geo
 {
   /// <summary>    
   /// The <c>VelocityDB.geohash</c> namespace contains classes for creating GeoHash based on Longitude and Latitude, see https://en.wikipedia.org/wiki/Geohash

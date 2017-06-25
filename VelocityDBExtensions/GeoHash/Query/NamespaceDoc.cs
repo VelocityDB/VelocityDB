@@ -1,4 +1,4 @@
-namespace VelocityDBExtensions.geohash.query
+namespace VelocityDBExtensions.Geo.query
 {
   /// <summary>    
   /// The <c>VelocityDB.geohash.query</c> namespace contains classes for querying GeoHash, see https://en.wikipedia.org/wiki/Geohash

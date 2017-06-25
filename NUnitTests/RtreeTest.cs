@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using VelocityDb.Collection.Spatial;
 using NUnit.Framework;
+using VelocityDBExtensions.Spatial;
 
 namespace NUnitTests
 {

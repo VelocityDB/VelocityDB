@@ -11,7 +11,7 @@ using System;
  * in the LICENSE file. If you have not, see
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-namespace VelocityDBExtensions.geohash
+namespace VelocityDBExtensions.Geo
 {
   /// <summary>
   /// <seealso cref="WGS84Point"/> encapsulates coordinates on the earths surface.

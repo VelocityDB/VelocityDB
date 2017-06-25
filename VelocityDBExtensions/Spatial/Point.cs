@@ -5,7 +5,7 @@ using System.Linq;
 #endif
 using System.Text;
 
-namespace VelocityDb.Collection.Spatial
+namespace VelocityDBExtensions.Spatial
 {
   /// <summary>
   /// Points are most often considered within the framework of Euclidean geometry, where they are one of the fundamental objects. Euclid originally defined the point as "that which has no part". In two-dimensional Euclidean space, a point is represented by an ordered pair (x,?y) of numbers, where the first number conventionally represents the horizontal and is often denoted by x, and the second number conventionally represents the vertical and is often denoted by y.

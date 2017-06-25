@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using VelocityDb;
 
-namespace VelocityDb.Collection.Spatial
+namespace VelocityDBExtensions.Spatial
 {
   /// <summary>
   /// 

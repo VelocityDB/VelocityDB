@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using VelocityDb;
 using VelocityDb.Exceptions;
+using VelocityDb.Session;
 
-namespace VelocityDb.Collection.Spatial
+namespace VelocityDBExtensions.Spatial
 {
   /// <summary>
   /// RTree implementation inspired by description on Wikipedia http://en.wikipedia.org/wiki/R-tree
@@ -590,7 +591,7 @@ namespace VelocityDb.Collection.Spatial
       return true;
     }
 
-    public override void InitializeAfterRead(Session.SessionBase session)
+    public override void InitializeAfterRead(SessionBase session)
     {
       base.InitializeAfterRead(session);
       entryStatus = new byte[maxNodeEntries];

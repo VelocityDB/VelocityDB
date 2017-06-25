@@ -7,7 +7,7 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.Exceptions;
 
-namespace VelocityDb.Collection.Spatial
+namespace VelocityDBExtensions.Spatial
 {
   //
   // Priority Queue that stores values and priorities. Uses a Heap to sort the priorities; the values are sorted "in step" with the priorities.

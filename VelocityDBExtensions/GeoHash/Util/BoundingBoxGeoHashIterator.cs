@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace VelocityDBExtensions.geohash.util
+namespace VelocityDBExtensions.Geo.util
 {
   /// <summary>
   /// Iterate over all of the values within a bounding box at a particular

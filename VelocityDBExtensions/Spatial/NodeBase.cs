@@ -8,7 +8,7 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.Session;
 
-namespace VelocityDb.Collection.Spatial
+namespace VelocityDBExtensions.Spatial
 {
   internal abstract class NodeBase : OptimizedPersistable
   {

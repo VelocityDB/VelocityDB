@@ -11,7 +11,7 @@ using System;
  * in the LICENSE file. If you have not, see
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-namespace VelocityDBExtensions.geohash
+namespace VelocityDBExtensions.Geo
 {
   /// <summary>
   ///  Rectangular bounding box which is used to describe the bounds of a GeoHash query

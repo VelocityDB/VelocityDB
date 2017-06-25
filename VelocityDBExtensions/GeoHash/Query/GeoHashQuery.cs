@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace VelocityDBExtensions.geohash.query
+namespace VelocityDBExtensions.Geo.query
 {
 
 

@@ -8,7 +8,7 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.Exceptions;
 
-namespace VelocityDb.Collection.Spatial
+namespace VelocityDBExtensions.Spatial
 {
   internal class NodeInternal : NodeBase
   {
