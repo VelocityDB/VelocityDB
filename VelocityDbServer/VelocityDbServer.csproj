@@ -83,9 +83,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=6.2.3.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.6.2.3\lib\net40\VelocityDb.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="VelocityDb, Version=6.3.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.6.3.0\lib\net40\VelocityDb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

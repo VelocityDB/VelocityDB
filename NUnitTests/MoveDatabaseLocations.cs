@@ -1,10 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
 using VelocityDb;
 using VelocityDb.Session;
 using VelocityDbSchema.Samples.Sample4;
@@ -16,13 +12,22 @@ namespace NUnitTests
   {
     public const string systemDir = "MoveDatabaseLocationTest";
     public const string systemDir2 = "MoveDatabaseLocationTest2";
+    public const string otherDbDir = "MoveDatabaseLocationTestOther";
+    public const string otherDbDir2 = "MoveDatabaseLocationTestOther2";
     public string systemHost = SessionBase.LocalHost;
-    public string systemHost2 = "Asus";
+    public string systemHost2 = "FindPriceBuy";
+    public const UInt32 otherStartdbId = 100;
 
     public void verifyDatabaseLocations(SessionBase session)
     {
       session.BeginRead();
       foreach (Person person in session.AllObjects<Person>())
+      {
+        Console.WriteLine(person.ToString());
+        Assert.AreEqual(person.FirstName, "Mats");
+      }
+      Database db = session.OpenDatabase(otherStartdbId);
+      foreach (Person person in db.AllObjects<Person>())
       {
         Console.WriteLine(person.ToString());
         Assert.AreEqual(person.FirstName, "Mats");
@@ -36,25 +41,25 @@ namespace NUnitTests
       session.BeginUpdate();
       Person person = new Person("Mats", "Persson", 54);
       session.Persist(person);
+      var otherLocation = new DatabaseLocation(session.SystemHostName, otherDbDir, otherStartdbId, session.DefaultDatabaseLocation().EndDatabaseNumber, session);
+      Placement place = new Placement(otherStartdbId);
+      Person person2 = new Person("Mats", "Persson", 27);
+      session.Persist(place, person2);
       session.Commit();
       verifyDatabaseLocations(session);
     }
 
-    public void moveDatabaseLocations(SessionBase session, string updatedHostName, string newPath)
+    public void moveDatabaseLocations(SessionBase session)
     {
-        session.BeginUpdate(false);
-        DatabaseLocation bootLocation = session.DatabaseLocations.LocationForDb(0);
-        DatabaseLocation locationNew = new DatabaseLocation(updatedHostName, newPath, bootLocation.StartDatabaseNumber, bootLocation.EndDatabaseNumber, session,
-            bootLocation.CompressPages, bootLocation.PageEncryption, bootLocation.IsBackupLocation, bootLocation.BackupOfOrForLocation);
-        bootLocation = session.NewLocation(locationNew);
-        session.Commit(false);
+      session.RelocateDefaultDatabaseLocation();
+      session.RelocateDatabaseLocationFor(otherStartdbId, session.SystemHostName, otherDbDir2);
     }
 
     [Test]
     //[Repeat(3)]
     public void moveDatabaseLocations()
     {
-      SessionBase.BaseDatabasePath = "d:/Databases"; // use same as VelocityDbServer.exe.config 
+      SessionBase.BaseDatabasePath = "c:/Databases"; // use same as VelocityDbServer.exe.config 
       DirectoryInfo info = new DirectoryInfo(Path.Combine(SessionBase.BaseDatabasePath,  systemDir));
      if (info.Exists)
         info.Delete(true);
@@ -64,7 +69,7 @@ namespace NUnitTests
         newInfo.Delete(true);
       createDatabaseLocations(new SessionNoServer(systemDir));
       info.MoveTo(newPath);
-      moveDatabaseLocations(new SessionNoServer(newPath, 2000, false, false), systemHost, newPath);
+      moveDatabaseLocations(new SessionNoServer(newPath, 2000, false, false));
       verifyDatabaseLocations(new SessionNoServer(newPath));
       info.Delete(true);
 
@@ -74,7 +79,7 @@ namespace NUnitTests
       createDatabaseLocations(new ServerClientSession(systemDir));
       newPath = Path.Combine(SessionBase.BaseDatabasePath, systemDir + "MovedTo");
       info.MoveTo(newPath);
-      moveDatabaseLocations(new ServerClientSession(newPath, systemHost, 2000, false, false), systemHost, newPath);
+      moveDatabaseLocations(new ServerClientSession(newPath, systemHost, 2000, false, false));
       verifyDatabaseLocations(new ServerClientSession(newPath, systemHost));
       info.Delete(true);
 
@@ -100,7 +105,7 @@ namespace NUnitTests
         }
         info.Delete(true);
         info = new DirectoryInfo(newPath);
-        moveDatabaseLocations(new ServerClientSession(newPath, systemHost, 2000, false, false), systemHost, newPath);
+        moveDatabaseLocations(new ServerClientSession(newPath, systemHost, 2000, false, false));
         verifyDatabaseLocations(new ServerClientSession(newPath));
         info.Delete(true);
       }
