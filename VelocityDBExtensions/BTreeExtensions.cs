@@ -192,7 +192,7 @@ namespace VelocityDBExtensions.Extensions.BTree
         {
           //if we were able to create a hash from the right side (likely)
           MemberExpression returnedEx = null;
-#if WINDOWS_PHONE || PORTABLE || WINDOWS_UWP || NET_CORE
+#if WINDOWS_PHONE || PORTABLE || WINDOWS_UWP
           Key key = (Key) Activator.CreateInstance(typeof(Key));
 #else
           Key key = (Key)FormatterServices.GetUninitializedObject(typeof(Key));
@@ -301,7 +301,7 @@ namespace VelocityDBExtensions.Extensions.BTree
         {
           //if we were able to create a hash from the right side (likely)
           MemberExpression returnedEx = null;
-#if WINDOWS_PHONE || WINDOWS_UWP || NET_CORE
+#if WINDOWS_PHONE || WINDOWS_UWP
           Key key = (Key) Activator.CreateInstance(typeof(Key));
 #else
           Key key = (Key)FormatterServices.GetUninitializedObject(typeof(Key));
@@ -427,7 +427,7 @@ namespace VelocityDBExtensions.Extensions.BTree
         {
           //if we were able to create a hash from the right side (likely)
           MemberExpression returnedEx = null;
-#if WINDOWS_PHONE || WINDOWS_UWP || NET_CORE
+#if WINDOWS_PHONE || WINDOWS_UWP
           Key key = (Key) Activator.CreateInstance(typeof(Key));
 #else
           Key key = (Key)FormatterServices.GetUninitializedObject(typeof(Key));
@@ -547,7 +547,7 @@ namespace VelocityDBExtensions.Extensions.BTree
         {
           //if we were able to create a hash from the right side (likely)
           MemberExpression returnedEx = null;
-#if WINDOWS_PHONE || WINDOWS_UWP || NET_CORE
+#if WINDOWS_PHONE || WINDOWS_UWP
           Key key = (Key) Activator.CreateInstance(typeof(Key));
 #else
           Key key = (Key)FormatterServices.GetUninitializedObject(typeof(Key));
@@ -659,7 +659,7 @@ namespace VelocityDBExtensions.Extensions.BTree
         if (comparer != null)
         {
           MemberExpression returnedEx = null;
-#if WINDOWS_PHONE || WINDOWS_UWP || NET_CORE
+#if WINDOWS_PHONE || WINDOWS_UWP
           Key key = (Key) Activator.CreateInstance(typeof(Key));
 #else
           Key key = (Key)FormatterServices.GetUninitializedObject(typeof(Key));
@@ -708,7 +708,7 @@ namespace VelocityDBExtensions.Extensions.BTree
     {
       CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
       int indexNumberOfFields = comparer.FieldsToCompare.Length;
-#if WINDOWS_PHONE || WINDOWS_UWP || NET_CORE
+#if WINDOWS_PHONE || WINDOWS_UWP
       Key key = (Key) Activator.CreateInstance(typeof(Key));
 #else
       Key key = (Key)FormatterServices.GetUninitializedObject(typeof(Key));

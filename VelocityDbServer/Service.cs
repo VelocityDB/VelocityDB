@@ -1,4 +1,9 @@
-﻿using System;
+﻿/* Copyright © VelocityDB, Inc - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Mats Persson mailto:Mats@VelocityDB.com, May 2013
+ */
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -66,7 +71,7 @@ namespace VelocityDb.Server
         while (!ServerTcpClient.ShutDown)
         {
           ServerTcpClient.s_acceptDone.Reset();
-#if NET_CORE
+#if NET_COREx
           //listener?.AcceptSocketAsync().Wait();
           ServerTcpClient.AcceptTcpClient(listener);
 #else
@@ -78,7 +83,7 @@ namespace VelocityDb.Server
       }
       catch (SocketException e)
       {
-#if !NET_CORE
+#if !NET_COREx
         if (e.ErrorCode != 10054)	// client closed socket
 #endif
         {

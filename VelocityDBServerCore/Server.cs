@@ -12,7 +12,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using Microsoft.IdentityModel.Protocols;
 using VelocityDb.Session;
 using VelocityDB.Server;
 
@@ -64,7 +63,8 @@ namespace VelocityDb.Server
 #if !NET_CORE
       string baseDatabasePath = ConfigurationManager.AppSettings["BaseDatabasePath"]  ?? "" .ToString();
       if (baseDatabasePath.Length > 0)
-        SessionBase.BaseDatabasePath = baseDatabasePath;#else
+        SessionBase.BaseDatabasePath = baseDatabasePath;
+
       string doWindowsAuth = ConfigurationManager.AppSettings["DoWindowsAuthentication"] ?? "" .ToString();
       bool doWindowsAuthentication;
       if (bool.TryParse(doWindowsAuth, out doWindowsAuthentication))

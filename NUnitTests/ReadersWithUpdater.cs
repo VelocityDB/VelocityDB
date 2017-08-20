@@ -102,8 +102,8 @@ namespace NUnitTests
       using (SessionNoServer updater = new SessionNoServer(systemDir, 5000)) 
       using (SessionNoServer reader = new SessionNoServer(systemDir, 5000))
       {
-        updater.SetTraceAllDbActivity();
-        reader.SetTraceAllDbActivity();
+        //updater.SetTraceAllDbActivity();
+        //reader.SetTraceAllDbActivity();
         updater.BeginUpdate();
         UInt32 dbNum = updater.DatabaseNumberOf(typeof(Man));
         Database db = updater.OpenDatabase(dbNum, true, false);
