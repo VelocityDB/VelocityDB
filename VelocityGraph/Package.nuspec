@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>VelocityGraph</id>
-    <version>6.5</version>
+    <version>6.6</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
     <licenseUrl>http://VelocityDB.com/Eula.htm</licenseUrl>
@@ -15,7 +15,7 @@
     <copyright>Copyright 2017</copyright>
     <tags>Hybrid Object Property Graph Database .NET Blueprints Distributable Embeddable</tags>
     <dependencies>
-      <dependency id="VelocityDB" version="6.5" />
+      <dependency id="VelocityDB" version="6.6" />
       <dependency id="Frontenac.Blueprints" version="2.4.0" />
     </dependencies>
   </metadata>
