@@ -40,8 +40,8 @@ namespace DatabaseManager
             else
               contentType = " of type: " + "unknown with id " + typever;
           }
-          return "Page: " + page.PageNumber.ToString() + " size: " +
-          page.PageInfo.UncompressedSize + " stored size: " + page.PageInfo.OnDiskSize + " compression: " + page.PageInfo.Compressed + " " + page.PageInfo.Encryption + " version: " + page.PageInfo.VersionNumber + " objects: " + page.PageInfo.NumberOfSlots + contentType;
+          return $"Page: {page.PageNumber} size: {page.PageInfo.UncompressedSize} stored size: {page.PageInfo.OnDiskSize} offset: {page.Offset} compression: " +
+            $"{page.PageInfo.Compressed} {page.PageInfo.Encryption} version: {page.PageInfo.VersionNumber}  objects: {page.PageInfo.NumberOfSlots} {contentType}";
         }
         return "Failed to open " + m_dbNum;
       }

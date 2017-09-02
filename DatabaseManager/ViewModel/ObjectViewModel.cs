@@ -46,14 +46,14 @@ namespace DatabaseManager
         if (obj.GetType() == typeof(UInt64))
         {
           m_objectId = (UInt64)obj;
-          m_objectAsString = "[" + arrayIndex.ToString() + "] " + new Oid(m_objectId).ToString();
+          m_objectAsString = $"[{arrayIndex}] {new Oid(m_objectId)}";
         }
         else
         {
           Oid oid = new Oid(parentView.ParentId);
           oid = new Oid(oid.Database, (UInt32)obj);
           m_objectId = oid.Id;
-          m_objectAsString = "[" + arrayIndex.ToString() + "] " + new OidShort(oid.IdShort).ToString();
+          m_objectAsString = $"[{arrayIndex}] {new OidShort(oid.IdShort)}";
         }
       }
       else
@@ -65,9 +65,9 @@ namespace DatabaseManager
           m_objectId = pObj.Id;
         m_session = session;
         if (pObj != null && pObj.WrappedObject != obj)
-          m_objectAsString = "[" + arrayIndex.ToString() + "] " + pObj.WrappedObject.ToString() + " " + new Oid(pObj.Id);
+          m_objectAsString = $"[{arrayIndex}] {pObj.WrappedObject} {new Oid(pObj.Id)}";
         else
-          m_objectAsString = "[" + arrayIndex.ToString() + "] " + obj.ToString();
+          m_objectAsString = $"[{arrayIndex}] {obj}";
       }
     }
 
