@@ -199,7 +199,7 @@ namespace VelocityDBExtensions
           {
             UInt32 typeShortId = UInt32.Parse(numberString);
             UInt16 slotNumber = (UInt16)typeShortId;
-            if ((i == 0 && slotNumber < Schema.s_bootupTypeCount) || (i == 1 && slotNumber >= Schema.s_bootupTypeCount))
+            if ((i == 0 && slotNumber < Schema.s_bootupTypeCountExpanded) || (i == 1 && slotNumber >= Schema.s_bootupTypeCountExpanded))
             {
               TypeVersion tv = schema.GetTypeVersion(typeShortId, session);
               if (tv != null)
