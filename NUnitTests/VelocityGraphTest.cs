@@ -24,6 +24,7 @@ using System.Net;
 using System.Diagnostics;
 using VelocityDbSchema;
 using VelocityDb.Exceptions;
+using VelocityGraph.Exceptions;
 
 namespace NUnitTests
 {
