@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Frontenac.Blueprints.Util.IO.GraphJson;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Frontenac.Blueprints;
 using VelocityDb.Session;
 using VelocityGraph;
 
@@ -12,7 +12,7 @@ namespace QuickStartVelocityGraph
   class QuickStartVelocityGraph
   {
     static readonly string systemDir = "QuickStartVelocityGraph"; // appended to SessionBase.BaseDatabasePath
-    static readonly string s_licenseDbFile = "c:/4.odb"; // (download from https://www.velocitydb.com/Secure/Download.aspx)
+    static readonly string s_licenseDbFile = "c:/4.odb"; // (download from https://Velocitydb.com/Secure/License.aspx)
 
     static void CreateGraph()
     {
@@ -131,7 +131,13 @@ namespace QuickStartVelocityGraph
         // All vertices and their edges
         var edges = g.GetEdges();
         int edgeCount = edges.Count();
-
+        g.ExportToGraphJson("c:/QuickStart.json");
+        string exported;
+        using (MemoryStream ms = new MemoryStream())
+        {
+          g.ExportToGraphJson(ms);
+          exported = Encoding.UTF8.GetString(ms.ToArray());
+        }
         session.Commit();
       }
     }

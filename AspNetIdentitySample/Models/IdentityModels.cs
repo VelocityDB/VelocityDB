@@ -23,7 +23,7 @@ namespace AspNetIdentitySample.Models
 
   public class ApplicationDbContext: SessionNoServer
   {
-    static readonly string s_licenseDbFile = "c:/4.odb"; // (download from https://www.velocitydb.com/Secure/Download.aspx)
+    static readonly string s_licenseDbFile = "c:/4.odb"; // (download from https://Velocitydb.com/Secure/License.aspx)
 
     AspNetIdentity m_aspNetIdentity;
     public ApplicationDbContext():base("AspNetIdentitySample")
