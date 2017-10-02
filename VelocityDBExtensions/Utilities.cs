@@ -299,67 +299,70 @@ namespace VelocityDBExtensions
       }
       else
       {
-        if (_shape.BaseShape != null)
+        if (_shape.BaseShape != null && _shape.BaseShape.Type != CommonTypes.s_typeOfValueType)
         {
           //TypeVersion baseClassShape = schema.lookupByNumber.TypeVersionLookup(_shape.baseShape);
           sb.Append(ToStringDetails(obj, schema, page, _shape.BaseShape, skipArrays));
         }
-        foreach (DataMember m in _shape.DataMemberArray)
-        {
-          FieldInfo field = m.GetField(_shape.Type);
-          object o = m.GetMemberValue(obj);
-          //sb.AppendLine();
-          if (o == null)
-            sb.Append("  " + field.Name + " : " + "null");
-          else
+        if (_shape.DataMemberArray.Length == 0 && sb.Length == 0)
+          sb.Append(obj.ToString()); // an object without member fields (like used in NodaTime)
+        else
+          foreach (DataMember m in _shape.DataMemberArray)
           {
-            bool foundIt = session.GlobalObjWrapperGet(o, out ipObj);
-            if (foundIt)
-              sb.Append("  " + field.Name + " : " + pObj.WrappedObject.ToString() + " " + Oid.AsString(ipObj.Id));
+            FieldInfo field = m.GetField(_shape.Type);
+            object o = m.GetMemberValue(obj);
+            //sb.AppendLine();
+            if (o == null)
+              sb.Append("  " + field.Name + " : " + "null");
             else
             {
-              array = o as Array;
-              if (array != null)
-              {
-                Type elementType = m.FieldType.GetElementType();
-                sb.Append("  " + field.Name + " " + field.FieldType.ToGenericTypeString());
-                if (!skipArrays)
-                  sb.Append(ArrayToString(array, false, page, elementType));
-              }
+              bool foundIt = session.GlobalObjWrapperGet(o, out ipObj);
+              if (foundIt)
+                sb.Append("  " + field.Name + " : " + pObj.WrappedObject.ToString() + " " + Oid.AsString(ipObj.Id));
               else
               {
-                IList list = o as IList;
-                if (list != null)
+                array = o as Array;
+                if (array != null)
                 {
-                  int i = 0;
-                  sb.Append("  " + field.Name + " " + o.ToString());
-                  foreach (object listObj in list)
-                  {
-                    //sb.AppendLine();
-                    ipObj = listObj as IOptimizedPersistable;
-                    if (listObj != null && pObj != null)
-                      sb.Append("\t[" + i.ToString() + "]\t" + Oid.AsString(ipObj.Id));
-                    else
-                    {
-                      if (session.GlobalObjWrapperGet(listObj, out ipObj))
-                        sb.Append("\t[" + i.ToString() + "]\t" + Oid.AsString(ipObj.Id));
-                      else
-                        sb.Append("\t[" + i.ToString() + "]\t" + listObj.ToString());
-                    }
-                    i++;
-                  }
+                  Type elementType = m.FieldType.GetElementType();
+                  sb.Append("  " + field.Name + " " + field.FieldType.ToGenericTypeString());
+                  if (!skipArrays)
+                    sb.Append(ArrayToString(array, false, page, elementType));
                 }
-                else if (field.FieldType.GetTypeCode() != TypeCode.Object || m.HasId || !field.FieldType.GetTypeInfo().IsSerializable || (o as WeakIOptimizedPersistableReferenceBase) != null)
-                  sb.Append("  " + field.Name + " : " + o.ToString());
                 else
                 {
-                  TypeVersion memberShape = schema.RegisterClass(field.FieldType, session);
-                  sb.Append("  " + field.Name + " : " + ToStringDetails(o, schema, page, memberShape, skipArrays));
+                  IList list = o as IList;
+                  if (list != null)
+                  {
+                    int i = 0;
+                    sb.Append("  " + field.Name + " " + o.ToString());
+                    foreach (object listObj in list)
+                    {
+                      //sb.AppendLine();
+                      ipObj = listObj as IOptimizedPersistable;
+                      if (listObj != null && pObj != null)
+                        sb.Append("\t[" + i.ToString() + "]\t" + Oid.AsString(ipObj.Id));
+                      else
+                      {
+                        if (session.GlobalObjWrapperGet(listObj, out ipObj))
+                          sb.Append("\t[" + i.ToString() + "]\t" + Oid.AsString(ipObj.Id));
+                        else
+                          sb.Append("\t[" + i.ToString() + "]\t" + listObj.ToString());
+                      }
+                      i++;
+                    }
+                  }
+                  else if (field.FieldType.GetTypeCode() != TypeCode.Object || m.HasId || !field.FieldType.GetTypeInfo().IsSerializable || (o as WeakIOptimizedPersistableReferenceBase) != null)
+                    sb.Append("  " + field.Name + " : " + o.ToString());
+                  else
+                  {
+                    TypeVersion memberShape = schema.RegisterClass(field.FieldType, session);
+                    sb.Append("  " + field.Name + " : " + ToStringDetails(o, schema, page, memberShape, skipArrays));
+                  }
                 }
               }
             }
           }
-        }
       }
       return sb.ToString();
     }

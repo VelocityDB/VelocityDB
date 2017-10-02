@@ -66,10 +66,16 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
   {
     int[,] array = new int[4, 2];
     int[,,] array2 = new int[4, 2, 3];
+    List<string[]> _listDtringArray;
     public AllSuportedSub4()
     {
       array[0, 1] = 9;
       array2[0, 1, 2] = 9;
+      _listDtringArray = new List<string[]>();
+      var stringArray = new string[] { "Mats", "Robin", "Kinga" };
+      _listDtringArray.Add(stringArray);
+      stringArray = new string[] { "Oliwia", "Lidia", "Carter" };
+      _listDtringArray.Add(stringArray);
     }
   }
   public interface IAllSuportedSub : IOptimizedPersistable

@@ -69,8 +69,8 @@
     <Reference Include="NMoneys, Version=5.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NMoneys.5.1.4.1\lib\net40-client\NMoneys.dll</HintPath>
     </Reference>
-    <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NodaTime.1.3.3\lib\net35-Client\NodaTime.dll</HintPath>
+    <Reference Include="NodaTime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NodaTime.2.2.0\lib\net45\NodaTime.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
@@ -93,14 +93,14 @@
       <HintPath>..\packages\System.Xml.XPath.4.3.0\lib\net46\System.Xml.XPath.dll</HintPath>
     </Reference>
     <Reference Include="VelocityDb, Version=6.9.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.6.9.0\lib\net40\VelocityDb.dll</HintPath>
+      <HintPath>..\packages\VelocityDB.6.10.0\lib\net40\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="VelocityDBExtensions, Version=6.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDBExtensions.6.9.0\lib\net40\VelocityDBExtensions.dll</HintPath>
+      <HintPath>..\packages\VelocityDBExtensions.6.10.0\lib\net40\VelocityDBExtensions.dll</HintPath>
     </Reference>
     <Reference Include="VelocityGraph, Version=6.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.6.9\lib\Net40\VelocityGraph.dll</HintPath>
+      <HintPath>..\packages\VelocityGraph.6.10\lib\Net40\VelocityGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
