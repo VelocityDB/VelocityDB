@@ -50,7 +50,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
+      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Frontenac.Blueprints, Version=2.4.0.0, Culture=neutral, PublicKeyToken=f8f0b8cb1a55f367, processorArchitecture=MSIL">
       <HintPath>..\packages\Frontenac.Blueprints.2.4\lib\net40\Frontenac.Blueprints.dll</HintPath>
@@ -166,12 +166,12 @@
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
-    <Reference Include="VelocityDb, Version=6.9.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.6.10.0\lib\net40\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=6.11.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.6.11.0\lib\net45\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="VelocityGraph, Version=6.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.6.10\lib\Net40\VelocityGraph.dll</HintPath>
+      <HintPath>..\packages\VelocityGraph.6.11\lib\Net45\VelocityGraph.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>

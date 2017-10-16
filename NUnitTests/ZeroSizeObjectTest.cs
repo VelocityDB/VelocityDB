@@ -39,7 +39,7 @@ namespace NUnitTests
         Assert.NotNull(o2.TransactionFacilitator);
         session.Commit();
       }
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServerShared(systemDir))
       {
         session.BeginUpdate();
         var o2 = (EFTPOSMachineParent)session.Open(id);

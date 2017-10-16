@@ -162,7 +162,7 @@ namespace NUnitTests
 #if DEBUG
       Assert.Throws<NotImplementedException>(() =>
       {
-        using (SessionNoServer session = new SessionNoServer(systemDir))
+        using (var session = new SessionNoServerShared(systemDir))
         {
           session.BeginUpdate();
           AllSupported obj = new AllSupported(2);

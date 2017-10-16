@@ -18,7 +18,7 @@ namespace NUnitTests
   [TestFixture]
   public class MultipleUpdaters
   {
-    public const string systemDir = "c:\\NUnitTestDbs";
+    public const string systemDir = "c:/NUnitTestDbs";
     static object s_lockObj = new object();
 
     [Test]
@@ -85,6 +85,7 @@ namespace NUnitTests
           }
           session.DeleteDatabase(db);
           session.Commit(); // OptimisticLockingFailed here
+          session.Verify();
         }
       });
     }
@@ -97,7 +98,7 @@ namespace NUnitTests
         UInt64 id;
         try
         {
-          using (SessionNoServer session = new SessionNoServer(systemDir))
+          using (var session = new SessionNoServerShared(systemDir))
           {
             session.BeginUpdate();
             Man man = new Man();
@@ -116,6 +117,7 @@ namespace NUnitTests
               session2.Commit();
             }
             session.Commit();
+            session.Verify();
           }
         }
         finally
@@ -152,6 +154,7 @@ namespace NUnitTests
               session2.Commit(); // OptimisticLockingFailed here
             }
             session.Commit();
+            session.Verify();
           }
         }
         finally
@@ -162,14 +165,13 @@ namespace NUnitTests
     }
 
     [Test]
-    [Repeat(2)]
     public void MultipleThreadsAdding()
     {
       bool doClearAll = SessionBase.ClearAllCachedObjectsWhenDetectingUpdatedDatabase;
       SessionBase.ClearAllCachedObjectsWhenDetectingUpdatedDatabase = false;
       try
       {
-        using (SessionNoServer session = new SessionNoServer(systemDir))
+        using (var session = new SessionNoServer(systemDir))
         {
           session.BeginUpdate();
           session.RegisterClass(typeof(AutoPlacement)); // build in type but not yet registered as a one
@@ -183,10 +185,14 @@ namespace NUnitTests
           session.Persist(doc);
           session.Commit();
         }
-        using (ServerClientSessionShared sharedReadSession = new ServerClientSessionShared(systemDir))
+        using (var sharedReadSession = new ServerClientSessionShared(systemDir))
         {
           sharedReadSession.BeginRead();
           Parallel.ForEach(Enumerable.Range(1, 3), (num) => LockConflict(sharedReadSession));
+        }
+        using (var session = new SessionNoServer(systemDir))
+        {
+          session.Verify();
         }
       }
       finally

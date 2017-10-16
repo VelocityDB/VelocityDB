@@ -14,7 +14,8 @@ using VelocityDbSchema.Indexes;
 using System.Diagnostics;
 using VelocityDb.Collection;
 using VelocityDBExtensions;
-using static VelocityDb.Collection.BTree.Extensions.BTreeExtensions;
+//using static VelocityDb.Collection.BTree.Extensions.BTreeExtensions;
+using VelocityDBExtensions.Extensions.BTree;
 using VelocityDb.Exceptions;
 
 namespace NUnitTests
@@ -558,7 +559,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
+      using (var session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServerShared(systemDir))
       {
         Stopwatch sw = new Stopwatch();
         sw.Start();
@@ -710,7 +711,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
+      using (var session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServerShared(systemDir))
       {
         session.BeginRead();
         session.TraceIndexUsage = true;

@@ -83,7 +83,7 @@ namespace NUnitTests
       Project project = null;
       Project priorProject = null;
       for (int i = 0; i < numberOfProjects; i++)
-        using (SessionNoServer session = new SessionNoServer(systemDir))
+        using (var session = new SessionNoServerShared(systemDir))
         {
           session.BeginUpdate();
           IssueTracker issueTracker = session.AllObjects<IssueTracker>(false).FirstOrDefault();

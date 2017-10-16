@@ -60,7 +60,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServerShared(systemDir))
       {
         session.BeginUpdate();
         isers1 = new TestISerializableStruct("not");
@@ -159,11 +159,12 @@ namespace NUnitTests
       session.Commit();
       session.Dispose();
     }
+    [TestCase(true, 5, (UInt32)7676)]
     [TestCase(false, 5, (UInt32)7676)]
-    [TestCase(false, 1000000, (UInt32)7676)]
-    [TestCase(true, 1000000, (UInt32)7676)]
-    [TestCase(true, 50000, (UInt32)7676)]
-    [TestCase(false, 100000, (UInt32)7676)]
+   // [TestCase(false, 1000000, (UInt32)7676)]
+   // [TestCase(true, 1000000, (UInt32)7676)]
+   // [TestCase(true, 50000, (UInt32)7676)]
+   // [TestCase(false, 100000, (UInt32)7676)]
     public void DeleteObjectsTestCreate(bool standalone, int count, UInt32 dbNumber)
     {
       SessionBase session;
@@ -202,8 +203,27 @@ namespace NUnitTests
       AllObjects<VelocityDbSchema.Samples.Sample1.Person> allPersons = db.AllObjects<VelocityDbSchema.Samples.Sample1.Person>();
       ulong ct = allPersons.Count();
       List<VelocityDbSchema.Samples.Sample1.Person> personList = db.AllObjects<VelocityDbSchema.Samples.Sample1.Person>().ToList();
-      Assert.IsEmpty(personList);
+      Array.Sort(ids);
+      if (personList.Count > 0)
+      {
+        int pos = Array.BinarySearch(ids, personList[0].Id);
+        Assert.Less(pos, 0);
+      }
       session.Commit();
+      using (var session2 = new SessionNoServerShared(systemDir))
+      {
+        session2.BeginRead();
+        db = session2.OpenDatabase(dbNumber);
+        allPersons = db.AllObjects<VelocityDbSchema.Samples.Sample1.Person>();
+        ct = allPersons.Count();
+        personList = db.AllObjects<VelocityDbSchema.Samples.Sample1.Person>().ToList();
+        if (personList.Count > 0)
+        {
+          int pos = Array.BinarySearch(ids, personList[0].Id);
+          Assert.Less(pos, 0);
+        }
+        session2.Commit();
+      }
       tw.Reset();
       tw.Start();
       session.BeginUpdate();
@@ -236,6 +256,16 @@ namespace NUnitTests
       //session.Verify();
       session.Commit();
       session.Dispose();
+      using (SessionNoServer session2 = new SessionNoServer(systemDir))
+      {
+        session2.BeginRead();
+        db = session2.OpenDatabase(dbNumber);
+        allPersons = db.AllObjects<VelocityDbSchema.Samples.Sample1.Person>();
+        ct = allPersons.Count();
+        personList = allPersons.ToList();
+        Assert.IsEmpty(personList);
+        session2.Commit();
+      }
     }
 
     [Test]
@@ -479,6 +509,15 @@ namespace NUnitTests
       }
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
+        session.Verify();
+        session.BeginRead();
+        var all = session.AllObjects<Dictionary<string, int>>();
+        foreach (var dict in all)
+          Console.WriteLine(dict);
+        session.Commit();
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
         session.BeginRead();
         object dictObj = session.Open(id);
         Dictionary<string, int> dict = (Dictionary<string, int>)dictObj;
@@ -491,7 +530,7 @@ namespace NUnitTests
 
     void DictionaryTestTony()
     {
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
         Test test1 = new Test("def", 1);
@@ -508,8 +547,9 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServerShared(systemDir))
       {
+        session.Verify();
         session.BeginUpdate();
         foreach (var test_value in session.AllObjects<Test2>()) // this fails
           Trace.WriteLine(test_value);
@@ -792,7 +832,7 @@ namespace NUnitTests
     {
       UInt64 id;
       TestRec tr;
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
         int[] intArray = new Int32[] { 6, 7 };
@@ -801,7 +841,7 @@ namespace NUnitTests
         id = tr.Id;
         session.Commit();
       }
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServerShared(systemDir))
       {
         session.BeginRead();
         TestRec tr2 = session.Open<TestRec>(id);

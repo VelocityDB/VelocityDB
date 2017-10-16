@@ -100,7 +100,7 @@ namespace NUnitTests
         id = allSuportedSub3_1.Id;
         session.Commit();
       }
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServerShared(systemDir))
       {
         session.BeginRead();
         allSuportedSub3_2 = (AllSuportedSub3)session.Open(id);
@@ -108,7 +108,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
         var x = new AllSuportedSub5();
@@ -117,7 +117,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
         var x = (AllSuportedSub5)session.Open(id);
@@ -125,7 +125,7 @@ namespace NUnitTests
         x.nullableaDouble = 0.5;
         session.Commit();
       }
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
         var x = new AllSuportedSub6();
@@ -142,7 +142,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
         allSuported = new AllSupported(3);
@@ -164,7 +164,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServer(systemDir))
       {
         session.BeginRead();
         allSupported2 = (AllSupported)session.Open(id);

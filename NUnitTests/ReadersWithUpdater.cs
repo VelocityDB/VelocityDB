@@ -58,7 +58,7 @@ namespace NUnitTests
         session.Commit();
         session.BeginUpdate();
         man.Age = ++man.Age;
-        using (SessionNoServer session2 = new SessionNoServer(systemDir))
+        using (var session2 = new SessionNoServerShared(systemDir))
         {
           session2.BeginRead();
           Man man2 = (Man)session2.Open(id);

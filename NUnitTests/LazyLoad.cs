@@ -77,7 +77,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServerShared(systemDir))
       {
         UInt32 ct = 100;
         session.BeginRead();

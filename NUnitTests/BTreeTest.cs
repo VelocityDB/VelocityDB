@@ -22,6 +22,55 @@ namespace NUnitTests
     public const string location2Dir = "c:/NUnitTestDbsLocation2";
 
     [Test]
+    public void fullShiftRightTest()
+    {
+      Oid id;
+      int ct = 0;
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        BTreeSet<int> bTree = new BTreeSet<int>(null, session, 9);
+        session.Persist(bTree);
+        id = bTree.Oid;
+        for (int i = 65; i >= 0; i -= 5)
+        {
+          bTree.Add(i);
+          ct++;
+        }
+        bTree.Remove(65);
+          ct--;
+        bTree.Remove(60);
+          ct--;
+        bTree.Remove(55);
+          ct--;
+        bTree.Remove(50);
+          ct--;
+         bTree.Add(1);
+          ct++;
+         bTree.Add(2);
+          ct++;
+         bTree.Add(3);
+          ct++;
+         bTree.Add(4);
+          ct++;
+        session.Commit();
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginRead();
+        BTreeSet<int> bTree = (BTreeSet<int>)session.Open(id);
+        int count = 0;
+        foreach (int num in bTree)
+        {
+          count++;
+        }
+        Assert.True(ct == bTree.Count);
+        Assert.True(ct == bTree.Count());
+        session.Commit();
+      }
+    }
+
+    [Test]
     public void hashCodeComparerIntTest()
     {
       Oid id;
@@ -78,7 +127,7 @@ namespace NUnitTests
         }
         session.Commit();
       }
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServerShared(systemDir))
       {
         session.BeginRead();
         BTreeSet<string> bTree= (BTreeSet<string>)session.Open(id);
@@ -408,7 +457,7 @@ namespace NUnitTests
     [TestCase(1000001, 10000)]
     public void CreateTicksCompareFieldsOidShort(int numberOfTicks, int nodeSize)
     {
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServer(systemDir))
       {
         session.BeginRead();
         session.Open(10, 1, 1, false);
@@ -417,7 +466,7 @@ namespace NUnitTests
         session.Open(10, 2, 2, false);
         session.Commit();
       }
-      using (SessionNoServer session = new SessionNoServer(systemDir, 2000, false))
+      using (var session = new SessionNoServerShared(systemDir, 2000, false))
       {
         //session.SetTraceAllDbActivity();
         //session.ClientCache.MinimumAvailableMegaBytes = 1100;

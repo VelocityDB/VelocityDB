@@ -43,7 +43,7 @@ namespace NUnitTests
     [TestCase(1000)]
     public void FixedSizeManyTest(int howMany)
     {
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
         FixedSize fixedSize;
@@ -56,7 +56,7 @@ namespace NUnitTests
         }
         session.Commit();
       }
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServerShared(systemDir))
       {
         session.BeginRead();
         Database db = session.OpenDatabase(FixedSize.PlaceInDatabase);

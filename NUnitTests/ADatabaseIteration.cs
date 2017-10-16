@@ -131,7 +131,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServerShared(systemDir))
       {
         session.Verify();
         session.BeginUpdate();

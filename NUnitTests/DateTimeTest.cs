@@ -35,7 +35,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session = new SessionNoServerShared(systemDir))
       {
         session.BeginRead();
         var result2 = session.AllObjects<LocalDateField>().First(t => 

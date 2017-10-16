@@ -651,7 +651,7 @@ namespace NUnitTests
         //session.Commit();
       }
 
-      using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
+      using (var session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServerShared(systemDir))
       {
         session.BeginUpdate();
         Graph g = Graph.Open(session);

@@ -62,7 +62,7 @@ namespace DatabaseManager
         {
           Type elementType = m_member.FieldType.GetElementType();
           TypeCode tCode = elementType.GetTypeCode();
-          bool isValueType = elementType.GetTypeInfo().IsValueType;
+          bool isValueType = elementType.IsValueType;
           if ((isValueType || elementType.IsArray) && !m_isEncodedOidArray)
             base.Children.Add(new ArrayViewModelNoExpansions(a, elementType, this, m_isEncodedOidArray, parentObj.Page, m_session));
           else
@@ -95,7 +95,7 @@ namespace DatabaseManager
             else
               elementType = elementType.GetElementType();
             TypeCode tCode = elementType.GetTypeCode();
-            bool isValueType = elementType.GetTypeInfo().IsValueType;
+            bool isValueType = elementType.IsValueType;
             if ((isValueType || elementType.IsArray) && !m_isEncodedOidArray)
               base.Children.Add(new ListViewModel(list, this, parentObj.Page));
             else

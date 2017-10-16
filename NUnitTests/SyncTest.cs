@@ -43,7 +43,7 @@ namespace NUnitTests
     [Test]
     public void aSyncNewDatabases()
     {
-      using (SessionBase session = new SessionNoServer(s_sync1))
+      using (var session = new SessionNoServerShared(s_sync1))
       {
         session.EnableSyncByTrackingChanges = true;
         using (var trans = session.BeginUpdate())
@@ -133,7 +133,7 @@ namespace NUnitTests
 
       using (SessionBase readFromSession = new SessionNoServer(s_sync1))
       {
-        using (SessionBase updateSession = new SessionNoServer(s_sync2))
+        using (var updateSession = new SessionNoServerShared(s_sync2))
         {
           updateSession.SyncWith(readFromSession);
         }
