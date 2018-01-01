@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="World Cities" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignWidth="528" SizeToContent="WidthAndHeight" DataContext="{Binding ElementName=CityName}">
   <StackPanel>
-   <TextBox Text="Download: http://www.maxmind.com/app/worldcities, decompress to c:\worldcitiespop.txt" Height="27" HorizontalAlignment="Left" Margin="2,5,0,0" Name="HelpLabel" VerticalAlignment="Top" Width="522" />
+   <TextBox Text="Download: http://www.maxmind.com/app/worldcities, decompress to c:/SampleData/worldcitiespop.txt" Height="27" HorizontalAlignment="Left" Margin="2,5,0,0" Name="HelpLabel" VerticalAlignment="Top" Width="522" />
    <StackPanel Orientation="Horizontal" Name="CreateDatabasePanel">
       <Label  Margin="0,2,2,0" Padding="0" Content="File:" FontStyle="Normal" Name="FileLabel" />
-      <TextBox Margin="0,0,5,0" Padding="0"  Name="worldCitiesTextFile" Text="c:\worldcitiespop.txt" GotFocus="worldCitiesTextFile_GotFocus" Foreground="Black" Background="Yellow" FontWeight="Bold" Width="281" />
+      <TextBox Margin="0,0,5,0" Padding="0"  Name="worldCitiesTextFile" Text="c:/SampleData/worldcitiespop.txt" GotFocus="worldCitiesTextFile_GotFocus" Foreground="Black" Background="Yellow" FontWeight="Bold" Width="281" />
       <Button Margin="0,0,5,0" Content="Load Data from Text File" Name="loadButton" Click="loadButton_Click" Height="29" Width="202" />
     </StackPanel>
     <Label  Name="errorMessage" Padding="0" Foreground="Red"/>

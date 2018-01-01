@@ -74,7 +74,7 @@ namespace WorldCities
       try
       {
         System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
-        openFileDialog.InitialDirectory = "c:\\";
+        openFileDialog.InitialDirectory = "c:/SampleData";
         openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
         openFileDialog.FilterIndex = 2;
         openFileDialog.RestoreDirectory = true;

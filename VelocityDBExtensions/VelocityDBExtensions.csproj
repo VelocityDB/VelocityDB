@@ -59,6 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BTreeExtensions.cs" />
+    <Compile Include="CompressedBitArray\BufferedRunningLengthWord.cs" />
+    <Compile Include="CompressedBitArray\EwahCompressedBitArray.cs" />
+    <Compile Include="CompressedBitArray\EwahEnumerator.cs" />
+    <Compile Include="CompressedBitArray\RunningLengthWord.cs" />
     <Compile Include="GeoHash\BoundingBox.cs" />
     <Compile Include="GeoHash\GeoHash.cs" />
     <Compile Include="GeoHash\NamespaceDoc.cs" />

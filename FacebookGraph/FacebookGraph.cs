@@ -28,7 +28,7 @@ namespace FacebookGraph
   class FacebookGraph
   {
     static readonly string s_systemDir = "FacebookGraph";
-    static readonly string s_inputData = "f:/bfs-28-socialgraph-release-corrected"; // change if you need to, download dataset from http://www.VelocityDB.com/Public/bfs-28-socialgraph-release-corrected.zip (and uncompress with 7-zip http://www.7-zip.org/)
+    static readonly string s_inputData = "c:/SampleData/bfs-28-socialgraph-release-corrected"; // change if you need to, download dataset from http://www.VelocityDB.com/Public/bfs-28-socialgraph-release-corrected.zip (and uncompress with 7-zip http://www.7-zip.org/)
     //static readonly string inputData = "D:\\bfs-28-socialgraph-release";// change if you need to, download dataset from http://odysseas.calit2.uci.edu/doku.php/public:online_social_networks#facebook_social_graph_-_breadth_first_search
     static readonly string s_licenseDbFile = "c:/4.odb";
     enum Gender { Male, Female, Unknown };

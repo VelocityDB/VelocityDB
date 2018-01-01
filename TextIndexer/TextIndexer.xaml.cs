@@ -34,7 +34,7 @@ namespace TextIndexer
   public partial class MainWindow : Window
   {
     static readonly string s_systemDir = "TextIndexer"; // appended to SessionBase.BaseDatabasePath
-    static readonly string s_booksDir = "f:/Books";
+    static readonly string s_booksDir = "c:/SampleData/Books";
     static readonly string s_licenseDbFile = "c:/4.odb";
 
     SessionNoServer session;

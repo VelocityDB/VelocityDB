@@ -28,7 +28,7 @@ namespace Wikipedia
     static long s_docCountIndexed = 0; // info about progress of indexing
     static readonly string s_systemDir = "Wikipedia"; // appended to SessionBase.BaseDatabasePath
     static readonly string s_licenseDbFile = "c:/4.odb";
-    static readonly string s_wikipediaXmlFile = "f:/enwiki-latest-pages-articles.xml";
+    static readonly string s_wikipediaXmlFile = "c:/SampleData/enwiki-latest-pages-articles.xml";
 
     // Display any warnings or errors.
     private static void ValidationCallBack(object sender, System.Xml.Schema.ValidationEventArgs args)

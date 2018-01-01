@@ -13,7 +13,7 @@ namespace KevinBaconNumbers
 {
   class ImdbImport
   {
-    static readonly string imdbTextFilesDir = "D:/imdb"; // change if you need to
+    static readonly string imdbTextFilesDir = "c:/SampleData/imdb"; // change if you need to
     static readonly string s_licenseDbFile = "c:/4.odb";
     static readonly char[] trimEndChars = new char[] { ';', '.', '"', ',', '\r', ':', ':', ']', '!', '?', '+', '(', '\'', '{', '}', '-', ' ' };
 

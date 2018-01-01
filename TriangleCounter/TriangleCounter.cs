@@ -32,7 +32,7 @@ namespace TriangleCounter
   class TriangleCounter
   {
     static readonly string systemDir = "TriangleCounter"; // appended to SessionBase.BaseDatabasePath for a full path
-    static readonly string edgesInputFile = "d:\\edges.txt";
+    static readonly string edgesInputFile = "c:/SampleData/edges.txt";
 
     static int discoverTrianglesSingleCore(BTreeMap<int, int[]> edges)
     {

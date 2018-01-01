@@ -105,7 +105,6 @@ namespace KevinBaconNumbers
 
     static void Main(string[] args)
     {
-      SessionBase.BaseDatabasePath = @"d:/Databases";
       bool dirExist = Directory.Exists(Path.Combine(SessionBase.BaseDatabasePath, s_systemDir));
       if (!dirExist)
         ImdbImport.ImprortImdb(s_systemDir);
