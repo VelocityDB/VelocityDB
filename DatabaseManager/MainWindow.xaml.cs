@@ -28,12 +28,14 @@ namespace DatabaseManager
   public partial class MainWindow : Window
   {
     AllFederationsViewModel m_viewModel;
+    string _dbFilePath;
     public MainWindow(string dbFilePath)
     {
       InitializeComponent();
+      _dbFilePath = dbFilePath;
       m_viewModel = new AllFederationsViewModel();
       DirectoryInfo dirInfo = m_viewModel.Initialize(dbFilePath);
-      DataCache.MaximumMemoryUse = 3000000000; // 3 GB, set this to what fits your case
+      //DataCache.MaximumMemoryUse = 3000000000; // 3 GB, set this to what fits your case
       bool addedFd = false;
       if (dirInfo != null)
         addedFd = AddFederation(dirInfo);
@@ -67,6 +69,14 @@ namespace DatabaseManager
     private void AddMenuItem_Click(object sender, RoutedEventArgs e)
     {
       AddFederation(null);
+    }
+
+    private void SchemaMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      var cw = new Schema(_dbFilePath);
+      cw.ShowInTaskbar = false;
+      cw.Owner = this;
+      cw.Show();
     }
 
     private void Create1000TestObjectsMenuItem_Click(object sender, RoutedEventArgs e)

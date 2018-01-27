@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>VelocityDBExtensions</id>
-    <version>6.11</version>
+    <version>7.0</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
     <licenseUrl>http://Velocitydb.com/Eula.htm</licenseUrl>
@@ -10,12 +10,12 @@
     <iconUrl>http://VelocityDB.com/images/VelocityDbLogo.svg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Extensions to VelocityDB.</summary>
-    <description>Extensions to VelocityDB for efficient LINQ index/BTree queries, AzureSession file API usage with Microsoft Azure, import/export to/from CSV and JSON, Sync, GeoHash and RTree.</description>
-    <releaseNotes>Use latest version of VelocityDB.</releaseNotes>
-    <copyright>Copyright 2017</copyright>
-    <tags>Object Database NoSQL .NET C# F# VB.NET C++ CLI Universal Windows NET CORE Standard Xamarin Mono Android iOS Mac Xbox cross-platform web asp.net identity persistence client csv json server oodb key-value scalable fast flexible distributable embedded Database sync big data events geo hash Azure</tags>
+    <description>Extensions to VelocityDB for efficient LINQ index/BTree queries, AzureSession file API usage with Microsoft Azure, import/export to/from CSV and JSON, Sync, GeoHash, Compressed Bitmap and RTree.</description>
+    <releaseNotes>Using latest version of VelocityDB</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>Object Database NoSQL .NET C# F# VB.NET C++ CLI Universal Windows NET CORE Standard Xamarin Mono Android iOS Mac Xbox cross-platform web asp.net identity persistence client csv json server oodb key-value scalable fast flexible distributable embedded Database sync big data events geo hash Azure compressed bitmap</tags>
     <dependencies>
-      <dependency id="VelocityDB" version="6.11" />
+      <dependency id="VelocityDB" version="7.0" />
       <dependency id="LumenWorksCsvReader" version="3.9.1" />
       <dependency id="Microsoft.Data.Edm" version="5.8.3" />
       <dependency id="Microsoft.Data.OData" version="5.8.3" />

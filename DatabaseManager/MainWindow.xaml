@@ -14,7 +14,8 @@
       <RowDefinition></RowDefinition>
     </Grid.RowDefinitions>
     <Menu IsMainMenu="True">
-      <MenuItem Header="_Add" Click="AddMenuItem_Click"/>
+      <MenuItem Header="_Schema Connectivity" Click="SchemaMenuItem_Click"/>
+      <MenuItem Header="_Add Connection..." Click="AddMenuItem_Click"/>
     </Menu>
     <TreeView Grid.Row="1" x:Name="treeView1" Margin="-5,0,0,0" BorderThickness="0" ItemsSource="{Binding Federations}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" >
       <TreeView.ItemContainerStyle>

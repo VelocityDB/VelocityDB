@@ -8,11 +8,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DatabaseManager")]
-[assembly: AssemblyDescription("Database Manager GUI for browsing databases, pages and objects. Alos for: Database backup & restore, creating new database locations.")]
+[assembly: AssemblyDescription("Database Manager GUI for browsing databases, pages, objects and schema connectivity. Also for: Database backup & restore, creating new database locations.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("VelocityDB, Inc.")]
 [assembly: AssemblyProduct("DatabaseManager")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("5.0.30")]
-[assembly: AssemblyFileVersion("5.0.30")]
+[assembly: AssemblyVersion("7.0.0")]
+[assembly: AssemblyFileVersion("7.0.0")]

@@ -56,8 +56,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="VelocityDb, Version=6.11.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.6.11.0\lib\net45\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=7.0.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.7.0.0\lib\net45\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
@@ -81,12 +81,25 @@
     <Compile Include="RestoreDialog.xaml.cs">
       <DependentUpon>RestoreDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Schema.xaml.cs">
+      <DependentUpon>Schema.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SchemaExtractor.cs" />
     <Compile Include="SchemaInfo.cs" />
+    <Compile Include="SchemaViewModel\AllFederationsSchemaViewModel.cs" />
+    <Compile Include="SchemaViewModel\DataMemberViewModelNoExpansion.cs" />
+    <Compile Include="SchemaViewModel\SchemaListViewModel.cs" />
+    <Compile Include="SchemaViewModel\DataMemberViewModel.cs" />
+    <Compile Include="SchemaViewModel\NotInSchemaViewModel.cs" />
+    <Compile Include="SchemaViewModel\TypeVersionViewModelNoExpansion.cs" />
     <Compile Include="ViewModel\AllFederationsViewModel .cs" />
     <Compile Include="ViewModel\ArrayViewModelNoExpansions.cs" />
+    <Compile Include="SchemaViewModel\TypeVersionViewModel.cs" />
+    <Compile Include="SchemaViewModel\TypeViewModel.cs" />
+    <Compile Include="SchemaViewModel\SchemasViewModel.cs" />
     <Compile Include="ViewModel\DatabaseLocationViewModel .cs" />
     <Compile Include="ViewModel\DatabaseViewModel.cs" />
+    <Compile Include="SchemaViewModel\FederationSchemaViewModel.cs" />
     <Compile Include="ViewModel\FederationViewModel.cs" />
     <Compile Include="ViewModel\FieldViewModel.cs" />
     <Compile Include="ViewModel\FieldViewModelNoExpansions.cs" />
@@ -115,6 +128,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RestoreDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Schema.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -181,6 +198,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Sync.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\structure.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VelocityDBExtensions\VelocityDBExtensions.csproj">
