@@ -627,6 +627,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
         m_sortedSetPerson = value;
       }
     }
+    WeakReferencedConnection<Person> _weakRefToPerson;
     SortedMap<byte, Person> m_sortedMapByteToPerson;
 
     SortedMap<byte, Person> SortedMapByteToPerson
@@ -662,7 +663,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       public int next;
     }
 
-    public AllSupported(Int32 arraySize)
+    public AllSupported(Int32 arraySize, SessionBase session)
     {
       _uint64EnumArray = new UInt64Enum[arraySize];
       if (arraySize > 1)
@@ -725,6 +726,9 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       nullableoidList = new List<Oid?>(arraySize);
       personHashSet = new VelocityDbHashSet<Person>();
       person = new Person();
+      personHashSet.Add(person);
+      session.Persist(person);
+      _weakRefToPerson = new WeakReferencedConnection<Person>(person);
       timeSpan = new TimeSpan(1, 0, 0);
       personArrayOidShort = new Person[arraySize];
       if (arraySize > 1)

@@ -12,7 +12,7 @@ namespace DatabaseManager
   {
     SessionBase _session;
     bool _internalTypes;
-
+    bool _hideWeakReferenceConnectionTypes;
     public SchemasViewModel(SessionBase session, bool internalTypes, FederationSchemaViewModel parentView)
       : base(parentView, true)
     {
@@ -21,6 +21,20 @@ namespace DatabaseManager
     }
 
     public string SchemasName => _internalTypes ? "Internal built in types" : "User defined types";
+
+    public bool HideWeakReferenceConnectionTypes
+    {
+      get
+      {
+        return _hideWeakReferenceConnectionTypes;
+      }
+      set
+      {
+        _hideWeakReferenceConnectionTypes = value;
+        base.Children.Clear();
+        LoadChildren();
+      }
+    }
 
     protected override void LoadChildren()
     {

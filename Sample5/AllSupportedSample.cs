@@ -40,7 +40,7 @@ namespace AllSupportedSample
         using (SessionNoServer session = new SessionNoServer(s_systemDir))
         {
           session.BeginUpdate();
-          allSupported = new AllSupported(3);
+          allSupported = new AllSupported(3, session);
           session.Persist(allSupported);
           id = allSupported.Id;
          session.Commit();

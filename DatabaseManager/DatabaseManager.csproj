@@ -56,8 +56,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="VelocityDb, Version=7.0.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.7.0.0\lib\net45\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=7.1.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.7.1.0\lib\net45\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
@@ -92,6 +92,7 @@
     <Compile Include="SchemaViewModel\DataMemberViewModel.cs" />
     <Compile Include="SchemaViewModel\NotInSchemaViewModel.cs" />
     <Compile Include="SchemaViewModel\TypeVersionViewModelNoExpansion.cs" />
+    <Compile Include="SchemaViewModel\WeakReferencedTypeViewModel.cs" />
     <Compile Include="ViewModel\AllFederationsViewModel .cs" />
     <Compile Include="ViewModel\ArrayViewModelNoExpansions.cs" />
     <Compile Include="SchemaViewModel\TypeVersionViewModel.cs" />
@@ -207,6 +208,9 @@
       <Project>{8856fdc1-b759-4e3f-a5dc-47f1aa1bde81}</Project>
       <Name>VelocityDBExtensions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\weak.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

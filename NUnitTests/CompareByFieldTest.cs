@@ -41,16 +41,16 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        AllSupported obj = new AllSupported(1);
+        AllSupported obj = new AllSupported(1, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("aString", session);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, (ushort) compArraySize);
         for (int i = 0; i < 10000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.aString = RandomString(10);
           sortedSet.Add(obj);
         }
-        obj = new AllSupported(1);
+        obj = new AllSupported(1, session);
         obj.aString = null;
         sortedSet.Add(obj);
         int ct = 0;
@@ -78,12 +78,12 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        AllSupported obj = new AllSupported(1);
+        AllSupported obj = new AllSupported(1, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("int16", session);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(Int16), true);
         for (int i = 0; i < 100000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.int16 = (Int16) randGen.Next(Int16.MinValue, Int16.MaxValue);
           sortedSet.Add(obj);
         }
@@ -106,12 +106,12 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        AllSupported obj = new AllSupported(2);
+        AllSupported obj = new AllSupported(2, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("int32", session);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(Int32), true);
         for (int i = 0; i < 100000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.int32 = randGen.Next(Int32.MinValue, Int32.MaxValue);
           sortedSet.Add(obj);
         }
@@ -134,12 +134,12 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        AllSupported obj = new AllSupported(2);
+        AllSupported obj = new AllSupported(2, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("int32", session, false, false, false);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000);
         for (int i = 0; i < 100000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.int32 = randGen.Next(Int32.MinValue, Int32.MaxValue);
           sortedSet.Add(obj);
         }
@@ -195,12 +195,12 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        AllSupported obj = new AllSupported(2);
+        AllSupported obj = new AllSupported(2, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("int64", session);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(Int64), true);
         for (int i = 0; i < 100000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.int64 = randGen.Next(Int32.MinValue, Int32.MaxValue) * randGen.Next();
           sortedSet.Add(obj);
         }
@@ -229,12 +229,12 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        AllSupported obj = new AllSupported(1);
+        AllSupported obj = new AllSupported(1, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("uint16", session);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(UInt16), true);
         for (int i = 0; i < 100000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.uint16 = (UInt16)randGen.Next(UInt16.MinValue, UInt16.MaxValue);
           sortedSet.Add(obj);
         }
@@ -257,12 +257,12 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        AllSupported obj = new AllSupported(1);
+        AllSupported obj = new AllSupported(1, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("uint32", session);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(UInt32), true);
         for (int i = 0; i < 10000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.uint32 = (UInt32) randGen.Next();
           sortedSet.Add(obj);
         }
@@ -285,12 +285,12 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        AllSupported obj = new AllSupported(1);
+        AllSupported obj = new AllSupported(1, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("uint64", session);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(UInt64), true);
         for (int i = 0; i < 100000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.uint64 = (UInt64) (randGen.Next(Int32.MinValue, Int32.MaxValue) * randGen.Next());
           sortedSet.Add(obj);
         }
@@ -314,12 +314,12 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        AllSupported obj = new AllSupported(1);
+        AllSupported obj = new AllSupported(1, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("single", session);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(Single), true);
         for (int i = 0; i < 100000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.single = (Single)(randGen.NextDouble() - randGen.NextDouble()) * randGen.Next(UInt16.MinValue, UInt16.MaxValue);
           sortedSet.Add(obj);
         }
@@ -343,13 +343,13 @@ namespace NUnitTests
       using (SessionNoServer session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        AllSupported obj = new AllSupported(1);
+        AllSupported obj = new AllSupported(1, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("aDouble", session);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(double), completeKey);
         List<AllSupported> toRemove = new List<AllSupported>();
         for (int i = 0; i < 100000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.aDouble = (randGen.NextDouble() - randGen.NextDouble()) * randGen.Next(UInt16.MinValue, UInt16.MaxValue);
           if (i % 3500 == 0)
             toRemove.Add(obj);
@@ -383,7 +383,7 @@ namespace NUnitTests
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(Decimal), true);
         for (int i = 0; i < 100000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.aDecimal = (Decimal) (randGen.NextDouble() - randGen.NextDouble()) * randGen.Next(UInt16.MinValue, UInt16.MaxValue);
           sortedSet.Add(obj);
         }
@@ -411,7 +411,7 @@ namespace NUnitTests
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(long), true);
         for (int i = 0; i < 20000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.dateTime = DateTime.FromBinary(randGen.Next(Int32.MinValue, Int32.MaxValue) * randGen.Next());
           sortedSet.Add(obj);
         }
@@ -439,7 +439,7 @@ namespace NUnitTests
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(long), true);
         for (int i = 0; i < 10000; i++)
         {
-          obj = new AllSupported(1);
+          obj = new AllSupported(1, session);
           obj.timeSpan = TimeSpan.FromTicks(randGen.Next(Int32.MinValue, Int32.MaxValue) * randGen.Next());
           sortedSet.Add(obj);
         }

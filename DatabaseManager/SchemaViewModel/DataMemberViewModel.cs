@@ -20,7 +20,9 @@ namespace DatabaseManager
     readonly DataMember m_member;
     readonly SessionBase m_session;
     readonly bool m_isEncodedOidArray;
-    public DataMemberViewModel(TypeVersion parentObj, DataMember member, TypeVersionViewModel parentObject, SessionBase session)
+    readonly SchemasViewModel _schemasViewModel;
+
+    public DataMemberViewModel(TypeVersion parentObj, DataMember member, TypeVersionViewModel parentObject, SessionBase session, SchemasViewModel schemasViewModel)
       : base(parentObject, true)
     {
       m_member = member;
@@ -29,6 +31,7 @@ namespace DatabaseManager
       m_isEncodedOidArray = parentObj.Type.IsAssignableFrom(typeof(BTreeNode)) && parentObj.Type.IsArray && (member.Field.Name == "keysArray" || member.Field.Name == "valuesArray");
       m_isEncodedOidArray = m_isEncodedOidArray || parentObj.GetType().IsGenericType && parentObj.GetType().GetGenericTypeDefinition() == typeof(WeakReferenceList<>);
       m_fieldAsString = member.ToString();
+      _schemasViewModel = schemasViewModel;
     }
     public DataMemberViewModel(TypeVersion parentObj, DataMember member, DataMemberViewModel parentObject, SessionBase session)
   : base(parentObject, true)
@@ -87,7 +90,7 @@ namespace DatabaseManager
               var type = vType.Type;
               if (type.IsSubclassOf(vdbType.Type) || type == t)
                 for (int i = 0; i < vType.TypeVersion.Length; i++)
-                  base.Children.Add(new TypeVersionViewModel(vType.TypeVersion[i], this, m_session));
+                  base.Children.Add(new TypeVersionViewModel(vType.TypeVersion[i], this, _schemasViewModel));
             }
             else
               Trace.WriteLine("vType or vType.type is unexpectedly null for VelocityDbType: " + vType);

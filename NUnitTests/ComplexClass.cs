@@ -145,7 +145,7 @@ namespace NUnitTests
       using (var session = new SessionNoServer(systemDir))
       {
         session.BeginUpdate();
-        allSuported = new AllSupported(3);
+        allSuported = new AllSupported(3, session);
         allSuported.Persist(session, allSuported);
         allSuported.m_weakRefArray[0] = new WeakIOptimizedPersistableReference<IOptimizedPersistable>(allSuported);
         allSuported.m_objectArray[0] = new WeakIOptimizedPersistableReference<IOptimizedPersistable>(allSuported);

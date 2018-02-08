@@ -36,6 +36,7 @@
             <TextBlock Text="{Binding FederationName}">
               <TextBlock.ContextMenu>
                 <ContextMenu>
+
                 </ContextMenu>
               </TextBlock.ContextMenu>
             </TextBlock>
@@ -48,6 +49,8 @@
             <TextBlock Text="{Binding SchemasName}">
               <TextBlock.ContextMenu>
                 <ContextMenu>
+                  <MenuItem Header="Hide Weak Reference Type Connections" IsCheckable="true" IsChecked="{Binding HideWeakReferenceConnectionTypes}" Click="HideWeakReferenceConnectionTypesMenuItem_Click">
+                  </MenuItem>
                 </ContextMenu>
               </TextBlock.ContextMenu>
             </TextBlock>
@@ -84,7 +87,16 @@
             <TextBlock Text="{Binding DataMemberName}" />
           </StackPanel>
         </HierarchicalDataTemplate>
-
+        
+        <HierarchicalDataTemplate 
+          DataType="{x:Type local:WeakReferencedTypeViewModel}"
+          ItemsSource="{Binding Children}">
+          <StackPanel Orientation="Horizontal">
+            <Image Width="16" Height="16" Margin="1,0" Source="/DatabaseManager;component/Images/weak.jpg" />
+            <TextBlock Text="{Binding Description}" />
+          </StackPanel>
+        </HierarchicalDataTemplate>
+        
         <DataTemplate DataType="{x:Type local:NotInSchemaViewModel}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding Message}" />

@@ -14,7 +14,7 @@ namespace NUnitTests
   [TestFixture]
   public class AzureFileApi
   {
-    [Test]
+   // [Test]
     public void Azure()
     {
       UInt64 id = 42949738497;
@@ -29,7 +29,7 @@ namespace NUnitTests
       // Such as: net use f: \\veleocitydb.file.core.windows.net\azure /u:veleocitydb [access key]
       // Add access key and update for your case.
       // Then you can use the mounted Azure directory just like you use any local drive!
-      /*using (SessionBase session = new SessionNoServer("F:/azure", 99999, false))
+      /*using (SessionBase session = new SessionNoServer("v:/azure", 99999, false))
       {
         session.BeginUpdate();
         allSuported = new AllSupported(3);
@@ -38,7 +38,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer("F:/azure", 99999, false))
+      using (SessionNoServer session = new SessionNoServer("v:/azure", 99999, false))
       {
         session.BeginRead();
         allSupported2 = (AllSupported)session.Open(id);
@@ -48,8 +48,8 @@ namespace NUnitTests
       using (SessionBase session = new AzureSession(connectionString, "azure", "azure", 99999, false))
       {
         session.BeginUpdate();
-        allSuported = new AllSupported(3);
-        allSuported.Persist(session, allSuported);
+        allSuported = new AllSupported(3, session);
+        session.Persist(allSuported);
         id = allSuported.Id;
         session.Commit();
       }

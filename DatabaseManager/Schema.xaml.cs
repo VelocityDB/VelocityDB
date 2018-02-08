@@ -63,5 +63,12 @@ namespace DatabaseManager
       }
       return false;
     }
+
+    private void HideWeakReferenceConnectionTypesMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      var view = (SchemasViewModel)menuItem.DataContext;
+      view.HideWeakReferenceConnectionTypes = menuItem.IsChecked;
+    }
   }
 }

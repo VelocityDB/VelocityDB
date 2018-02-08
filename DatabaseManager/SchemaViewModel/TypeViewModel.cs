@@ -11,11 +11,12 @@ namespace DatabaseManager
   public class TypeViewModel : TreeViewItemViewModel
   {
     readonly VelocityDbType _type;
-
+    readonly SchemasViewModel _schemasViewModel;
     public TypeViewModel(SchemasViewModel schemaViewModel, VelocityDbType type)
       : base(schemaViewModel, true)
     {
       _type = type;
+      _schemasViewModel = schemaViewModel;
     }
 
     public string TypeName
@@ -32,7 +33,7 @@ namespace DatabaseManager
       {
         if (_type != null)
           foreach (var typeVersion in _type.TypeVersion)
-            base.Children.Add(new TypeVersionViewModel(typeVersion, this, _type.Session));
+            base.Children.Add(new TypeVersionViewModel(typeVersion, this, _schemasViewModel));
       }
     }
   }
