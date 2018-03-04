@@ -165,12 +165,12 @@ namespace NUnitTests
         using (var session = new SessionNoServerShared(systemDir))
         {
           session.BeginUpdate();
-          AllSupported obj = new AllSupported(2);
+          AllSupported obj = new AllSupported(2, session);
           CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("int32", session, false, false, false);
           BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, sizeof(Int32), true);
           for (int i = 0; i < 100000; i++)
           {
-            obj = new AllSupported(1);
+            obj = new AllSupported(1, session);
             obj.int32 = randGen.Next(Int32.MinValue, Int32.MaxValue);
             sortedSet.Add(obj);
           }

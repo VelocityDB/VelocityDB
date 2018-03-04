@@ -20,4 +20,6 @@
       <br />
       <asp:TextBox ID="HostName" runat="server" Width=200 Text=""></asp:TextBox>
     </div>
+  </div>
+</div>
 </asp:Content>
