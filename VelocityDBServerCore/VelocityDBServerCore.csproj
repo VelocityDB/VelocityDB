@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VelocityDB" Version="7.1.4" />
+    <PackageReference Include="VelocityDB" Version="7.1.5" />
   </ItemGroup>
 
   <ItemGroup>
