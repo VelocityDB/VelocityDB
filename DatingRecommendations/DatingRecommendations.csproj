@@ -63,12 +63,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=7.1.5.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.7.1.5\lib\net45\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=7.1.6.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.7.1.6\lib\net45\VelocityDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="VelocityGraph, Version=7.1.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.7.1.5\lib\Net45\VelocityGraph.dll</HintPath>
+    <Reference Include="VelocityGraph, Version=7.1.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.7.1.6\lib\Net45\VelocityGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
