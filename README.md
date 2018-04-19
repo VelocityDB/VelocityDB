@@ -19,5 +19,5 @@ Building Prerequisites
 
 If you prefer not to use our [installer](https://velocitydb.com/Download.aspx) and instead want to build our extensions, drivers, server and samples from the source code as in our GitHub repository then you need to manually first install
 
-1.	[Microsoft Sync Framework](https://www.microsoft.com/en-us/download/details.aspx?id=23217) (used by our extensions project VelocityDBExtensions2)
-2.	[LinqPad5](https://www.linqpad.net/Download.aspx) (used by our LinqPad driver)
+1.	[Microsoft Sync Framework](https://download.microsoft.com/download/E/8/8/E8819A3A-E994-4A1C-B318-1E9DD2E936DB/SyncSDK-v2.1-x64-ENU.msi) (used by our extensions project VelocityDBExtensions2)
+2.	[LinqPad5](http://www.linqpad.net/GetFile.aspx?LINQPad5Setup-AnyCPU.exe) (used by our LinqPad driver)
