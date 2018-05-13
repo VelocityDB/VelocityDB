@@ -53,8 +53,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="VelocityDb, Version=7.1.7.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.7.1.7\lib\net45\VelocityDb.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\VelocityDB.7.2.0\lib\net45\VelocityDb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
