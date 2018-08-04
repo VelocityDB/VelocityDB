@@ -26,7 +26,6 @@ namespace Baseball
   public partial class MainWindow : Window
   {
     static readonly string s_systemDir = "Baseball"; // appended to SessionBase.BaseDatabasePath
-    static readonly string s_licenseDbFile = "c:/4.odb";
 
     public MainWindow()
     {
@@ -57,7 +56,6 @@ namespace Baseball
         {
           Console.WriteLine($"Running with databases in directory: {session.SystemDirectory}");
           session.BeginUpdate();
-          File.Copy(s_licenseDbFile, System.IO.Path.Combine(session.SystemDirectory, "4.odb"), true);
           string line;
           using (StreamReader stream = new StreamReader(lahman58db.Text + "\\Allstar.csv", true))
           {

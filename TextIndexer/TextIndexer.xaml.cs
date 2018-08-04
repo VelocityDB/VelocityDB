@@ -35,7 +35,6 @@ namespace TextIndexer
   {
     static readonly string s_systemDir = "TextIndexer"; // appended to SessionBase.BaseDatabasePath
     static readonly string s_booksDir = "c:/SampleData/Books";
-    static readonly string s_licenseDbFile = "c:/4.odb";
 
     SessionNoServer session;
     List<DataGrid> dataGridList;
@@ -51,7 +50,6 @@ namespace TextIndexer
       Placement placerIndexRoot = new Placement(IndexRoot.PlaceInDatabase);
       session.BeginUpdate();
       Console.WriteLine("Running with databases in directory: " + session.SystemDirectory);
-      File.Copy(s_licenseDbFile, Path.Combine(session.SystemDirectory, "4.odb"), true);
       IndexRoot _indexRoot;
       Database db = session.OpenDatabase(IndexRoot.PlaceInDatabase, false, false);
       if (db == null)

@@ -18,7 +18,6 @@ namespace BackupRestore
   {
     static readonly string s_systemDir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
       "VelocityDB" + Path.DirectorySeparatorChar + "Databases" + Path.DirectorySeparatorChar + "HighAvailability");
-    static readonly string s_licenseDbFile = "c:/4.odb";
     static string systemHost = Dns.GetHostName();
     //static string backupHost = "Qlap-Tech0195"; // modify to second server name that you are using (make sure VelocityDB is installed on that server first)
     static string backupHost = "FindPriceBuy"; // modify to second server name that you are using (make sure VelocityDB is installed on that server first)
@@ -153,7 +152,6 @@ namespace BackupRestore
       {
         if (!Directory.Exists(s_systemDir))
           Directory.CreateDirectory(s_systemDir);
-        File.Copy(s_licenseDbFile, Path.Combine(s_systemDir, "4.odb"));
         ha.CreateDataWithBackupServer();
         ha.ReadSomeData();
         ha.CreateMoreDataWithBackupServer();

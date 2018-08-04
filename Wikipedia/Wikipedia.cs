@@ -27,7 +27,6 @@ namespace Wikipedia
   {
     static long s_docCountIndexed = 0; // info about progress of indexing
     static readonly string s_systemDir = "Wikipedia"; // appended to SessionBase.BaseDatabasePath
-    static readonly string s_licenseDbFile = "c:/4.odb";
     static readonly string s_wikipediaXmlFile = "c:/SampleData/enwiki-latest-pages-articles.xml";
 
     // Display any warnings or errors.
@@ -75,7 +74,6 @@ namespace Wikipedia
         XmlText xmlText;
         XmlWhitespace xmlWhitespace;
         session.BeginUpdate();
-        File.Copy(s_licenseDbFile, System.IO.Path.Combine(session.SystemDirectory, "4.odb"), true);
         // register all database schema classes used by the application in advance to avoid lock conflict later in parallel indexing
         Database db = session.OpenDatabase(IndexRoot.PlaceInDatabase, false, false);
         if (db != null)

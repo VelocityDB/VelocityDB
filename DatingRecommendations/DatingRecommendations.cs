@@ -34,7 +34,6 @@ namespace DatingRecommendations
   {
     static readonly string s_systemDir = SessionBase.BaseDatabasePath + "/DatingRecommendations";
     static readonly string s_inputDataDir = "c:/SampleData/libimseti"; // change if you need to, download dataset from http://www.occamslab.com/petricek/data/
-    static readonly string s_licenseDbFile = "c:/4.odb";
     static readonly int s_highestRating = 10;
     enum Gender { Male, Female, Unknown };
 
@@ -48,7 +47,6 @@ namespace DatingRecommendations
         if (dirExist)
           Directory.Delete(s_systemDir, true); // remove systemDir from prior runs and all its databases.
         Directory.CreateDirectory(s_systemDir);
-        File.Copy(s_licenseDbFile, Path.Combine(s_systemDir, "4.odb"));
         using (SessionNoServer session = new SessionNoServer(s_systemDir))
         {
           DataCache.MaximumMemoryUse = 12000000000; // 12 GB, set this to what fits your case

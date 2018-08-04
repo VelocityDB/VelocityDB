@@ -17,14 +17,15 @@ namespace VelocityGraphSample
   using System.Collections.Generic;
   class VelocityGraphSample
   {
-    static readonly string systemDir = "VelocityGraphSample"; // appended to SessionBase.BaseDatabasePath
+    static readonly string s_systemDir = "VelocityGraphSample"; // appended to SessionBase.BaseDatabasePath
 
     static void Main(string[] args)
     {
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (SessionNoServer session = new SessionNoServer(s_systemDir))
       {
         if (Directory.Exists(session.SystemDirectory))
           Directory.Delete(session.SystemDirectory, true); // remove systemDir from prior runs and all its databases.
+        Directory.CreateDirectory(session.SystemDirectory);
         Console.WriteLine("Running with databases in directory: " + session.SystemDirectory);
         session.BeginUpdate();
         Graph g = new Graph(session);
@@ -141,7 +142,7 @@ namespace VelocityGraphSample
         session.Commit();
       }
 
-      using (ServerClientSession session = new ServerClientSession(systemDir, System.Net.Dns.GetHostName()))
+      using (ServerClientSession session = new ServerClientSession(s_systemDir, System.Net.Dns.GetHostName()))
       {
         session.BeginRead();
         Graph g = Graph.Open(session);

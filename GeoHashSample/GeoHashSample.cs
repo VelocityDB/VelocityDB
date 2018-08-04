@@ -16,7 +16,6 @@ namespace GeoHashSample
   class GeoHashSample
   {
     static readonly string s_systemDir = "GeoHashSample";
-    static readonly string s_licenseDbFile = "c:/4.odb";
     static readonly int s_numberOfSamples = 10000000;
     static void CreateData()
     {
@@ -29,7 +28,6 @@ namespace GeoHashSample
           Directory.Delete(session.SystemDirectory, true); // remove systemDir from prior runs and all its databases.
         }
         Directory.CreateDirectory(session.SystemDirectory);
-        File.Copy(s_licenseDbFile, Path.Combine(session.SystemDirectory, "4.odb"));
         SessionBase.DefaultCompressPages = PageInfo.compressionKind.LZ4;
         session.BeginUpdate();
         CompareGeoObj comparer = new CompareGeoObj();

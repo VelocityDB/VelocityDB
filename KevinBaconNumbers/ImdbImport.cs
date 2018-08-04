@@ -14,7 +14,6 @@ namespace KevinBaconNumbers
   class ImdbImport
   {
     static readonly string imdbTextFilesDir = "c:/SampleData/imdb"; // change if you need to
-    static readonly string s_licenseDbFile = "c:/4.odb";
     static readonly char[] trimEndChars = new char[] { ';', '.', '"', ',', '\r', ':', ':', ']', '!', '?', '+', '(', '\'', '{', '}', '-', ' ' };
 
     void parseMovie(SessionBase session, string line, ImdbRoot imdbRoot, ActingPerson acting)
@@ -157,7 +156,6 @@ namespace KevinBaconNumbers
         try
         {
           session.BeginUpdate();
-          File.Copy(s_licenseDbFile, Path.Combine(session.SystemDirectory, "4.odb"), true);
           ImdbRoot imdbRoot = new ImdbRoot(session);
           session.Persist(imdbRoot);
           imdbImport.ParseActors(session, imdbRoot);

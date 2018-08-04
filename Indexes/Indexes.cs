@@ -19,7 +19,6 @@ namespace Indexes
 {
   class Indexes
   {
-    static readonly string s_licenseDbFile = "c:/4.odb";
     static readonly string s_systemDir = "Indexes"; // appended to SessionBase.BaseDatabasePath
 
     static void Main(string[] args)
@@ -51,7 +50,6 @@ namespace Indexes
             if (db.DatabaseNumber >= 10 || db.DatabaseNumber == SessionBase.IndexDescriptorDatabaseNumber)
               session.DeleteDatabase(db);
           session.Commit();
-          File.Copy(s_licenseDbFile, Path.Combine(session.SystemDirectory, "4.odb"));
         }
         using (SessionNoServer session = new SessionNoServer(s_systemDir))
         {

@@ -12,7 +12,6 @@ namespace AllSupportedSample
   class AllSupportedSample
   {
     static readonly string s_systemDir = "AllSupportedSample"; // appended to SessionBase.BaseDatabasePath
-    static readonly string s_licenseDbFile = "c:/4.odb";
 
     static int Main(string[] args)
     {
@@ -25,7 +24,6 @@ namespace AllSupportedSample
         {
           Console.WriteLine("Running with databases in directory: " + session.SystemDirectory);
           session.BeginUpdate();
-          File.Copy(s_licenseDbFile, Path.Combine(session.SystemDirectory, "4.odb"), true);
           sub4 = new AllSuportedSub4();
           session.Persist(sub4);
           id = sub4.Id;

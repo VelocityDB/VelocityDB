@@ -30,7 +30,6 @@ namespace FacebookGraph
     static readonly string s_systemDir = "FacebookGraph";
     static readonly string s_inputData = "c:/SampleData/bfs-28-socialgraph-release-corrected"; // change if you need to, download dataset from http://www.VelocityDB.com/Public/bfs-28-socialgraph-release-corrected.zip (and uncompress with 7-zip http://www.7-zip.org/)
     //static readonly string inputData = "D:\\bfs-28-socialgraph-release";// change if you need to, download dataset from http://odysseas.calit2.uci.edu/doku.php/public:online_social_networks#facebook_social_graph_-_breadth_first_search
-    static readonly string s_licenseDbFile = "c:/4.odb";
     enum Gender { Male, Female, Unknown };
 
     static void Main(string[] args)
@@ -52,7 +51,6 @@ namespace FacebookGraph
       if (Directory.Exists(Path.Combine(SessionBase.BaseDatabasePath, s_systemDir)))
         Directory.Delete(Path.Combine(SessionBase.BaseDatabasePath, s_systemDir), true); // remove systemDir from prior runs and all its databases.
       Directory.CreateDirectory(Path.Combine(SessionBase.BaseDatabasePath, s_systemDir));
-      File.Copy(s_licenseDbFile, Path.Combine(SessionBase.BaseDatabasePath, s_systemDir, "4.odb"));
 
       using (SessionNoServer session = new SessionNoServer(s_systemDir, 5000, false, false, CacheEnum.No))
       {

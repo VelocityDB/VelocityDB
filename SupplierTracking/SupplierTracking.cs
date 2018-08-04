@@ -17,7 +17,6 @@ namespace SupplierTracking
   class SupplierTracking
   {
     static readonly string s_systemDir = "SupplierTracking"; // appended to SessionBase.BaseDatabasePath
-    static readonly string s_licenseDbFile = "c:/4.odb";
 
     static int Main(string[] args)
     {
@@ -29,7 +28,6 @@ namespace SupplierTracking
         if (Directory.Exists(session.SystemDirectory))
           Directory.Delete(session.SystemDirectory, true); // remove systemDir from prior runs and all its databases.
         Directory.CreateDirectory(session.SystemDirectory);
-        File.Copy(s_licenseDbFile, Path.Combine(session.SystemDirectory, "4.odb"));
         session.BeginUpdate();
         Graph g = new Graph(session, false);
 

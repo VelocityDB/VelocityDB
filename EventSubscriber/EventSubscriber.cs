@@ -15,15 +15,13 @@ namespace EventSubscriber
   class EventSubscriber
   {
     static readonly string s_systemDir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-      "VelocityDB" + Path.DirectorySeparatorChar + "Databases" + Path.DirectorySeparatorChar + "EventSubscriber"); 
-    static readonly string s_licenseDbFile = "c:/4.odb";
+      $"VelocityDB{Path.DirectorySeparatorChar}Databases{Path.DirectorySeparatorChar}EventSubscriber"); 
 
     static void Main(string[] args)
     {
       using (ServerClientSession session = new ServerClientSession(s_systemDir))
       {
         session.BeginUpdate();
-        File.Copy(s_licenseDbFile, Path.Combine(s_systemDir, "4.odb"), true);
         session.RegisterClass(typeof(Woman));
         session.RegisterClass(typeof(Man));
         session.SubscribeToChanges(typeof(Person));

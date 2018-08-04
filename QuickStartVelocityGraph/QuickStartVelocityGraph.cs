@@ -12,7 +12,6 @@ namespace QuickStartVelocityGraph
   class QuickStartVelocityGraph
   {
     static readonly string systemDir = "QuickStartVelocityGraph"; // appended to SessionBase.BaseDatabasePath
-    static readonly string s_licenseDbFile = "c:/4.odb"; // (download from https://Velocitydb.com/Secure/License.aspx)
 
     static void CreateGraph()
     {
@@ -22,8 +21,6 @@ namespace QuickStartVelocityGraph
           Directory.Delete(session.SystemDirectory, true); // remove systemDir from prior runs and all its databases.
         // Start an update transaction
         session.BeginUpdate();
-        // Copy VelocityDB license database to this database directory
-        File.Copy(s_licenseDbFile, Path.Combine(session.SystemDirectory, "4.odb"));
         Graph g = new Graph(session);
         session.Persist(g);
 
