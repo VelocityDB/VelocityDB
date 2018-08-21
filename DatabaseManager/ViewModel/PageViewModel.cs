@@ -53,7 +53,7 @@ namespace DatabaseManager
       Page page = m_session.OpenPage(db, m_pageNum);
       using (System.Windows.Application.Current.Dispatcher.DisableProcessing())
       {
-        foreach (IOptimizedPersistable o in page)
+        foreach (IOptimizedPersistable o in page.ObjectsLazyLoaded())
           base.Children.Add(new ObjectViewModel(o, this, m_session));
       }
     }

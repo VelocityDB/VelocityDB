@@ -412,6 +412,36 @@ namespace NUnitTests
       }
     }
 
+    [Test]
+    public void SessionUpdateObject()
+    {
+      UInt64 id = 0;
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        VelocityDbSchema.Person person = new VelocityDbSchema.Person();
+        person.LastName = "Med vänliga hälsningar";
+        id = session.Persist(person);
+        session.Commit();
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        VelocityDbSchema.Person person = session.Open<VelocityDbSchema.Person>(id);
+        session.UpdateObject(person);
+        person.m_ssn = long.MaxValue;
+        session.Commit();
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        VelocityDbSchema.Person person = session.Open<VelocityDbSchema.Person>(id);
+        Assert.AreEqual(person.m_ssn, long.MaxValue);
+        person.LastName = "Mit freundlichen Grüßen";
+        session.Commit();
+      }
+    }
+
     private VersionManager<VelocityDbSchema.Samples.Sample1.Person> GetVersionManager(SessionBase session)
     {
       Database db = session.OpenDatabase(VersionManager<VelocityDbSchema.Samples.Sample1.Person>.versionMangerDatabase, false, false);

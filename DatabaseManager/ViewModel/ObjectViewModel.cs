@@ -13,17 +13,14 @@ namespace DatabaseManager
   {
     readonly UInt64 m_objectId;
     readonly SessionBase m_session;
-    readonly string m_objectAsString;
+    string m_objectAsString;
 
     public ObjectViewModel(IOptimizedPersistable obj, TreeViewItemViewModel parentPage, SessionBase session)
       : base(parentPage, true)
     {
       m_objectId = obj.Id;
       m_session = session;
-      if (obj.WrappedObject != obj)
-        m_objectAsString = obj.WrappedObject.ToString() + " " + new Oid(obj.Id);
-      else
-        m_objectAsString = obj.ToString();
+      SetName(obj);
     }
 
     public ObjectViewModel(IOptimizedPersistable obj, FieldViewModel parentView, SessionBase session)
@@ -71,6 +68,20 @@ namespace DatabaseManager
       }
     }
 
+    void SetName(IOptimizedPersistable obj)
+    {
+      try
+      {
+        if (obj.WrappedObject != obj)
+          m_objectAsString = obj.WrappedObject.ToString() + " " + new Oid(obj.Id);
+        else
+          m_objectAsString = obj.ToString();
+      }
+      catch (Exception)
+      { // in case fields used in ToString() are not loaded
+          m_objectAsString = obj.WrappedObject.GetType().ToGenericTypeString() + " " + Oid.AsString(obj.Id);
+      }
+    }
     public string ObjectName
     {
       //get { return _object.ToStringDetails(_schema); }
@@ -106,9 +117,10 @@ namespace DatabaseManager
 
     protected override void LoadChildren()
     {
-      IOptimizedPersistable pObj = (IOptimizedPersistable)m_session.Open(m_objectId, false, null, false, 0, Int32.MaxValue);
+      IOptimizedPersistable pObj = (IOptimizedPersistable)m_session.Open(m_objectId, false, null, false, 0, Int32.MaxValue);     
       if (pObj != null)
       {
+        SetName(pObj);
         m_session.LoadFields(pObj);
         object o = pObj.WrappedObject;
         TypeVersion baseShape = pObj.Shape.BaseShape;

@@ -44,7 +44,7 @@ namespace DatabaseManager
       {
         Database db = m_session.OpenDatabase(m_dbid, false, false);
         if (db != null)
-          foreach (Page page in db)
+          foreach (var page in db.Pages(true))
             base.Children.Add(new PageViewModel(page, this, m_session));
       }
     }
