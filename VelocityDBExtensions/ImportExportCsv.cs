@@ -62,7 +62,7 @@ namespace VelocityDBExtensions
                                      page.PageInfo.ShapeNumber);
                 foreach (IOptimizedPersistable pObj in page)
                 {
-                  TypeVersion tv = pObj.Shape;
+                  TypeVersion tv = pObj.GetTypeVersion();
                   if (!files.TryGetValue(tv.ShortId, out writer))
                   {
                     Type type = tv.VelocityDbType.Type;
@@ -72,10 +72,10 @@ namespace VelocityDBExtensions
                     {
                       typeName = typeName.Replace(c, string.Empty);
                     }
-                    filePath = typeName + pObj.Shape.ShortId + ".csv";
+                    filePath = typeName + pObj.GetTypeVersion().ShortId + ".csv";
                     FileStream fStream = new FileStream(Path.Combine(directory, filePath), FileMode.Create);
                     writer = new StreamWriter(fStream);
-                    files[pObj.Shape.ShortId] = writer;
+                    files[pObj.GetTypeVersion().ShortId] = writer;
                     List<DataMember> members = tv.GetDataMemberList();
                     byte[] bytes = Page.StringToByteArray($"id{fieldSeperator}"); // special transient member
                     fStream.Write(bytes, 0, bytes.Length);

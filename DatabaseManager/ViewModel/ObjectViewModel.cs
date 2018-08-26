@@ -28,8 +28,8 @@ namespace DatabaseManager
     {
       m_objectId = obj.Id;
       m_session = session;
-      if (obj.WrappedObject != obj)
-        m_objectAsString = obj.WrappedObject.ToString() + " " + new Oid(obj.Id);
+      if (obj.GetWrappedObject() != obj)
+        m_objectAsString = obj.GetWrappedObject().ToString() + " " + new Oid(obj.Id);
       else
         m_objectAsString = obj.ToString();
     }
@@ -61,8 +61,8 @@ namespace DatabaseManager
         if (pObj != null)
           m_objectId = pObj.Id;
         m_session = session;
-        if (pObj != null && pObj.WrappedObject != obj)
-          m_objectAsString = $"[{arrayIndex}] {pObj.WrappedObject} {new Oid(pObj.Id)}";
+        if (pObj != null && pObj.GetWrappedObject() != obj)
+          m_objectAsString = $"[{arrayIndex}] {pObj.GetWrappedObject()} {new Oid(pObj.Id)}";
         else
           m_objectAsString = $"[{arrayIndex}] {obj}";
       }
@@ -72,14 +72,14 @@ namespace DatabaseManager
     {
       try
       {
-        if (obj.WrappedObject != obj)
-          m_objectAsString = obj.WrappedObject.ToString() + " " + new Oid(obj.Id);
+        if (obj.GetWrappedObject() != obj)
+          m_objectAsString = obj.GetWrappedObject().ToString() + " " + new Oid(obj.Id);
         else
           m_objectAsString = obj.ToString();
       }
       catch (Exception)
       { // in case fields used in ToString() are not loaded
-          m_objectAsString = obj.WrappedObject.GetType().ToGenericTypeString() + " " + Oid.AsString(obj.Id);
+          m_objectAsString = obj.GetWrappedObject().GetType().ToGenericTypeString() + " " + Oid.AsString(obj.Id);
       }
     }
     public string ObjectName
@@ -122,8 +122,8 @@ namespace DatabaseManager
       {
         SetName(pObj);
         m_session.LoadFields(pObj);
-        object o = pObj.WrappedObject;
-        TypeVersion baseShape = pObj.Shape.BaseShape;
+        object o = pObj.GetWrappedObject();
+        TypeVersion baseShape = pObj.GetTypeVersion().BaseShape;
         while (baseShape != null)
         {
           foreach (DataMember member in baseShape.DataMemberArray)
@@ -133,7 +133,7 @@ namespace DatabaseManager
           }
           baseShape = baseShape.BaseShape;
         }
-        foreach (DataMember member in pObj.Shape.DataMemberArray)
+        foreach (DataMember member in pObj.GetTypeVersion().DataMemberArray)
         {
           object memberObj = member.GetMemberValue(o);
           LoadChild(member, memberObj);

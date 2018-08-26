@@ -47,13 +47,13 @@ namespace VelocityGraph
       m_typeId = (TypeId)aTypeId;
       m_typeName = aTypeName;
       var vertices = new VelocityDbList<Range<VertexId>>();
-      graph.Session.Persist(vertices);
+      graph.GetSession().Persist(vertices);
       m_vertices = new WeakIOptimizedPersistableReference<VelocityDbList<Range<VertexId>>>(vertices);
-      m_stringToPropertyType = new BTreeMap<string, PropertyType>(null, graph.Session);
-      m_edgeTypes = new BTreeSet<EdgeType>(null, graph.Session);
-      m_tailToHeadEdges = new BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>>(null, graph.Session);
-      m_headToTailEdges = new BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>>(null, graph.Session);
-      graph.Session.Persist(this);
+      m_stringToPropertyType = new BTreeMap<string, PropertyType>(null, graph.GetSession());
+      m_edgeTypes = new BTreeSet<EdgeType>(null, graph.GetSession());
+      m_tailToHeadEdges = new BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>>(null, graph.GetSession());
+      m_headToTailEdges = new BTreeMap<EdgeType, BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>>>(null, graph.GetSession());
+      graph.GetSession().Persist(this);
     }
 
     /// <summary>

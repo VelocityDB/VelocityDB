@@ -55,7 +55,7 @@ namespace VelocityDBExtensions
                         continue;
                       if (change.PageId == 0) // Database delete
                       {
-                        currentVersion = dbToUpdate.Page.PageInfo.VersionNumber;
+                        currentVersion = dbToUpdate.GetPage().PageInfo.VersionNumber;
                         if (currentVersion < change.Version)
                           sessionToUpdate.DeleteDatabase(dbToUpdate);
                         else

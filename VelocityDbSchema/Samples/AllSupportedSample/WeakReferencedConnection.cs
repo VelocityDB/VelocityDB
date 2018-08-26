@@ -22,7 +22,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     {
       if (!t.IsPersistent)
         throw new PersistedObjectExcpectedException("Persist first");
-       t.Session.Persist(this);
+       t.GetSession().Persist(this);
       _objId = t.Id;
     }
 

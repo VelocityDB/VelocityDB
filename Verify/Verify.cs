@@ -29,9 +29,9 @@ namespace Verify
             foreach (Page page in db)
               foreach (IOptimizedPersistable iPers in page)
               {
-                object obj = iPers.WrappedObject;
+                object obj = iPers.GetWrappedObject();
                 ++ct;
-                if (iPers.WrappedObject is IOptimizedPersistable)
+                if (iPers.GetWrappedObject() is IOptimizedPersistable)
                 {
                   UInt64 id = iPers.Id;
                   OptimizedPersistable pObj = iPers as OptimizedPersistable;

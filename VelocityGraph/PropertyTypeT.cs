@@ -32,14 +32,14 @@ namespace VelocityGraph
     internal PropertyTypeT(bool isVertexProp, TypeId typeId, PropertyId propertyId, string name, PropertyKind kind, Graph graph)
       : base(isVertexProp, typeId, propertyId, name, graph)
     {
-      m_propertyValue = new BTreeMap<ElementId, T>(null, graph.Session);
+      m_propertyValue = new BTreeMap<ElementId, T>(null, graph.GetSession());
       switch (kind)
       {
         case PropertyKind.Indexed:
-          m_valueIndex = new BTreeMap<T, BTreeSet<ElementId>>(null, graph.Session);
+          m_valueIndex = new BTreeMap<T, BTreeSet<ElementId>>(null, graph.GetSession());
           break;
         case PropertyKind.Unique:
-          m_valueIndexUnique = new BTreeMap<T, ElementId>(null, graph.Session);
+          m_valueIndexUnique = new BTreeMap<T, ElementId>(null, graph.GetSession());
           break;
       }
     }

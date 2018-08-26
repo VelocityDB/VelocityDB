@@ -16,7 +16,7 @@ namespace DatabaseManager
     public FieldViewModelNoExpansions(IOptimizedPersistable parentObj, DataMember member, ObjectViewModel parentView, SessionBase session)
       : base(parentView, true)
     {
-      fieldAsString = Utilities.ToStringDetails(member, parentObj.WrappedObject, parentObj, parentObj.Page, true);
+      fieldAsString = Utilities.ToStringDetails(member, parentObj.GetWrappedObject(), parentObj, parentObj.GetPage(), true);
     }
 
     public string FieldName

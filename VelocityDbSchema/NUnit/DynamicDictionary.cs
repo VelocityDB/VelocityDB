@@ -117,7 +117,7 @@ namespace VelocityDbSchema.NUnit
     /// <summary>
     /// Gets the session of this object or null if this object isn't yet persisted.
     /// </summary>
-    public virtual SessionBase Session => _page?.Database.Session;
+    public virtual SessionBase Session => _page?.Database.GetSession();
 
     [FieldAccessor("m_creationTime")]
     public DateTime CreationTime
@@ -199,12 +199,6 @@ namespace VelocityDbSchema.NUnit
 
     public ushort ObjectsPerPage => 40000;
 
-    public Page Page
-    {
-      get { return _page; }
-      set { _page = value; }
-    }
-
     /// <summary>
     /// A default for number of objects per database page used when persiting objects without an explicit <see cref="Placement"/> object or if persistet using <see cref="OptimizedPersistable.Persist(SessionBase, OptimizedPersistable, bool, bool)"/>
     /// This happens when objects are persited by reachability from a persistent object.
@@ -231,7 +225,7 @@ namespace VelocityDbSchema.NUnit
       }
     }
 
-    public TypeVersion Shape
+    protected TypeVersion Shape
     {
       get { return _shape; }
       set { _shape = value; }
@@ -257,6 +251,25 @@ namespace VelocityDbSchema.NUnit
       else
         throw new ArgumentException("Object is not a IOptimizedPersistable");
     }
+    /// <inheritdoc />
+    public Page GetPage()
+    {
+      return _page;
+    }
+
+    /// <inheritdoc />
+    public void SetPage(Page page)
+    {
+      _page = page;
+    }
+
+    /// <inheritdoc />
+    public TypeVersion GetTypeVersion() => _shape;
+
+    /// <inheritdoc />
+    public void SetTypeVersion(TypeVersion typeVersion) => _shape = typeVersion;
+    /// <inheritdoc />
+    public object GetWrappedObject() => this;
 
     public void FlushTransients()
     {
@@ -312,7 +325,7 @@ namespace VelocityDbSchema.NUnit
 
     public void PersistMyReferences(SessionBase session, bool inFlush)
     {
-      Shape.PersistRefences(WrappedObject, _page.PageInfo, this, session, inFlush);
+      Shape.PersistRefences(GetWrappedObject(), _page.PageInfo, this, session, inFlush);
     }
 
     public void ReadMe(TypeVersion typeVersion, byte[] memberBytes, ref int offset, SessionBase session, Page page,
@@ -328,7 +341,7 @@ namespace VelocityDbSchema.NUnit
     {
       IOptimizedPersistable copy = (IOptimizedPersistable)this.MemberwiseClone();
 
-      copy.Page = page;
+      copy.SetPage(page);
 
       return copy;
     }
@@ -347,10 +360,10 @@ namespace VelocityDbSchema.NUnit
 
       this.Update();
 
-      if (Page != null)
+      if (GetPage() != null)
       {
-        Page.UnpersistObject(this);
-        Page = null;
+        GetPage().UnpersistObject(this);
+        SetPage(null);
       }
 
       Id = 0;
@@ -358,7 +371,7 @@ namespace VelocityDbSchema.NUnit
 
     public bool Update()
     {
-      return !IsPersistent || Page.Database.Session.UpdateObject(this, false, true);
+      return !IsPersistent || GetPage().Database.GetSession().UpdateObject(this, false, true);
     }
 
     public byte[] WriteMe(TypeVersion typeVersion, bool addShapeNumber, PageInfo pageInfo,

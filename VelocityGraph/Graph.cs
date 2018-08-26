@@ -518,7 +518,7 @@ namespace VelocityGraph
     }
 
     /// <inheritdoc />
-    public override SessionBase Session
+    protected override SessionBase Session
     {
       get
       {

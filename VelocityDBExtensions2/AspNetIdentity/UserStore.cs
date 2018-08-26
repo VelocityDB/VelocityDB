@@ -750,11 +750,11 @@ namespace VelocityDBExtensions2.AspNet.Identity
       return null;
     }
 
-    public SessionBase Session
+    protected SessionBase Session
     {
       get
       {
-        return m_aspNetIdentity.Session;
+        return m_aspNetIdentity.GetSession();
       }
     }
   }

@@ -514,7 +514,7 @@ namespace NUnitTests
         Man man2 = (Man)man.Clone();
         Assert.NotNull(man);
         Assert.IsFalse(man2.IsPersistent);
-        Assert.IsNull(man2.Shape);
+        Assert.IsNull(man2.GetTypeVersion());
         Assert.AreEqual(man2.Id, 0);
         Assert.AreEqual(man2.ShortId, 0);
         Assert.True(man != man2);

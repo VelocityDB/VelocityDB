@@ -25,8 +25,8 @@ namespace VelocityGraph
     internal PropertyTypeNoDuplicateValues(bool isVertexProp, TypeId typeId, PropertyId propertyId, string name, PropertyKind kind, Graph graph)
       : base(isVertexProp, typeId, propertyId, name, kind, graph)
     {
-      m_valueToId = new BTreeMap<T, UInt64>(null, graph.Session);
-      m_IdToValue = new BTreeMap<UInt64, T>(null, graph.Session);
+      m_valueToId = new BTreeMap<T, UInt64>(null, graph.GetSession());
+      m_IdToValue = new BTreeMap<UInt64, T>(null, graph.GetSession());
       m_nextId = 0;
     }
 

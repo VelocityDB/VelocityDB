@@ -32,7 +32,7 @@ namespace DatabaseManager
       using (System.Windows.Application.Current.Dispatcher.DisableProcessing())
       {
         if (_type != null)
-          foreach (var typeVersion in _type.TypeVersion)
+          foreach (var typeVersion in _type.TypeVersions)
             base.Children.Add(new TypeVersionViewModel(typeVersion, this, _schemasViewModel));
       }
     }

@@ -118,7 +118,7 @@ namespace VelocityDBExtensions.Extensions.BTree
  where Key : new()
 #endif
     {
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
 
       Expression leftSide = binExp.Left;
@@ -167,7 +167,7 @@ namespace VelocityDBExtensions.Extensions.BTree
  where Key : new()
 #endif
     {
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
 
       Expression leftSide = binExp.Left;
@@ -236,7 +236,7 @@ namespace VelocityDBExtensions.Extensions.BTree
  where Key : new()
 #endif
     {
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
       Expression leftSide = binExp.Left;
       Expression rightSide = binExp.Right;
@@ -277,7 +277,7 @@ namespace VelocityDBExtensions.Extensions.BTree
  where Key : new()
 #endif
     {
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
       Expression leftSide = binExp.Left;
       Expression rightSide = binExp.Right;
@@ -353,7 +353,7 @@ namespace VelocityDBExtensions.Extensions.BTree
  where Key : new()
 #endif
     {
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
       Expression leftSide = binExp.Left;
       Expression rightSide = binExp.Right;
@@ -401,7 +401,7 @@ namespace VelocityDBExtensions.Extensions.BTree
  where Key : new()
 #endif
     {
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
 
       Expression leftSide = binExp.Left;
@@ -472,7 +472,7 @@ namespace VelocityDBExtensions.Extensions.BTree
  where Key : new()
 #endif
     {
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
       Expression leftSide = binExp.Left;
       Expression rightSide = binExp.Right;
@@ -521,7 +521,7 @@ namespace VelocityDBExtensions.Extensions.BTree
  where Key : new()
 #endif
     {
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       Expression leftSide = binExp.Left;
       Expression rightSide = binExp.Right;
       object rightValue = GetRightValue(leftSide, rightSide);
@@ -597,7 +597,7 @@ namespace VelocityDBExtensions.Extensions.BTree
  where Key : new()
 #endif
     {
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
       Expression leftSide = binExp.Left;
       Expression rightSide = binExp.Right;
@@ -636,7 +636,7 @@ namespace VelocityDBExtensions.Extensions.BTree
  where Key : new()
 #endif
     {
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
       Expression leftSide = binExp.Left;
       Expression rightSide = binExp.Right;
@@ -696,7 +696,7 @@ namespace VelocityDBExtensions.Extensions.BTree
         if (binExp.NodeType != ExpressionType.Equal && binExp.NodeType != ExpressionType.AndAlso)
           return false;
       }
-      SessionBase session = sourceCollection.Session;
+      SessionBase session = sourceCollection.GetSession();
       if (session.TraceIndexUsage)
         Trace.WriteLine(DateTime.Now.ToString("HH:mm:ss:fff") + " Index used with " + sourceCollection.ToString());
       return true;
@@ -754,7 +754,7 @@ namespace VelocityDBExtensions.Extensions.BTree
       {
 
         bool noIndex = true;
-        SessionBase session = sourceCollection.Session;
+        SessionBase session = sourceCollection.GetSession();
         CompareByField<Key> comparer = sourceCollection.Comparer as CompareByField<Key>;
         BinaryExpression binExp = expr.Body as BinaryExpression;
         if (binExp != null && canUseIndex<Key>(sourceCollection, binExp, comparer))

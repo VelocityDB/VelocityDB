@@ -59,6 +59,25 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
         throw new ArgumentException("Object is not a IOptimizedPersistable");
     }
 
+    /// <inheritdoc />
+    public Page GetPage()
+    {
+      return m_page;
+    }
+
+    /// <inheritdoc />
+    public void SetPage(Page page)
+    {
+      m_page = page;
+    }
+    /// <inheritdoc />
+    public object GetWrappedObject() => this;
+    /// <inheritdoc />
+    public TypeVersion GetTypeVersion() => m_shape;
+
+    /// <inheritdoc />
+    public void SetTypeVersion(TypeVersion typeVersion) => m_shape = typeVersion;
+
     /// <summary>
     /// By default we flush (write) any updated page we find when looking for an object placement page and the page is considered full (depends on how many objects we permit/page)
     /// </summary>
@@ -270,20 +289,20 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     /// <summary>
     /// Gets the session of this object or null if this object isn't yet persisted.
     /// </summary>
-    public virtual SessionBase Session
+    protected virtual SessionBase Session
     {
       get
       {
         if (this.m_page == null)
           return null;
-        return this.m_page.Database.Session;
+        return this.m_page.Database.GetSession();
       }
     }
 
     public IOptimizedPersistable ShallowCopyTo(Page page)
     {
       IOptimizedPersistable copy = (IOptimizedPersistable)this.MemberwiseClone();
-      copy.Page = page;
+      copy.SetPage(page);
       return copy;
     }
 
@@ -321,7 +340,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     public bool Update()
     {
       if (IsPersistent)
-        return this.Page.Database.Session.UpdateObject(this, false, true);
+        return this.Page.Database.GetSession().UpdateObject(this, false, true);
       return true;
     }
 

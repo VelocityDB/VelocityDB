@@ -85,8 +85,8 @@ namespace DatabaseManager
             {
               var type = vType.Type;
               if (type.IsSubclassOf(vdbType.Type) || type == t)
-                for (int i = 0; i < vType.TypeVersion.Length; i++)
-                  base.Children.Add(new TypeVersionViewModel(vType.TypeVersion[i], this, _schemasViewModel));
+                for (int i = 0; i < vType.TypeVersions.Length; i++)
+                  base.Children.Add(new TypeVersionViewModel(vType.TypeVersions[i], this, _schemasViewModel));
             }
             else
               Trace.WriteLine("vType or vType.type is unexpectedly null for VelocityDbType: " + vType);

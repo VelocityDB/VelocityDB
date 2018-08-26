@@ -109,7 +109,7 @@ namespace TextIndexer
     {
       DocumentText docText = new DocumentText(docTextString, doc);
       session.Persist(doc);
-      doc.Page.Database.Name = doc.Name;
+      doc.GetPage().Database.Name = doc.Name;
       session.Persist(docText);
       indexRoot.Repository.DocumentSet.Add(doc);
       doc.Content = docText;

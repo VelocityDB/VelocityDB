@@ -121,7 +121,7 @@ namespace DatabaseManager
       MenuItem menuItem = (MenuItem)sender;
       DatabaseLocationViewModel view = (DatabaseLocationViewModel)menuItem.DataContext;
       DatabaseLocation dbLocation = view.DatabaseLocation;
-      SessionBase session = dbLocation.Session;
+      SessionBase session = dbLocation.GetSession();
       if (session.InTransaction)
         session.Commit();
       session.BeginUpdate();
@@ -144,7 +144,7 @@ namespace DatabaseManager
       MenuItem menuItem = (MenuItem)sender;
       DatabaseLocationViewModel view = (DatabaseLocationViewModel)menuItem.DataContext;
       DatabaseLocation dbLocation = view.DatabaseLocation;
-      SessionBase session = dbLocation.Session;
+      SessionBase session = dbLocation.GetSession();
       if (session.InTransaction)
         session.Commit();
       //DatabaseLocationMutable newLocationMutable = new DatabaseLocationMutable(session);
@@ -154,7 +154,7 @@ namespace DatabaseManager
       //bool? result = popup.ShowDialog();
       //if (result != null && result.Value)
       {
-        dbLocation.Page = null; // fake it as a transient object before restore !
+        dbLocation.SetPage(null); // fake it as a transient object before restore !
         dbLocation.Id = 0;      // be careful about doing this kind of make transient tricks, references from objects like this are still persistent.
        // if (session.OptimisticLocking) // && session.GetType() == typeof(ServerClientSession))
         {
@@ -183,7 +183,7 @@ namespace DatabaseManager
       MenuItem menuItem = (MenuItem)sender;
       DatabaseLocationViewModel view = (DatabaseLocationViewModel)menuItem.DataContext;
       DatabaseLocation dbLocation = view.DatabaseLocation;
-      SessionBase session = dbLocation.Session;
+      SessionBase session = dbLocation.GetSession();
       DatabaseLocationMutable newLocationMutable = new DatabaseLocationMutable(session);
       newLocationMutable.BackupOfOrForLocation = dbLocation.BackupOfOrForLocation;
       newLocationMutable.CompressPages = dbLocation.CompressPages;
@@ -276,7 +276,7 @@ namespace DatabaseManager
         if (session.InTransaction)
           session.Commit(); // must not be in transaction while copying databases
         session.CopyAllDatabasesTo(copyDir);
-        session = info.Session;
+        session = info.GetSession();
         session.BeginUpdate();
         FederationCopyInfo copyInfo = new FederationCopyInfo(Dns.GetHostName(), copyDir);
         session.Persist(copyInfo);
@@ -319,7 +319,7 @@ namespace DatabaseManager
       FederationInfo info = view.Federationinfo;
       SessionBase session = view.Session;
       session.Verify();
-      session = info.Session;
+      session = info.GetSession();
       session.BeginUpdate();
       info.Update();
       info.Validated.Add(DateTime.Now);
@@ -332,7 +332,7 @@ namespace DatabaseManager
       MenuItem menuItem = (MenuItem)sender;
       FederationViewModel view = (FederationViewModel)menuItem.DataContext;
       FederationInfo info = view.Federationinfo;
-      SessionBase session = info.Session;
+      SessionBase session = info.GetSession();
       session.BeginUpdate();
       info.Unpersist(session);
       session.Commit();

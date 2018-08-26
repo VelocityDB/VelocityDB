@@ -25,11 +25,11 @@ namespace VelocityDBExtensions2.AspNet.Identity
       m_aspNetIdentity = identity;
     }
 
-    public SessionBase Session
+    protected SessionBase Session
     {
       get
       {
-        return m_aspNetIdentity.Session;
+        return m_aspNetIdentity.GetSession();
       }
     }
 
@@ -110,7 +110,7 @@ namespace VelocityDBExtensions2.AspNet.Identity
       SessionBase session = Session;
       if (session.InTransaction == false)
         session.BeginRead(); 
-      var roles = m_aspNetIdentity.Session.AllObjects<IdentityRole>();
+      var roles = m_aspNetIdentity.GetSession().AllObjects<IdentityRole>();
       return (T)await Task.FromResult((from role in roles where role.Name == roleName select role).FirstOrDefault());
     }
 

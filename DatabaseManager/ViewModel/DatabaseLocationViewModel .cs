@@ -30,7 +30,7 @@ namespace DatabaseManager
     {
       get
       {
-        return m_databaseLocation.Session.DatabaseLocations.ToList();
+        return m_databaseLocation.GetSession().DatabaseLocations.ToList();
       }
     }
 
@@ -66,14 +66,14 @@ namespace DatabaseManager
 
     protected override void LoadChildren()
     {
-      base.Children.Add(new ObjectViewModel(m_databaseLocation, this, m_databaseLocation.Session));
+      base.Children.Add(new ObjectViewModel(m_databaseLocation, this, m_databaseLocation.GetSession()));
       IOrderedEnumerable<Database> dbs;
-      if (!m_databaseLocation.Session.InTransaction)
-        m_databaseLocation.Session.BeginRead();
+      if (!m_databaseLocation.GetSession().InTransaction)
+        m_databaseLocation.GetSession().BeginRead();
       if (m_orderDatabasesByName)
-        dbs = m_databaseLocation.Session.OpenLocationDatabases(m_databaseLocation, false).OrderBy(db => db.Name);
+        dbs = m_databaseLocation.GetSession().OpenLocationDatabases(m_databaseLocation, false).OrderBy(db => db.Name);
       else
-        dbs = m_databaseLocation.Session.OpenLocationDatabases(m_databaseLocation, false).OrderBy(db => db.Id);
+        dbs = m_databaseLocation.GetSession().OpenLocationDatabases(m_databaseLocation, false).OrderBy(db => db.Id);
       using (System.Windows.Application.Current.Dispatcher.DisableProcessing())
       {
         foreach (Database database in dbs)

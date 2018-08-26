@@ -25,10 +25,10 @@ namespace DatabaseManager
       m_member = member;
       m_session = session;
       m_parentId = parentObj.Id; 
-      object memberObj = member.GetMemberValue(parentObj.WrappedObject);
+      object memberObj = member.GetMemberValue(parentObj.GetWrappedObject());
       m_isEncodedOidArray = (parentObj as BTreeNode) != null && memberObj != null && (memberObj as Array) != null && (member.Field.Name == "keysArray" || member.Field.Name == "valuesArray");
       m_isEncodedOidArray = m_isEncodedOidArray || parentObj.GetType().IsGenericType && parentObj.GetType().GetGenericTypeDefinition() == typeof(WeakReferenceList<>);
-      m_fieldAsString = Utilities.ToStringDetails(member, parentObj.WrappedObject, parentObj, parentObj.Page, true);
+      m_fieldAsString = Utilities.ToStringDetails(member, parentObj.GetWrappedObject(), parentObj, parentObj.GetPage(), true);
     }
 
     public string FieldName
@@ -47,7 +47,7 @@ namespace DatabaseManager
     public Array GetFieldAsArray()
     {
       IOptimizedPersistable parentObj = (IOptimizedPersistable)m_session.Open(m_parentId, false, null, false, 0, Int32.MaxValue);
-      object memberObj = m_member.GetMemberValue(parentObj.WrappedObject);
+      object memberObj = m_member.GetMemberValue(parentObj.GetWrappedObject());
       return memberObj as Array;
     }
 
@@ -56,7 +56,7 @@ namespace DatabaseManager
       IOptimizedPersistable parentObj = (IOptimizedPersistable) m_session.Open(m_parentId, false, null, false, 0, Int32.MaxValue);
       if (parentObj != null)
       {
-        object memberObj = m_member.GetMemberValue(parentObj.WrappedObject);
+        object memberObj = m_member.GetMemberValue(parentObj.GetWrappedObject());
         Array a = memberObj as Array;
         if (a != null)
         {
@@ -64,7 +64,7 @@ namespace DatabaseManager
           TypeCode tCode = elementType.GetTypeCode();
           bool isValueType = elementType.IsValueType;
           if ((isValueType || elementType.IsArray) && !m_isEncodedOidArray)
-            base.Children.Add(new ArrayViewModelNoExpansions(a, elementType, this, m_isEncodedOidArray, parentObj.Page, m_session));
+            base.Children.Add(new ArrayViewModelNoExpansions(a, elementType, this, m_isEncodedOidArray, parentObj.GetPage(), m_session));
           else
           {
             int i = 0;
@@ -89,21 +89,24 @@ namespace DatabaseManager
           else
           {
             IList list = memberObj as IList;
-            Type elementType = list.GetType();
-            if (elementType.IsGenericType)
-              elementType = elementType.GetGenericArguments()[0];
-            else
-              elementType = elementType.GetElementType();
-            TypeCode tCode = elementType.GetTypeCode();
-            bool isValueType = elementType.IsValueType;
-            if ((isValueType || elementType.IsArray) && !m_isEncodedOidArray)
-              base.Children.Add(new ListViewModel(list, this, parentObj.Page));
-            else
+            if (list != null)
             {
-              int i = 0;
-              foreach (object arrayObj in list)
+              Type elementType = list.GetType();
+              if (elementType.IsGenericType)
+                elementType = elementType.GetGenericArguments()[0];
+              else
+                elementType = elementType.GetElementType();
+              TypeCode tCode = elementType.GetTypeCode();
+              bool isValueType = elementType.IsValueType;
+              if ((isValueType || elementType.IsArray) && !m_isEncodedOidArray)
+                base.Children.Add(new ListViewModel(list, this, parentObj.GetPage()));
+              else
               {
-                base.Children.Add(new ObjectViewModel(arrayObj, this, i++, m_isEncodedOidArray, m_session));
+                int i = 0;
+                foreach (object arrayObj in list)
+                {
+                  base.Children.Add(new ObjectViewModel(arrayObj, this, i++, m_isEncodedOidArray, m_session));
+                }
               }
             }
           }

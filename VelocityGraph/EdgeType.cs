@@ -64,14 +64,14 @@ namespace VelocityGraph
       if (headType != null)
         m_headType = new WeakIOptimizedPersistableReference<VertexType>(headType);
       if (Unrestricted)
-        m_unrestrictedEdges = new BTreeMap<EdgeId, UnrestrictedEdge>(null, graph.Session);
+        m_unrestrictedEdges = new BTreeMap<EdgeId, UnrestrictedEdge>(null, graph.GetSession());
       else
-        m_restrictedEdges = new BTreeMap<EdgeId, ulong>(null, graph.Session);
-      m_stringToPropertyType = new BTreeMap<string, PropertyType>(null, graph.Session);
+        m_restrictedEdges = new BTreeMap<EdgeId, ulong>(null, graph.GetSession());
+      m_stringToPropertyType = new BTreeMap<string, PropertyType>(null, graph.GetSession());
       var edgeRanges = new VelocityDbList<Range<EdgeId>>();
-      graph.Session.Persist(edgeRanges);
+      graph.GetSession().Persist(edgeRanges);
       m_edgeRanges = new WeakIOptimizedPersistableReference<VelocityDbList<Range<PropertyId>>>(edgeRanges);
-      graph.Session.Persist(this);
+      graph.GetSession().Persist(this);
     }
 
     /// <summary>

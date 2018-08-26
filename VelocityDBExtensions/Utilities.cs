@@ -29,7 +29,7 @@ namespace VelocityDBExtensions
       IOptimizedPersistable pObj;
       StringBuilder sb = new StringBuilder(100);
       int i = 0;
-      SessionBase session = page.Database.Session;
+      SessionBase session = page.Database.GetSession();
       TypeCode tCode = elementType.GetTypeCode();
       bool isValueType = elementType.GetTypeInfo().IsValueType;
       foreach (object arrayObj in array)
@@ -116,8 +116,8 @@ namespace VelocityDBExtensions
     /// <returns>content of an object as string</returns>
     static public string ToStringDetails(this OptimizedPersistable pObj, Schema schema, TypeVersion typeVersion, bool skipArrays)
     {
-      object obj = pObj.WrappedObject ?? pObj;
-      return ToStringDetails(obj, schema, pObj.Page, typeVersion, skipArrays);
+      object obj = pObj.GetWrappedObject() ?? pObj;
+      return ToStringDetails(obj, schema, pObj.GetPage(), typeVersion, skipArrays);
     }
 
     /// <summary>
@@ -130,15 +130,15 @@ namespace VelocityDBExtensions
     static public string ToStringDetails(this OptimizedPersistable pObj, SessionBase session, bool skipArrays = true)
     {
       Schema schema = session.OpenSchema(false);
-      if (pObj.WrappedObject == null)
-        return pObj.ToString() + pObj.ToStringDetails(schema, pObj.Shape, skipArrays);
+      if (pObj.GetWrappedObject() == null)
+        return pObj.ToString() + pObj.ToStringDetails(schema, pObj.GetTypeVersion(), skipArrays);
       else
       {
-        Array array = pObj.WrappedObject as Array;
+        Array array = pObj.GetWrappedObject() as Array;
         if (array != null)
-          return pObj.WrappedObject.ToString() + " (" + array.Length + ") " + Oid.AsString(pObj.Id) + pObj.ToStringDetails(schema, pObj.Shape, skipArrays);
+          return pObj.GetWrappedObject().ToString() + " (" + array.Length + ") " + Oid.AsString(pObj.Id) + pObj.ToStringDetails(schema, pObj.GetTypeVersion(), skipArrays);
         else
-          return pObj.WrappedObject.ToString() + " " + Oid.AsString(pObj.Id) + pObj.ToStringDetails(schema, pObj.Shape, skipArrays);
+          return pObj.GetWrappedObject().ToString() + " " + Oid.AsString(pObj.Id) + pObj.ToStringDetails(schema, pObj.GetTypeVersion(), skipArrays);
       }
     }
 
@@ -152,7 +152,7 @@ namespace VelocityDBExtensions
     /// <returns>A <see cref="string"/> containing all details of this field.</returns>
     public static string ToStringDetails(DataMember member, object obj, IOptimizedPersistable pObj, Page page, bool skipArrays)
     {
-      SessionBase session = pObj.Page.Database.Session;
+      SessionBase session = pObj.GetPage().Database.GetSession();
       IOptimizedPersistable placeHolder;
       Schema schema = session.OpenSchema(false);
       FieldInfo field = member.Field;
@@ -169,7 +169,7 @@ namespace VelocityDBExtensions
       {
         bool foundIt = session.GlobalObjWrapperGet(o, out placeHolder);
         if (foundIt)
-          sb.Append("  " + member.FieldName + " : " + placeHolder.WrappedObject.ToString() + " " + Oid.AsString(placeHolder.Id));
+          sb.Append("  " + member.FieldName + " : " + placeHolder.GetWrappedObject().ToString() + " " + Oid.AsString(placeHolder.Id));
         else
         {
           Array array = o as Array;
@@ -243,12 +243,12 @@ namespace VelocityDBExtensions
     internal static string ToStringDetails(object obj, Schema schema, Page page, TypeVersion _shape, bool skipArrays)
     {
       OptimizedPersistable pObj = obj as OptimizedPersistable;
-      if (pObj != null && pObj.WrappedObject != null)
-        obj = pObj.WrappedObject;
+      if (pObj != null && pObj.GetWrappedObject() != null)
+        obj = pObj.GetWrappedObject();
       IOptimizedPersistable ipObj = pObj;
       StringBuilder sb = new StringBuilder(100);
       Array array = obj as Array;
-      SessionBase session = page.Database.Session;
+      SessionBase session = page.Database.GetSession();
       if (array != null && !skipArrays)
       {
         int i = 0;
@@ -318,7 +318,7 @@ namespace VelocityDBExtensions
             {
               bool foundIt = session.GlobalObjWrapperGet(o, out ipObj);
               if (foundIt)
-                sb.Append("  " + field.Name + " : " + pObj.WrappedObject.ToString() + " " + Oid.AsString(ipObj.Id));
+                sb.Append("  " + field.Name + " : " + pObj.GetWrappedObject().ToString() + " " + Oid.AsString(ipObj.Id));
               else
               {
                 array = o as Array;

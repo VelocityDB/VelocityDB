@@ -15,7 +15,7 @@ namespace DatabaseManager
     public DatabaseViewModel(DatabaseLocationViewModel databaseLocationView, Database database)
       : base(databaseLocationView, true)
     {
-      m_session = database.Session;
+      m_session = database.GetSession();
       m_dbid = database.DatabaseNumber;
     }
 

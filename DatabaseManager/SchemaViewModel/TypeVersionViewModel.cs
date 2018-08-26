@@ -35,22 +35,22 @@ namespace DatabaseManager
       {
         if (_typeVersion.BaseShape != null)
           if (_typeVersion.BaseShape.Type == CommonTypes.s_typeOfOptimizedPersistable)
-            base.Children.Add(new TypeVersionViewModelNoExpansion(_typeVersion.BaseShape, this, _typeVersion.Session));
+            base.Children.Add(new TypeVersionViewModelNoExpansion(_typeVersion.BaseShape, this, _typeVersion.GetSession()));
         else
             base.Children.Add(new TypeVersionViewModel(_typeVersion.BaseShape, this, _schemaViewModel));
         foreach (var field in _typeVersion.DataMemberArray)
         {
           if (field.HasId || field.WeakIOptimizedPersistableReference || field.Field.FieldType.ExpandsToNonPrimitiveTypes())
-            base.Children.Add(new DataMemberViewModel(_typeVersion, field, this, _typeVersion.Session, _schemaViewModel));
+            base.Children.Add(new DataMemberViewModel(_typeVersion, field, this, _typeVersion.GetSession(), _schemaViewModel));
           else
-            base.Children.Add(new DataMemberViewModelNoExpansion(_typeVersion, field, this, _typeVersion.Session));
+            base.Children.Add(new DataMemberViewModelNoExpansion(_typeVersion, field, this, _typeVersion.GetSession()));
         }
         List<Type> weakReferencedTypes;
         if (!_schemaViewModel.HideWeakReferenceConnectionTypes && VelocityDb.TypeInfo.Schema.WeakReferencedTypes.TryGetValue(_typeVersion.Type, out weakReferencedTypes))
         {
           foreach (Type type in weakReferencedTypes)
           {
-            base.Children.Add(new WeakReferencedTypeViewModel(_typeVersion, type, this, _typeVersion.Session, _schemaViewModel));
+            base.Children.Add(new WeakReferencedTypeViewModel(_typeVersion, type, this, _typeVersion.GetSession(), _schemaViewModel));
           }
         }
       }
