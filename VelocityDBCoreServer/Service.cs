@@ -117,7 +117,11 @@ namespace VelocityDBCoreServer
   }
 
   // Code from https://github.com/aspnet/Hosting/blob/2a98db6a73512b8e36f55a1e6678461c34f4cc4d/samples/GenericHostSample/ServiceBaseLifetime.cs
-  public class ServiceBaseLifetime : ServiceBase, IHostLifetime
+  public class ServiceBaseLifetime
+#if AsWindowsService
+: ServiceBase, IHostLifetime
+#endif
+
   {
     private readonly TaskCompletionSource<object> _delayStart = new TaskCompletionSource<object>();
 
@@ -128,6 +132,7 @@ namespace VelocityDBCoreServer
 
     private IApplicationLifetime ApplicationLifetime { get; }
 
+#if AsWindowsService
     public Task WaitForStartAsync(CancellationToken cancellationToken)
     {
       cancellationToken.Register(() => _delayStart.TrySetCanceled());
@@ -170,8 +175,12 @@ namespace VelocityDBCoreServer
       ApplicationLifetime.StopApplication();
       base.OnStop();
     }
+#else
+
+#endif
   }
 
+#if AsWindowsService
   public static class ServiceBaseLifetimeHostExtensions
   {
     public static IHostBuilder UseServiceBaseLifetime(this IHostBuilder hostBuilder)
@@ -184,4 +193,5 @@ namespace VelocityDBCoreServer
       return hostBuilder.UseServiceBaseLifetime().Build().RunAsync(cancellationToken);
     }
   }
+#endif
 }

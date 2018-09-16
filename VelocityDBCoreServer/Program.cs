@@ -6,7 +6,9 @@ using System.Net;
 using System.Reflection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+#if AsWindowsService
 using Microsoft.AspNetCore.Hosting.WindowsServices;
+#endif
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,11 +24,12 @@ namespace VelocityDBCoreServer
     public static void Main(string[] args)
     {
       var isService = !(Debugger.IsAttached || args.Contains("--console"));
-
+#if AsWindowsService
       if (!System.Diagnostics.EventLog.SourceExists("VelocityDbServer"))
       {
         System.Diagnostics.EventLog.CreateEventSource("VelocityDbServer", "VelocityDbServerLog");
       }
+#endif
       var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
       var pathToContentRoot = Path.GetDirectoryName(pathToExe);
       if (!isService)
@@ -101,12 +104,13 @@ namespace VelocityDBCoreServer
         services.AddHostedService<Service>();
       });
       var host = builder.UseStartup<Startup>().Build();
-
+#if AsWindowsService
       if (isService)
       {
         host.RunAsService();
       }
       else
+#endif
       {
         host.Run();
       }
