@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="odbimdb\**" />
+    <EmbeddedResource Remove="odbimdb\**" />
+    <None Remove="odbimdb\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\AccountModels.cs" />
+    <Compile Remove="Models\ShoppingCart.cs" />
+    <Compile Remove="NUnit\EFTPOSMachine.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LumenWorksCsvReader" Version="4.0.0" />
+    <PackageReference Include="VelocityDB" Version="7.6.0" />
+  </ItemGroup>
+
+</Project>
