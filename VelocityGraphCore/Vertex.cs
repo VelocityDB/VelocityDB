@@ -18,7 +18,7 @@ namespace VelocityGraph
   /// The incoming edges are those edges for which the vertex is the head.
   /// Diagrammatically, ---inEdges---> vertex ---outEdges--->
   /// </summary>
-  public class Vertex : Element, IVertex
+  public class Vertex : Element, IVertex, IEqualityComparer<Vertex>
   {
     VertexType m_vertexType;
     /// <summary>
@@ -401,6 +401,7 @@ namespace VelocityGraph
       HashSet<Edge> edgeSet;
       List<Edge> path = new List<Edge>();
       List<List<Edge>> resultPaths = new List<List<Edge>>();
+      var visited = new HashSet<Vertex>();
       if (excludedVertexProperty != null)
       {
         foreach (PropertyType pt in excludedVertexProperty)
@@ -445,10 +446,17 @@ namespace VelocityGraph
         includedEdgePropertySize = 0;
       PathInfo pathInfo = new PathInfo(this, path, null);
       if (excludedVertices != null)
+      {
         pathInfo.Visited.UnionWith(excludedVertices);
+        if (toVertex == null)
+          visited.UnionWith(excludedVertices);
+      }
       pathInfo.Visited.Add(this);
-      if (toVertex != null)
+      if (toVertex == null)
+        visited.Add(this);
+      else
         pathInfo.Visited.Add(toVertex);
+
       q.Enqueue(pathInfo);
       while (q.Count > 0)
       {
@@ -528,7 +536,7 @@ namespace VelocityGraph
         if (pathInfo.EdgePath.Count < maxHops || friends.Count == 0)
           foreach (KeyValuePair<Vertex, HashSet<Edge>> v in friends)
           {
-            if (pathInfo.Visited.Contains(v.Key) == false)
+            if (pathInfo.Visited.Contains(v.Key) == false && (all || toVertex != null || visited.Contains(v.Key) == false))
               foreach (Edge edge in v.Value)
               {
                 if (excludedEdges == null || excludedEdges.Contains(edge) == false)
@@ -541,6 +549,8 @@ namespace VelocityGraph
                       if (pt.HasPropertyValue(v.Key.VertexId))
                       {
                         pathInfo.Visited.Add(v.Key);
+                        if (!all && toVertex == null)
+                          visited.Add(v.Key);
                         doExclude = true;
                         break;
                       }
@@ -565,6 +575,8 @@ namespace VelocityGraph
                     path.Add(edge);
                     PathInfo newPath = new PathInfo(v.Key, path, pathInfo.Visited);
                     newPath.Visited.Add(v.Key);
+                    if (!all && toVertex == null)
+                      visited.Add(v.Key);
                     if (validateEdges == null || validateEdges(path))
                     {
                       bool vertexTypeIncluded = includedVertexTypes == null || includedVertexTypes.Contains(v.Key.VertexType);
@@ -574,11 +586,7 @@ namespace VelocityGraph
                       {
                         q.Enqueue(newPath);
                         if (toVertex == null && newPath.EdgePath.Count <= maxHops)
-                        {
                           resultPaths.Add(newPath.EdgePath);
-                          if (!all)
-                            return resultPaths;
-                        }
                       }
                     }
                   }
@@ -591,6 +599,33 @@ namespace VelocityGraph
       return resultPaths;
     }
 
+    /// <summary>
+    /// Traverses graph from this Vertex to all related Vertex using Breadth-first search like in Dijkstra's algorithm
+    /// </summary>
+    /// <param name="dir">>Direction to traverse edges</param>
+    /// <param name="maxHops">maximum number of hops from this Vertex</param>
+    /// <returns><see cref="List{Vertex}"> containing all related vertices</returns>
+    public List<Vertex> RelatedVertices(Direction dir = Direction.Both, ISet<EdgeType> edgeTypesToTraverse = null)
+    {
+      var related = new HashSet<Vertex>();
+      related.Add(this);
+      var chase = new List<Vertex>();
+      chase.Add(this);
+      for (int i = 0; i < chase.Count; i++)
+      {
+        var vertex = chase[i];
+        var neighbours = vertex.Traverse(dir, edgeTypesToTraverse);
+        foreach (var p in neighbours)
+        {
+          if (!related.Contains(p.Key))
+          {
+            related.Add(p.Key);
+            chase.Add(p.Key);
+          }
+        }
+      }
+      return related.ToList();
+    }
 
     /// <summary>
     /// Uses <see cref="DefaultVertexQuery"/>
@@ -673,6 +708,23 @@ namespace VelocityGraph
     public override string ToString()
     {
       return "Vertex: " + VertexId + " " + m_vertexType.TypeName;
+    }
+
+    /// <inheritdoc />
+    public bool Equals(Vertex x, Vertex y)
+    {
+      bool isEqual = ReferenceEquals(x, y);
+      if (isEqual)
+        return true;
+      if (y != null)
+        return x.VertexId == y.VertexId && x.VertexType == y.VertexType;
+      return false;
+    }
+
+    /// <inheritdoc />
+    public int GetHashCode(Vertex obj)
+    {
+      return obj.VertexId;
     }
   }
 }

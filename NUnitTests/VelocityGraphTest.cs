@@ -507,6 +507,10 @@ namespace NUnitTests
 
         var toNull = sydney.Traverse(99, true, Direction.Out, null);
 
+        var related = sydney.RelatedVertices();
+
+        var relatedAny = sydney.RelatedVertices(Direction.Both);
+
         var to_madrid = sydney.Traverse(99, true, Direction.Out, madrid); // (madrid, 99, false, edge_set);
 
         Assert.GreaterOrEqual(toNull.Count, to_madrid.Count);

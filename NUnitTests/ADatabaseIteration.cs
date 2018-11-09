@@ -20,7 +20,7 @@ namespace NUnitTests
   {
     static readonly string drive = "c:\\";
     static readonly string licenseDbFile = Path.Combine(drive, "4.odb");
-    public const string systemDir = "c:/NUnitTestDbs";
+    public const string s_systemDir = "c:/NUnitTestDbs";
     public const string location2Dir = "c:/NUnitTestDbsLocation2";
 
 
@@ -29,15 +29,15 @@ namespace NUnitTests
     {
       SessionBase.DefaultCompressPages = PageInfo.compressionKind.LZ4;
 
-      if (Directory.Exists(systemDir))
+      if (Directory.Exists(s_systemDir))
       {
-        foreach (string s in Directory.GetFiles(systemDir))
+        foreach (string s in Directory.GetFiles(s_systemDir))
           File.Delete(s);
-        foreach (string s in Directory.GetDirectories(systemDir))
+        foreach (string s in Directory.GetDirectories(s_systemDir))
           Directory.Delete(s, true);
       }
       else
-        Directory.CreateDirectory(systemDir);
+        Directory.CreateDirectory(s_systemDir);
       if (Directory.Exists(location2Dir))
       {
         foreach (string s in Directory.GetFiles(location2Dir))
@@ -54,7 +54,7 @@ namespace NUnitTests
     {
       Assert.Throws<NoValidVelocityDBLicenseFoundException>(() =>
       {
-        using (SessionNoServer session = new SessionNoServer(systemDir))
+        using (SessionNoServer session = new SessionNoServer(s_systemDir))
         {
           session.BeginUpdate();
           Database database;
@@ -67,7 +67,7 @@ namespace NUnitTests
             Assert.NotNull(database);
           }
           session.Commit();
-          File.Copy(Path.Combine(systemDir, "20.odb"), Path.Combine(systemDir, "4.odb"));
+          File.Copy(Path.Combine(s_systemDir, "20.odb"), Path.Combine(s_systemDir, "4.odb"));
           session.BeginUpdate();
           for (uint i = 21; i < 30; i++)
           {
@@ -86,7 +86,7 @@ namespace NUnitTests
     public void aaaFakeLicenseDatabaseCleanup(bool deleteLocationProperly, bool useServerSession)
     {
       if (deleteLocationProperly)
-        using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
+        using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(s_systemDir) : (SessionBase)new SessionNoServer(s_systemDir))
         {
           session.BeginUpdate();
           DatabaseLocation defaultLocation = session.DatabaseLocations.Default();
@@ -97,22 +97,22 @@ namespace NUnitTests
           session.DeleteLocation(defaultLocation);
           session.Commit();
         }
-      foreach (string s in Directory.GetFiles(systemDir))
+      foreach (string s in Directory.GetFiles(s_systemDir))
         File.Delete(s);
-      using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
+      using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(s_systemDir) : (SessionBase)new SessionNoServer(s_systemDir))
       {
         session.BeginUpdate();
         UInt32 dbNum = session.DatabaseNumberOf(typeof(NotSharingPage));
         session.NewDatabase(dbNum);
         session.Commit();
       }
-      File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"));
+      File.Copy(licenseDbFile, Path.Combine(s_systemDir, "4.odb"));
     }
 
     [TestCase(100000)]
     public void CreateDataAndIterateDb(int numObj)
     {
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (SessionNoServer session = new SessionNoServer(s_systemDir))
       {
         session.Verify();
         session.BeginUpdate();
@@ -131,7 +131,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (var session = new SessionNoServerShared(systemDir))
+      using (var session = new SessionNoServerShared(s_systemDir))
       {
         session.Verify();
         session.BeginUpdate();
@@ -156,7 +156,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (SessionNoServer session = new SessionNoServer(s_systemDir))
       {
         session.BeginRead();
         session.Verify();
@@ -215,7 +215,7 @@ namespace NUnitTests
     [TestCase(50000)]
     public void CreateDataAndIterateSession(int numObj)
     {
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (SessionNoServer session = new SessionNoServer(s_systemDir))
       {
         session.BeginUpdate();
         UInt32 dbNum = session.DatabaseNumberOf(typeof(NotSharingPage));
@@ -233,7 +233,7 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (SessionNoServer session = new SessionNoServer(s_systemDir))
       {
         session.BeginUpdate();
         UInt32 dbNum = session.DatabaseNumberOf(typeof(SharingPageTypeB));
@@ -257,12 +257,17 @@ namespace NUnitTests
         session.Commit();
       }
 
-      using (SessionNoServer session = new SessionNoServer(systemDir))
+      using (var session =  new SessionNoServer(s_systemDir, 5000, true, false, CacheEnum.No))
       {
         session.BeginRead();
         UInt32 dbNum = session.DatabaseNumberOf(typeof(NotSharingPage));
-        Database db = session.OpenDatabase(dbNum);
-        AllObjects<NotSharingPage> all = session.AllObjects<NotSharingPage>(true, false);
+        var db = session.OpenDatabase(dbNum);
+        long ct = 0;
+        var all = session.AllObjects<NotSharingPage>(true, false);
+        foreach (var obj in all)
+        { // loads objects one at a time
+          ct++;
+        }
         OfType all2 = session.OfType(typeof(NotSharingPage), true, false);
         dbNum = session.DatabaseNumberOf(typeof(SharingPageTypeA));
         Database dbA = session.OpenDatabase(dbNum);

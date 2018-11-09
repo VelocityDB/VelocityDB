@@ -17,7 +17,7 @@ namespace VelocityGraph
   /// The edge label determines the type of relationship that exists between the two vertices.
   /// Diagrammatically, outVertex ---label---> inVertex.
   /// </summary>
-  public class Edge : Element, IEdge
+  public class Edge : Element, IEdge, IEqualityComparer<Edge>
   {
     EdgeType m_edgeType;
     Vertex m_tail;
@@ -262,6 +262,23 @@ namespace VelocityGraph
     public override string ToString()
     {
       return "Edge: " + EdgeId + " " + m_edgeType.TypeName;
+    }
+
+    /// <inheritdoc />
+    public bool Equals(Edge x, Edge y)
+    {
+      bool isEqual = ReferenceEquals(x, y);
+      if (isEqual)
+        return true;
+      if (y != null)
+        return x.EdgeId == y.EdgeId && x.EdgeType == y.EdgeType;
+      return false;
+    }
+
+    /// <inheritdoc />
+    public int GetHashCode(Edge obj)
+    {
+      return obj.EdgeId;
     }
   }
 }
