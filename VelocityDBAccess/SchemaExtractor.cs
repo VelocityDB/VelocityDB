@@ -7,6 +7,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using VelocityDb;
+using VelocityDb.Collection.BTree;
+using VelocityDb.TypeInfo;
 
 namespace VelocityDBAccess
 {
@@ -24,11 +27,8 @@ namespace VelocityDBAccess
       if (!t.IsGenericType)
         return t.FullName;
       string genericTypeName = t.GetGenericTypeDefinition().Name;
-      genericTypeName = genericTypeName.Substring(0,
-          genericTypeName.IndexOf('`'));
-      string genericArgs = string.Join(",",
-          t.GetGenericArguments()
-              .Select(ta => ToGenericTypeString(ta)).ToArray());
+      genericTypeName = genericTypeName.Substring(0, genericTypeName.IndexOf('`'));
+      string genericArgs = string.Join(",", t.GetGenericArguments().Select(ta => ToGenericTypeString(ta)).ToArray());
       return genericTypeName + "<" + genericArgs + ">";
     }
   }
@@ -66,30 +66,13 @@ namespace VelocityDBAccess
       SortedSet<string> lSingular = new SortedSet<string>();
 
       // Initially maps FullName to Name.
-      lPlural = pPersistables.ToDictionary(lPersistable => lPersistable.ToGenericTypeString(), lPersistable => lPersistable.Name + "s");
+      lPlural = pPersistables.ToDictionary(lPersistable => lPersistable.ToGenericTypeString(), lPersistable => lPersistable.ToGenericTypeString().Replace('<', '_').Replace('>', '_').Replace('.', '_').Replace(',', '_').TrimEnd('_'));
       foreach (Type type in pPersistables)
         lSingular.Add(type.ToGenericTypeString());
-      // Solve name clashes.
-      pPersistables
-          .ToLookup(lPersistable => lPersistable.Name)
-          .Where(lGroup => lGroup.Count() > 1)
-          .Select(lGroup => SolveNameClash(lGroup))
-          .ToList()
-          .ForEach(delegate(Dictionary<string, string[]> lSub)
-          {
-            foreach (KeyValuePair<string, string[]> lPair in lSub)
-            {
-              // Singular names just join names.
-             // lSingular[lPair.Key] = String.Join("_", lPair.Value);
-              // Last name gets pluralized for plural names.
-              lPair.Value[lPair.Value.Count() - 1] = lPair.Value.Last() + "s";
-              lPlural[lPair.Key] = String.Join("_", lPair.Value);
-
-            }
-          });
       pSchema.SingularNames = lSingular;
       pSchema.TypesNameToPluralName = lPlural;
     }
+
     /// <summary>
     /// Extract schema information from assemblies.
     /// </summary>
@@ -98,7 +81,7 @@ namespace VelocityDBAccess
     /// <param name="pDependenciesFilenames">Assemblies required by
     /// pClassesFilenames Assemblies.</param>
     /// <returns></returns>
-    public static SchemaInfo Extract(string[] pClassesFilenames, string[] pDependenciesFilenames)
+    public static SchemaInfo Extract(string[] pClassesFilenames, string[] pDependenciesFilenames, SessionInfo sessionInfo)
     {
       // Create schema, get persistable types, loaded assemblies and
       // loaded assemblies names, and finally create names for each type.
@@ -111,6 +94,9 @@ namespace VelocityDBAccess
       // resolver.
       AppDomain.CurrentDomain.AssemblyResolve += SchemaExtractor.AssemblyResolve;
       GetAssembliesAndTypes(pClassesFilenames, pDependenciesFilenames, ref lSchema);
+      sessionInfo.SetSession();
+      var schema = sessionInfo.Session.OpenSchema(false);
+      lSchema.PersistableTypes = schema.LookupByType.Where(p => schema.IsInternalType(p.Value) == false).Select(p => p.Key).ToArray();
       CreateNamesDictionary(lSchema.PersistableTypes, ref lSchema);
       AppDomain.CurrentDomain.AssemblyResolve -= SchemaExtractor.AssemblyResolve;
       return lSchema;

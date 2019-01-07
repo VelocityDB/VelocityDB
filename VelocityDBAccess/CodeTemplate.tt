@@ -6,38 +6,33 @@ namespace <#=NameSpace#>
 {
     using System;
     using System.Collections.Generic;
+    using System.Dynamic;
     using System.Net;
     using VelocityDb.Session;
+    using VelocityDb.TypeInfo;
+
 <# foreach(var lAssemblyName in Schema.LoadedAssembliesNames)
   {#>
     using <#=lAssemblyName#>;
 <#}#>
 
- /*   public static class <#=TypeName#>Static
-    {
-        
-<# foreach(KeyValuePair<string, string> lPair in Schema.TypesNameToPluralName)
-   {#>
-        static IEnumerable< <#=lPair.Key#> > IEnumerable< <#=lPair.Key#> >(this <#=lPair.Key#> source)
-        {
-				  Session.BeginRead();
-					return Session.AllObjects< <#=lPair.Key#> >();
-        }
-<# }#>
-}*/
-
     public class <#=TypeName#>
     {
         private SessionBase session;
         
-<# foreach(KeyValuePair<string, string> lPair in Schema.TypesNameToPluralName)
+<# foreach(var lPair in SessionInfo.Session.OpenSchema(false).LookupByType)
+   if (lPair.Value.Type != null)
    {#>
-        public virtual IEnumerable< <#=lPair.Key#> > <#=lPair.Value#>
+        public virtual IEnumerable<dynamic> <#=lPair.Value.Type.ToGenericTypeString().Replace('<', '_').Replace('>', '_').Replace('.', '_').Replace(',','_').TrimEnd('_') #>
         {
             get
             {
                 session.BeginRead();
-                return this.session.AllObjects< <#=lPair.Key#> >();
+                UInt64 id = <#= lPair.Value.Id #>;
+                var vType = session.Open<VelocityDbType>(id);
+                Type t = vType.Type;
+                foreach (var obj in session.OfType(t, false))
+                    yield return obj;
             }
         }
 <# }#>
@@ -45,8 +40,8 @@ namespace <#=NameSpace#>
         public void CloseSession()
         {
             if (session.InTransaction)
-							session.Commit();
-					  session = null;
+			    session.Commit();
+			session = null;
         }
 
         public <#=TypeName#>()
@@ -70,7 +65,7 @@ namespace <#=NameSpace#>
                     throw new InvalidDataException("Invalid Session Type");
 <#                  break;
             }#>
-            /*if (session != null)
+           /*if (session != null)
             {
                 SessionBase.DoWindowsAuthentication = lAuth;
             }*/

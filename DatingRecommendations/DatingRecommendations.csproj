@@ -51,9 +51,8 @@
       <HintPath>..\packages\Frontenac.Blueprints.2.4\lib\net40\Frontenac.Gremlinq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -64,11 +63,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=7.7.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.7.7.0\lib\net45\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=7.7.1.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.7.7.1\lib\net45\VelocityDb.dll</HintPath>
     </Reference>
-    <Reference Include="VelocityGraph, Version=7.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.7.7\lib\Net45\VelocityGraph.dll</HintPath>
+    <Reference Include="VelocityGraph, Version=7.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.7.7.2\lib\Net45\VelocityGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

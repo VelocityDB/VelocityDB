@@ -25,12 +25,14 @@ namespace VelocityDB.LINQPad
             VelocityDBAccessBuilder lBuilder = new VelocityDBAccessBuilder(schema, sessionInfo);
             lBuilder.BuildAssembly(pAssemblyName, pNamespace, pTypeName, false);
         }
+
+        
         public List<ExplorerItem> BuildSchema()
         {
             // Create a ExplorerItem for each persistable type.
             List<ExplorerItem> lSchema = (
                 from Type lType in schema.PersistableTypes
-                let lName = schema.TypesNameToPluralName[lType.FullName]
+                let lName = schema.TypesNameToPluralName[lType.ToGenericTypeString()]
                 orderby lName
                 select new ExplorerItem(lName,
                     ExplorerItemKind.QueryableObject,
@@ -106,7 +108,6 @@ namespace VelocityDB.LINQPad
         }
         public VelocityDBBuilder(VelocityDBDynamicDriver pDriver, VelocityDBProperties pProperties)
         {
-            schema = SchemaExtractor.Extract(pProperties.ClassesFilenamesArray, pProperties.DependencyFilesArray);
             sessionInfo = new SessionInfo()
             {
                 DBFolder = pProperties.DBFolder,
@@ -115,6 +116,7 @@ namespace VelocityDB.LINQPad
                 SessionType = pProperties.SessionType,
                 WindowsAuth = pProperties.WindowsAuth
             };
+            schema = SchemaExtractor.Extract(pProperties.ClassesFilenamesArray, pProperties.DependencyFilesArray, sessionInfo);
         }
     }
 }

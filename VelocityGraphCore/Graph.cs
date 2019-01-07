@@ -804,6 +804,7 @@ namespace VelocityGraph
     public long CountVertices()
     {
       long ct = 0;
+      Session.LoadFields(this);
       foreach (VertexType vt in VertexTypes)
         ct += vt.CountVertices();
       return ct;
@@ -849,6 +850,7 @@ namespace VelocityGraph
     public long CountEdges()
     {
       long ct = 0;
+      Session.LoadFields(this);
       foreach (EdgeType et in EdgeTypes)
         ct += et.CountEdges();
       return ct;
@@ -1499,6 +1501,7 @@ namespace VelocityGraph
     {
       get
       {
+        Session.LoadFields(this);
         return m_vertexTypes.GetTarget(false, Session);
       }
     }

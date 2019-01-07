@@ -56,15 +56,17 @@ namespace DatabaseManager
       else
       {
         IOptimizedPersistable pObj = obj as IOptimizedPersistable;
-        if (pObj == null)
+        if (pObj == null & obj != null)
           session.GlobalObjWrapperGet(obj, out pObj);
         if (pObj != null)
           m_objectId = pObj.Id;
         m_session = session;
         if (pObj != null && pObj.GetWrappedObject() != obj)
           m_objectAsString = $"[{arrayIndex}] {pObj.GetWrappedObject()} {new Oid(pObj.Id)}";
-        else
+        else if (obj != null)
           m_objectAsString = $"[{arrayIndex}] {obj}";
+        else
+          m_objectAsString = $"[{arrayIndex}] null";
       }
     }
 
