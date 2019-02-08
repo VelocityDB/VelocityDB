@@ -31,8 +31,7 @@ namespace NUnitTests
         session.RegisterClass(typeof(VelocityDbSchema.Samples.AllSupportedSample.Pet));
         session.RegisterClass(typeof(System.Guid));
         session.RegisterClass(typeof(AutoPlacement));
-        session.Commit();
-        session.BeginUpdate();
+        session.Checkpoint();
         Person person = new Person();
         person.m_friends.Persist(place, session);
         person.Persist(place, session);

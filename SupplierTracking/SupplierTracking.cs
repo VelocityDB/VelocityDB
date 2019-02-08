@@ -172,9 +172,9 @@ namespace SupplierTracking
           string s = (string)vertex.VertexType.TypeName;
           return s;
         }; 
-        g.ExportToGraphJson("c:/SupplierTrackingExportToGraphJson.json", gs);
+        //g.ExportToGraphJson("c:/SupplierTrackingExportToGraphJson.json", gs);
         Graph g2 = new Graph(session);
-        g2.ImportGraphJson("c:/SupplierTrackingExportToGraphJson.json");
+        //g2.ImportGraphJson("c:/SupplierTrackingExportToGraphJson.json");
         session.Commit();
         return 0;
       }

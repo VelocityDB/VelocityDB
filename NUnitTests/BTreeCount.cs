@@ -27,8 +27,7 @@ namespace NUnitTests
     [TestFixture]
     public class CountExceptionTest
     {
-      static readonly string testDir = "g:/CountExceptionTest/";
-      static readonly string licensePath = "C:/4.odb";
+      static readonly string testDir = @"f:\CountExceptionTest/";
 
       private SessionBase _session;
 
@@ -37,8 +36,6 @@ namespace NUnitTests
       {
         if (Directory.Exists(testDir))
           Directory.Delete(testDir, true);
-        Directory.CreateDirectory(testDir);
-        File.Copy(licensePath, testDir + "4.odb");
         _session = new SessionNoServer(testDir);
         _session.BeginUpdate();
       }
@@ -56,8 +53,7 @@ namespace NUnitTests
         _session.Persist(obj1);
         var obj2 = new PersistentClass("OBJ2");
         _session.Persist(obj2);
-        _session.Commit();
-        _session.BeginUpdate();
+        _session.Checkpoint();
         var list = _session.AllObjects<PersistentClass>();
         var computedCount = Enumerable.Count(list);
         Assert.AreEqual(2, computedCount);
@@ -71,8 +67,7 @@ namespace NUnitTests
         _session.Persist(obj1);
         var obj2 = new PersistentClass("OBJ2");
         _session.Persist(obj2);
-        _session.Commit();
-        _session.BeginUpdate();
+        _session.Checkpoint();
         var index = _session.Index<PersistentClass>("_name");
         var computedCount = Enumerable.Count(index);
         Assert.AreEqual(2, computedCount);

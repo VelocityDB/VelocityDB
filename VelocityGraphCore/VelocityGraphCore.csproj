@@ -4,12 +4,13 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
+    <Version>8</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Frontenac.Blueprints" Version="2.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="VelocityDB" Version="7.7.1" />
+    <PackageReference Include="VelocityDB" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

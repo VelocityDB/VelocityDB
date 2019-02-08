@@ -364,8 +364,7 @@ namespace NUnitTests
         Assert.AreSame(person, person2);
         Console.WriteLine("{0} records in version manager and tip is {1}.", vm2.Count, person2);
       }
-      sess.Commit();
-      sess.BeginUpdate();
+      sess.Checkpoint();
       Database db = sess.OpenDatabase(VersionManager<VelocityDbSchema.Samples.Sample1.Person>.versionMangerDatabase, false, false);
       if (db != null)
         sess.DeleteDatabase(db);
@@ -473,8 +472,7 @@ namespace NUnitTests
           database = session.OpenDatabase(i);
           Assert.NotNull(database);
         }
-        session.Commit();
-        session.BeginUpdate();
+        session.Checkpoint();
         for (uint i = 60000000; i < 60000010; i++)
         {
           database = session.OpenDatabase(i);
@@ -737,8 +735,7 @@ namespace NUnitTests
         Database db = session.OpenDatabase(10, true, false);
         if (db != null)
           session.DeleteDatabase(db);
-        session.Commit();
-        session.BeginUpdate();
+        session.Checkpoint();
         place = new Placement(10, 2, 1, 1, 10);
         DateTime birthday = new DateTime(1960, 6, 13);
         mats = new Man("Mats", "Persson", age++, ssn++, birthday);
@@ -905,8 +902,7 @@ namespace NUnitTests
       client.BeginUpdate();
       var rec = new CastRecord();
       rec.Persist(client, rec);
-      client.Commit();
-      client.BeginUpdate();
+      client.Checkpoint();
       var rec2 = new CastRecord();
       rec2.Fields.Add("test", new WeakIOptimizedPersistableReference<CastRecord>(rec));
       rec2.Persist(client, rec2);
@@ -958,8 +954,7 @@ namespace NUnitTests
       var rec = new StringRecord2();
       rec.Fields["Title"] = "Simple Title";
       rec.Persist(session, rec);
-      session.Commit();
-      session.BeginUpdate();
+      session.Checkpoint();
       rec.Fields["Title"] = "Different title text";
       var rec2 = rec.Copy();
       rec2.Persist(session, rec2);

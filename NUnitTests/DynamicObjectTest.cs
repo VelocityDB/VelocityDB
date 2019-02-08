@@ -25,7 +25,6 @@ namespace NUnitTests
     public class DynamicDictionaryTests
     {
       private readonly string SystemDir = "DynamicTest";
-      private readonly string LicenseFile = "c:/4.odb";
       private UInt64 _personId;
       private UInt64 _person2Id;
       private static string s_TestDynamicPerson = nameof(s_TestDynamicPerson);
@@ -38,11 +37,6 @@ namespace NUnitTests
         using (var session = new SessionNoServer(SystemDir))
         {
           session.BeginUpdate();
-
-          var path = Path.Combine(session.SystemDirectory, "4.odb");
-
-          if (!File.Exists(path))
-            File.Copy(LicenseFile, path, true);
 
           session.RegisterClass(typeof(DynamicDictionary));
           session.RegisterClass(typeof(PersistableDynamicDictionary));

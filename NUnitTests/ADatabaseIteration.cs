@@ -204,8 +204,7 @@ namespace NUnitTests
         {
           Assert.NotNull(allB.ElementAt(i));
         }
-        session.Commit();
-        session.BeginUpdate();
+        session.Checkpoint();
         session.DeleteDatabase(db);
         session.DeleteDatabase(dbA);
         session.DeleteDatabase(dbB);
@@ -299,8 +298,7 @@ namespace NUnitTests
           sB = allB.ElementAt(i);
         for (int i = 0; i < numObj; i += 45000)
           ns = all.ElementAt(i);
-        session.Commit();
-        session.BeginUpdate();
+        session.Checkpoint();
         session.DeleteDatabase(db);
         session.DeleteDatabase(dbA);
         session.DeleteDatabase(dbB);

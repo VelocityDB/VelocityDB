@@ -2,10 +2,10 @@
 <package >
   <metadata>
     <id>VelocityGraph</id>
-    <version>7.7.2</version>
+    <version>8</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
-    <licenseUrl>http://VelocityDB.com/Eula.htm</licenseUrl>
+    <license type="file">Eula.txt</license>
     <projectUrl>https://github.com/VelocityDB/VelocityDB/tree/master/VelocityGraph</projectUrl>
     <iconUrl>http://VelocityDB.com/images/VelocityGraph.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -15,11 +15,12 @@
     <copyright>Copyright 2018</copyright>
     <tags>Hybrid Object Property Graph Database .NET Blueprints Distributable Embeddable</tags>
     <dependencies>
-      <dependency id="VelocityDB" version="7.7.1" />
+      <dependency id="VelocityDB" version="8.0.0" />
       <dependency id="Frontenac.Blueprints" version="2.4.0" />
     </dependencies>
   </metadata>
     <files>
+      <file src="..\Eula.txt" target="" />
       <file src="Release/VelocityGraph.dll" target="lib\Net45" />
       <file src="Release/VelocityGraph.pdb" target="lib\Net45" />
       <file src="Release/VelocityGraph.xml" target="lib\Net45" />

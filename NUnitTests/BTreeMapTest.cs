@@ -64,8 +64,7 @@ namespace NUnitTests
         int zipCodeCt = 0;
         foreach (var p in bTreeMap.LocationByZipCode)
         {
-          session.Commit();
-          session.BeginUpdate();
+          session.Checkpoint();
           var v = p.Value;
           foreach (var l in v)
             l.Address1 = "2034 Cordoba PL";

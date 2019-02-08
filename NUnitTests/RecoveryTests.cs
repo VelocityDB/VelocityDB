@@ -21,6 +21,8 @@ namespace NUnitTests
     {
       Database db = null;
       session.BeginUpdate();
+      session.RegisterClass(typeof(SortedSetAny<int>));
+      session.RegisterClass(typeof(SortedSetAny<float>));
       db = session.OpenDatabase(88, true, false);
       if (db != null)
         session.DeleteDatabase(db);
@@ -77,8 +79,7 @@ namespace NUnitTests
       object o = session.Open(88, 1, 1, false);
       floatSet = (SortedSetAny<float>)o;
       Debug.Assert(floatSet != null);
-      session.Commit();
-      session.BeginUpdate();
+      session.Checkpoint();
       db = session.OpenDatabase(88);
       session.DeleteDatabase(db);
       db = session.OpenDatabase(89);

@@ -80,8 +80,7 @@ namespace NUnitTests
         Man man = new Man();
         man.Persist(session, man);
         id = man.Id;
-        session.Commit();
-        session.BeginUpdate();
+        session.Checkpoint();
         man.Age = ++man.Age;
         session.FlushUpdates();
         using (SessionNoServer session2 = new SessionNoServer(systemDir))
@@ -220,8 +219,7 @@ namespace NUnitTests
           }
           reader.Commit();
           reader.BeginRead();
-          updater.Commit();
-          updater.BeginUpdate();
+          updater.Checkpoint();
           reader.ForceDatabaseCacheValidation(); // we now validate on BeginRead so to make this test pass, we need to add this call after updater commit.
         }
         Database db2 = reader.OpenDatabase(dbNum);
@@ -272,8 +270,7 @@ namespace NUnitTests
         Database db = updater.OpenDatabase(dbNum, true, false);
         if (db != null)
           updater.DeleteDatabase(db);
-        updater.Commit();
-        updater.BeginUpdate();
+        updater.Checkpoint();
         Man man;
         Placement place = new Placement(dbNum, 1, 1, 2);
         for (int i = 0; i < 100; i++)
@@ -338,8 +335,7 @@ namespace NUnitTests
           }
           reader.ClearPageCache(); // required or else we will use cached page and Assert (see line above) will fail
           System.GC.Collect(); // force weak referenced pages to be garbage collected (again to avoid Assert failure)
-          updater.Commit();
-          updater.BeginUpdate();
+          updater.Checkpoint();
         }
         reader.Commit();
         updater.DeleteDatabase(db);

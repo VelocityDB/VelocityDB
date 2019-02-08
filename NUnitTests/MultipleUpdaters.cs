@@ -141,8 +141,7 @@ namespace NUnitTests
             Man man = new Man();
             man.Persist(session, man);
             id = man.Id;
-            session.Commit();
-            session.BeginUpdate();
+            session.Checkpoint();
             man.Age = ++man.Age;
             session.FlushUpdates(); // fStream set for updated databases will cause other write sessions to fail updating these databases
             using (SessionNoServer session2 = new SessionNoServer(systemDir))

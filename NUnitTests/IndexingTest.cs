@@ -23,8 +23,8 @@ namespace NUnitTests
   [TestFixture]
   public class IndexingTest
   {
-    public const string systemDir = "g:/IndexingTestDbs";
-    static readonly string licenseDbFile = @"D:/4.odb";
+    public const string systemDir = "f:/IndexingTestDbs";
+    static readonly string licenseDbFile = @"c:/4.odb";
 
     private string RandomString(int size)
     {
@@ -242,8 +242,7 @@ namespace NUnitTests
           Motorcycle mc = new Motorcycle();
           session.Persist(mc);
         }
-        session.Commit();
-        session.BeginUpdate();
+        session.Checkpoint();
         int ct = 0;
         var mIndex = session.Index<Car>();
         if (mIndex != null)
@@ -410,8 +409,7 @@ namespace NUnitTests
           ++ct;
         }
         Assert.AreEqual(ct, 2500);
-        session.Commit();
-        session.BeginUpdate();
+        session.Checkpoint();
         ct = 0;
         prior = double.MinValue;
         foreach (Motorcycle mc in session.Index<Motorcycle>("cc"))
