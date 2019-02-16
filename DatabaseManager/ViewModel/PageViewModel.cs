@@ -29,7 +29,7 @@ namespace DatabaseManager
         Database db = m_session.OpenDatabase(m_dbNum, false, false);
         if (db != null)
         {
-          Page page = m_session.OpenPage(db, m_pageNum);
+          Page page = m_session.OpenPage(db, m_pageNum, true);
           string contentType = "";
           uint typever = page.PageInfo.ShapeNumber;
           if (typever > 0)

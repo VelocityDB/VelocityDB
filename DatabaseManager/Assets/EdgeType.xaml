@@ -1,0 +1,21 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Geometry x:Key="edgeTypeGeometry">F1 M37.795276,37.795276z M0,0z M20.102152,35.158226L1.2537803,12.72046</Geometry>
+  <DrawingGroup x:Key="edgeTypeDrawingGroup" ClipGeometry="M0,0 V37.795276 H37.795276 V0 H0 Z">
+    <DrawingGroup Transform="0.67043315,0,0,0.67043315,6.1393594,-2.5342908">
+      <DrawingGroup.ClipGeometry>
+        <PathGeometry FillRule="Nonzero" Figures="M30.05,8L30.05,20 41,20 41,27 30.05,27 30.05,39.61C30.05,39.61,29.55,44.33,34.8,43.85A8.76,8.76,0,0,0,41,40.5L41,48.5C41,48.5,39.15,50.66,34.4,51.39A33.52,33.52,0,0,1,27.18,51.52C23.71,51.08,19,49.4,19,40.21L19,27 14,27 14,20C14,20,23.5,19.69,23.5,8z" />
+      </DrawingGroup.ClipGeometry>
+      <GeometryDrawing Brush="#FF81A4E3">
+        <GeometryDrawing.Geometry>
+          <RectangleGeometry RadiusX="0" RadiusY="0" Rect="9,3,36.98,53.66" />
+        </GeometryDrawing.Geometry>
+      </GeometryDrawing>
+    </DrawingGroup>
+    <GeometryDrawing Geometry="{StaticResource edgeTypeGeometry}">
+      <GeometryDrawing.Pen>
+        <Pen Brush="#FF000000" Thickness="0.94697189" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+      </GeometryDrawing.Pen>
+    </GeometryDrawing>
+  </DrawingGroup>
+  <DrawingImage x:Key="edgeTypeDrawingImage" Drawing="{StaticResource edgeTypeDrawingGroup}" />
+</ResourceDictionary>

@@ -4,6 +4,12 @@
              xmlns:local="clr-namespace:DatabaseManager"
              Startup="AppStartup">
   <Application.Resources>
-         
-    </Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary x:Name="VertexType" Source="Assets/VertexType.xaml"/>
+        <ResourceDictionary x:Name="edgeType" Source="Assets/EdgeType.xaml"/>
+        <ResourceDictionary x:Name="vertex" Source="Assets/Vertex.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
 </Application>

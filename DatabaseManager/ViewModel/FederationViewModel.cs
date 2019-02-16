@@ -14,6 +14,7 @@ namespace DatabaseManager
   {
     FederationInfo m_federationInfo;
     SessionBase m_session;
+    bool _velocityGraphMode;
 
     public FederationViewModel(FederationInfo federationInfo) : base(null, true)
     {
@@ -49,12 +50,36 @@ namespace DatabaseManager
       }
     }
 
+    public bool VelocityGraphMode
+    {
+      get
+      {
+        return _velocityGraphMode;
+      }
+      set
+      {
+        _velocityGraphMode = value;
+        base.Children.Clear();
+        LoadChildren();
+      }
+    }
+
     protected override void LoadChildren()
     {
-      base.Children.Add(new ObjectViewModel(m_federationInfo, this, m_session));
-      DatabaseLocations locations = m_session.DatabaseLocations;
-      foreach (DatabaseLocation location in locations)
-        base.Children.Add(new DatabaseLocationViewModel(location, Properties.Settings.Default.OrderDatabasesByName));
+      if (VelocityGraphMode)
+      {
+        foreach (var graph in m_session.AllObjects<VelocityGraph.Graph>())
+        {
+          base.Children.Add(new VelocityGraphViewModel(graph));
+        }
+      }
+      else
+      {
+        base.Children.Add(new ObjectViewModel(m_federationInfo, this, m_session));
+        DatabaseLocations locations = m_session.DatabaseLocations;
+        foreach (DatabaseLocation location in locations)
+          base.Children.Add(new DatabaseLocationViewModel(location, Properties.Settings.Default.OrderDatabasesByName));
+      }
     }
   }
 }

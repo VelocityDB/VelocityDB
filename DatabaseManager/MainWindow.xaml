@@ -40,43 +40,49 @@
           ItemsSource="{Binding Children}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding FederationName}">
-               <TextBlock.ContextMenu>
-                 <ContextMenu>
-                   <MenuItem Header="Copy..." Click="CopyFederationMenuItem_Click">
-                      <MenuItem.Icon>
+              <TextBlock.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="Copy..." Click="CopyFederationMenuItem_Click">
+                    <MenuItem.Icon>
                       <Image Source="/DatabaseManager;component/Images/copy.ico" />
-                     </MenuItem.Icon>
-                   </MenuItem>
-                   <MenuItem Header="Remove" Click="RemoveFederationInfoMenuItem_Click">
-                      <MenuItem.Icon>
-                        <Image Source="/DatabaseManager;component/Images/removeIcon.png" />
-                     </MenuItem.Icon>
-                   </MenuItem>
+                    </MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Remove" Click="RemoveFederationInfoMenuItem_Click">
+                    <MenuItem.Icon>
+                      <Image Source="/DatabaseManager;component/Images/removeIcon.png" />
+                    </MenuItem.Icon>
+                  </MenuItem>
                   <MenuItem Header="Sync..." Click="SyncFederationMenuItem_Click">
                     <MenuItem.Icon>
                       <Image Source="/DatabaseManager;component/Images/Sync.ico" />
                     </MenuItem.Icon>
                   </MenuItem>
                   <MenuItem Header="Validate" Click="ValidateFederationMenuItem_Click">
-                      <MenuItem.Icon>
+                    <MenuItem.Icon>
                       <Image Source="/DatabaseManager;component/Images/Search.ico" />
-                     </MenuItem.Icon>
-                   </MenuItem>
+                    </MenuItem.Icon>
+                  </MenuItem>
                   <MenuItem Header="New DatabaseLocation..." Click="NewDatabaseLocationMenuItem_Click">
-                      <MenuItem.Icon>
+                    <MenuItem.Icon>
                       <Image Source="/DatabaseManager;component/Images/DatabaseLocation.png" />
-                     </MenuItem.Icon>
-                   </MenuItem>
+                    </MenuItem.Icon>
+                  </MenuItem>
                   <MenuItem Header="Persist 1000 objects" Click="Create1000TestObjectsMenuItem_Click" >
                     <MenuItem.Icon>
                       <Image Source="/DatabaseManager;component/Images/Objects.png" />
                     </MenuItem.Icon>
                   </MenuItem>
+                  <MenuItem Header="VelocityGraph mode" IsCheckable="true" IsChecked="{Binding VelocityGraphMode}" Click="VelocityGraphModeMenuItem_Click" >
+                    <MenuItem.Icon>
+                      <Image Source="/DatabaseManager;component/Images/VelocityGraph.ico" />
+                    </MenuItem.Icon>
+                  </MenuItem>
                 </ContextMenu>
-               </TextBlock.ContextMenu>
-              </TextBlock>
+              </TextBlock.ContextMenu>
+            </TextBlock>
           </StackPanel>
         </HierarchicalDataTemplate>
+        
         <HierarchicalDataTemplate 
           DataType="{x:Type local:DatabaseLocationViewModel}"
           ItemsSource="{Binding Children}">
@@ -112,7 +118,42 @@
             <TextBlock Text="{Binding DatabaseName}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
-        
+
+        <HierarchicalDataTemplate DataType="{x:Type local:VelocityGraphViewModel}" ItemsSource="{Binding Children}">
+          <StackPanel Orientation="Horizontal">
+            <Image Width="16" Height="16" Margin="1,0" Source="/DatabaseManager;component/Images/VelocityGraph.ico" />
+            <TextBlock Text="{Binding GraphName}"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type local:VertexTypeViewModel}" ItemsSource="{Binding Children}">
+          <StackPanel Orientation="Horizontal">
+            <Image Width="16" Height="16" Margin="1,0" Source="{StaticResource vertexTypeDrawingImage}"></Image>
+            <TextBlock Text="{Binding ObjectName}"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type local:EdgeTypeViewModel}" ItemsSource="{Binding Children}">
+          <StackPanel Orientation="Horizontal">
+            <Image Width="16" Height="16" Margin="1,0" Source="{StaticResource edgeTypeDrawingImage}"></Image>
+            <TextBlock Text="{Binding ObjectName}"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type local:VertexViewModel}" ItemsSource="{Binding Children}">
+          <StackPanel Orientation="Horizontal">
+            <Image Width="12" Height="12" Margin="1,0" Source="{StaticResource vertexDrawingImage}"></Image>
+            <TextBlock Text="{Binding VertexName}"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type local:EdgeViewModel}" ItemsSource="{Binding Children}">
+          <StackPanel Orientation="Horizontal">
+            <Image Width="16" Height="16" Margin="1,0" Source="/DatabaseManager;component/Images/edge.png" />
+            <TextBlock Text="{Binding EdgeName}"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
+
         <HierarchicalDataTemplate 
           DataType="{x:Type local:PageViewModel}"
           ItemsSource="{Binding Children}"
@@ -137,6 +178,24 @@
           </StackPanel>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type local:VertexPropertyViewModel}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding ObjectName}" />
+          </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:EdgePropertyViewModel}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding ObjectName}" />
+          </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:PropertyTypeViewModel}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding ObjectName}" />
+          </StackPanel>
+        </DataTemplate>
+        
         <HierarchicalDataTemplate 
           DataType="{x:Type local:FieldViewModel}"
           ItemsSource="{Binding Children}"
@@ -151,7 +210,7 @@
             <TextBlock Text="{Binding ArrayDisplay}" />
           </StackPanel>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type local:ListViewModel}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding ListDisplay}" />

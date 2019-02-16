@@ -565,6 +565,18 @@ namespace VelocityGraph
     }
 
     /// <summary>
+    /// Return all the property types associated with edge type.
+    /// </summary>
+    /// <returns>the set of property types associated with the edge type</returns>
+    public IEnumerable<PropertyType> GetPropertyTypes()
+    {
+      foreach (var pair in m_stringToPropertyType)
+      {
+        yield return pair.Value;
+      }
+    }
+
+    /// <summary>
     /// Sets an edge property given an edge id, property type and a value
     /// </summary>
     /// <param name="elementId">an edge id</param>

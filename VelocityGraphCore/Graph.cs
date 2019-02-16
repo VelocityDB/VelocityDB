@@ -498,6 +498,9 @@ namespace VelocityGraph
       }
     }
 
+    /// <summary>
+    /// Get all <see cref="PropertyType"/>s defined for this <see cref="Graph"/>
+    /// </summary>
     internal WeakReferenceList<PropertyType> PropertyTypes
     {
       get

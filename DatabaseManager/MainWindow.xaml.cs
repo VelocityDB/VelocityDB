@@ -32,6 +32,7 @@ namespace DatabaseManager
     public MainWindow(string dbFilePath)
     {
       InitializeComponent();
+      //SessionBase.s_serverTcpIpPortNumber = 7032;
       _dbFilePath = dbFilePath;
       m_viewModel = new AllFederationsViewModel();
       DirectoryInfo dirInfo = m_viewModel.Initialize(dbFilePath);
@@ -114,6 +115,13 @@ namespace DatabaseManager
       MenuItem menuItem = (MenuItem)sender;
       DatabaseLocationViewModel view = (DatabaseLocationViewModel)menuItem.DataContext;
       view.OrderDatabasesByName = menuItem.IsChecked;
+    }
+
+    private void VelocityGraphModeMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      var view = (FederationViewModel)menuItem.DataContext;
+      view.VelocityGraphMode = menuItem.IsChecked;
     }
 
     private void RemoveDatabaseLocationMenuItem_Click(object sender, RoutedEventArgs e)

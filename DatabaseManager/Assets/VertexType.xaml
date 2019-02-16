@@ -1,0 +1,20 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <DrawingGroup x:Key="vertexTypeDrawingGroup" ClipGeometry="M0,0 V37.795276 H37.795276 V0 H0 Z">
+    <DrawingGroup Transform="0.62335217,0,0,0.62335217,9.3408665,-2.4118808">
+      <DrawingGroup.ClipGeometry>
+        <PathGeometry FillRule="Nonzero" Figures="M30.05,8L30.05,20 41,20 41,27 30.05,27 30.05,39.61C30.05,39.61,29.55,44.33,34.8,43.85A8.76,8.76,0,0,0,41,40.5L41,48.5C41,48.5,39.15,50.66,34.4,51.39A33.52,33.52,0,0,1,27.18,51.52C23.71,51.08,19,49.4,19,40.21L19,27 14,27 14,20C14,20,23.5,19.69,23.5,8z" />
+      </DrawingGroup.ClipGeometry>
+      <GeometryDrawing Brush="#FF81A4E3">
+        <GeometryDrawing.Geometry>
+          <RectangleGeometry RadiusX="0" RadiusY="0" Rect="9,3,36.98,53.66" />
+        </GeometryDrawing.Geometry>
+      </GeometryDrawing>
+    </DrawingGroup>
+    <GeometryDrawing Brush="#FF000080">
+      <GeometryDrawing.Geometry>
+        <EllipseGeometry RadiusX="6.6783" RadiusY="6.5829" Center="9.2207,19.0053" />
+      </GeometryDrawing.Geometry>
+    </GeometryDrawing>
+  </DrawingGroup>
+  <DrawingImage x:Key="vertexTypeDrawingImage" Drawing="{StaticResource vertexTypeDrawingGroup}" />
+</ResourceDictionary>

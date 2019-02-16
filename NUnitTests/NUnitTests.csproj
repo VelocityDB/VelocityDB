@@ -96,8 +96,8 @@
     <Reference Include="VelocityDBExtensions, Version=8.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\VelocityDBExtensions.8.0.0\lib\net45\VelocityDBExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="VelocityGraph, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.8.0.0\lib\Net45\VelocityGraph.dll</HintPath>
+    <Reference Include="VelocityGraph, Version=8.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.8.1.0\lib\Net45\VelocityGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
