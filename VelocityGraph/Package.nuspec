@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>VelocityGraph</id>
-    <version>8.1</version>
+    <version>8.1.2</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
     <license type="file">Eula.txt</license>
@@ -11,12 +11,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>VelocityGraph is a property graph database for .NET.</summary>
     <description>Pure, fast and scalable .NET property graph and object hybrid database. No new graph language to learn, all accomplished with a .NET API.</description>
-    <releaseNotes>Use latest version of VelocityDB.</releaseNotes>
+    <releaseNotes>Added .net standard 2 support.</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>Hybrid Object Property Graph Database .NET Blueprints Distributable Embeddable</tags>
     <dependencies>
       <dependency id="VelocityDB" version="8.0.0" />
-      <dependency id="Frontenac.Blueprints" version="2.4.0" />
+      <dependency id="Frontenac.Blueprints" version="2.5.0" />
     </dependencies>
   </metadata>
     <files>
@@ -24,6 +24,8 @@
       <file src="Release/VelocityGraph.dll" target="lib\Net45" />
       <file src="Release/VelocityGraph.pdb" target="lib\Net45" />
       <file src="Release/VelocityGraph.xml" target="lib\Net45" />
+      <file src="..\VelocityGraphStandard\bin\Release\netstandard2.0\VelocityGraph.dll" target="lib\.NETStandard,Version=v2.0" />
+      <file src="..\VelocityGraphStandard\bin\Release\netstandard2.0\VelocityGraph.pdb" target="lib\.NETStandard,Version=v2.0" />
       <file src="..\VelocityGraphCore\bin\Release\netcoreapp2.1\VelocityGraphCore.dll" target="lib\.NETCoreApp,Version=v2.1" />
       <file src="..\VelocityGraphCore\bin\Release\netcoreapp2.1\VelocityGraphCore.pdb" target="lib\.NETCoreApp,Version=v2.1" />
     </files>
