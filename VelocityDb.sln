@@ -104,7 +104,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoHashSample", "GeoHashSam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VelocityDBExtensions", "VelocityDBExtensions\VelocityDBExtensions.csproj", "{8856FDC1-B759-4E3F-A5DC-47F1AA1BDE81}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Net Core 2.1", ".Net Core 2.1", "{C57CD967-66A5-454C-9F46-74D920F9FEE9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Net Core 2.2", ".Net Core 2.2", "{C57CD967-66A5-454C-9F46-74D920F9FEE9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples .Net Core", "Samples .Net Core", "{0E92882E-BDFE-4396-94E1-60A2B69C3B49}"
 EndProject

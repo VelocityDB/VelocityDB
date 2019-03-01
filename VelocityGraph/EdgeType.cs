@@ -128,8 +128,10 @@ namespace VelocityGraph
     /// Gets an edge given an edge id. Throws if no such edge exist.
     /// </summary>
     /// <param name="edgeId">The id of the edge</param>
+    /// <param name="polymorphic">If true and id isn't found in this EdgeType continue search into sub types</param>
+    /// <param name="errorIfNotFound">Indicate what to do if <see cref="Edge"/> does not exist</param>
     /// <returns>The edge with matching id if it exists</returns>
-    public Edge GetEdge(EdgeId edgeId)
+    public Edge GetEdge(EdgeId edgeId, bool polymorphic = false, bool errorIfNotFound = true)
     {
       if (Unrestricted)
       {
@@ -154,8 +156,18 @@ namespace VelocityGraph
           return new Edge(MyGraph, this, edgeId, head, tail);
         }
       }
-
-      throw new EdgeDoesNotExistException();
+      if (polymorphic)
+      {
+        foreach (var et in m_subTypes)
+        {
+          var e = et.GetEdge(edgeId, polymorphic, false);
+          if (e != null)
+            return e;
+        }
+      }
+      if (errorIfNotFound)
+        throw new EdgeDoesNotExistException();
+      return null;
     }
 
     /// <summary>
