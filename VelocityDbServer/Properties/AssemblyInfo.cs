@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("VelocityDB, Inc.")]
 [assembly: AssemblyProduct("VelocityDbServer")]
-[assembly: AssemblyCopyright("Copyright © 2016 VelocityDB, Inc.")]
+[assembly: AssemblyCopyright("Copyright © 2019 VelocityDB, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("5.5.1.0")]
-[assembly: AssemblyFileVersion("5.5.1.0")]
+[assembly: AssemblyVersion("8.1.4.0")]
+[assembly: AssemblyFileVersion("8.1.4.0")]
