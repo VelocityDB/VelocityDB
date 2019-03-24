@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="VelocityDB" Version="8.1.4" />
+    <PackageReference Include="VelocityDB" Version="8.1.5" />
   </ItemGroup>
 
 </Project>
