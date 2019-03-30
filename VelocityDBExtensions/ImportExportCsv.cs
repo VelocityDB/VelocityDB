@@ -191,6 +191,45 @@ namespace VelocityDBExtensions
           pageInfoString = textReader.ReadLine();
         }
       }
+
+      var schemaInternalTypeFiles = new[] {
+        "VelocityDb.TypeInfo.Schema65747.csv",
+        "VelocityDb.TypeInfo.TypeVersion65749.csv",
+        "VelocityDb.TypeInfo.VelocityDbType65753.csv",
+        "VelocityDb.TypeInfo.DataMember65745.csv",
+        "VelocityDb.Collection.BTree.BTreeSetOidShortVelocityDb.TypeInfo.VelocityDbType65623.csv",
+        "VelocityDb.Collection.Comparer.VelocityDbTypeComparer65655.csv"
+      };
+      var schemaInternalTypeFileInfo = new List<FileInfo>();
+      foreach (var fileName in schemaInternalTypeFiles)
+        schemaInternalTypeFileInfo.Add(di.GetFiles(fileName, SearchOption.TopDirectoryOnly).First());
+
+      foreach (FileInfo info in schemaInternalTypeFileInfo)
+      {
+        string numberString = Regex.Match(info.Name, @"\d+").Value;
+        if (numberString.Length > 0)
+        {
+          UInt32 typeShortId = UInt32.Parse(numberString);
+          UInt16 slotNumber = (UInt16)typeShortId;
+          TypeVersion tv = schema.GetTypeVersion(typeShortId, session);
+          if (tv != null)
+          {
+            using (StreamReader textReader = new StreamReader(info.FullName))
+            {
+              CsvReader csvReader = new CsvReader(textReader, true);
+              string[] fileldNames = csvReader.GetFieldHeaders();
+              foreach (string[] record in csvReader)
+              {
+                tv.ObjectBytesFromStrings(record, fileldNames, session, schema);
+              }
+            }
+          }
+        }
+      }
+      Database schemaDb = session.OpenDatabase(Schema.SchemaDB);
+      Page schemaPage = schemaDb.CachedPage(1);
+      schemaPage.FinishUpCsvImport();
+      var schemaTypes = new UInt32[] { 65747, 65749, 65753, 65745, 65623, 65655 };
       for (int i = 0; i < 2; i++)
         foreach (FileInfo info in files)
         {
@@ -199,14 +238,14 @@ namespace VelocityDBExtensions
           {
             UInt32 typeShortId = UInt32.Parse(numberString);
             UInt16 slotNumber = (UInt16)typeShortId;
-            if ((i == 0 && slotNumber < Schema.s_bootupTypeCountExpanded) || (i == 1 && slotNumber >= Schema.s_bootupTypeCountExpanded))
+            if (((i == 0 && slotNumber < Schema.s_bootupTypeCountExpanded) || (i == 1 && slotNumber >= Schema.s_bootupTypeCountExpanded)) && !schemaTypes.Contains(typeShortId))
             {
               TypeVersion tv = schema.GetTypeVersion(typeShortId, session);
               if (tv != null)
               {
                 using (StreamReader textReader = new StreamReader(info.FullName))
                 {
-                  CsvReader csvReader = new CsvReader(textReader, true);
+                  var csvReader = new CsvReader(textReader, true);
                   string[] fileldNames = csvReader.GetFieldHeaders();
                   foreach (string[] record in csvReader)
                   {

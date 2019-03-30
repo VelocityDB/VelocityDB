@@ -62,11 +62,22 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
     }
   }
 
+  public struct AStruct
+  {
+    public int anInt;
+    public string aString;
+  }
+
   public class AllSuportedSub4 : OptimizedPersistable
   {
     int[,] array = new int[4, 2];
     int[,,] array2 = new int[4, 2, 3];
     List<string[]> _listDtringArray;
+    System.ComponentModel.ListSortDirection listSortDirection;
+    System.ComponentModel.ListSortDirection? listSortDirectionNullable;
+    System.ComponentModel.ListSortDirection? listSortDirectionNullable2;
+    AStruct? aStructNullableNull;
+    AStruct? aStructNullable;
     public AllSuportedSub4()
     {
       array[0, 1] = 9;
@@ -76,6 +87,11 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       _listDtringArray.Add(stringArray);
       stringArray = new string[] { "Oliwia", "Lidia", "Carter" };
       _listDtringArray.Add(stringArray);
+      listSortDirection = System.ComponentModel.ListSortDirection.Ascending;
+      listSortDirectionNullable = System.ComponentModel.ListSortDirection.Descending;
+      listSortDirectionNullable2 = null;
+      aStructNullableNull = null;
+      aStructNullable = new AStruct { anInt = 99, aString = "Kinga" };
     }
   }
   public interface IAllSuportedSub : IOptimizedPersistable
@@ -727,6 +743,7 @@ namespace VelocityDbSchema.Samples.AllSupportedSample
       personHashSet = new VelocityDbHashSet<Person>();
       person = new Person();
       personHashSet.Add(person);
+      //session.Persist(personHashSet);
       session.Persist(person);
       _weakRefToPerson = new WeakReferencedConnection<Person>(person);
       timeSpan = new TimeSpan(1, 0, 0);
