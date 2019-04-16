@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
-    <Version>8.1.8</Version>
-    <AssemblyVersion>8.1.8</AssemblyVersion>
+    <Version>8.2</Version>
+    <AssemblyVersion>8.2</AssemblyVersion>
     <Company>VelocityDB Inc</Company>
     <Description>Graph Database API</Description>
   </PropertyGroup>
@@ -13,7 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Frontenac.Blueprints" Version="2.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="VelocityDB" Version="8.1.8" />
+    <PackageReference Include="VelocityDB" Version="8.2.0" />
   </ItemGroup>
 
 </Project>

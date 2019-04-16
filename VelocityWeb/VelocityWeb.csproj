@@ -66,8 +66,8 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="VelocityDb, Version=8.1.8.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.8.1.8\lib\net45\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=8.2.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.8.2.0\lib\net45\VelocityDb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

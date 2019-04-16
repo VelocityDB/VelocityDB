@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="LumenWorksCsvReader" Version="4.0.0" />
-    <PackageReference Include="VelocityDB" Version="8.1.8" />
+    <PackageReference Include="VelocityDB" Version="8.2.0" />
   </ItemGroup>
 
 </Project>
