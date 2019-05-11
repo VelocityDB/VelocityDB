@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>8.2</Version>
-    <AssemblyVersion>8.2</AssemblyVersion>
+    <Version>8.2.1</Version>
+    <AssemblyVersion>8.2.1</AssemblyVersion>
     <Company>VelocityDB Inc</Company>
+    <PackageReleaseNotes></PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -17,9 +18,9 @@
 
   <ItemGroup>
     <PackageReference Include="LumenWorksCsvReader" Version="4.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.Spatial" Version="5.8.4" />
-    <PackageReference Include="VelocityDB" Version="8.2.0" />
+    <PackageReference Include="VelocityDB" Version="8.2.1" />
   </ItemGroup>
 
 </Project>

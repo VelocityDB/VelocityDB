@@ -77,12 +77,17 @@ namespace VelocityDBExtensions
                     writer = new StreamWriter(fStream);
                     files[pObj.GetTypeVersion().ShortId] = writer;
                     List<DataMember> members = tv.GetDataMemberList();
-                    byte[] bytes = Page.StringToByteArray($"id{fieldSeperator}"); // special transient member
+                    byte[] bytes = Page.StringToByteArray($"IOptimizedPersistable.id{fieldSeperator}"); // special transient member
                     fStream.Write(bytes, 0, bytes.Length);
                     if (tv.IsString)
                     {
                       bytes = Page.StringToByteArray($"String");
                       fStream.Write(bytes, 0, bytes.Length);
+                    }
+                    else if (tv.IsISerializable)
+                    {
+                      bytes = Page.StringToByteArray($"IsISerializable");
+                      fStream.Write(bytes, 0, bytes.Length);                     
                     }
                     else
                     {
