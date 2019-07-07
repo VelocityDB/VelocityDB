@@ -27,14 +27,19 @@ namespace NUnitTests
       char ch;
       for (int i = 0; i < size; i++)
       {
-        ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+        var r = random.NextDouble();
+        ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * r + 65)));
         builder.Append(ch);
+        if (r < 0.2)
+          break;
       }
 
       return builder.ToString();
     }
 
-    [TestCase(0)]  
+    [TestCase(0)]
+        [TestCase(2)]
+        [TestCase(5)]
     [TestCase(10)]
     public void CompareString(int compArraySize)
     {
@@ -44,14 +49,16 @@ namespace NUnitTests
         AllSupported obj = new AllSupported(1, session);
         CompareByField<AllSupported> compareByField = new CompareByField<AllSupported>("aString", session);
         BTreeSet<AllSupported> sortedSet = new BTreeSet<AllSupported>(compareByField, session, 1000, (ushort) compArraySize);
-        for (int i = 0; i < 10000; i++)
+        session.Persist(sortedSet);
+        for (int i = 0; i < 11000; i++)
         {
           obj = new AllSupported(1, session);
           obj.aString = RandomString(10);
-          sortedSet.Add(obj);
+          sortedSet.AddFast(obj);
         }
         obj = new AllSupported(1, session);
         obj.aString = null;
+        session.Persist(obj);
         sortedSet.Add(obj);
         int ct = 0;
         AllSupported prior = null;
