@@ -61,8 +61,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=8.3.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.8.3.0\lib\net45\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=8.4.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.8.4.0\lib\net45\VelocityDb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

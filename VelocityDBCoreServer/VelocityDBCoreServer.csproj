@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <Version>8.2.2</Version>
+    <Version>8.4</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="VelocityDB" Version="8.3.0" />
+    <PackageReference Include="VelocityDB" Version="8.4.0" />
   </ItemGroup>
 
 </Project>

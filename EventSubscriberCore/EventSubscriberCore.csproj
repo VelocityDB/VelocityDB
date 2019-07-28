@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VelocityDB" Version="8.3.0" />
+    <PackageReference Include="VelocityDB" Version="8.4.0" />
   </ItemGroup>
 
   <ItemGroup>

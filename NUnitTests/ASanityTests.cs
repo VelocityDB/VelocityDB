@@ -174,6 +174,7 @@ namespace NUnitTests
         session = new ServerClientSession(systemDir);
       VelocityDbSchema.Samples.Sample1.Person person;
       session.BeginUpdate();
+      session.CrossTransactionCacheAllDatabases(false);
       //session.SetTraceDbActivity(7676);
       var tw = new Stopwatch();
       tw.Start();

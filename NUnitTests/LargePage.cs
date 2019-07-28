@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using VelocityDb;
+using VelocityDb.Collection;
+using VelocityDb.Collection.BTree;
 using VelocityDb.Session;
 using VelocityDbSchema.NUnit;
 
@@ -21,8 +24,9 @@ namespace NUnitTests
       UInt64 id;
       using (SessionNoServer session = new SessionNoServer(s_systemDir))
       {
-        session.BeginUpdate(); 
-        var large = new LargeObject((int) Math.Pow(2, 25)); // Math.Pow(2, 27) too large to handle with ToBase64String for csv export
+        session.BeginUpdate();
+        session.CrossTransactionCacheAllDatabases(false);
+        var large = new LargeObject((int)Math.Pow(2, 25)); // Math.Pow(2, 27) too large to handle with ToBase64String for csv export
         id = session.Persist(large);
         Assert.True(large.IsOK());
         session.Commit();
@@ -39,7 +43,7 @@ namespace NUnitTests
     [Test]
     public void TooLargeObject()
     {
-      Assert.Throws<OverflowException>(() =>
+      Assert.Throws<OutOfMemoryException>(() =>
       {
         UInt64 id;
         using (SessionNoServer session = new SessionNoServer(s_systemDir))
