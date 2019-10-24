@@ -66,11 +66,11 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=8.4.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.8.4.0\lib\net45\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=8.5.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.8.5.0\lib\net45\VelocityDb.dll</HintPath>
     </Reference>
-    <Reference Include="VelocityGraph, Version=8.4.0.0, Culture=neutral, PublicKeyToken=033a993463f9cfa3, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.8.4.0\lib\Net45\VelocityGraph.dll</HintPath>
+    <Reference Include="VelocityGraph, Version=8.5.0.0, Culture=neutral, PublicKeyToken=033a993463f9cfa3, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.8.5.0\lib\Net45\VelocityGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

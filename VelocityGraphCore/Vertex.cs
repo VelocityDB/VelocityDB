@@ -604,6 +604,7 @@ namespace VelocityGraph
     /// </summary>
     /// <param name="dir">>Direction to traverse edges</param>
     /// <param name="maxHops">maximum number of hops from this Vertex</param>
+    /// <param name="edgeTypesToTraverse">the type of edges to follow, by default null which means follow all edge types</param>
     /// <returns><see cref="List{Vertex}"> containing all related vertices</returns>
     public List<Vertex> RelatedVertices(Direction dir = Direction.Both, ISet<EdgeType> edgeTypesToTraverse = null)
     {

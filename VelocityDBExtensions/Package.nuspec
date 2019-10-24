@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>VelocityDBExtensions</id>
-    <version>8.4</version>
+    <version>8.5</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
     <license type="file">Eula.txt</license>
@@ -15,7 +15,7 @@
     <copyright>Copyright 2019</copyright>
     <tags>Object Database NoSQL .NET C# F# VB.NET C++ CLI Universal Windows NET CORE Standard Xamarin Mono Android iOS Mac Xbox cross-platform web asp.net identity persistence client csv json server oodb key-value scalable fast flexible distributable embedded Database sync big data events geo hash Azure compressed bitmap</tags>
     <dependencies>
-      <dependency id="VelocityDB" version="8.4" />
+      <dependency id="VelocityDB" version="8.5" />
       <dependency id="LumenWorksCsvReader" version="4.0.0" />
       <dependency id="Microsoft.Data.Edm" version="5.8.4" />
       <dependency id="Microsoft.Data.OData" version="5.8.4" />
@@ -29,7 +29,7 @@
       <file src="..\Eula.txt" target="" />
       <file src="bin\Release\VelocityDBExtensions.dll" target="lib\net45" />
       <file src="bin\Release\VelocityDBExtensions.pdb" target="lib\Net45" />
-      <file src="..\VelocityDBExtensionsCore\bin\Release\netcoreapp2.1\VelocityDBExtensionsCore.dll" target="lib\.NETCoreApp,Version=v2.1" />
-      <file src="..\VelocityDBExtensionsCore\bin\Release\netcoreapp2.1\VelocityDBExtensionsCore.pdb" target="lib\.NETCoreApp,Version=v2.1" />
+      <file src="..\VelocityDBExtensionsCore\bin\Release\netcoreapp2.2\VelocityDBExtensionsCore.dll" target="lib\.NETCoreApp,Version=v2.2" />
+      <file src="..\VelocityDBExtensionsCore\bin\Release\netcoreapp2.2\VelocityDBExtensionsCore.pdb" target="lib\.NETCoreApp,Version=v2.2" />
     </files>
 </package>
