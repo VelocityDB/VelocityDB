@@ -299,10 +299,10 @@ namespace VelocityGraph
               else
               {
                 Range<VertexId> nextRange = vertecis[1];
-                if (range.Max + 1 == nextRange.Min)
+                if (range.Max + 2 == nextRange.Min)
                 {
                   vertecis.RemoveAt(1);
-                  vId = nextRange.Min;
+                  vId = range.Max + 1;
                   range = new Range<VertexId>(range.Min, nextRange.Max);
                   vertecis[0] = range;
                 }

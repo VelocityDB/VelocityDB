@@ -4,16 +4,36 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
-    <Version>8.5</Version>
-    <AssemblyVersion>8.5</AssemblyVersion>
+    <Version>8.5.1</Version>
+    <AssemblyVersion>8.5.1</AssemblyVersion>
     <Company>VelocityDB Inc</Company>
     <Description>Graph Database API</Description>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\VelocityGraph\Exceptions\EdgeDoesNotExistException.cs" Link="Exceptions\EdgeDoesNotExistException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\EdgeTypeDoesNotExistException.cs" Link="Exceptions\EdgeTypeDoesNotExistException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\EdgeTypeInUseException.cs" Link="Exceptions\EdgeTypeInUseException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\InvalidHeadVertexTypeException.cs" Link="Exceptions\InvalidHeadVertexTypeException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\InvalidPropertyIdException.cs" Link="Exceptions\InvalidPropertyIdException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\InvalidTailVertexTypeException.cs" Link="Exceptions\InvalidTailVertexTypeException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\InvalidTypeIdException.cs" Link="Exceptions\InvalidTypeIdException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\NamespaceDoc.cs" Link="Exceptions\NamespaceDoc.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\PropertyTypeInUseException.cs" Link="Exceptions\PropertyTypeInUseException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\VertexAllreadyExistException.cs" Link="Exceptions\VertexAllreadyExistException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\VertexDoesNotExistException.cs" Link="Exceptions\VertexDoesNotExistException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\VertexTypeDoesNotExistException.cs" Link="Exceptions\VertexTypeDoesNotExistException.cs" />
+    <Compile Include="..\VelocityGraph\Exceptions\VertexTypeInUseException.cs" Link="Exceptions\VertexTypeInUseException.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Frontenac.Blueprints" Version="2.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="VelocityDB" Version="8.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 
 </Project>
