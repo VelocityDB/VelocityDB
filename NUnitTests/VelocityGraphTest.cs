@@ -31,12 +31,83 @@ namespace NUnitTests
   [TestFixture]
   public class VelocityGraphTest
   {
-    static readonly string drive = "F:\\";
+    static readonly string drive = "c:\\";
     static readonly string systemDir = Path.Combine(drive, "VelocityGraphNunit");
     static readonly string inputData = Path.Combine(drive, "bfs-1-socialgraph-release");
-    static readonly string licenseDbFile = Path.Combine(drive, "4.odb");
     const int numberOfUserVertices = 4194304;
     const int numberOfLocationVertices = 10000;
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public void A_Lester(bool vertexIdSetPerVertexType)
+    {
+      try
+      {
+        if (Directory.Exists(systemDir))
+          Directory.Delete(systemDir, true); // remove systemDir from prior runs and all its databases.
+      }
+      catch
+      {
+        if (Directory.Exists(systemDir))
+          Directory.Delete(systemDir, true); // remove systemDir from prior runs and all its databases.
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session, vertexIdSetPerVertexType);
+        session.Persist(g);
+        VertexType userType = g.NewVertexType("User");
+        for (int i = 1; i < 7; i++)
+          userType.NewVertex();
+        IVertex vertex = null;
+        foreach (var iv in g.GetVertices())
+        {
+          Vertex v = (Vertex) iv;
+          Console.WriteLine(v.VertexId);
+          if (v.VertexId == 3)
+            vertex = v;
+        }
+        g.RemoveVertex(vertex);
+        userType.NewVertex();
+        userType.NewVertex();
+        foreach (var iv in g.GetVertices())
+        {
+          Vertex v = (Vertex) iv;
+          Console.WriteLine(v.VertexId);
+        }
+        Assert.AreEqual(7, g.CountVertices());
+        var userUserEdgeType = g.NewEdgeType("UserUser", true);
+        var vertices = g.GetVertices().ToArray();
+        for (int i = 0; i < 6; i++)
+        {
+          var v1 = (Vertex) vertices[i];
+          var v2 = (Vertex) vertices[i + 1];
+          userUserEdgeType.NewEdge(v1, v2);
+        }
+        IEdge edge = null;
+        foreach (var ie in g.GetEdges())
+        {
+          var e = (Edge)ie;
+          Console.WriteLine(e.EdgeId);
+          if (e.EdgeId == 3)
+            edge = e;
+        }
+        g.RemoveEdge(edge);
+        for (int i = 0; i < 2; i++)
+        {
+          var v1 = (Vertex)vertices[i];
+          var v2 = (Vertex)vertices[6];
+          userUserEdgeType.NewEdge(v1, v2);
+        }
+        foreach (var ie in g.GetEdges())
+        {
+          var e = (Edge)ie;
+          Console.WriteLine(e.EdgeId);
+        }
+        Assert.AreEqual(7, g.CountEdges());
+        Assert.AreEqual(7, g.CountVertices());
+      }
+    }
 
     [TestCase(false)]
     public void Create1Vertices(bool vertexIdSetPerVertexType)
@@ -47,12 +118,11 @@ namespace NUnitTests
       {
         if (Directory.Exists(systemDir))
           Directory.Delete(systemDir, true); // remove systemDir from prior runs and all its databases.
-        Directory.CreateDirectory(systemDir);
-        File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"));
       }
       catch
       {
-        File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"));
+        if (Directory.Exists(systemDir))
+          Directory.Delete(systemDir, true); // remove systemDir from prior runs and all its databases.
       }
 
       using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
@@ -586,12 +656,11 @@ namespace NUnitTests
       {
         if (Directory.Exists(systemDir))
           Directory.Delete(systemDir, true); // remove systemDir from prior runs and all its databases.
-        Directory.CreateDirectory(systemDir);
-        File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"));
       }
       catch
       {
-        File.Copy(licenseDbFile, Path.Combine(systemDir, "4.odb"));
+        if (Directory.Exists(systemDir))
+          Directory.Delete(systemDir, true); // remove systemDir from prior runs and all its databases.
       }
       using (SessionBase session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServer(systemDir))
       {

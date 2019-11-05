@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
-    <Version>8.5.1</Version>
-    <AssemblyVersion>8.5.1</AssemblyVersion>
+    <Version>8.5.2</Version>
+    <AssemblyVersion>8.5.2</AssemblyVersion>
     <Company>VelocityDB Inc</Company>
     <Description>Graph Database API</Description>
   </PropertyGroup>

@@ -379,23 +379,25 @@ namespace VelocityGraph
             if (range.Min > 1)
             {
               eId = range.Min - 1;
-              range = new Range<VertexId>(eId, range.Max);
+              range = new Range<EdgeId>(eId, range.Max);
+              EdgeRanges[0] = range;
             }
             else
             {
               Range<VertexId> nextRange = EdgeRanges[1];
               if (range.Max + 2 == nextRange.Min)
               {
-                EdgeRanges.Remove(range);
+                EdgeRanges.RemoveAt(1);
                 eId = range.Max + 1;
-                range = new Range<VertexId>(range.Min, nextRange.Max);
+                range = new Range<EdgeId>(range.Min, nextRange.Max);
+                EdgeRanges[0] = range;
               }
               else
               {
-                range = new Range<VertexId>(range.Min, range.Max + 1);
+                range = new Range<EdgeId>(range.Min, range.Max + 1);
                 eId = range.Max + 1;
-              }
-              EdgeRanges.Add(range);
+                EdgeRanges[0] = range;
+              }             
             }
           }
           break;
