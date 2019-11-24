@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VelocityDB" Version="8.5.0" />
+    <PackageReference Include="VelocityDB" Version="8.6.0" />
+    <PackageReference Include="VelocityGraph" Version="8.5.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="VelocityGraph.Edge" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACAAAAAgAAAMAEgEEABEAAEAEAAIAYACACACAAAAA=</HashCode>
+      <FileName>Edge.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="VelocityGraph.EdgeDoesNotExistException" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EdgeDoesNotExistException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.EdgeType" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQEDACCADAAAASMgkIgBnQAQBAAE5UhAABAAAAEAAQ=</HashCode>
+      <FileName>EdgeType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VelocityGraph.EdgeTypeDoesNotExistException" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EdgeTypeDoesNotExistException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.EdgeTypeInUseException" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EdgeTypeInUseException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.Element" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAIwAAAAAAAAAAAA=</HashCode>
+      <FileName>Element.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.Graph" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEgIcIJEEiIRCMDEJhBRYFCACACKxIWABJQARABQA=</HashCode>
+      <FileName>Graph.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VelocityGraph.GraphJsonWriter" Collapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Graph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.GraphJsonSettings" Collapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAgAAAAAAAAAAAAAIAgIAAAAAAAQAAAEAEAEgAAAAg=</HashCode>
+      <FileName>Graph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.InvalidHeadVertexTypeException" Collapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InvalidHeadVertexTypeException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.InvalidPropertyIdException" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InvalidPropertyIdException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.InvalidTailVertexTypeException" Collapsed="true">
+    <Position X="12.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InvalidTailVertexTypeException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.InvalidTypeIdException" Collapsed="true">
+    <Position X="5.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InvalidTypeIdException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.NamespaceDoc" Collapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NamespaceDoc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.PropertyType" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAADAAAFAAAAAECgQAAAAAEAEgAAEQABAAEII=</HashCode>
+      <FileName>PropertyType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.PropertyTypeInUseException" Collapsed="true">
+    <Position X="8.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PropertyTypeInUseException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.PropertyTypeT&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAUAQBAAAFAAAAAECQAAAAAAAAEAAIAAARAAEIA=</HashCode>
+      <FileName>PropertyTypeT.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.UnrestrictedEdge" Collapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAQAIAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UnrestrictedEdge.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.Vertex" Collapsed="true">
+    <Position X="2.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACAIEIAAAAAAAEiAKgREAAAgEAIIgQAAAAAAAAAAA=</HashCode>
+      <FileName>Vertex.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="VelocityGraph.VertexAllreadyExistException" Collapsed="true">
+    <Position X="7" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>VertexAllreadyExistException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.VertexDoesNotExistException" Collapsed="true">
+    <Position X="8.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>VertexDoesNotExistException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.VertexType" Collapsed="true">
+    <Position X="10.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAIGIBDBAgwQNAkIgBmQBAAAAAxUpEAAAAAQEAQA=</HashCode>
+      <FileName>VertexType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.VertexTypeDoesNotExistException" Collapsed="true">
+    <Position X="12.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>VertexTypeDoesNotExistException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.VertexTypeInUseException" Collapsed="true">
+    <Position X="5.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>VertexTypeInUseException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.Properties.Resources" Collapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VelocityGraph.Properties.Settings" Collapsed="true">
+    <Position X="12.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="VelocityGraph.DataType" Collapsed="true">
+    <Position X="5.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAQAAAAAgQAAAAACAAAACAgQAAQAAAAAAAAA=</HashCode>
+      <FileName>Graph.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="VelocityGraph.PropertyKind" Collapsed="true">
+    <Position X="7" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABACAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graph.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

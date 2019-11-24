@@ -11,6 +11,7 @@ using VelocityDbSchema.Samples.AllSupportedSample;
 
 namespace VelocityDbSchema
 {
+  [Serializable]
 	public class Person : OptimizedPersistable 
 	{
     static UInt64 NextNum = 0;
@@ -193,4 +194,23 @@ namespace VelocityDbSchema
       }
     }
 	}
+
+  public class PersonChris : OptimizedPersistable
+  {
+    public PersonChris()
+    {
+      this.Jobs = new VelocityDbList<Job>();
+    }
+
+    public string Name { get; set; }
+
+    public string Address { get; set; }
+
+    public VelocityDbList<Job> Jobs { get; private set; }
+  }
+
+  public class Job : OptimizedPersistable
+  {
+    public string Name { get; set; }
+  }
 }

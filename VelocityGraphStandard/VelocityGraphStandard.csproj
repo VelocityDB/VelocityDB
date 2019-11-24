@@ -1,16 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
+    <AssemblyName>VelocityGraph</AssemblyName>
+    <RootNamespace>VelocityGraph</RootNamespace>
     <Version>8.6</Version>
-    <AssemblyVersion>8.6</AssemblyVersion>
     <Company>VelocityDB Inc</Company>
     <Description>Graph Database API</Description>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\VelocityGraph\Edge.cs" Link="Edge.cs" />
+    <Compile Include="..\VelocityGraph\EdgeType.cs" Link="EdgeType.cs" />
+    <Compile Include="..\VelocityGraph\Element.cs" Link="Element.cs" />
     <Compile Include="..\VelocityGraph\Exceptions\EdgeDoesNotExistException.cs" Link="Exceptions\EdgeDoesNotExistException.cs" />
     <Compile Include="..\VelocityGraph\Exceptions\EdgeTypeDoesNotExistException.cs" Link="Exceptions\EdgeTypeDoesNotExistException.cs" />
     <Compile Include="..\VelocityGraph\Exceptions\EdgeTypeInUseException.cs" Link="Exceptions\EdgeTypeInUseException.cs" />
@@ -24,9 +28,18 @@
     <Compile Include="..\VelocityGraph\Exceptions\VertexDoesNotExistException.cs" Link="Exceptions\VertexDoesNotExistException.cs" />
     <Compile Include="..\VelocityGraph\Exceptions\VertexTypeDoesNotExistException.cs" Link="Exceptions\VertexTypeDoesNotExistException.cs" />
     <Compile Include="..\VelocityGraph\Exceptions\VertexTypeInUseException.cs" Link="Exceptions\VertexTypeInUseException.cs" />
+    <Compile Include="..\VelocityGraph\Graph.cs" Link="Graph.cs" />
+    <Compile Include="..\VelocityGraph\NamespaceDoc.cs" Link="NamespaceDoc.cs" />
+    <Compile Include="..\VelocityGraph\PropertyType.cs" Link="PropertyType.cs" />
+    <Compile Include="..\VelocityGraph\PropertyTypeNoDuplicateValues.cs" Link="PropertyTypeNoDuplicateValues.cs" />
+    <Compile Include="..\VelocityGraph\PropertyTypeT.cs" Link="PropertyTypeT.cs" />
+    <Compile Include="..\VelocityGraph\UnrestrictedEdge.cs" Link="UnrestrictedEdge.cs" />
+    <Compile Include="..\VelocityGraph\Vertex.cs" Link="Vertex.cs" />
+    <Compile Include="..\VelocityGraph\VertexType.cs" Link="VertexType.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="4.4.0" />
     <PackageReference Include="Frontenac.Blueprints" Version="2.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="VelocityDB" Version="8.6.0" />

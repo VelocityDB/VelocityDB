@@ -50,6 +50,38 @@ namespace NUnitTests
     }
 
     [Test]
+    public void aaaE_Chris()
+    {
+      var person = new PersonChris()
+      {
+        Name = "John",
+        Address = "123 Blah St"
+      };
+      using (var session1 = new SessionNoServer(s_systemDir))
+      {
+        // Persist instance of Person within transaction
+        session1.BeginUpdate();
+        session1.Persist(person);
+        session1.Commit();
+
+        // Create new transaction and make changes to Person and add child object Job
+        session1.BeginUpdate();
+        person.Name = "Bob";
+        person.Jobs.Add(new Job { Name = "clean house" });
+
+        // Do not commit previous transaction (keep open) and attempt to read person using another session and a read transaction
+        using (var session2 = new SessionNoServer(s_systemDir))
+        {
+          session2.BeginRead();
+          uint dbNum = session2.DatabaseNumberOf(typeof(PersonChris));
+          Database db = session2.OpenDatabase(dbNum);
+          var person1 = db.AllObjects<PersonChris>().First(); // IOException is thrown here
+          session2.Commit();
+        }
+      }
+    }
+
+    [Test]
     public void aaaFakeLicenseDatabase()
     {
       Assert.Throws<NoValidVelocityDBLicenseFoundException>(() =>
