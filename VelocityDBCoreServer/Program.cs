@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -23,11 +23,12 @@ namespace VelocityDBCoreServer
   {
     public static void Main(string[] args)
     {
+      //System.Threading.Thread.Sleep(100000);
       var isService = !(Debugger.IsAttached || args.Contains("--console"));
 #if AsWindowsService
-      if (!System.Diagnostics.EventLog.SourceExists("VelocityDbServer"))
+      if (!System.Diagnostics.EventLog.SourceExists("VelocityDbCoreServer"))
       {
-        System.Diagnostics.EventLog.CreateEventSource("VelocityDbServer", "VelocityDbServerLog");
+        System.Diagnostics.EventLog.CreateEventSource("VelocityDbCoreServer", "VelocityDbCoreServerLog");
       }
 #endif
       var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
@@ -89,7 +90,7 @@ namespace VelocityDBCoreServer
         }
       }
       var webHostArgs = args.Where(arg => arg != "--console").ToArray();
-      var builder = WebHost.CreateDefaultBuilder(webHostArgs).UseContentRoot(pathToContentRoot).UseKestrel(options => { options.Listen(IPAddress.Loopback, 7033);}); //options.Listen(IPAddress.Loopback, 7034, listenOptions => { listenOptions.UseHttps();}); });
+      var builder = WebHost.CreateDefaultBuilder(webHostArgs).UseContentRoot(pathToContentRoot).ConfigureKestrel(options => { options.Listen(IPAddress.Loopback, 7033); }); //options.Listen(IPAddress.Loopback, 7034, listenOptions => { listenOptions.UseHttps();}); });
       //builder.UseHttpSys(options =>
       // {
       //   options.Authentication.Schemes = AuthenticationSchemes.NTLM;

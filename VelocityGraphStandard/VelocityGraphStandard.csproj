@@ -11,6 +11,10 @@
     <Description>Graph Database API</Description>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>F:\VelocityDbSetup\VelocityDB\VelocityGraphStandard\VelocityGraph.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\VelocityGraph\Edge.cs" Link="Edge.cs" />
     <Compile Include="..\VelocityGraph\EdgeType.cs" Link="EdgeType.cs" />
@@ -39,10 +43,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Castle.Core" Version="4.4.0" />
     <PackageReference Include="Frontenac.Blueprints" Version="2.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="VelocityDB" Version="8.6.0" />
+    <PackageReference Include="VelocityDB" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>

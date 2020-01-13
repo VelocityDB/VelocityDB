@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.ServiceProcess;
+using System.IO;
 
 namespace VelocityDBCoreServer
 {
@@ -16,6 +17,7 @@ namespace VelocityDBCoreServer
     public static Thread tcpListenThread;
     public static TcpListener listener = null;
     public static bool stopService = false;
+
     public Service()
     {
     }
@@ -99,7 +101,7 @@ namespace VelocityDBCoreServer
     {
       //Thread.Sleep(15000); // wait for possible prior service
       stopService = false;
-      ServerTcpClient.s_odbServerLog.Source = "VelocityDbServer";
+      ServerTcpClient.s_odbServerLog.Source = "VelocityDbCoreServer";
       ServerTcpClient.ShutDown = false;
       CreateAndStartThreads(ServerTcpClient.s_numberOfWorkerThreads);
       return Task.CompletedTask;
@@ -110,7 +112,7 @@ namespace VelocityDBCoreServer
       stopService = true;
       ServerTcpClient.ShutDown = true;
       ServerTcpClient.s_acceptDone.Set();
-      System.Environment.Exit(0); // fast shutdown so that reinstall succeeds (?)
+      //System.Environment.Exit(0); // fast shutdown so that reinstall succeeds (?)
       tcpListenThread.Join();
       return Task.CompletedTask;
     }
@@ -121,16 +123,15 @@ namespace VelocityDBCoreServer
 #if AsWindowsService
 : ServiceBase, IHostLifetime
 #endif
-
   {
     private readonly TaskCompletionSource<object> _delayStart = new TaskCompletionSource<object>();
 
-    public ServiceBaseLifetime(IApplicationLifetime applicationLifetime)
+    public ServiceBaseLifetime(IHostApplicationLifetime applicationLifetime)
     {
       ApplicationLifetime = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
     }
 
-    private IApplicationLifetime ApplicationLifetime { get; }
+    private IHostApplicationLifetime ApplicationLifetime { get; }
 
 #if AsWindowsService
     public Task WaitForStartAsync(CancellationToken cancellationToken)
@@ -164,6 +165,7 @@ namespace VelocityDBCoreServer
     // Called by base.Run when the service is ready to start.
     protected override void OnStart(string[] args)
     {
+      ServerTcpClient.s_odbServerLog.WriteEntry("Starting service");
       _delayStart.TrySetResult(null);
       base.OnStart(args);
     }
@@ -172,6 +174,7 @@ namespace VelocityDBCoreServer
     // That's OK because StopApplication uses a CancellationTokenSource and prevents any recursion.
     protected override void OnStop()
     {
+      ServerTcpClient.s_odbServerLog.WriteEntry("Stopping service");
       ApplicationLifetime.StopApplication();
       base.OnStop();
     }

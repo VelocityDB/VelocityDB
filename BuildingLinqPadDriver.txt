@@ -6,14 +6,14 @@ General driver creation instructions: https://www.linqpad.net/Extensibility.aspx
 
 Building the VelocityDB LinqPad driver
 
-1. Install LinqPad https://www.linqpad.net/Download.aspx (choose AnyCPU version 4)
+1. Install LinqPad https://www.linqpad.net/Download.aspx (choose AnyCPU version 5)
 
 2. Make sure reference to LinqPad .exe is correct in VelocityDBLinqPad project, update if necessary.
 
 3. Build Release version of VelocityDBLinqPad project
 
 4. Go to Release bin directory and add 
-   header.xml UtilitiesModule.pdb VelocityDBLINQPad.dll VelocityDBAccess.dll  VelocityDBLinqPad.lpx UtilitiesModule.dll  VelocityDBAccess.pdb  VelocityDBLINQPad.pdb
+   header.xml UtilitiesModule.pdb VelocityDB.dll VelocityDBLINQPad.dll VelocityDBAccess.dll  VelocityDBLinqPad.lpx UtilitiesModule.dll  VelocityDBAccess.pdb  VelocityDBLINQPad.pdb
    to a zip archive file. We use http://www.7-zip.org/ for creating such archives. Rename the archive to VelocityDBLinqPad.lpx
 
 5. Follow instructions to use this driver as described in https://velocitydb.com/UserGuide.aspx#_Toc524897887

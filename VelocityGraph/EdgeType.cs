@@ -394,8 +394,8 @@ namespace VelocityGraph
               }
               else
               {
-                range = new Range<EdgeId>(range.Min, range.Max + 1);
                 eId = range.Max + 1;
+                range = new Range<EdgeId>(range.Min, eId);
                 EdgeRanges[0] = range;
               }             
             }
