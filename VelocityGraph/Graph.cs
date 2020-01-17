@@ -1398,7 +1398,7 @@ namespace VelocityGraph
             vertecis[pos] = new Range<VertexId>(range.Min + 1, range.Max);
         }
         else if (range.Max == vId)
-          vertecis[pos] = new Range<VertexId>(range.Min, range.Max + 1);
+          vertecis[pos] = new Range<VertexId>(range.Min, range.Max - 1);
         else
         {
           vertecis[pos] = new Range<VertexId>(range.Min, vId - 1);

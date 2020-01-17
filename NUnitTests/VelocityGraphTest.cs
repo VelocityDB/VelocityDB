@@ -110,6 +110,129 @@ namespace NUnitTests
     }
 
     [TestCase(false)]
+    [TestCase(true)]
+    public void A_Lester2(bool vertexIdSetPerVertexType)
+    {
+      try
+      {
+        if (Directory.Exists(systemDir))
+          Directory.Delete(systemDir, true); // remove systemDir from prior runs and all its databases.
+      }
+      catch
+      {
+        if (Directory.Exists(systemDir))
+          Directory.Delete(systemDir, true); // remove systemDir from prior runs and all its databases.
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session, vertexIdSetPerVertexType);
+        session.Persist(g);
+        VertexType aType = g.NewVertexType("A");
+        VertexType bType = g.NewVertexType("B");
+        //var aToB = g.NewEdgeType("AtoB", true); fails when removing connected Vertex
+        var aToB = g.NewEdgeType("AtoB", true, aType, bType);
+        int i = 1;
+        for (i = 1; i <= 3; i++)
+          aType.NewVertex();
+        for (i = 1; i <= 60; i++)
+          bType.NewVertex();
+        var aVertices = aType.GetVertices().ToArray();
+        Array.Sort(aVertices, (v1, v2) => v1.VertexId.CompareTo(v2.VertexId));
+        var bVertices = bType.GetVertices().ToArray();
+        Array.Sort(bVertices, (v1, v2) => v1.VertexId.CompareTo(v2.VertexId));
+        int s = 20;
+        i = 1;
+        foreach (var a in aVertices)
+        {
+          for (; i <= s; i++)
+          {
+            var b = bVertices[i - 1];
+            a.AddEdge(aToB, b);
+          }
+          s += 20;
+        }
+        Assert.AreEqual(60, g.CountEdges());
+        Assert.AreEqual(63, g.CountVertices());
+
+        var toDelete = new List<Vertex>();
+        foreach (var iv in aType.GetVertices())
+        {
+          Vertex v = (Vertex)iv;
+          //Console.WriteLine(v.VertexId);
+          if (v.VertexId == 2)
+          {
+            toDelete.Add(v);
+            //break;
+          }
+        }
+        for (i = 0; i < toDelete.Count; i++)
+          g.RemoveVertex(toDelete[i]);
+
+        Assert.AreEqual(63 - toDelete.Count, g.CountVertices());
+        Assert.AreEqual(40, g.CountEdges());
+        var newVertex = aType.NewVertex();
+        Assert.AreEqual(63, g.CountVertices());
+        for (i = 1; i <= 20; i++)
+        {
+          var b = bVertices[i];
+          newVertex.AddEdge(aToB, b);
+          Assert.AreEqual(40 + i, g.CountEdges());
+        }
+        Console.WriteLine("A vertices:");
+        foreach (var v in aType.GetVertices())
+        {
+          Console.WriteLine(v.VertexId);
+        }
+        Console.WriteLine("B vertices:");
+        foreach (var v in bType.GetVertices())
+        {
+          Console.WriteLine(v.VertexId);
+        }
+        Console.WriteLine("AtoB Edges:");
+        foreach (var ie in g.GetEdges())
+        {
+          var e = (Edge)ie;
+          Console.WriteLine(e.EdgeId);
+        }
+      }
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public void A_Lester3(bool vertexIdSetPerVertexType)
+    {
+      try
+      {
+        if (Directory.Exists(systemDir))
+          Directory.Delete(systemDir, true); // remove systemDir from prior runs and all its databases.
+      }
+      catch
+      {
+        if (Directory.Exists(systemDir))
+          Directory.Delete(systemDir, true); // remove systemDir from prior runs and all its databases.
+      }
+      using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session, vertexIdSetPerVertexType);
+        session.Persist(g);
+        VertexType aType = g.NewVertexType("A");
+        VertexType bType = g.NewVertexType("B");
+        var aToB = g.NewEdgeType("AtoB", true, aType, bType);
+        int i = 1;
+        Vertex v = null;
+        for (i = 1; i < 3; i++)
+          v = aType.NewVertex();
+        Assert.AreEqual(2, g.CountVertices());
+        v.Remove();
+        Assert.AreEqual(1, g.CountVertices());
+        foreach (var v2 in aType.GetVertices())
+          Console.WriteLine(v2.VertexId);
+      }
+    }
+
+    [TestCase(false)]
     public void Create1Vertices(bool vertexIdSetPerVertexType)
     {
       DataCache.MaximumMemoryUse = 10000000000; // 10 GB

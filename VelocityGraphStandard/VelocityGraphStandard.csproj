@@ -6,7 +6,7 @@
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
     <AssemblyName>VelocityGraph</AssemblyName>
     <RootNamespace>VelocityGraph</RootNamespace>
-    <Version>8.6</Version>
+    <Version>9.0.1</Version>
     <Company>VelocityDB Inc</Company>
     <Description>Graph Database API</Description>
   </PropertyGroup>
