@@ -231,34 +231,6 @@ namespace DatabaseManager.Model
           .ToArray();
     }
 
-    private static void GetAssembliesAndTypes(string[] pClassFilenames, string[] pDependencyFilenames, ref SchemaInfo pSchema)
-    {
-      // Creates a SchemaExtractor instance on a new domain. This is done
-      // so that no assembly is loaded on process start, and at the end,
-      // only needed assemblies are loaded.
-      AppDomain lDomain = AppDomain.CreateDomain("User assemblies domain.");
-      SchemaExtractor lExtractor;
-      lExtractor = (SchemaExtractor)lDomain.CreateInstanceFromAndUnwrap(typeof(SchemaExtractor).Assembly.CodeBase, typeof(SchemaExtractor).FullName);
-      // Load assemblies and types on the new domain.
-      List<string> lTypeNames = null;
-      List<string> lAssemblyNames = null;
-      List<string> lActualDependencies = null;
-      lExtractor.GetAssembliesAndTypesHelper(pClassFilenames, pDependencyFilenames, ref lAssemblyNames, ref lTypeNames, ref lActualDependencies);
-      AppDomain.Unload(lDomain);
-
-      // Load assemblies on this domain (to be able to access types).
-      Assembly l;
-      foreach (string lDep in lActualDependencies)
-      {
-        l = Assembly.LoadFrom(lDep);
-      }
-
-      // Obtain types from names and fill in schema.
-      pSchema.PersistableTypes = lTypeNames.Select(lTypeName => DataMember.GetTypeFromAnyAssemblyVersion(lTypeName)).ToArray();
-      pSchema.LoadedAssemblies = lActualDependencies.ToArray();
-      pSchema.LoadedAssembliesNames = lAssemblyNames.ToArray();
-    }
-
     public void LoadAllFederationAssemblies()
     {
       if (m_typesAssemblies != null && m_typesAssemblies.Length > 0)

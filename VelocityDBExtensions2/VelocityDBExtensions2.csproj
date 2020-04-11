@@ -38,8 +38,8 @@
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=3.0.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.3.0.4\lib\net452\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=3.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.3.0.5\lib\net452\Microsoft.Azure.KeyVault.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Data.Edm, Version=5.8.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.Edm.5.8.4\lib\net40\Microsoft.Data.Edm.dll</HintPath>
@@ -77,8 +77,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=9.0.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.9.0.0\lib\net45\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=9.1.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.9.1.0\lib\net45\VelocityDb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

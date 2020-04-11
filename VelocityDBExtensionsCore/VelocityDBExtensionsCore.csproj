@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>8.6</Version>
+    <Version>9.1</Version>
     <AssemblyVersion>8.6</AssemblyVersion>
     <Company>VelocityDB Inc</Company>
     <PackageReleaseNotes></PackageReleaseNotes>
@@ -20,7 +20,13 @@
     <PackageReference Include="LumenWorksCsvReader" Version="4.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Spatial" Version="5.8.4" />
-    <PackageReference Include="VelocityDB" Version="9.0.0" />
+    <PackageReference Include="VelocityDB" Version="9.1.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="Microsoft.Synchronization">
+      <HintPath>C:\Program Files (x86)\VelocityDB\Microsoft.Synchronization.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

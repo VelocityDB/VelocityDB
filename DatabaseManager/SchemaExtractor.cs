@@ -179,16 +179,32 @@ namespace DatabaseManager
       // so that no assembly is loaded on process start, and at the end,
       // only needed assemblies are loaded.
       //Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+#if NET_CORE
+      AppDomain lDomain = AppDomain.CurrentDomain;
+#else
       AppDomain lDomain = AppDomain.CreateDomain("User assemblies domain.");
+#endif
       SchemaExtractor lExtractor;
-      OptimizedPersistable pObj = (OptimizedPersistable)lDomain.CreateInstanceFromAndUnwrap(typeof(OptimizedPersistable).Assembly.CodeBase, typeof(OptimizedPersistable).FullName);
-      lExtractor = (SchemaExtractor)lDomain.CreateInstanceFromAndUnwrap(typeof(SchemaExtractor).Assembly.CodeBase,typeof(SchemaExtractor).FullName);
+      var fName = typeof(OptimizedPersistable).Assembly.CodeBase;
+      var fIndex = fName.IndexOf("file://");
+      if (fIndex == 0)
+        fIndex = 8;
+      fName = fName.Substring(fIndex);
+      OptimizedPersistable pObj = (OptimizedPersistable)lDomain.CreateInstanceFromAndUnwrap(fName, typeof(OptimizedPersistable).FullName);
+      fName = typeof(SchemaExtractor).Assembly.CodeBase;
+      fIndex = fName.IndexOf("file://");
+      if (fIndex == 0)
+        fIndex = 8;
+      fName = fName.Substring(fIndex);
+      lExtractor = (SchemaExtractor)lDomain.CreateInstanceFromAndUnwrap(fName, typeof(SchemaExtractor).FullName);
       // Load assemblies and types on the new domain.
       List<string> lTypeNames = null;
       List<string> lAssemblyNames = null;
       List<string> lActualDependencies = null;
       lExtractor.GetAssembliesAndTypesHelper(pClassFilenames, pDependencyFilenames, ref lAssemblyNames, ref lTypeNames, ref lActualDependencies);
+#if !NET_CORE
       AppDomain.Unload(lDomain);
+#endif
 
       // Load assemblies on this domain (to be able to access types).
       Assembly l;

@@ -1,0 +1,140 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyVersion>9.1.0.0</AssemblyVersion>
+    <FileVersion>9.1.0.0</FileVersion>
+    <Version>9.1</Version>
+    <RootNamespace>DatabaseManager</RootNamespace>
+    <AssemblyName>DatabaseManager</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;NET_CORE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;NET_CORE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\FastForward.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\DatabaseManager\App.xaml.cs" Link="App.xaml.cs" />
+    <Compile Include="..\DatabaseManager\ConnectionDialog.xaml.cs" Link="ConnectionDialog.xaml.cs" />
+    <Compile Include="..\DatabaseManager\MainWindow.xaml.cs" Link="MainWindow.xaml.cs" />
+    <Compile Include="..\DatabaseManager\Model\DatabaseLocationMutable.cs" Link="Model\DatabaseLocationMutable.cs" />
+    <Compile Include="..\DatabaseManager\Model\FederationCopyInfo.cs" Link="Model\FederationCopyInfo.cs" />
+    <Compile Include="..\DatabaseManager\Model\FederationInfo.cs" Link="Model\FederationInfo.cs" />
+    <Compile Include="..\DatabaseManager\NewDatabaseLocationDialog.xaml.cs" Link="NewDatabaseLocationDialog.xaml.cs" />
+    <Compile Include="..\DatabaseManager\Properties\Resources.Designer.cs" Link="Properties\Resources.Designer.cs" />
+    <Compile Include="..\DatabaseManager\Properties\Settings.Designer.cs" Link="Properties\Settings.Designer.cs" />
+    <Compile Include="..\DatabaseManager\RestoreDialog.xaml.cs" Link="RestoreDialog.xaml.cs" />
+    <Compile Include="..\DatabaseManager\Schema.xaml.cs" Link="Schema.xaml.cs" />
+    <Compile Include="..\DatabaseManager\SchemaExtractor.cs" Link="SchemaExtractor.cs" />
+    <Compile Include="..\DatabaseManager\SchemaInfo.cs" Link="SchemaInfo.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\AllFederationsSchemaViewModel.cs" Link="SchemaViewModel\AllFederationsSchemaViewModel.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\DataMemberViewModel.cs" Link="SchemaViewModel\DataMemberViewModel.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\DataMemberViewModelNoExpansion.cs" Link="SchemaViewModel\DataMemberViewModelNoExpansion.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\FederationSchemaViewModel.cs" Link="SchemaViewModel\FederationSchemaViewModel.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\NotInSchemaViewModel.cs" Link="SchemaViewModel\NotInSchemaViewModel.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\SchemaListViewModel.cs" Link="SchemaViewModel\SchemaListViewModel.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\SchemasViewModel.cs" Link="SchemaViewModel\SchemasViewModel.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\TypeVersionViewModel.cs" Link="SchemaViewModel\TypeVersionViewModel.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\TypeVersionViewModelNoExpansion.cs" Link="SchemaViewModel\TypeVersionViewModelNoExpansion.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\TypeViewModel.cs" Link="SchemaViewModel\TypeViewModel.cs" />
+    <Compile Include="..\DatabaseManager\SchemaViewModel\WeakReferencedTypeViewModel.cs" Link="SchemaViewModel\WeakReferencedTypeViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\AllFederationsViewModel .cs" Link="ViewModel\AllFederationsViewModel .cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\ArrayViewModelNoExpansions.cs" Link="ViewModel\ArrayViewModelNoExpansions.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\DatabaseLocationViewModel .cs" Link="ViewModel\DatabaseLocationViewModel .cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\DatabaseViewModel.cs" Link="ViewModel\DatabaseViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\EdgePropertyViewModel.cs" Link="ViewModel\EdgePropertyViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\EdgeTypeViewModel.cs" Link="ViewModel\EdgeTypeViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\EdgeViewModel.cs" Link="ViewModel\EdgeViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\FederationViewModel.cs" Link="ViewModel\FederationViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\FieldViewModel.cs" Link="ViewModel\FieldViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\FieldViewModelNoExpansions.cs" Link="ViewModel\FieldViewModelNoExpansions.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\ListViewModel.cs" Link="ViewModel\ListViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\ObjectViewModel.cs" Link="ViewModel\ObjectViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\PageViewModel.cs" Link="ViewModel\PageViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\PropertyTypeViewModel.cs" Link="ViewModel\PropertyTypeViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\TreeViewItemViewModel.cs" Link="ViewModel\TreeViewItemViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\VelocityGraphViewModel.cs" Link="ViewModel\VelocityGraphViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\VertexPropertyViewModel.cs" Link="ViewModel\VertexPropertyViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\VertexTypeViewModel.cs" Link="ViewModel\VertexTypeViewModel.cs" />
+    <Compile Include="..\DatabaseManager\ViewModel\VertexViewModel.cs" Link="ViewModel\VertexViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\DatabaseManager\Images\FastForward.ico" Link="Images\FastForward.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\DatabaseManager\Images\copy.ico" Link="Images\copy.ico" />
+    <Resource Include="..\DatabaseManager\Images\Database.png" Link="Images\Database.png" />
+    <Resource Include="..\DatabaseManager\Images\DatabaseLocation.png" Link="Images\DatabaseLocation.png" />
+    <Resource Include="..\DatabaseManager\Images\Earth.ico" Link="Images\Earth.ico" />
+    <Resource Include="..\DatabaseManager\Images\edge.png" Link="Images\edge.png" />
+    <Resource Include="..\DatabaseManager\Images\Edit.png" Link="Images\Edit.png" />
+    <Resource Include="..\DatabaseManager\Images\Objects.png" Link="Images\Objects.png" />
+    <Resource Include="..\DatabaseManager\Images\removeIcon.png" Link="Images\removeIcon.png" />
+    <Resource Include="..\DatabaseManager\Images\Search.ico" Link="Images\Search.ico" />
+    <Resource Include="..\DatabaseManager\Images\structure.png" Link="Images\structure.png" />
+    <Resource Include="..\DatabaseManager\Images\Sync.ico" Link="Images\Sync.ico" />
+    <Resource Include="..\DatabaseManager\Images\system_restore.png" Link="Images\system_restore.png" />
+    <Resource Include="..\DatabaseManager\Images\VelocityGraph.ico" Link="Images\VelocityGraph.ico" />
+    <Resource Include="..\DatabaseManager\Images\weak.jpg" Link="Images\weak.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\DatabaseManager\Properties\Resources.resx" Link="Properties\Resources.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\" />
+    <Folder Include="SchemaViewModel\" />
+    <Folder Include="ViewModel\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\DatabaseManager\Images\edgeType.svg" Link="Images\edgeType.svg" />
+    <Resource Include="..\DatabaseManager\Images\type.svg" Link="Images\type.svg" />
+    <Resource Include="..\DatabaseManager\Images\type2.svg" Link="Images\type2.svg" />
+    <Resource Include="..\DatabaseManager\Images\vertex.svg" Link="Images\vertex.svg" />
+    <Resource Include="..\DatabaseManager\Images\vertexType.svg" Link="Images\vertexType.svg" />
+    <None Include="..\DatabaseManager\Properties\Settings.settings" Link="Properties\Settings.settings" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
+    <PackageReference Include="VelocityDBExtensions" Version="9.1.0" />
+    <PackageReference Include="VelocityGraph" Version="9.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="..\DatabaseManager\App.xaml" Link="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="..\DatabaseManager\ConnectionDialog.xaml" Link="ConnectionDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\DatabaseManager\MainWindow.xaml" Link="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\DatabaseManager\NewDatabaseLocationDialog.xaml" Link="NewDatabaseLocationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\DatabaseManager\RestoreDialog.xaml" Link="RestoreDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\DatabaseManager\Schema.xaml" Link="Schema.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_LastSelectedProfileId>F:\VelocityDbSetup\VelocityDB\DatabaseManagerCore\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Update="..\DatabaseManager\App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Update="..\DatabaseManager\ConnectionDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="..\DatabaseManager\MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="..\DatabaseManager\NewDatabaseLocationDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="..\DatabaseManager\RestoreDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="..\DatabaseManager\Schema.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Assets\EdgeType.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Assets\Vertex.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Assets\VertexType.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

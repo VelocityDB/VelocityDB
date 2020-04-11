@@ -312,7 +312,11 @@ namespace DatabaseManager
           session.Commit(); // must not be in transaction while copying databases
         using (SessionBase sessionDestination = new SessionNoServer(destdir))
         {
+#if NET_CORE
+          
+#else
           sessionDestination.SyncWith(session);
+#endif
         }
         m_viewModel = new AllFederationsViewModel();
         base.DataContext = m_viewModel;
