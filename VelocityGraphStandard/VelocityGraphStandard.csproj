@@ -6,9 +6,11 @@
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
     <AssemblyName>VelocityGraph</AssemblyName>
     <RootNamespace>VelocityGraph</RootNamespace>
-    <Version>9.1</Version>
+    <Version>9.1.1</Version>
     <Company>VelocityDB Inc</Company>
     <Description>Graph Database API</Description>
+    <AssemblyVersion>9.1.1.0</AssemblyVersion>
+    <FileVersion>9.1.1.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -45,7 +47,7 @@
   <ItemGroup>
     <PackageReference Include="Frontenac.Blueprints" Version="2.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="VelocityDB" Version="9.1.0" />
+    <PackageReference Include="VelocityDB" Version="9.1.1" />
   </ItemGroup>
 
   <ItemGroup>

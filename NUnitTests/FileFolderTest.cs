@@ -48,7 +48,7 @@ namespace NUnitTests
         FileInDb file = new FileInDb(fileInfo.Name, folder);
         byte[] bytes = File.ReadAllBytes(fileInfo.FullName);
         FileContent fileContent = new FileContent(bytes);
-        session.Persist(fileContent);
+        session.Persist(fileContent, 10000);
         file.Content = fileContent;
       }
     }

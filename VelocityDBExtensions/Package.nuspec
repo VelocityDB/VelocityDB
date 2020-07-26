@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>VelocityDBExtensions</id>
-    <version>9.1</version>
+    <version>9.1.1</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
     <license type="file">Eula.txt</license>
@@ -15,7 +15,7 @@
     <copyright>Copyright 2020</copyright>
     <tags>Object Database NoSQL .NET C# F# VB.NET C++ CLI Universal Windows NET CORE Standard Xamarin Mono Android iOS Mac Xbox cross-platform web asp.net identity persistence client csv json server oodb key-value scalable fast flexible distributable embedded Database sync big data events geo hash Azure compressed bitmap</tags>
     <dependencies>
-      <dependency id="VelocityDB" version="9.1" />
+      <dependency id="VelocityDB" version="9.1.1" />
       <dependency id="LumenWorksCsvReader" version="4.0.0" />
       <dependency id="Microsoft.Data.Edm" version="5.8.4" />
       <dependency id="Microsoft.Data.OData" version="5.8.4" />

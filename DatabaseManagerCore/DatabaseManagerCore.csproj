@@ -5,9 +5,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>9.1.0.0</AssemblyVersion>
-    <FileVersion>9.1.0.0</FileVersion>
-    <Version>9.1</Version>
+    <AssemblyVersion>9.1.1.0</AssemblyVersion>
+    <FileVersion>9.1.1.0</FileVersion>
+    <Version>9.1.1</Version>
     <RootNamespace>DatabaseManager</RootNamespace>
     <AssemblyName>DatabaseManager</AssemblyName>
   </PropertyGroup>
@@ -112,8 +112,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
-    <PackageReference Include="VelocityDBExtensions" Version="9.1.0" />
-    <PackageReference Include="VelocityGraph" Version="9.1.0" />
+    <PackageReference Include="VelocityDBExtensions" Version="9.1.1" />
+    <PackageReference Include="VelocityGraph" Version="9.1.1" />
   </ItemGroup>
 
   <ItemGroup>
