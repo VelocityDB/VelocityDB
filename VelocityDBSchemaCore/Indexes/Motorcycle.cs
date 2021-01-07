@@ -5,6 +5,7 @@ using System.Text;
 using VelocityDb;
 using VelocityDb.Collection;
 using VelocityDb.Indexing;
+using Index = VelocityDb.Indexing.Index;
 
 namespace VelocityDbSchema.Indexes
 {

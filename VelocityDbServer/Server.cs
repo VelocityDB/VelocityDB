@@ -27,13 +27,13 @@ namespace VelocityDb.Server
       bool startAsNonService = false;
  #if !NET_CORE
 			// Create the source, if it does not already exist.
-			if (!EventLog.SourceExists("VelocityDbServer"))
+			if (!System.Diagnostics.EventLog.SourceExists("VelocityDbServer"))
 			{
-				//An event log source should not be created and immediately used.
-				//There is a latency time to enable the source, it should be create
-				//prior to executing the application that uses the source.
-				//Execute this sample a second time to use the new source.
-        EventLog.CreateEventSource("VelocityDbServer", "VelocityDbServerLog");
+        //An event log source should not be created and immediately used.
+        //There is a latency time to enable the source, it should be create
+        //prior to executing the application that uses the source.
+        //Execute this sample a second time to use the new source.
+        System.Diagnostics.EventLog.CreateEventSource("VelocityDbServer", "VelocityDbServerLog");
 			}
 #endif
       if (args.Length > 0)

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VelocityDBAccess</RootNamespace>
     <AssemblyName>VelocityDBAccess</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
     </SccProjectName>
@@ -66,11 +66,11 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=9.1.1.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.9.1.1\lib\net45\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=9.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.10.0.0\lib\Xamarin.iOS,Version=v1.0\VelocityDb.dll</HintPath>
     </Reference>
     <Reference Include="VelocityGraph, Version=9.1.1.0, Culture=neutral, PublicKeyToken=033a993463f9cfa3, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.9.1.1\lib\Net45\VelocityGraph.dll</HintPath>
+      <HintPath>..\packages\VelocityGraph.10.0.1\lib\.NETStandard,Version=v2.0\VelocityGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

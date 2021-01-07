@@ -2,16 +2,12 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VelocityDB" Version="9.1.1" />
-    <PackageReference Include="VelocityGraph" Version="9.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\VelocityGraphCore\VelocityGraphCore.csproj" />
+    <PackageReference Include="VelocityDB" Version="10.0.0" />
+    <PackageReference Include="VelocityGraph" Version="10.0.1" />
   </ItemGroup>
 
 </Project>

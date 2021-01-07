@@ -104,7 +104,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoHashSample", "GeoHashSam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VelocityDBExtensions", "VelocityDBExtensions\VelocityDBExtensions.csproj", "{8856FDC1-B759-4E3F-A5DC-47F1AA1BDE81}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Net Core 2.2", ".Net Core 2.2", "{C57CD967-66A5-454C-9F46-74D920F9FEE9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Net Core 3.1", ".Net Core 3.1", "{C57CD967-66A5-454C-9F46-74D920F9FEE9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples .Net Core", "Samples .Net Core", "{0E92882E-BDFE-4396-94E1-60A2B69C3B49}"
 EndProject
@@ -152,7 +152,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickStartCore", "QuickStar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoHashSampleCore", "GeoHashSampleCore\GeoHashSampleCore.csproj", "{88969C0D-A2E8-4D41-817D-213D01462CF0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Net 4.5", ".Net 4.5", "{20249C99-1013-484B-8FB2-4F20BE0CA8D1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Net 4.6.1 or 4.8", ".Net 4.6.1 or 4.8", "{20249C99-1013-484B-8FB2-4F20BE0CA8D1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample1Core", "Sample1Core\Sample1Core.csproj", "{9C006C4F-8666-4591-9ECE-3EBE3ECB4FCF}"
 EndProject
@@ -164,7 +164,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Net Standard", ".Net Stand
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VelocityGraphStandard", "VelocityGraphStandard\VelocityGraphStandard.csproj", "{B7CAFA78-8348-4898-813C-D45C556F4543}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Net Core 3.1", ".Net Core 3.1", "{3C80B7EA-1686-4A7E-A4ED-F8A767319FB3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Net 5", ".Net 5", "{3C80B7EA-1686-4A7E-A4ED-F8A767319FB3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VelocityDBCoreServer", "VelocityDBCoreServer\VelocityDBCoreServer.csproj", "{4ECADE84-BA69-4CA0-AE5F-501A049BE4F3}"
 EndProject

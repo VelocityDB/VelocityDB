@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VelocityGraph</RootNamespace>
     <AssemblyName>VelocityGraph</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -39,15 +39,6 @@
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.4.1\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Frontenac.Blueprints, Version=2.5.0.0, Culture=neutral, PublicKeyToken=f8f0b8cb1a55f367, processorArchitecture=MSIL">
-      <HintPath>..\packages\Frontenac.Blueprints.2.5.0\lib\net40\Frontenac.Blueprints.dll</HintPath>
-    </Reference>
-    <Reference Include="Frontenac.Gremlinq, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe2d4176a64ca6d1, processorArchitecture=MSIL">
-      <HintPath>..\packages\Frontenac.Blueprints.2.5.0\lib\net40\Frontenac.Gremlinq.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -61,10 +52,168 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="VelocityDb, Version=9.1.1.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.9.1.1\lib\net45\VelocityDb.dll</HintPath>
+      <HintPath>..\packages\VelocityDB.10.0.0\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blueprints\Contracts\EdgeContract.cs" />
+    <Compile Include="Blueprints\Contracts\ElementContract.cs" />
+    <Compile Include="Blueprints\Contracts\GraphContract.cs" />
+    <Compile Include="Blueprints\Contracts\IndexableGraphContract.cs" />
+    <Compile Include="Blueprints\Contracts\IndexContract.cs" />
+    <Compile Include="Blueprints\Contracts\KeyIndexableGraphContract.cs" />
+    <Compile Include="Blueprints\Contracts\QueryContract.cs" />
+    <Compile Include="Blueprints\Contracts\VertexContract.cs" />
+    <Compile Include="Blueprints\DictionaryElement.cs" />
+    <Compile Include="Blueprints\Direction.cs" />
+    <Compile Include="Blueprints\Features.cs" />
+    <Compile Include="Blueprints\Geo\GeoCircle.cs" />
+    <Compile Include="Blueprints\Geo\GeoPoint.cs" />
+    <Compile Include="Blueprints\Geo\GeoRectangle.cs" />
+    <Compile Include="Blueprints\Geo\IGeoShape.cs" />
+    <Compile Include="Blueprints\GraphHelpers.cs" />
+    <Compile Include="Blueprints\ICloseableIterable.cs" />
+    <Compile Include="Blueprints\IEdge.cs" />
+    <Compile Include="Blueprints\IElement.cs" />
+    <Compile Include="Blueprints\IGraph.cs" />
+    <Compile Include="Blueprints\IIndex.cs" />
+    <Compile Include="Blueprints\IIndexableGraph.cs" />
+    <Compile Include="Blueprints\IKeyIndexableGraph.cs" />
+    <Compile Include="Blueprints\Impls\TG\ITinkerStorage.cs" />
+    <Compile Include="Blueprints\Impls\TG\TinkerEdge.cs" />
+    <Compile Include="Blueprints\Impls\TG\TinkerElement.cs" />
+    <Compile Include="Blueprints\Impls\TG\TinkerGraph.cs" />
+    <Compile Include="Blueprints\Impls\TG\TinkerGraphFactory.cs" />
+    <Compile Include="Blueprints\Impls\TG\TinkerIndex.cs" />
+    <Compile Include="Blueprints\Impls\TG\TinkerMetadataReader.cs" />
+    <Compile Include="Blueprints\Impls\TG\TinkerMetadataWriter.cs" />
+    <Compile Include="Blueprints\Impls\TG\TinkerStorageContract.cs" />
+    <Compile Include="Blueprints\Impls\TG\TinkerStorageFactory.cs" />
+    <Compile Include="Blueprints\Impls\TG\TinkerVertex.cs" />
+    <Compile Include="Blueprints\IQuery.cs" />
+    <Compile Include="Blueprints\IThreadedTransactionalGraph.cs" />
+    <Compile Include="Blueprints\ITransactionalGraph.cs" />
+    <Compile Include="Blueprints\IVertex.cs" />
+    <Compile Include="Blueprints\IVertexQuery.cs" />
+    <Compile Include="Blueprints\Parameter.cs" />
+    <Compile Include="Blueprints\Util\DefaultGraphQuery.cs" />
+    <Compile Include="Blueprints\Util\DefaultQuery.cs" />
+    <Compile Include="Blueprints\Util\DefaultVertexQuery.cs" />
+    <Compile Include="Blueprints\Util\EdgeHelpers.cs" />
+    <Compile Include="Blueprints\Util\ElementHelpers.cs" />
+    <Compile Include="Blueprints\Util\ExceptionFactory.cs" />
+    <Compile Include="Blueprints\Util\GraphHelpers.cs" />
+    <Compile Include="Blueprints\Util\IndexableGraphHelpers.cs" />
+    <Compile Include="Blueprints\Util\IO\GML\GmlParser.cs" />
+    <Compile Include="Blueprints\Util\IO\GML\GmlReader.cs" />
+    <Compile Include="Blueprints\Util\IO\GML\GmlTokens.cs" />
+    <Compile Include="Blueprints\Util\IO\GML\GmlWriter.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphJson\GraphJsonReader.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphJson\GraphJsonSettings.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphJson\GraphJsonWriter.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphML\GraphMigrator.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphML\GraphMLReader.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphML\GraphMLTokens.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphML\GraphMLWriter.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphSon\ElementFactory.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphSon\ElementFactoryContract.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphSon\ElementPropertyConfig.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphSon\GraphElementFactory.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphSon\GraphSonMode.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphSon\GraphSonReader.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphSon\GraphSonTokens.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphSon\GraphSonUtility.cs" />
+    <Compile Include="Blueprints\Util\IO\GraphSon\GraphSONWriter.cs" />
+    <Compile Include="Blueprints\Util\IO\LexicographicalElementComparator.cs" />
+    <Compile Include="Blueprints\Util\IO\StreamTokenizer.cs" />
+    <Compile Include="Blueprints\Util\KeyIndexableGraphHelpers.cs" />
+    <Compile Include="Blueprints\Util\MultiIterable.cs" />
+    <Compile Include="Blueprints\Util\PropertyFilteredIterable.cs" />
+    <Compile Include="Blueprints\Util\StringFactory.cs" />
+    <Compile Include="Blueprints\Util\VertexHelpers.cs" />
+    <Compile Include="Blueprints\Util\VerticesFromEdgesIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\BatchGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\Cache\IVertexCache.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\Cache\LongIDVertexCache.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\Cache\ObjectIDVertexCache.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\Cache\StringCompression.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\Cache\StringCompressionContract.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\Cache\StringIDVertexCache.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\Cache\URLCompression.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\Cache\VertexCacheContract.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\VertexIDType.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Batch\WritethroughGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventEdge.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventEdgeIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventElement.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventIndex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventIndexableGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventIndexIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventTransactionalGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventTransactionalIndexableGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventTrigger.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventVertex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\EventVertexIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\ConsoleGraphChangedListener.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\EdgeAddedEvent .cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\EdgePropertyChangedEvent.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\EdgePropertyEvent.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\EdgePropertyEventContract.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\EdgePropertyRemovedEvent.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\EdgeRemovedEvent.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\Event.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\EventContract.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\GraphChangedListener.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\GraphChangedListenerContract.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\StubGraphChangedListener.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\VertexAddedEvent.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\VertexPropertyChangedEvent.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\VertexPropertyEvent.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\VertexPropertyEventContract.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\VertexPropertyRemovedEvent.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Event\Listener\VertexRemovedEvent.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Id\IdEdge.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Id\IdEdgeIndex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Id\IdEdgeIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Id\IdElement.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Id\IdGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Id\IdVertex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Id\IdVertexIndex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Id\IdVertexIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\IWrapperGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Partition\PartitionEdge.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Partition\PartitionEdgeIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Partition\PartitionElement.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Partition\PartitionGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Partition\PartitionIndex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Partition\PartitionIndexableGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Partition\PartitionIndexIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Partition\PartitionVertex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Partition\PartitionVertexIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyEdge.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyEdgeIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyElement.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyIndex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyIndexableGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyIndexIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyKeyIndexableGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyTokens.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyVertex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\ReadOnly\ReadOnlyVertexIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\WrappedQuery.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Wrapped\WrappedEdge.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Wrapped\WrappedEdgeIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Wrapped\WrappedElement.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Wrapped\WrappedGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Wrapped\WrappedIndex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Wrapped\WrappedIndexableGraph.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Wrapped\WrappedIndexIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Wrapped\WrappedVertex.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\Wrapped\WrappedVertexIterable.cs" />
+    <Compile Include="Blueprints\Util\Wrappers\WrapperVertexQuery.cs" />
+    <Compile Include="Blueprints\Util\WrappingCloseableIterable.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="EdgeType.cs" />
     <Compile Include="Element.cs" />
@@ -92,12 +241,16 @@
     <Compile Include="VertexType.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Blueprints\Blueprints.csproj" />
     <None Include="packages.config" />
     <None Include="README.md" />
     <None Include="vg.snk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Generated\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Blueprints\Util\IO\GraphML\graph-example-1.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

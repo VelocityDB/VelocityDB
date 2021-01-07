@@ -9,6 +9,7 @@ using VelocityDb;
 using VelocityDb.Collection.BTree;
 using VelocityDb.Session;
 using VelocityDb.Indexing;
+using Index = VelocityDb.Indexing.Index;
 
 namespace VelocityDbSchema.IndexedTimeSeries {
 

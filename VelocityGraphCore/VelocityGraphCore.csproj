@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
     <Version>9.1</Version>
@@ -27,9 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Frontenac.Blueprints" Version="2.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="VelocityDB" Version="9.1.1" />
+    <PackageReference Include="VelocityDB" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>

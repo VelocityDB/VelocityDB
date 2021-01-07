@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyVersion>9.1.1.0</AssemblyVersion>
@@ -111,9 +111,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
-    <PackageReference Include="VelocityDBExtensions" Version="9.1.1" />
-    <PackageReference Include="VelocityGraph" Version="9.1.1" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.0" />
+    <PackageReference Include="VelocityDB" Version="10.0.0" />
+    <PackageReference Include="VelocityDBExtensions" Version="10.0.0" />
+    <PackageReference Include="VelocityGraph" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>

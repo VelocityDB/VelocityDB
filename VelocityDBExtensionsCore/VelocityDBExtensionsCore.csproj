@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Version>9.1.1</Version>
     <AssemblyVersion>9.1.1</AssemblyVersion>
     <Company>VelocityDB Inc</Company>
@@ -20,7 +20,7 @@
     <PackageReference Include="LumenWorksCsvReader" Version="4.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Spatial" Version="5.8.4" />
-    <PackageReference Include="VelocityDB" Version="9.1.1" />
+    <PackageReference Include="VelocityDB" Version="10.0.0" />
   </ItemGroup>
   
   <ItemGroup>

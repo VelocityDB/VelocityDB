@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{42ED5D37-0E20-4FC3-B6B1-F38A08283C30}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Frontenac.Blueprints</RootNamespace>
+    <AssemblyName>Frontenac.Blueprints</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\net45\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\net45\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Contracts\EdgeContract.cs" />
+    <Compile Include="Contracts\ElementContract.cs" />
+    <Compile Include="Contracts\GraphContract.cs" />
+    <Compile Include="Contracts\IndexableGraphContract.cs" />
+    <Compile Include="Contracts\IndexContract.cs" />
+    <Compile Include="Contracts\KeyIndexableGraphContract.cs" />
+    <Compile Include="Contracts\QueryContract.cs" />
+    <Compile Include="Contracts\VertexContract.cs" />
+    <Compile Include="DictionaryElement.cs" />
+    <Compile Include="Direction.cs" />
+    <Compile Include="Geo\GeoCircle.cs" />
+    <Compile Include="Geo\GeoPoint.cs" />
+    <Compile Include="Geo\GeoRectangle.cs" />
+    <Compile Include="Geo\IGeoShape.cs" />
+    <Compile Include="IEdge.cs" />
+    <Compile Include="IElement.cs" />
+    <Compile Include="Features.cs" />
+    <Compile Include="IGraph.cs" />
+    <Compile Include="ICloseableIterable.cs" />
+    <Compile Include="Impls\TG\TinkerEdge.cs" />
+    <Compile Include="Impls\TG\TinkerElement.cs" />
+    <Compile Include="Impls\TG\TinkerGrapĥ.cs" />
+    <Compile Include="Impls\TG\TinkerGraphFactory.cs" />
+    <Compile Include="Impls\TG\TinkerIndex.cs" />
+    <Compile Include="Impls\TG\TinkerMetadataReader.cs" />
+    <Compile Include="Impls\TG\TinkerMetadataWriter.cs" />
+    <Compile Include="Impls\TG\ITinkerStorage.cs" />
+    <Compile Include="Impls\TG\TinkerStorageContract.cs" />
+    <Compile Include="Impls\TG\TinkerStorageFactory.cs" />
+    <Compile Include="Impls\TG\TinkerVertex.cs" />
+    <Compile Include="IIndex.cs" />
+    <Compile Include="IIndexableGraph.cs" />
+    <Compile Include="IKeyIndexableGraph.cs" />
+    <Compile Include="Parameter.cs" />
+    <Compile Include="GraphHelpers.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IQuery.cs" />
+    <Compile Include="IThreadedTransactionalGraph.cs" />
+    <Compile Include="ITransactionalGraph.cs" />
+    <Compile Include="Util\DefaultGraphQuery.cs" />
+    <Compile Include="Util\DefaultQuery.cs" />
+    <Compile Include="Util\DefaultVertexQuery.cs" />
+    <Compile Include="Util\EdgeHelpers.cs" />
+    <Compile Include="Util\ElementHelpers.cs" />
+    <Compile Include="Util\ExceptionFactory.cs" />
+    <Compile Include="Util\GraphHelpers.cs" />
+    <Compile Include="Util\IndexableGraphHelpers.cs" />
+    <Compile Include="Util\IO\GML\GmlParser.cs" />
+    <Compile Include="Util\IO\GML\GmlReader.cs" />
+    <Compile Include="Util\IO\GML\GmlTokens.cs" />
+    <Compile Include="Util\IO\GML\GmlWriter.cs" />
+    <Compile Include="Util\IO\GraphJson\GraphJsonSettings.cs" />
+    <Compile Include="Util\IO\GraphJson\GraphJsonWriter.cs" />
+    <Compile Include="Util\IO\GraphJson\GraphJsonReader.cs" />
+    <Compile Include="Util\IO\GraphML\GraphMigrator.cs" />
+    <Compile Include="Util\IO\GraphML\GraphMLReader.cs" />
+    <Compile Include="Util\IO\GraphML\GraphMLTokens.cs" />
+    <Compile Include="Util\IO\GraphML\GraphMLWriter.cs" />
+    <Compile Include="Util\IO\GraphSon\ElementFactory.cs" />
+    <Compile Include="Util\IO\GraphSon\ElementFactoryContract.cs" />
+    <Compile Include="Util\IO\GraphSon\ElementPropertyConfig.cs" />
+    <Compile Include="Util\IO\GraphSon\GraphElementFactory.cs" />
+    <Compile Include="Util\IO\GraphSon\GraphSonMode.cs" />
+    <Compile Include="Util\IO\GraphSon\GraphSonReader.cs" />
+    <Compile Include="Util\IO\GraphSon\GraphSonTokens.cs" />
+    <Compile Include="Util\IO\GraphSon\GraphSonUtility.cs" />
+    <Compile Include="Util\IO\GraphSon\GraphSonWriter.cs" />
+    <Compile Include="Util\IO\LexicographicalElementComparator.cs" />
+    <Compile Include="Util\IO\StreamTokenizer.cs" />
+    <Compile Include="Util\KeyIndexableGraphHelpers.cs" />
+    <Compile Include="Util\MultiIterable.cs" />
+    <Compile Include="Util\PropertyFilteredIterable.cs" />
+    <Compile Include="Util\StringFactory.cs" />
+    <Compile Include="Util\VertexHelpers.cs" />
+    <Compile Include="Util\VerticesFromEdgesIterable.cs" />
+    <Compile Include="Util\Wrappers\Batch\BatchGraph.cs" />
+    <Compile Include="Util\Wrappers\Batch\Cache\LongIDVertexCache.cs" />
+    <Compile Include="Util\Wrappers\Batch\Cache\ObjectIDVertexCache.cs" />
+    <Compile Include="Util\Wrappers\Batch\Cache\StringCompression.cs" />
+    <Compile Include="Util\Wrappers\Batch\Cache\StringCompressionContract.cs" />
+    <Compile Include="Util\Wrappers\Batch\Cache\StringIDVertexCache.cs" />
+    <Compile Include="Util\Wrappers\Batch\Cache\URLCompression.cs" />
+    <Compile Include="Util\Wrappers\Batch\Cache\IVertexCache.cs" />
+    <Compile Include="Util\Wrappers\Batch\Cache\VertexCacheContract.cs" />
+    <Compile Include="Util\Wrappers\Batch\VertexIDType.cs" />
+    <Compile Include="Util\Wrappers\Batch\WritethroughGraph.cs" />
+    <Compile Include="Util\Wrappers\Event\EventEdge.cs" />
+    <Compile Include="Util\Wrappers\Event\EventEdgeIterable.cs" />
+    <Compile Include="Util\Wrappers\Event\EventElement.cs" />
+    <Compile Include="Util\Wrappers\Event\EventGraph.cs" />
+    <Compile Include="Util\Wrappers\Event\EventIndex.cs" />
+    <Compile Include="Util\Wrappers\Event\EventIndexableGraph.cs" />
+    <Compile Include="Util\Wrappers\Event\EventIndexIterable.cs" />
+    <Compile Include="Util\Wrappers\Event\EventTransactionalGraph.cs" />
+    <Compile Include="Util\Wrappers\Event\EventTransactionalIndexableGraph.cs" />
+    <Compile Include="Util\Wrappers\Event\EventTrigger.cs" />
+    <Compile Include="Util\Wrappers\Event\EventVertex.cs" />
+    <Compile Include="Util\Wrappers\Event\EventVertexIterable.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\ConsoleGraphChangedListener.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\EdgeAddedEvent .cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\EdgePropertyChangedEvent.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\EdgePropertyEvent.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\EdgePropertyEventContract.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\EdgePropertyRemovedEvent.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\EdgeRemovedEvent.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\Event.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\EventContract.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\GraphChangedListener.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\GraphChangedListenerContract.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\StubGraphChangedListener.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\VertexAddedEvent.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\VertexPropertyChangedEvent.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\VertexPropertyEvent.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\VertexPropertyEventContract.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\VertexPropertyRemovedEvent.cs" />
+    <Compile Include="Util\Wrappers\Event\Listener\VertexRemovedEvent.cs" />
+    <Compile Include="Util\Wrappers\Id\IdEdge.cs" />
+    <Compile Include="Util\Wrappers\Id\IdEdgeIndex.cs" />
+    <Compile Include="Util\Wrappers\Id\IdEdgeIterable.cs" />
+    <Compile Include="Util\Wrappers\Id\IdElement.cs" />
+    <Compile Include="Util\Wrappers\Id\IdGraph.cs" />
+    <Compile Include="Util\Wrappers\Id\IdVertex.cs" />
+    <Compile Include="Util\Wrappers\Id\IdVertexIndex.cs" />
+    <Compile Include="Util\Wrappers\Id\IdVertexIterable.cs" />
+    <Compile Include="Util\Wrappers\Partition\PartitionEdge.cs" />
+    <Compile Include="Util\Wrappers\Partition\PartitionEdgeIterable.cs" />
+    <Compile Include="Util\Wrappers\Partition\PartitionElement.cs" />
+    <Compile Include="Util\Wrappers\Partition\PartitionGraph.cs" />
+    <Compile Include="Util\Wrappers\Partition\PartitionIndex.cs" />
+    <Compile Include="Util\Wrappers\Partition\PartitionIndexableGraph.cs" />
+    <Compile Include="Util\Wrappers\Partition\PartitionIndexIterable.cs" />
+    <Compile Include="Util\Wrappers\Partition\PartitionVertex.cs" />
+    <Compile Include="Util\Wrappers\Partition\PartitionVertexIterable.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyEdge.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyEdgeIterable.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyElement.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyGraph.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyIndex.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyIndexableGraph.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyIndexIterable.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyKeyIndexableGraph.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyTokens.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyVertex.cs" />
+    <Compile Include="Util\Wrappers\ReadOnly\ReadOnlyVertexIterable.cs" />
+    <Compile Include="Util\Wrappers\WrappedQuery.cs" />
+    <Compile Include="Util\Wrappers\Wrapped\WrappedEdge.cs" />
+    <Compile Include="Util\Wrappers\Wrapped\WrappedEdgeIterable.cs" />
+    <Compile Include="Util\Wrappers\Wrapped\WrappedElement.cs" />
+    <Compile Include="Util\Wrappers\Wrapped\WrappedGraph.cs" />
+    <Compile Include="Util\Wrappers\Wrapped\WrappedIndex.cs" />
+    <Compile Include="Util\Wrappers\Wrapped\WrappedIndexableGraph.cs" />
+    <Compile Include="Util\Wrappers\Wrapped\WrappedIndexIterable.cs" />
+    <Compile Include="Util\Wrappers\Wrapped\WrappedVertex.cs" />
+    <Compile Include="Util\Wrappers\Wrapped\WrappedVertexIterable.cs" />
+    <Compile Include="Util\Wrappers\IWrapperGraph.cs" />
+    <Compile Include="Util\Wrappers\WrapperVertexQuery.cs" />
+    <Compile Include="Util\WrappingCloseableIterable.cs" />
+    <Compile Include="IVertex.cs" />
+    <Compile Include="IVertexQuery.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Util\IO\GraphML\graph-example-1.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

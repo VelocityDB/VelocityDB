@@ -8,6 +8,7 @@ using VelocityDb.Exceptions;
 using VelocityDb.Indexing;
 using VelocityDb.Session;
 using VelocityDb.TypeInfo;
+using Index = VelocityDb.Indexing.Index;
 
 namespace VelocityDbSchema.NUnit
 {

@@ -18,6 +18,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Blueprints - Copy\**" />
+    <EmbeddedResource Remove="Blueprints - Copy\**" />
+    <None Remove="Blueprints - Copy\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\VelocityGraph\Edge.cs" Link="Edge.cs" />
     <Compile Include="..\VelocityGraph\EdgeType.cs" Link="EdgeType.cs" />
     <Compile Include="..\VelocityGraph\Element.cs" Link="Element.cs" />
@@ -45,9 +51,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Frontenac.Blueprints" Version="2.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="VelocityDB" Version="9.1.1" />
+    <PackageReference Include="VelocityDB" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
