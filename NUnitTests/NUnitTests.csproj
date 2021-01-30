@@ -80,14 +80,14 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
-    <Reference Include="VelocityDb, Version=9.1.1.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.10.0.0\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=10.1.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.10.1.0\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
     </Reference>
-    <Reference Include="VelocityDBExtensions, Version=9.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDBExtensions.10.0.0\lib\net46\VelocityDBExtensions.dll</HintPath>
+    <Reference Include="VelocityDBExtensions, Version=10.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDBExtensions.10.1.0\lib\net46\VelocityDBExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="VelocityGraph, Version=9.1.1.0, Culture=neutral, PublicKeyToken=033a993463f9cfa3, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.10.0.1\lib\.NETStandard,Version=v2.0\VelocityGraph.dll</HintPath>
+    <Reference Include="VelocityGraph, Version=10.1.0.0, Culture=neutral, PublicKeyToken=033a993463f9cfa3, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.10.1.0\lib\.NETStandard,Version=v2.0\VelocityGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
