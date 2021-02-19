@@ -75,13 +75,21 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=10.1.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.10.1.0\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=10.1.1.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.10.1.1\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayOfWeakrefs.cs" />
+    <Compile Include="Artifacts\ArtifactBase.cs" />
+    <Compile Include="Artifacts\ArtifactCommunication.cs" />
+    <Compile Include="Artifacts\ArtifactPerson.cs" />
+    <Compile Include="Artifacts\DbBase.cs" />
+    <Compile Include="Artifacts\Device.cs" />
+    <Compile Include="Artifacts\Investigation.cs" />
     <Compile Include="EntityNewsData.cs" />
+    <Compile Include="Graph\Node.cs" />
+    <Compile Include="Graph\Relation.cs" />
     <Compile Include="Imdb\ActingByNameComparer.cs" />
     <Compile Include="Imdb\Actor.cs" />
     <Compile Include="Imdb\Actress.cs" />
@@ -119,7 +127,10 @@
     <Compile Include="NUnit\CastRecord.cs" />
     <Compile Include="NUnit\CastRecord2.cs" />
     <Compile Include="NUnit\ComputerFileData.cs" />
+    <Compile Include="NUnit\Context.cs" />
     <Compile Include="NUnit\Counter.cs" />
+    <Compile Include="NUnit\Data.cs" />
+    <Compile Include="NUnit\DictionaryExtensions.cs" />
     <Compile Include="NUnit\Dokument.cs" />
     <Compile Include="NUnit\DynamicDictionary.cs" />
     <Compile Include="NUnit\EFTPOSMachine.cs" />
@@ -320,6 +331,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
