@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Frontenac.Blueprints.Util.IO.GML
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GML
 {
     internal class GmlParser
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Id
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Id
 {
     public class IdVertex : IdElement, IVertex
     {

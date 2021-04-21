@@ -112,9 +112,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
-    <PackageReference Include="VelocityDB" Version="10.1.1" />
-    <PackageReference Include="VelocityDBExtensions" Version="10.1.1" />
-    <PackageReference Include="VelocityGraph" Version="10.1.1" />
+    <PackageReference Include="VelocityDB" Version="10.2.0" />
+    <PackageReference Include="VelocityDBExtensions" Version="10.2.0" />
+    <PackageReference Include="VelocityGraph" Version="10.2.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using System;
-using Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Id
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Id
 {
     public class IdEdge : IdElement, IEdge
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
-using Frontenac.Blueprints.Util.Wrappers.Event.Listener;
+using VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event.Listener;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Event
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event
 {
     public class EventTrigger : IDisposable
     {

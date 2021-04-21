@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Wrapped
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Wrapped
 {
     public class WrappedVertex : WrappedElement, IVertex
     {

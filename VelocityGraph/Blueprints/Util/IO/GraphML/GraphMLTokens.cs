@@ -1,4 +1,4 @@
-﻿namespace Frontenac.Blueprints.Util.IO.GraphML
+﻿namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphML
 {
     /// <summary>
     ///     A collection of tokens used for GraphML related data.

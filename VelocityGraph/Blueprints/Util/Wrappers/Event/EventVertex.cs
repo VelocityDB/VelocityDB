@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Event
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event
 {
     /// <summary>
     ///     An vertex with a GraphChangedListener attached.  Those listeners are notified when changes occur to

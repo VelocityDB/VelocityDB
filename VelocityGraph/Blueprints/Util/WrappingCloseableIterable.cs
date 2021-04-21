@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util
+namespace VelocityGraph.Frontenac.Blueprints.Util
 {
     public class WrappingCloseableIterable<T> : ICloseableIterable<T>
     {

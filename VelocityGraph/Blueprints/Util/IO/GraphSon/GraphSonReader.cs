@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Frontenac.Blueprints.Util.Wrappers.Batch;
+using VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Frontenac.Blueprints.Util.IO.GraphSON
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphSON
 {
     /// <summary>
     ///     GraphSONReader reads the data from a TinkerPop JSON stream to a graph.

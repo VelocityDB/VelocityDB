@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Frontenac.Blueprints.Util
+namespace VelocityGraph.Frontenac.Blueprints.Util
 {
     /// <summary>
     ///     For those graph engines that do not support the low-level querying of the vertices or edges, then DefaultQuery can be used.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints
+namespace VelocityGraph.Frontenac.Blueprints
 {
     /// <summary>
     ///     An IIndexableGraph is a graph that supports the manual indexing of its elements.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Frontenac.Blueprints.Util.IO.GraphSON
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphSON
 {
     /// <summary>
     ///     GraphSONWriter writes a Graph to a TinkerPop JSON OutputStream.

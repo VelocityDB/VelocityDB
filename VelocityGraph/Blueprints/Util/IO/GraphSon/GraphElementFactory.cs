@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frontenac.Blueprints.Util.IO.GraphSON
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphSON
 {
     /// <summary>
     ///     The standard factory used for most graph element creation.  It uses an actual

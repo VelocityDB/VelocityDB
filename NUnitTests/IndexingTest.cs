@@ -18,6 +18,7 @@ using VelocityDBExtensions;
 using VelocityDBExtensions.Extensions.BTree;
 using VelocityDb.Exceptions;
 using RelSandbox;
+using VelocityDb.Collection.Comparer;
 
 namespace NUnitTests
 {
@@ -115,6 +116,80 @@ namespace NUnitTests
       }
 
 
+    }
+
+    [Test]
+    public void aaa_IndexRegisterClass()
+    {
+      if (Directory.Exists(Path.Combine(SessionBase.BaseDatabasePath, systemDir)))
+        Directory.Delete(Path.Combine(SessionBase.BaseDatabasePath, systemDir), true); // remove systemDir from prior runs and all its databases.
+      using (SessionBase session = new SessionNoServer(systemDir))
+      {
+        ConsoleTraceListener consoleTrace = null;
+        if (Trace.Listeners.OfType<ConsoleTraceListener>().Count() == 0)
+        {
+          consoleTrace = new ConsoleTraceListener();
+          Trace.Listeners.Add(consoleTrace);
+        }
+        string brandName = "Toyota";
+        string color = "Blue";
+        int maxPassengers = 5;
+        int fuelCapacity = 40;
+        double litresPer100Kilometers = 5;
+        DateTime modelYear = new DateTime(2003, 1, 1);
+        string modelName = "Highlander";
+        int maxSpeed = 200;
+        int odometer = 100000;
+        string registrationState = "Texas";
+        string registrationPlate = "TX343434";
+        string insurancePolicy = "CAA7878787";
+        DriversLicense license = new DriversLicense("California", "B7788888", DateTime.Now + new TimeSpan(1825, 0, 0, 0));
+        Person person = new Person("Mats Persson", license);
+        InsuranceCompany insuranceCompany = new InsuranceCompany("Skandia", "851727878");
+        session.BeginUpdate();
+        session.RegisterClass(typeof(IndexDescriptor));
+        session.RegisterClass(typeof(BTreeSetOidShort<IndexDescriptor>));
+        session.RegisterClass(typeof(CompareByField<IndexDescriptor>));
+        session.RegisterClass(typeof(Indexes));
+        session.RegisterClass(typeof(DriversLicense));
+        session.RegisterClass(typeof(InsuranceCompany));
+        session.RegisterClass(typeof(CompareByFieldIndex<InsuranceCompany>));
+        session.RegisterClass(typeof(BTreeSetOidShort<InsuranceCompany>));
+        session.RegisterClass(typeof(VelocityDbSchema.Indexes.Person));
+        session.RegisterClass(typeof(VelocityDbSchema.Person));
+        session.RegisterClass(typeof(VelocityDbSchema.Man));
+        session.RegisterClass(typeof(Person));
+        session.RegisterClass(typeof(Car));
+        session.RegisterClass(typeof(VelocityDb.Collection.Comparer.CompareByFieldIndex<Car>));
+        session.RegisterClass(typeof(BTreeSet<Car>));
+        session.RegisterClass(typeof(BTreeSet<Vehicle>));
+        session.RegisterClass(typeof(CompareByFieldIndex<Vehicle>));
+        session.RegisterClass(typeof(VelocityDbList<WeakIOptimizedPersistableReference<Vehicle>>));
+        session.RegisterClass(typeof(Guid));
+        session.RegisterClass(typeof(VelocityDbList<OptimizedPersistable>));
+        session.RegisterClass(typeof(VelocityDbList<WeakIOptimizedPersistableReference<VelocityDbSchema.Person>>));
+        session.Checkpoint();
+        File.Delete(Path.Combine(session.SystemDirectory, "4.odb")); // to test if rest of code works without a license database
+        Car car = new Car(color, maxPassengers, fuelCapacity, litresPer100Kilometers, modelYear, brandName, modelName, maxSpeed,
+odometer, registrationState, registrationPlate, insuranceCompany, insurancePolicy);
+        session.Persist(car);
+        session.Commit();
+        try
+        {
+          session.BeginUpdate();
+          car = new Car(color, maxPassengers, fuelCapacity, litresPer100Kilometers, modelYear, brandName, modelName, maxSpeed,
+            odometer, registrationState, registrationPlate, insuranceCompany, insurancePolicy);
+          session.Persist(car);
+          car = new Car(color, maxPassengers, fuelCapacity, litresPer100Kilometers, modelYear, brandName, modelName, maxSpeed,
+            odometer, registrationState, registrationPlate, insuranceCompany, insurancePolicy);
+          session.Persist(car);
+          Assert.Fail();
+        }
+        catch (UniqueConstraintException ex)
+        {
+          Console.WriteLine($"Got exception as expected: {ex}");
+        }
+      }
     }
 
     [Test]
@@ -829,6 +904,70 @@ namespace NUnitTests
         Assert.GreaterOrEqual(q.Count(), 10);
         q = from dict in session.Index<PersistableDynamicDictionary>("m_creationTime") where dict.CreationTime > DateTime.UtcNow.AddYears(-1) select dict;
         Assert.GreaterOrEqual(q.Count(), 10);
+        session.Commit();
+      }
+    }
+
+    [Test]
+    public void MotorCycles()
+    {
+      using (SessionBase session = new SessionNoServer(systemDir))
+      {
+        session.BeginUpdate();
+        var mcs = new MotorcycleList();
+        session.Persist(mcs);
+        for (int i = 0; i < 100; i++)
+        {
+          var allMcs = session.AllObjects<Motorcycle>();
+          var ct1 = allMcs.Count;
+          mcs.Motorcycles.Add(new Motorcycle());
+          mcs.Motorcycles.Add(new Motorcycle());
+          mcs.Motorcycles.Add(new Motorcycle());
+          var ct2 = allMcs.Count;
+          var allMcsIndex = session.Index<Motorcycle>("cc");
+          var ct3 = allMcsIndex.Count;
+          allMcs = session.AllObjects<Motorcycle>();
+          var ct4 = allMcs.Count;
+          var ct5 = allMcsIndex.Count;
+          session.FlushUpdates();
+          var ct6 = allMcs.Count;
+          var ct7 = allMcsIndex.Count;
+        }
+        session.Abort();
+      }
+    }
+
+    [Test]
+    public void PersistUnpersist()
+    {
+      using (SessionBase session = new SessionNoServer(systemDir))
+      {
+        int ct = 0;
+        int ct2 = 0;
+        int ct3 = 0;
+        session.BeginUpdate();
+        int guid1 = session.Index<Motorcycle>("guid").Count;
+        var allMcsIndex = session.Index<Motorcycle>("cc");
+        foreach (var mc in allMcsIndex)
+          ct++;
+        for (int i = 0; i < 5; i++)
+        {
+          var mc = new Motorcycle();
+          session.Persist(mc);
+          //session.Checkpoint();
+          session.Unpersist(mc);
+        }
+        int guid2 = session.Index<Motorcycle>("guid").Count;
+        foreach (var mc in allMcsIndex)
+          ct2++;
+        Assert.AreEqual(ct, ct2);
+        Assert.AreEqual(guid1, guid2);
+        session.Commit();
+        session.BeginRead();
+        allMcsIndex = session.Index<Motorcycle>("cc");
+        foreach (var mc in allMcsIndex)
+          ct2++;
+        Assert.AreEqual(ct, ct3);
         session.Commit();
       }
     }

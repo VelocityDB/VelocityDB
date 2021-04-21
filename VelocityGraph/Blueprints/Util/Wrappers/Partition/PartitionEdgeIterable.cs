@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Partition
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Partition
 {
     internal class PartitionEdgeIterable : ICloseableIterable<IEdge>
     {

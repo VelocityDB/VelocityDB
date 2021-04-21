@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Batch
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch
 {
     /// <summary>
     ///     This is a naive wrapper to make a non-transactional graph transactional by simply writing all mutations

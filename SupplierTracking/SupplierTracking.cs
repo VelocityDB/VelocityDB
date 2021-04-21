@@ -1,6 +1,6 @@
 ﻿// This sample shows one way to solve problem descibed in http://stackoverflow.com/questions/28060104/recursive-query-with-sub-graph-aggregation-arbitrary-depth 
 
-using Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using VelocityDb;
 using VelocityDb.Session;
 using VelocityGraph;
-using Frontenac.Blueprints.Util.IO.GraphJson;
+using VelocityGraph.Frontenac.Blueprints.Util.IO.GraphJson;
 
 namespace SupplierTracking
 {

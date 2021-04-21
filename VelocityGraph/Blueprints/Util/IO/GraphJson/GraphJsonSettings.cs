@@ -1,4 +1,4 @@
-﻿namespace Frontenac.Blueprints.Util.IO.GraphJson
+﻿namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphJson
 {
     public class GraphJsonSettings
     {

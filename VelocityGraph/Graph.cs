@@ -14,17 +14,17 @@ using VertexTypeId = System.Int32;
 using TypeId = System.Int32;
 using EdgeTypeId = System.Int32;
 using EdgeIdVertexId = System.UInt64;
-using Frontenac.Blueprints;
-using Frontenac.Blueprints.Util;
-using Frontenac.Blueprints.Util.IO.GraphSON;
+using VelocityGraph.Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints.Util;
+using VelocityGraph.Frontenac.Blueprints.Util.IO.GraphSON;
 using System.Globalization;
 using VelocityDb.Collection;
 using System.IO;
 using System.Diagnostics.Contracts;
-//using Frontenac.Blueprints.Util.IO.GraphJson; Until Frontenac.Blueprints is updated with extensions added by VelocityGraph
-using Newtonsoft.Json; // temp Until Frontenac.Blueprints is updated with extensions added by VelocityGraph
-using Newtonsoft.Json.Linq;// temp Until Frontenac.Blueprints is updated with extensions added by VelocityGraph
-using Newtonsoft.Json.Serialization;// temp Until Frontenac.Blueprints is updated with extensions added by VelocityGraph
+//using VelocityGraph.Frontenac.Blueprints.Util.IO.GraphJson; Until VelocityGraph.Frontenac.Blueprints is updated with extensions added by VelocityGraph
+using Newtonsoft.Json; // temp Until VelocityGraph.Frontenac.Blueprints is updated with extensions added by VelocityGraph
+using Newtonsoft.Json.Linq;// temp Until VelocityGraph.Frontenac.Blueprints is updated with extensions added by VelocityGraph
+using Newtonsoft.Json.Serialization;// temp Until VelocityGraph.Frontenac.Blueprints is updated with extensions added by VelocityGraph
 using VelocityDb.Exceptions;
 using VelocityGraph.Exceptions;
 
@@ -978,7 +978,7 @@ namespace VelocityGraph
         et.m_stringToPropertyType.Remove(pt.Name);
       }
       Update();
-      PropertyTypes[pt.PropertyId] = null;
+      PropertyTypes.Remove(pt);
       pt.Unpersist(Session);
     }
 
@@ -1281,7 +1281,7 @@ namespace VelocityGraph
     public void ImportGraphJson(string filename)
     {
       Contract.Requires(!string.IsNullOrWhiteSpace(filename));
-      Frontenac.Blueprints.Util.IO.GraphJson.GraphJsonReader.InputGraph(this, filename);
+      VelocityGraph.Frontenac.Blueprints.Util.IO.GraphJson.GraphJsonReader.InputGraph(this, filename);
     }
 
     /// <summary>
@@ -1294,7 +1294,7 @@ namespace VelocityGraph
     {
       Contract.Requires(grapJsonInputStream != null);
       Contract.Requires(bufferSize > 0);
-      Frontenac.Blueprints.Util.IO.GraphJson.GraphJsonReader.InputGraph(this, grapJsonInputStream, bufferSize);
+      VelocityGraph.Frontenac.Blueprints.Util.IO.GraphJson.GraphJsonReader.InputGraph(this, grapJsonInputStream, bufferSize);
     }
 
     /// <inheritdoc />
@@ -1511,7 +1511,7 @@ namespace VelocityGraph
   }
 
 
-  // temp Until Frontenac.Blueprints is updated with extensions added by VelocityGraph
+  // temp Until VelocityGraph.Frontenac.Blueprints is updated with extensions added by VelocityGraph
   /// <summary>
   ///     GraphJsonWriter writes a Graph to a GraphJson OutputStream. 
   /// </summary>

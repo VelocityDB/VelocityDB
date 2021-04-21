@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Event.Listener
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event.Listener
 {
     /// <summary>
     ///     An event listener that acts as a counter for changes to the graph.

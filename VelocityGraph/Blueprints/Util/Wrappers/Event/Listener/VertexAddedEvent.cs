@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Event.Listener
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event.Listener
 {
     /// <summary>
     ///     Event that fires when a vertex is added to a graph.

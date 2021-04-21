@@ -1,11 +1,13 @@
-﻿using System;
+﻿using System.Diagnostics.Contracts;
 
-namespace Frontenac.Blueprints.Impls.TG
+namespace VelocityGraph.Frontenac.Blueprints.Impls.TG
 {
     public static class TinkerGraphFactory
     {
         public static TinkerGrapĥ CreateTinkerGraph()
         {
+            Contract.Ensures(Contract.Result<TinkerGrapĥ>() != null);
+
             var graph = new TinkerGrapĥ();
             CreateTinkerGraph(graph);
             return graph;
@@ -13,8 +15,7 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public static void CreateTinkerGraph(IGraph graph)
         {
-            if (graph == null)
-                throw new ArgumentNullException(nameof(graph));
+            Contract.Requires(graph != null);
 
             var marko = graph.AddVertex(1);
             marko.SetProperty("name", "marko");

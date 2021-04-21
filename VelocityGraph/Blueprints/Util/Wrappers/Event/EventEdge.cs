@@ -1,7 +1,7 @@
 ﻿using System;
-using Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Event
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event
 {
     /// <summary>
     ///     An edge with a GraphChangedListener attached.  Those listeners are notified when changes occur to

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Event.Listener
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event.Listener
 {
     /// <summary>
     ///     An example listener that writes a message to the console for each event that fires from the graph.

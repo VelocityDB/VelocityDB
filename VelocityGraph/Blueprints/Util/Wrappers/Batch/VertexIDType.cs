@@ -1,7 +1,7 @@
 ﻿using System;
-using Frontenac.Blueprints.Util.Wrappers.Batch.Cache;
+using VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch.Cache;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Batch
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch
 {
     /// <summary>
     ///     Type of vertex ids expected by BatchGraph. The default is IdType.OBJECT.

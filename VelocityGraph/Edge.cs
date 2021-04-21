@@ -5,8 +5,8 @@ using System.Text;
 using TypeId = System.Int32;
 using EdgeId = System.Int32;
 using PropertyId = System.Int32;
-using Frontenac.Blueprints;
-using Frontenac.Blueprints.Util;
+using VelocityGraph.Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints.Util;
 using VelocityGraph.Exceptions;
 
 namespace VelocityGraph

@@ -1,4 +1,4 @@
-﻿namespace Frontenac.Blueprints
+﻿namespace VelocityGraph.Frontenac.Blueprints
 {
     public class Parameter
     {

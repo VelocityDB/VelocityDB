@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using Frontenac.Blueprints.Impls.TG;
-using Frontenac.Blueprints.Util.IO.GML;
-using Frontenac.Blueprints.Util.IO.GraphML;
-using Frontenac.Blueprints.Util.IO.GraphSON;
+using VelocityGraph.Frontenac.Blueprints.Impls.TG;
+using VelocityGraph.Frontenac.Blueprints.Util.IO.GML;
+using VelocityGraph.Frontenac.Blueprints.Util.IO.GraphML;
+using VelocityGraph.Frontenac.Blueprints.Util.IO.GraphSON;
 
-namespace Frontenac.Blueprints
+namespace VelocityGraph.Frontenac.Blueprints
 {
     public static class GraphHelpers
     {

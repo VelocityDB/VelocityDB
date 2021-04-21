@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Frontenac.Blueprints.Util
+namespace VelocityGraph.Frontenac.Blueprints.Util
 {
     /// <summary>
     ///     A helper class that is used to combine multiple iterables into a single closeable IEnumerable.

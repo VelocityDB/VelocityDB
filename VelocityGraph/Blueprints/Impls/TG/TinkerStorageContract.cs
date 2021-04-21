@@ -1,21 +1,21 @@
-﻿using System;
+﻿using System.Diagnostics.Contracts;
 
-namespace Frontenac.Blueprints.Impls.TG
+namespace VelocityGraph.Frontenac.Blueprints.Impls.TG
 {
-    public static class TinkerStorageContract
+    [ContractClassFor(typeof (ITinkerStorage))]
+    public abstract class TinkerStorageContract : ITinkerStorage
     {
-        public static void ValidateLoad(string directory)
+        public TinkerGrapĥ Load(string directory)
         {
-            if (string.IsNullOrWhiteSpace(directory))
-                throw new ArgumentNullException(nameof(directory));
+            Contract.Requires(!string.IsNullOrWhiteSpace(directory));
+            Contract.Ensures(Contract.Result<TinkerGrapĥ>() != null);
+            return null;
         }
 
-        public static void ValidateSave(TinkerGrapĥ tinkerGrapĥ, string directory)
+        public void Save(TinkerGrapĥ tinkerGrapĥ, string directory)
         {
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
-            if (string.IsNullOrWhiteSpace(directory))
-                throw new ArgumentNullException(nameof(directory));
+            Contract.Requires(tinkerGrapĥ != null);
+            Contract.Requires(!string.IsNullOrWhiteSpace(directory));
         }
     }
 }

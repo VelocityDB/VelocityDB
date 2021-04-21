@@ -1,7 +1,7 @@
-﻿using System;
+﻿using System.Diagnostics.Contracts;
 using System.IO;
 
-namespace Frontenac.Blueprints.Impls.TG
+namespace VelocityGraph.Frontenac.Blueprints.Impls.TG
 {
     /// <summary>
     ///     Writes TinkerGrapĥ metadata to an OutputStream.
@@ -16,8 +16,7 @@ namespace Frontenac.Blueprints.Impls.TG
         /// <param name="tinkerGrapĥ"></param>
         public TinkerMetadataWriter(TinkerGrapĥ tinkerGrapĥ)
         {
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
+            Contract.Requires(tinkerGrapĥ != null);
 
             _tinkerGrapĥ = tinkerGrapĥ;
         }
@@ -28,8 +27,7 @@ namespace Frontenac.Blueprints.Impls.TG
         /// <param name="filename">the name of the file to write the TinkerGrapĥ metadata to</param>
         public void Save(string filename)
         {
-            if (string.IsNullOrWhiteSpace(filename))
-                throw new ArgumentNullException(nameof(filename));
+            Contract.Requires(!string.IsNullOrWhiteSpace(filename));
 
             using (var fos = File.Create(filename))
             {
@@ -43,8 +41,7 @@ namespace Frontenac.Blueprints.Impls.TG
         /// <param name="outputStream">the OutputStream to write the TinkerGrapĥ metadata to</param>
         public void Save(Stream outputStream)
         {
-            if (outputStream == null)
-                throw new ArgumentNullException(nameof(outputStream));
+            Contract.Requires(outputStream != null);
 
             using (var writer = new BinaryWriter(outputStream))
             {
@@ -62,10 +59,8 @@ namespace Frontenac.Blueprints.Impls.TG
         /// <param name="outputStream">the OutputStream to write the TinkerGrapĥ metadata to</param>
         public static void Save(TinkerGrapĥ tinkerGrapĥ, Stream outputStream)
         {
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
-            if (outputStream == null)
-                throw new ArgumentNullException(nameof(outputStream));
+            Contract.Requires(tinkerGrapĥ != null);
+            Contract.Requires(outputStream != null);
 
             var writer = new TinkerMetadataWriter(tinkerGrapĥ);
             writer.Save(outputStream);
@@ -78,10 +73,8 @@ namespace Frontenac.Blueprints.Impls.TG
         /// <param name="filename">the name of the file to write the TinkerGrapĥ metadata to</param>
         public static void Save(TinkerGrapĥ tinkerGrapĥ, string filename)
         {
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
-            if (string.IsNullOrWhiteSpace(filename))
-                throw new ArgumentNullException(nameof(filename));
+            Contract.Requires(tinkerGrapĥ != null);
+            Contract.Requires(!string.IsNullOrWhiteSpace(filename));
 
             var writer = new TinkerMetadataWriter(tinkerGrapĥ);
             writer.Save(filename);
@@ -89,10 +82,8 @@ namespace Frontenac.Blueprints.Impls.TG
 
         private static void WriteIndices(BinaryWriter writer, TinkerGrapĥ tinkerGrapĥ)
         {
-            if (writer == null)
-                throw new ArgumentNullException(nameof(writer));
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
+            Contract.Requires(writer != null);
+            Contract.Requires(tinkerGrapĥ != null);
 
             // Write the number of indices
             writer.Write(tinkerGrapĥ.Indices.Count);
@@ -152,10 +143,8 @@ namespace Frontenac.Blueprints.Impls.TG
 
         private static void WriteVertexKeyIndices(BinaryWriter writer, TinkerGrapĥ tinkerGrapĥ)
         {
-            if (writer == null)
-                throw new ArgumentNullException(nameof(writer));
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
+            Contract.Requires(writer != null);
+            Contract.Requires(tinkerGrapĥ != null);
 
             // Write the number of vertex key indices
             writer.Write(tinkerGrapĥ.VertexKeyIndex.Index.Count);
@@ -185,10 +174,8 @@ namespace Frontenac.Blueprints.Impls.TG
 
         private static void WriteEdgeKeyIndices(BinaryWriter writer, TinkerGrapĥ tinkerGrapĥ)
         {
-            if (writer == null)
-                throw new ArgumentNullException(nameof(writer));
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
+            Contract.Requires(writer != null);
+            Contract.Requires(tinkerGrapĥ != null);
 
             // Write the number of edge key indices
             writer.Write(tinkerGrapĥ.EdgeKeyIndex.Index.Count);
@@ -218,10 +205,8 @@ namespace Frontenac.Blueprints.Impls.TG
 
         private static void WriteTypedData(BinaryWriter writer, object data)
         {
-            if (writer == null)
-                throw new ArgumentNullException(nameof(writer));
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            Contract.Requires(writer != null);
+            Contract.Requires(data != null);
 
             var s = data as string;
             if (s != null)

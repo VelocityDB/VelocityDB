@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Frontenac.Blueprints.Util.Wrappers.ReadOnly
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.ReadOnly
 {
     internal class ReadOnlyEdgeIterable : ICloseableIterable<IEdge>
     {

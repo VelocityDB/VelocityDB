@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Id
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Id
 {
     public class IdVertexIndex : IIndex
     {

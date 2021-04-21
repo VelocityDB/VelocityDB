@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Frontenac.Blueprints.Util
+namespace VelocityGraph.Frontenac.Blueprints.Util
 {
     public static class IndexableGraphHelpers
     {

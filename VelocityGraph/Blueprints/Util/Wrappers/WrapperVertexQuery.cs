@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
 
-namespace Frontenac.Blueprints.Util.Wrappers
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers
 {
     /// <summary>
     ///     A WrapperQuery is useful for wrapping the construction and results of a Vertex.query().

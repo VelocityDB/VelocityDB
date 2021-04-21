@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics.Contracts;
 using System.IO;
 
-namespace Frontenac.Blueprints.Impls.TG
+namespace VelocityGraph.Frontenac.Blueprints.Impls.TG
 {
     /// <summary>
     ///     Reads TinkerGrapĥ metadata from a Stream.
@@ -13,8 +13,7 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public TinkerMetadataReader(TinkerGrapĥ tinkerGrapĥ)
         {
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
+            Contract.Requires(tinkerGrapĥ != null);
 
             _tinkerGrapĥ = tinkerGrapĥ;
         }
@@ -25,8 +24,7 @@ namespace Frontenac.Blueprints.Impls.TG
         /// <param name="filename">the name of the file to read the TinkerGrapĥ metadata from</param>
         public void Load(string filename)
         {
-            if (string.IsNullOrWhiteSpace(filename))
-                throw new ArgumentNullException(nameof(filename));
+            Contract.Requires(!string.IsNullOrWhiteSpace(filename));
 
             using (var fos = File.OpenRead(filename))
             {
@@ -40,8 +38,7 @@ namespace Frontenac.Blueprints.Impls.TG
         /// <param name="inputStream">the Stream to read the TinkerGrapĥ metadata from</param>
         public void Load(Stream inputStream)
         {
-            if (inputStream == null)
-                throw new ArgumentNullException(nameof(inputStream));
+            Contract.Requires(inputStream != null);
 
             using (var reader = new BinaryReader(inputStream))
             {
@@ -59,10 +56,8 @@ namespace Frontenac.Blueprints.Impls.TG
         /// <param name="inputStream">the Stream to read the TinkerGrapĥ metadata from</param>
         public static void Load(TinkerGrapĥ tinkerGrapĥ, Stream inputStream)
         {
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
-            if (inputStream == null)
-                throw new ArgumentNullException(nameof(inputStream));
+            Contract.Requires(tinkerGrapĥ != null);
+            Contract.Requires(inputStream != null);
 
             var reader = new TinkerMetadataReader(tinkerGrapĥ);
             reader.Load(inputStream);
@@ -75,10 +70,8 @@ namespace Frontenac.Blueprints.Impls.TG
         /// <param name="filename">the name of the file to read the TinkerGrapĥ metadata from</param>
         public static void Load(TinkerGrapĥ tinkerGrapĥ, string filename)
         {
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
-            if (string.IsNullOrWhiteSpace(filename))
-                throw new ArgumentNullException(nameof(filename));
+            Contract.Requires(tinkerGrapĥ != null);
+            Contract.Requires(!string.IsNullOrWhiteSpace(filename));
 
             var reader = new TinkerMetadataReader(tinkerGrapĥ);
             reader.Load(filename);
@@ -86,10 +79,8 @@ namespace Frontenac.Blueprints.Impls.TG
 
         private static void ReadIndices(BinaryReader reader, TinkerGrapĥ tinkerGrapĥ)
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
+            Contract.Requires(reader != null);
+            Contract.Requires(tinkerGrapĥ != null);
 
             // Read the number of indices
             var indexCount = reader.ReadInt32();
@@ -147,10 +138,8 @@ namespace Frontenac.Blueprints.Impls.TG
 
         private static void ReadVertexKeyIndices(BinaryReader reader, TinkerGrapĥ tinkerGrapĥ)
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
+            Contract.Requires(reader != null);
+            Contract.Requires(tinkerGrapĥ != null);
 
             // Read the number of vertex key indices
             var indexCount = reader.ReadInt32();
@@ -192,10 +181,8 @@ namespace Frontenac.Blueprints.Impls.TG
 
         private static void ReadEdgeKeyIndices(BinaryReader reader, TinkerGrapĥ tinkerGrapĥ)
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
+            Contract.Requires(reader != null);
+            Contract.Requires(tinkerGrapĥ != null);
 
             // Read the number of edge key indices
             var indexCount = reader.ReadInt32();
@@ -237,8 +224,8 @@ namespace Frontenac.Blueprints.Impls.TG
 
         private static object ReadTypedData(BinaryReader reader)
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
+            Contract.Requires(reader != null);
+            Contract.Ensures(Contract.Result<object>() != null);
 
             var type = reader.ReadByte();
 

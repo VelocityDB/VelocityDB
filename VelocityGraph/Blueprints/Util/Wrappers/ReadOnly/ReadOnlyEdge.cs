@@ -1,7 +1,7 @@
 ﻿using System;
-using Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
 
-namespace Frontenac.Blueprints.Util.Wrappers.ReadOnly
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.ReadOnly
 {
     public class ReadOnlyEdge : ReadOnlyElement, IEdge
     {

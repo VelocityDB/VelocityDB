@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Xml;
-using Frontenac.Blueprints.Util.Wrappers.Batch;
+using VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch;
 
-namespace Frontenac.Blueprints.Util.IO.GraphML
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphML
 {
     /// <summary>
     ///     GraphMLReader writes the data from a GraphML stream to a graph.

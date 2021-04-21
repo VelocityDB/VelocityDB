@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Frontenac.Blueprints
+namespace VelocityGraph.Frontenac.Blueprints
 {
     /// <summary>
     ///     Features provides a listing of the features/qualities/quirks associated with any Graph implementation.

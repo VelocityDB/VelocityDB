@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Event
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event
 {
     /// <summary>
     ///     EventIndexableGraph is merely a proxy to index methods exposing eventInnerTinkerGrapĥ methods in the "evented" way. Like the

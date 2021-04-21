@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frontenac.Blueprints.Contracts;
-using Frontenac.Blueprints.Util.Wrappers.Event.Listener;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event.Listener;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Event
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event
 {
     /// <summary>
     ///     An element with a GraphChangedListener attached.  Those listeners are notified when changes occur to

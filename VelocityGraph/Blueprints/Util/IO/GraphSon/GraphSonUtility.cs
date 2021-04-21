@@ -7,7 +7,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Frontenac.Blueprints.Util.IO.GraphSON
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphSON
 {
     /// <summary>
     ///     Helps write individual graph elements to TinkerPop JSON format known as GraphSON.

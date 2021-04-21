@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Frontenac.Blueprints.Util.Wrappers.Batch.Cache;
+using VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch.Cache;
 using System.Linq;
-using Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Batch
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch
 {
     /// <summary>
     ///     BatchGraph is a wrapper that enables batch loading of a large number of edges and vertices by chunking the entire

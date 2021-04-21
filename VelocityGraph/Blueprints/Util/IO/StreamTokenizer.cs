@@ -36,7 +36,7 @@ using System.IO;
    *
    */
 
-namespace Frontenac.Blueprints.Util.IO
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO
 {
     public class StreamTokenizer : IEnumerable<int>
     {

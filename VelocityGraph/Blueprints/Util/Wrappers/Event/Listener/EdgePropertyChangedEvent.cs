@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Event.Listener
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Event.Listener
 {
     public class EdgePropertyChangedEvent : EdgePropertyEvent
     {

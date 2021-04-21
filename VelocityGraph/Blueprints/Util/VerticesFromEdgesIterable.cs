@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util
+namespace VelocityGraph.Frontenac.Blueprints.Util
 {
     /// <summary>
     ///     VerticesFromEdgesIterable is a helper class that returns vertices that meet the direction/label criteria of the incident edges.

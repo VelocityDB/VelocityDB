@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Frontenac.Blueprints
+namespace VelocityGraph.Frontenac.Blueprints
 {
     /// <summary>
     ///     A Graph is a container object for a collection of vertices and a collection edges.

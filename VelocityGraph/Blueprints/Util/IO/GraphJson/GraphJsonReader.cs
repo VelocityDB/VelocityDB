@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Frontenac.Blueprints.Util.Wrappers.Batch;
+using VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Frontenac.Blueprints.Util.IO.GraphJson
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphJson
 {
     /// <summary>
     ///     GraphJsonReader reads the data from a GraphJson JSON stream to a graph.

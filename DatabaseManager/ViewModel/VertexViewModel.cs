@@ -10,7 +10,7 @@ using VelocityDb.Collection.BTree;
 using VelocityDb.Collection;
 using VelocityDBExtensions;
 using VelocityGraph;
-using Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints;
 
 namespace DatabaseManager
 {

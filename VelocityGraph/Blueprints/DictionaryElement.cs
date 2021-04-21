@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Frontenac.Blueprints
+namespace VelocityGraph.Frontenac.Blueprints
 {
     [Serializable]
     public abstract class DictionaryElement : IElement

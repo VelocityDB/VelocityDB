@@ -10,7 +10,7 @@ using PropertyId = System.Int32;
 using TypeId = System.Int32;
 using VertexId = System.Int32;
 using EdgeId = System.Int32;
-using Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints;
 using VelocityDb.Collection;
 using VelocityDb;
 using VelocityDb.Exceptions;

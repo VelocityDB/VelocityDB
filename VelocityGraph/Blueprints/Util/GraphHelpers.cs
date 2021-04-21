@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frontenac.Blueprints.Util
+namespace VelocityGraph.Frontenac.Blueprints.Util
 {
     public static class GraphHelpers
     {

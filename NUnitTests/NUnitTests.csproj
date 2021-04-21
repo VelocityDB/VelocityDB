@@ -50,8 +50,8 @@
       <HintPath>..\packages\Microsoft.Data.Services.Client.5.8.4\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Synchronization, Version=2.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NMoneys, Version=6.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NMoneys.6.1.0\lib\net40-client\NMoneys.dll</HintPath>
@@ -80,14 +80,14 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
-    <Reference Include="VelocityDb, Version=10.1.1.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.10.1.1\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=10.2.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.10.2.0\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
     </Reference>
     <Reference Include="VelocityDBExtensions, Version=10.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDBExtensions.10.1.1\lib\net46\VelocityDBExtensions.dll</HintPath>
+      <HintPath>..\packages\VelocityDBExtensions.10.2.0\lib\net46\VelocityDBExtensions.dll</HintPath>
     </Reference>
     <Reference Include="VelocityGraph, Version=10.1.1.0, Culture=neutral, PublicKeyToken=033a993463f9cfa3, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.10.1.1\lib\.NETStandard,Version=v2.0\VelocityGraph.dll</HintPath>
+      <HintPath>..\packages\VelocityGraph.10.2.0\lib\.NETStandard,Version=v2.0\VelocityGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

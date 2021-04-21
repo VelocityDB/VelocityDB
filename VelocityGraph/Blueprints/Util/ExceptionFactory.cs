@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frontenac.Blueprints.Util
+namespace VelocityGraph.Frontenac.Blueprints.Util
 {
     /// <summary>
     ///     The ExceptionFactory provides standard exceptions that should be used by all Blueprints implementations.

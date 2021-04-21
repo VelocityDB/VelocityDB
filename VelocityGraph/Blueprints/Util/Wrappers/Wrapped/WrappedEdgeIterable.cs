@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Wrapped
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Wrapped
 {
     internal class WrappedEdgeIterable : ICloseableIterable<IEdge>
     {

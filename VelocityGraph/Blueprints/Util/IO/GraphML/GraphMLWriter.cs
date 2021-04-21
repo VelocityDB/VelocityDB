@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace Frontenac.Blueprints.Util.IO.GraphML
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphML
 {
     /// <summary>
     ///     GraphMLWriter writes a Graph to a GraphML OutputStream.

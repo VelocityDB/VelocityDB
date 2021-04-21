@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Frontenac.Blueprints.Util.IO.GML
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GML
 {
     /// <summary>
     ///     GMLWriter writes a Graph to a GML OutputStream.

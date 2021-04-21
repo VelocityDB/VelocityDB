@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Wrapped
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Wrapped
 {
     /// <summary>
     ///     WrappedGraph serves as a template for writing a wrapper graph.

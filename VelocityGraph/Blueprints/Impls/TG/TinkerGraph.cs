@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Frontenac.Blueprints.Contracts;
-using Frontenac.Blueprints.Util;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Util;
 
-namespace Frontenac.Blueprints.Impls.TG
+namespace VelocityGraph.Frontenac.Blueprints.Impls.TG
 {
     /// <summary>
     ///     An in-memory, reference implementation of the property TinkerGrapĥ interfaces provided by Blueprints.

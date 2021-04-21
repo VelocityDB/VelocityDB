@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frontenac.Blueprints.Util.IO.GraphSON
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphSON
 {
     public static class ElementFactoryContract
     {

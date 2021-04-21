@@ -1,4 +1,4 @@
-﻿namespace Frontenac.Blueprints
+﻿namespace VelocityGraph.Frontenac.Blueprints
 {
     /// <summary>
     ///     An Edge links two vertices. Along with its key/value properties, an edge has both a directionality and a label.

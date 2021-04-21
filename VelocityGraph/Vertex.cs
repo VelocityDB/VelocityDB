@@ -7,8 +7,8 @@ using VertexId = System.Int32;
 using VertexTypeId = System.Int32;
 using PropertyId = System.Int32;
 using EdgeTypeId = System.Int32;
-using Frontenac.Blueprints;
-using Frontenac.Blueprints.Util;
+using VelocityGraph.Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints.Util;
 
 namespace VelocityGraph
 {

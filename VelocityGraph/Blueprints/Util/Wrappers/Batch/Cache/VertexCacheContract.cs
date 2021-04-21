@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Batch.Cache
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch.Cache
 {
     public abstract class VertexCacheContract
     {

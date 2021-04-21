@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Frontenac.Blueprints
+namespace VelocityGraph.Frontenac.Blueprints
 {
     /// <summary>
     ///     A VertexQuery object defines a collection of filters and modifiers that are used to intelligently select edges from a vertex.

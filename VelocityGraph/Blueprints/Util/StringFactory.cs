@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frontenac.Blueprints.Util
+namespace VelocityGraph.Frontenac.Blueprints.Util
 {
     /// <summary>
     ///     A collection of helpful methods for creating standard toString() representations of graph-related objects.

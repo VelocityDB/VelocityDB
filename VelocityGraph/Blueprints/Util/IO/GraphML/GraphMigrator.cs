@@ -3,7 +3,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Threading.Tasks;
 
-namespace Frontenac.Blueprints.Util.IO.GraphML
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphML
 {
     /// <summary>
     ///     GraphMigrator takes the data in one graph and pipes it to another graph.

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frontenac.Blueprints.Contracts;
+using VelocityGraph.Frontenac.Blueprints.Contracts;
 
-namespace Frontenac.Blueprints.Util.Wrappers.ReadOnly
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.ReadOnly
 {
     /// <summary>
     ///     A ReadOnlyInnerTinkerGrapĥ wraps a Graph and overrides the underlying Graph's mutating methods.

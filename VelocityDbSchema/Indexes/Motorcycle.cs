@@ -68,4 +68,18 @@ namespace VelocityDbSchema.Indexes
       }
     }
   }
+
+  public class MotorcycleList : OptimizedPersistable
+  {
+    VelocityDbList<Motorcycle> _motorcycles;
+
+    public MotorcycleList()
+    {
+      _motorcycles = new VelocityDbList<Motorcycle>();
+    }
+    public VelocityDbList<Motorcycle> Motorcycles
+    {
+      get { return _motorcycles; }
+    }
+  }
 }

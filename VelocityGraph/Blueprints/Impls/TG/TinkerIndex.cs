@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
-using Frontenac.Blueprints.Contracts;
-using Frontenac.Blueprints.Util;
+using VelocityGraph.Frontenac.Blueprints.Util;
 
-namespace Frontenac.Blueprints.Impls.TG
+namespace VelocityGraph.Frontenac.Blueprints.Impls.TG
 {
     [Serializable]
     internal class TinkerIndex : IIndex
@@ -18,12 +18,9 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public TinkerIndex(string indexName, Type indexClass)
         {
-            if (indexClass == null)
-                throw new ArgumentNullException(nameof(indexClass));
-
-            if (!(typeof(IVertex).IsAssignableFrom(indexClass) ||
-                  typeof(IEdge).IsAssignableFrom(indexClass)))
-                throw new ArgumentException("indexClass must be assignable from IVertex of IEdge");
+            Contract.Requires(indexClass != null);
+            Contract.Requires(typeof (IVertex).IsAssignableFrom(indexClass) ||
+                              typeof (IEdge).IsAssignableFrom(indexClass));
 
             IndexName = indexName;
             IndexClass = indexClass;
@@ -41,8 +38,6 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public void Put(string key, object value, IElement element)
         {
-            IndexContract.ValidatePut(key, value, element);
-
             var keyMap = Index.Get(key);
             if (keyMap == null)
             {
@@ -60,8 +55,6 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public IEnumerable<IElement> Get(string key, object value)
         {
-            IndexContract.ValidateGet(key, value);
-
             var keyMap = Index.Get(key);
             if (null == keyMap)
                 return new WrappingCloseableIterable<IElement>(Enumerable.Empty<IElement>());
@@ -79,8 +72,6 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public long Count(string key, object value)
         {
-            IndexContract.ValidateCount(key, value);
-
             var keyMap = Index.Get(key);
             if (null == keyMap)
                 return 0;
@@ -90,8 +81,6 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public void Remove(string key, object value, IElement element)
         {
-            IndexContract.ValidateRemove(key, value, element);
-
             var keyMap = Index.Get(key);
             if (null != keyMap)
             {
@@ -111,8 +100,7 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public void RemoveElement(IElement element)
         {
-            if (element == null)
-                throw new ArgumentNullException(nameof(element));
+            Contract.Requires(element != null);
 
             if (!IndexClass.IsInstanceOfType(element)) return;
 

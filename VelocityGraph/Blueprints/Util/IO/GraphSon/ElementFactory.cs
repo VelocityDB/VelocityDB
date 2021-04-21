@@ -1,4 +1,4 @@
-﻿namespace Frontenac.Blueprints.Util.IO.GraphSON
+﻿namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphSON
 {
     /// <summary>
     ///     A factory responsible for creating graph elements.  Abstracts the way that graph elements are created. In

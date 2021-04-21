@@ -1,4 +1,4 @@
-﻿namespace Frontenac.Blueprints.Util.IO.GraphSON
+﻿namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphSON
 {
     /// <summary>
     ///     Modes of operation of the GraphSONUtility.

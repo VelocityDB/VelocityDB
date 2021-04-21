@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Batch.Cache
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch.Cache
 {
     public class LongIdVertexCache : IVertexCache
     {

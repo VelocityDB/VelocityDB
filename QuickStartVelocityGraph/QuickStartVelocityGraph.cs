@@ -1,4 +1,4 @@
-﻿using Frontenac.Blueprints.Util.IO.GraphJson;
+﻿using VelocityGraph.Frontenac.Blueprints.Util.IO.GraphJson;
 using System;
 using System.Collections.Generic;
 using System.IO;

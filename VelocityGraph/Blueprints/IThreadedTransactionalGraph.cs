@@ -1,4 +1,4 @@
-﻿namespace Frontenac.Blueprints
+﻿namespace VelocityGraph.Frontenac.Blueprints
 {
     /// <summary>
     ///     ThreadedTransactionalGraph provides more fine grained control over the transactional context.

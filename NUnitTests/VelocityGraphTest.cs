@@ -1,4 +1,4 @@
-﻿using Frontenac.Blueprints;
+﻿using VelocityGraph.Frontenac.Blueprints;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

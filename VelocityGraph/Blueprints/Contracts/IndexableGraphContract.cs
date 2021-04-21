@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frontenac.Blueprints.Contracts
+namespace VelocityGraph.Frontenac.Blueprints.Contracts
 {
     public static class IndexableGraphContract
     {

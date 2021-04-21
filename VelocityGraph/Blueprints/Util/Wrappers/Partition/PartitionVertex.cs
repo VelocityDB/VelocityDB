@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Partition
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Partition
 {
     public class PartitionVertex : PartitionElement, IVertex
     {

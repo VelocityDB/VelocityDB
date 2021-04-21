@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints
+namespace VelocityGraph.Frontenac.Blueprints
 {
     /// <summary>
     ///     A KeyIndexableGraph is a graph that supports basic index functionality around the key/value pairs of the elements of the graph.

@@ -10,8 +10,8 @@ using PropertyTypeId = System.Int32;
 using PropertyId = System.Int32;
 using TypeId = System.Int32;
 using VelocityDb.Collection.BTree;
-using Frontenac.Blueprints;
-using Frontenac.Blueprints.Util;
+using VelocityGraph.Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints.Util;
 using VelocityDb.Collection;
 using VelocityGraph.Exceptions;
 

@@ -10,7 +10,7 @@ queries:
 - Get the top 10 users with most friends
 */
 
-using Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

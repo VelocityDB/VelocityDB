@@ -1,4 +1,4 @@
-﻿namespace Frontenac.Blueprints
+﻿namespace VelocityGraph.Frontenac.Blueprints
 {
     /// <summary>
     ///     A transactional graph supports the notion of transactions. A transaction scopes a logically coherent operation composed

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util.Wrappers.ReadOnly
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.ReadOnly
 {
     public class ReadOnlyVertex : ReadOnlyElement, IVertex
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
-using Frontenac.Blueprints.Contracts;
-using Frontenac.Blueprints.Util;
+using VelocityGraph.Frontenac.Blueprints.Util;
 
-namespace Frontenac.Blueprints.Impls.TG
+namespace VelocityGraph.Frontenac.Blueprints.Impls.TG
 {
     [Serializable]
     internal class TinkerVertex : TinkerElement, IVertex
@@ -16,10 +16,8 @@ namespace Frontenac.Blueprints.Impls.TG
         public TinkerVertex(string id, TinkerGrapĥ tinkerGrapĥ)
             : base(id, tinkerGrapĥ)
         {
-            if (id == null)
-                throw new ArgumentNullException(nameof(id));
-            if (tinkerGrapĥ == null)
-                throw new ArgumentNullException(nameof(tinkerGrapĥ));
+            Contract.Requires(id != null);
+            Contract.Requires(tinkerGrapĥ != null);
         }
 
         public IEnumerable<IEdge> GetEdges(Direction direction, params string[] labels)
@@ -48,18 +46,15 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public IEdge AddEdge(object id, string label, IVertex inVertex)
         {
-            VertexContract.ValidateAddEdge(id, label, inVertex);
-
             return Graph.AddEdge(id, this, inVertex, label);
         }
 
         private static IEnumerable<IEdge> FilterEdgesByLabel(IDictionary<string, ConcurrentDictionary<string, IEdge>> edgesToGet,
                                                              params string[] labels)
         {
-            if (edgesToGet == null)
-                throw new ArgumentNullException(nameof(edgesToGet));
-            if (labels == null)
-                throw new ArgumentNullException(nameof(labels));
+            Contract.Requires(edgesToGet != null);
+            Contract.Requires(labels != null);
+            Contract.Ensures(Contract.Result<IEnumerable<IEdge>>() != null);
 
             if (labels.Length == 0)
             {
@@ -89,10 +84,8 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public void AddOutEdge(string label, IEdge edge)
         {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new ArgumentNullException(nameof(label));
-            if (edge == null)
-                throw new ArgumentNullException(nameof(edge));
+            Contract.Requires(!string.IsNullOrWhiteSpace(label));
+            Contract.Requires(edge != null);
 
             var edges = OutEdges.Get(label);
             if (null == edges)
@@ -105,10 +98,8 @@ namespace Frontenac.Blueprints.Impls.TG
 
         public void AddInEdge(string label, IEdge edge)
         {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new ArgumentNullException(nameof(label));
-            if (edge == null)
-                throw new ArgumentNullException(nameof(edge));
+            Contract.Requires(!string.IsNullOrWhiteSpace(label));
+            Contract.Requires(edge != null);
 
             var edges = InEdges.Get(label);
             if (null == edges)

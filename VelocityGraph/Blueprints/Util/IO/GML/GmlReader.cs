@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using Frontenac.Blueprints.Util.Wrappers.Batch;
+using VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch;
 
-namespace Frontenac.Blueprints.Util.IO.GML
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GML
 {
     /// <summary>
     ///     A reader for the Graph Modelling Language (GML).

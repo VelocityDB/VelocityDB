@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util.IO
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO
 {
     /// <summary>
     ///     Elements are sorted in lexicographical order of IDs.

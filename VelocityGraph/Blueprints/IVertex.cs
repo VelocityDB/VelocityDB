@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Frontenac.Blueprints
+namespace VelocityGraph.Frontenac.Blueprints
 {
     /// <summary>
     ///     A vertex maintains pointers to both a set of incoming and outgoing edges.

@@ -13,7 +13,7 @@ using VelocityGraph;
 
 namespace VelocityGraphSample
 {
-  using Frontenac.Blueprints;
+  using VelocityGraph.Frontenac.Blueprints;
   using System.Collections.Generic;
   class VelocityGraphSample
   {

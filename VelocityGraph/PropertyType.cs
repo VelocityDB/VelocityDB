@@ -7,7 +7,7 @@ using ElementId = System.Int32;
 using PropertyTypeId = System.Int32;
 using PropertyId = System.Int32;
 using TypeId = System.Int32;
-using Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints;
 
 namespace VelocityGraph
 {

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
-namespace Frontenac.Blueprints.Util.IO.GraphJson
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphJson
 {
     /// <summary>
     ///     GraphJsonWriter writes a Graph to a GraphJson OutputStream.

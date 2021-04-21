@@ -1,5 +1,5 @@
-﻿using Frontenac.Blueprints;
-using Frontenac.Blueprints.Util;
+﻿using VelocityGraph.Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frontenac.Blueprints.Geo
+namespace VelocityGraph.Frontenac.Blueprints.Geo
 {
     [Serializable]
     public class GeoPoint : IGeoShape

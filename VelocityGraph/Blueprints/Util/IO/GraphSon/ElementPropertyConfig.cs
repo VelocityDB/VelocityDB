@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Frontenac.Blueprints.Util.IO.GraphSON
+namespace VelocityGraph.Frontenac.Blueprints.Util.IO.GraphSON
 {
     /// <summary>
     ///     Configure how the GraphSON utility treats edge and vertex properties.

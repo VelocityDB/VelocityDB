@@ -1,4 +1,4 @@
-﻿namespace Frontenac.Blueprints.Util.Wrappers.ReadOnly
+﻿namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.ReadOnly
 {
     public static class ReadOnlyTokens
     {

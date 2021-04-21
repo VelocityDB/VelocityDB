@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Frontenac.Blueprints.Util.Wrappers.Batch.Cache
+namespace VelocityGraph.Frontenac.Blueprints.Util.Wrappers.Batch.Cache
 {
     public class StringIdVertexCache : IVertexCache
     {
@@ -30,7 +30,7 @@ namespace Frontenac.Blueprints.Util.Wrappers.Batch.Cache
             VertexCacheContract.ValidateGetEntry(externalId);
 
             var id = _compression.Compress(externalId.ToString());
-            return _map.Get(id);
+            return _map[id];
         }
 
         public void Set(IVertex vertex, object externalId)

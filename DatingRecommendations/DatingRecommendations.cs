@@ -23,7 +23,7 @@ using System.IO;
 using System.Linq;
 using VelocityDb.Session;
 using VelocityGraph;
-using Frontenac.Blueprints;
+using VelocityGraph.Frontenac.Blueprints;
 using System.Collections.Generic;
 using VelocityDb;
 
