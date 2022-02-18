@@ -24,7 +24,7 @@ namespace VelocityGraph
   public partial class VertexType : OptimizedPersistable
   {
     WeakIOptimizedPersistableReference<Graph> m_graph;
-    VertexType m_baseType;
+    internal VertexType m_baseType;
     List<VertexType> m_subTypes;
     string m_typeName;
     TypeId m_typeId;
@@ -508,17 +508,17 @@ namespace VelocityGraph
     }
 
     /// <summary>
-    /// Gets the associated <see cref="PropertyType"/> given a propert type name or null if such property type does't exist.
+    /// Gets the associated <see cref="PropertyType"/> given a property type name or null if such property type doesn't exist.
     /// </summary>
     /// <param name="name">A property type name</param>
     /// <returns>The property type or null</returns>
-    public PropertyType FindProperty(string name)
+    public PropertyType FindProperty(string name, bool doBaseType = true)
     {
       PropertyType anPropertyType;
       if (m_stringToPropertyType.TryGetValue(name, out anPropertyType))
-      {
         return anPropertyType;
-      }
+      if (doBaseType && m_baseType != null)
+        return m_baseType.FindProperty(name, doBaseType);
       return null;
     }
 
@@ -529,9 +529,10 @@ namespace VelocityGraph
     public IEnumerable<string> GetPropertyKeys()
     {
       foreach (var pair in m_stringToPropertyType)
-      {
         yield return pair.Key;
-      }
+      if (m_baseType != null)
+        foreach (var k in m_baseType.GetPropertyKeys())
+          yield return k;
     }
 
     /// <summary>
@@ -541,9 +542,10 @@ namespace VelocityGraph
     public IEnumerable<PropertyType> GetPropertyTypes()
     {
       foreach (var pair in m_stringToPropertyType)
-      {
         yield return pair.Value;
-      }
+      if (m_baseType != null)
+        foreach (var v in m_baseType.GetPropertyTypes())
+          yield return v;
     }
 
     /// <summary>
@@ -980,6 +982,9 @@ namespace VelocityGraph
     {
       BTreeMap<VertexType, BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>>> map;
       long numberOfEdges = 0;
+      if (etype.SubTypes != null)
+        foreach (var subtype in etype.SubTypes)
+          numberOfEdges += GetNumberOfEdges(subtype, vertexId, dir);
       switch (dir)
       {
         case Direction.Out:
@@ -1325,9 +1330,9 @@ namespace VelocityGraph
     /// <param name="vertexId">Id of <see cref="Vertex"/> for which to set property value</param>
     /// <param name="propertyType">The type of property to set</param>
     /// <param name="v">the value to set the property to</param>
-    public void SetPropertyValue(VertexId vertexId, PropertyType propertyType, IComparable v)
+    public void SetPropertyValue(VertexType vt, VertexId vertexId, PropertyType propertyType, IComparable v)
     {
-      propertyType.SetPropertyValue(vertexId, m_typeId, v);
+      propertyType.SetPropertyValue(vt, vertexId, m_typeId, v);
     }
 
     /// <summary>

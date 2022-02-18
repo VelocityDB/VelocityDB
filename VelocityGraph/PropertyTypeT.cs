@@ -100,6 +100,8 @@ namespace VelocityGraph
     virtual protected void SetPropertyValueX(ElementId element, T aValue)
     {
       Update();
+      if (m_propertyValue.Contains(element))
+        RemovePropertyValueT(element, out T pv);
       m_propertyValue[element] = aValue;
       if (m_valueIndex != null)
       {
@@ -185,7 +187,7 @@ namespace VelocityGraph
     {
       if (IsVertexProperty == false)
         throw new InvalidTypeIdException();
-      return GetPropertyVertices((T)value, polymorphic);
+      return GetPropertyVertices((T)value, polymorphic).ToArray();
     }
 
     /// <summary>
@@ -234,7 +236,7 @@ namespace VelocityGraph
     {
       if (IsVertexProperty)
         throw new InvalidTypeIdException();
-      return GetPropertyEdges((T)value);
+      return GetPropertyEdges((T)value).ToArray();
     }
 
     /// <inheritdoc />
@@ -265,7 +267,7 @@ namespace VelocityGraph
 
 
     /// <inheritdoc />
-    public override void SetPropertyValue(ElementId element, TypeId typeId, IComparable value)
+    public override void SetPropertyValue(VertexType vt, ElementId element, TypeId typeId, IComparable value)
     {
       if (object.ReferenceEquals(value, null))
         throw new NullObjectException("A property value may not be null");
@@ -276,22 +278,32 @@ namespace VelocityGraph
       }
       else if (typeId != TypeId)
       {
-        if (IsVertexProperty)
-        {
-          VertexType vertexTypeIn = MyGraph.GetVertexType(typeId);
-          VertexType vertexType = MyGraph.GetVertexType(TypeId);
-          if (vertexType.SubTypes.Contains(vertexTypeIn) == false)
-            throw new UnexpectedException("Invalid VertexType used for setting property");
-        }
-        else
-        {
-          EdgeType edgeTypeIn = MyGraph.GetEdgeType(typeId);
-          EdgeType edgeType = MyGraph.GetEdgeType(TypeId);
-          if (edgeType.SubTypes.Contains(edgeTypeIn) == false)
-            throw new UnexpectedException("Invalid EdgeType used for setting property");
-        }
+        VertexType vertexTypeIn = MyGraph.GetVertexType(typeId);
+        VertexType vertexType = MyGraph.GetVertexType(TypeId);
+        if (vertexType.SubTypes.Contains(vertexTypeIn) == false)
+          throw new UnexpectedException("Invalid VertexType used for setting property");
       }
-      SetPropertyValueX(element, (T) value);
+      SetPropertyValueX(element, (T)value);
+    }
+
+    /// <inheritdoc />
+    public override void SetPropertyValue(EdgeType et, ElementId element, TypeId typeId, IComparable value)
+    {
+      if (object.ReferenceEquals(value, null))
+        throw new NullObjectException("A property value may not be null");
+      if (MyGraph.VertexIdSetPerType && IsVertexProperty)
+      {
+        if (typeId != TypeId)
+          throw new NotSupportedException("SetPropertyValue with a different VertexType/EdgeType than used by property is not supported when using VertexIdSetPerType, create Graph with option bool vertexIdSetPerVertexType set to false");
+      }
+      else if (typeId != TypeId)
+      {
+        EdgeType edgeTypeIn = MyGraph.GetEdgeType(typeId);
+        EdgeType edgeType = MyGraph.GetEdgeType(TypeId);
+        if (edgeType.SubTypes.Contains(edgeTypeIn) == false)
+          throw new UnexpectedException("Invalid EdgeType used for setting property");
+      }
+      SetPropertyValueX(element, (T)value);
     }
 
     /// <summary>

@@ -24,7 +24,7 @@ namespace VelocityGraph
   public partial class EdgeType : OptimizedPersistable, IComparable<EdgeType>, IEqualityComparer<EdgeType>
   {
     WeakIOptimizedPersistableReference<Graph> m_graph;
-    EdgeType m_baseType;
+    internal EdgeType m_baseType;
     List<EdgeType> m_subTypes;
     string m_typeName;
     TypeId m_typeId;
@@ -253,9 +253,10 @@ namespace VelocityGraph
     public IEnumerable<string> GetPropertyKeys()
     {
       foreach (var pair in m_stringToPropertyType)
-      {
         yield return pair.Key;
-      }
+      if (m_baseType != null)
+        foreach (var k in m_baseType.GetPropertyKeys())
+          yield return k;
     }
 
     /// <summary>
@@ -557,13 +558,13 @@ namespace VelocityGraph
     /// </summary>
     /// <param name="name">a property type name</param>
     /// <returns>a looked up property type or null if no such property type exist</returns>
-    public PropertyType FindProperty(string name)
+    public PropertyType FindProperty(string name, bool doBaseType = true)
     {
       PropertyType anPropertyType;
       if (m_stringToPropertyType.TryGetValue(name, out anPropertyType))
-      {
         return anPropertyType;
-      }
+      if (doBaseType && m_baseType != null)
+        return m_baseType.FindProperty(name);
       return null;
     }
 
@@ -585,9 +586,10 @@ namespace VelocityGraph
     public IEnumerable<PropertyType> GetPropertyTypes()
     {
       foreach (var pair in m_stringToPropertyType)
-      {
         yield return pair.Value;
-      }
+      if (m_baseType != null)
+        foreach (var v in m_baseType.GetPropertyTypes())
+          yield return v;
     }
 
     /// <summary>
@@ -596,10 +598,11 @@ namespace VelocityGraph
     /// <param name="elementId">an edge id</param>
     /// <param name="property">a property type</param>
     /// <param name="v">a value</param>
-    public void SetPropertyValue(ElementId elementId, PropertyType property, IComparable v)
+    public void SetPropertyValue(EdgeType et, ElementId elementId, PropertyType property, IComparable v)
     {
-      property.SetPropertyValue(elementId, m_typeId, v);
+      property.SetPropertyValue(et, elementId, m_typeId, v);
     }
+    public void SetPropertyValue(VertexType vt, ElementId elementId, PropertyType property, IComparable v) { }
 
     /// <summary>
     /// Sub types of this <see cref="EdgeType"/> 

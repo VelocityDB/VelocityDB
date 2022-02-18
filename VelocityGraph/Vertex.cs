@@ -667,7 +667,7 @@ namespace VelocityGraph
     /// <param name="v">the property value</param>
     public void SetProperty(PropertyType property, IComparable v)
     {
-      m_vertexType.SetPropertyValue(VertexId, property, v);
+      m_vertexType.SetPropertyValue(m_vertexType, VertexId, property, v);
     }
 
     /// <summary>
@@ -684,10 +684,23 @@ namespace VelocityGraph
         throw new ArgumentException("Property value may not be null");
       if (key.Equals(StringFactory.Id))
         throw ExceptionFactory.PropertyKeyIdIsReserved();
-      PropertyType pt = m_vertexType.FindProperty(key);
+      PropertyType pt = m_vertexType.FindProperty(key, false);
+      var bType = m_vertexType;
       if (pt == null)
+      {
+        while (bType.m_baseType != null && pt == null)
+        {
+          bType = m_vertexType.m_baseType;
+          pt = bType.FindProperty(key, false);
+        }
+      }
+      if (pt == null)
+      {
         pt = m_vertexType.MyGraph.NewVertexProperty(m_vertexType, key, DataType.Object, PropertyKind.Indexed);
-      m_vertexType.SetPropertyValue(VertexId, pt, (IComparable)value);
+        m_vertexType.SetPropertyValue(m_vertexType, VertexId, pt, (IComparable)value);
+      }
+      else
+        bType.SetPropertyValue(m_vertexType, VertexId, pt, (IComparable)value);
     }
 
     /// <summary>
@@ -702,7 +715,7 @@ namespace VelocityGraph
       PropertyType pt = m_vertexType.FindProperty(key);
       if (pt == null)
         pt = m_vertexType.MyGraph.NewVertexProperty(m_vertexType, key, DataType.Object, PropertyKind.Indexed);
-      m_vertexType.SetPropertyValue(VertexId, pt, value);
+      m_vertexType.SetPropertyValue(m_vertexType, VertexId, pt, value);
     }
 
     /// <inheritdoc />

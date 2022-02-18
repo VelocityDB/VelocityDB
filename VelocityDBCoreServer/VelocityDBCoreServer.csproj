@@ -14,8 +14,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="5.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
-    <PackageReference Include="VelocityDB" Version="10.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.14" />
+    <PackageReference Include="VelocityDB" Version="11.0.0" />
   </ItemGroup>
 
 </Project>

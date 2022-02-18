@@ -58,7 +58,7 @@ namespace VelocityGraph
     }
 
     /// <inheritdoc />
-    public override void SetPropertyValue(ElementId element, TypeId typeId, IComparable value)
+    public override void SetPropertyValue(VertexType vt, ElementId element, TypeId typeId, IComparable value)
     {
       if (object.ReferenceEquals(value, null))
         throw new NullObjectException("A property value may not be null");
@@ -73,17 +73,19 @@ namespace VelocityGraph
         {
           VertexType vertexTypeIn = MyGraph.GetVertexType(typeId);
           VertexType vertexType = MyGraph.GetVertexType(TypeId);
-          if (vertexType.SubTypes.Contains(vertexTypeIn) == false)
+
+          if (vertexType != vt && vertexType.SubTypes.Contains(vertexTypeIn) == false)
             throw new UnexpectedException("Invalid VertexType used for setting property");
         }
-        else
-        {
-          EdgeType edgeTypeIn = MyGraph.GetEdgeType(typeId);
-          EdgeType edgeType = MyGraph.GetEdgeType(TypeId);
-          if (edgeType.SubTypes.Contains(edgeTypeIn) == false)
-            throw new UnexpectedException("Invalid EdgeType used for setting property");
-        }
       }
+      SetPropertyValueX(element, (T)value);
+    }
+
+    /// <inheritdoc />
+    public override void SetPropertyValue(EdgeType et, ElementId element, TypeId typeId, IComparable value)
+    {
+      if (object.ReferenceEquals(value, null))
+        throw new NullObjectException("A property value may not be null");
       SetPropertyValueX(element, (T)value);
     }
 
@@ -120,7 +122,7 @@ namespace VelocityGraph
     {
       UInt64 id = 0;
       if (m_valueToId.TryGetValue(value, out id))
-        return GetPropertyVertices(id, polymorphic);
+        return GetPropertyVertices(id, polymorphic).ToArray();
       return Enumerable.Empty<Vertex>();
     }
 

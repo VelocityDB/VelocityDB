@@ -81,19 +81,28 @@ namespace VelocityDBAccess
     /// <param name="pDependenciesFilenames">Assemblies required by
     /// pClassesFilenames Assemblies.</param>
     /// <returns></returns>
-    public static SchemaInfo Extract(string[] pClassesFilenames, string[] pDependenciesFilenames, SessionInfo sessionInfo)
+    public static SchemaInfo Extract(VelocityDBProperties lProp, ref SessionInfo sessionInfo)
     {
       // Create schema, get persistable types, loaded assemblies and
       // loaded assemblies names, and finally create names for each type.
       SchemaInfo lSchema = new SchemaInfo()
       {
-        UserClassesFiles = pClassesFilenames,
-        UserDependenciesFiles = pDependenciesFilenames
+        UserClassesFiles = lProp.ClassesFilenamesArray,
+        UserDependenciesFiles = lProp.DependencyFilesArray
       };
       // Already loaded assemblies sometimes get not found! register
       // resolver.
       AppDomain.CurrentDomain.AssemblyResolve += SchemaExtractor.AssemblyResolve;
-      GetAssembliesAndTypes(pClassesFilenames, pDependenciesFilenames, ref lSchema);
+      GetAssembliesAndTypes(lProp.ClassesFilenamesArray, lProp.DependencyFilesArray, ref lSchema);
+      // Save already loaded assemblies.
+      sessionInfo = new SessionInfo()
+      {
+        DBFolder = lProp.DBFolder,
+        Host = lProp.Host,
+        PessimisticLocking = lProp.PessimisticLocking,
+        SessionType = lProp.SessionType,
+        WindowsAuth = lProp.WindowsAuth
+      };
       sessionInfo.SetSession();
       var schema = sessionInfo.Session.OpenSchema(false);
       lSchema.PersistableTypes = schema.LookupByType.Where(p => schema.IsInternalType(p.Value) == false).Select(p => p.Key).ToArray();

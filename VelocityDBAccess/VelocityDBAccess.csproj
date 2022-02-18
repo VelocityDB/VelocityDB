@@ -55,6 +55,9 @@
     <Reference Include="Frontenac.Gremlinq, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe2d4176a64ca6d1, processorArchitecture=MSIL">
       <HintPath>..\packages\Frontenac.Blueprints.2.5.0\lib\net40\Frontenac.Gremlinq.dll</HintPath>
     </Reference>
+    <Reference Include="LINQPad">
+      <HintPath>C:\Program Files\LINQPad5\LINQPad.exe</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -67,10 +70,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
     <Reference Include="VelocityDb, Version=10.2.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.10.2.0\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
+      <HintPath>..\packages\VelocityDB.11.0.0\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
     </Reference>
-    <Reference Include="VelocityGraph, Version=10.1.1.0, Culture=neutral, PublicKeyToken=033a993463f9cfa3, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.10.2.0\lib\.NETStandard,Version=v2.0\VelocityGraph.dll</HintPath>
+    <Reference Include="VelocityGraph, Version=11.0.0.0, Culture=neutral, PublicKeyToken=033a993463f9cfa3, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.11.0.0\lib\.NETStandard,Version=v2.0\VelocityGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +88,7 @@
     <Compile Include="SchemaExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionInfo.cs" />
+    <Compile Include="VelocityDBProperties.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

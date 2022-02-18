@@ -116,7 +116,7 @@ namespace VelocityDB.LINQPad
                 SessionType = pProperties.SessionType,
                 WindowsAuth = pProperties.WindowsAuth
             };
-            schema = SchemaExtractor.Extract(pProperties.ClassesFilenamesArray, pProperties.DependencyFilesArray, sessionInfo);
+            schema = SchemaExtractor.Extract(pProperties, ref sessionInfo);
         }
     }
 }

@@ -132,7 +132,8 @@ namespace VelocityGraph
     /// <param name="elementId">Id of a vertex or edge</param>
     /// <param name="typeId">Id of vertex/edge</param>
     /// <param name="value">Value to assign to property</param>
-    abstract public void SetPropertyValue(ElementId elementId, TypeId typeId, IComparable value);
+    abstract public void SetPropertyValue(VertexType vt, ElementId elementId, TypeId typeId, IComparable value);
+    abstract public void SetPropertyValue(EdgeType et, ElementId elementId, TypeId typeId, IComparable value);
     /// <summary>
     /// Remove a property value
     /// </summary>

@@ -106,6 +106,11 @@ namespace NUnitTests
         }
         Assert.AreEqual(7, g.CountEdges());
         Assert.AreEqual(7, g.CountVertices());
+
+        var propType = userType.NewProperty("test", DataType.String, PropertyKind.NotIndexed);
+        var propType2 = userType.NewProperty("test2", DataType.String, PropertyKind.NotIndexed);
+        g.RemovePropertyType(propType);
+        g.RemovePropertyType(propType2);
       }
     }
 
@@ -279,7 +284,7 @@ namespace NUnitTests
           try
           {
             mats.SetProperty(userNamePropertyType, "Mats");
-            Assert.Fail("Invalid property for VertexType not handled");
+            ///Assert.Fail("Invalid property for VertexType not handled");
           }
           catch (Exception)
           {
@@ -476,6 +481,163 @@ namespace NUnitTests
       }
     }
 
+    [Test]
+    public void Semperis1()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session, false);
+        session.Persist(g);
+        VertexType userType = g.NewVertexType("User");
+        PropertyType userNamePropertyType = g.NewVertexProperty(userType, "NAME", DataType.String, PropertyKind.Indexed);
+        VertexType powerUserType = g.NewVertexType("PowerUser", userType);
+        Vertex kinga = userType.NewVertex();
+        Vertex mats = powerUserType.NewVertex();
+        kinga.SetProperty(userNamePropertyType, "Kinga");
+        var name = kinga.GetProperty("NAME");
+        Vertex findKinga = userNamePropertyType.GetPropertyVertex("Kinga", true);
+        Console.WriteLine(findKinga.GetProperty("NAME"));
+        mats.SetProperty(userNamePropertyType, "Mats");
+        Vertex findMats = userNamePropertyType.GetPropertyVertex("Mats", true);
+        Console.WriteLine(findMats.GetProperty("NAME"));
+        session.Commit();
+      }
+    }
+
+    [Test]
+    public void Semperis2()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session, false);
+        session.Persist(g);
+        VertexType userType = g.NewVertexType("User");
+        PropertyType flagProperty = userType.NewProperty("flag", DataType.Boolean, PropertyKind.Indexed);
+        VertexType powerUserType = g.NewVertexType("PowerUser", userType);
+        Vertex mats = powerUserType.NewVertex();
+        mats.SetProperty("flag", true);
+        Console.WriteLine("True?");
+        foreach (Vertex v in flagProperty.GetPropertyVertices(true, true))
+        {
+          Console.WriteLine(v.GetProperty("flag"));
+          v.SetProperty("flag", false);
+        }
+        Console.WriteLine("False?");
+        foreach (Vertex v in flagProperty.GetPropertyVertices(true, true))
+        {
+          Console.WriteLine(v.GetProperty("flag"));
+        }
+        session.Commit();
+      }
+    }
+
+    [Test]
+    public void Semperis3()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session, false);
+        session.Persist(g);
+        VertexType userType = g.NewVertexType("User");
+        g.NewVertexProperty(userType, "NAME", DataType.String, PropertyKind.Unique);
+        VertexType powerUserType = g.NewVertexType("PowerUser", g.FindVertexType("User"));
+        VertexType matsType = g.FindVertexType("PowerUser");      
+        Vertex mats = matsType.NewVertex();
+        EdgeType edgeConnectsTo = g.NewEdgeType("ConnectsTo", true);
+        EdgeType edgeAccounting = g.NewEdgeType("Accounting", true, edgeConnectsTo);
+        EdgeType edgeOther = g.NewEdgeType("Other", true, edgeConnectsTo);
+        mats.SetProperty("NAME", "Mats");
+        var name = mats.GetProperty("NAME");
+        Vertex user = userType.NewVertex();
+        Vertex user2 = userType.NewVertex();
+        var vertexType = g.GetVertexType(mats.VertexId);
+        user.SetProperty("NAME", "Teresa");
+        name = user.GetProperty("NAME");
+        IEdge edge1 = mats.AddEdge("Related", user);
+        IEdge edge2 = user.AddEdge("Related2", user2);
+        IEdge edge3 = mats.AddEdge("Related2", user2);
+        IEdge edge4 = mats.AddEdge(edgeConnectsTo, user);
+        IEdge edge5 = user.AddEdge(edgeConnectsTo, mats);
+        IEdge edge6 = user2.AddEdge(edgeConnectsTo, user);
+        var edges1 = mats.GetEdges(direction: Direction.Both).ToArray();
+        var edges2 = mats.GetEdges(direction: Direction.In).ToArray();
+        var edges3 = mats.GetEdges(direction: Direction.Out).ToArray();
+        var edges4 = user.GetEdges(direction: Direction.Both).ToArray();
+        var edges5 = user.GetEdges(direction: Direction.In).ToArray();
+        var edges6 = user.GetEdges(direction: Direction.Out).ToArray();
+        var edges7 = matsType.GetEdges(etype: edgeConnectsTo, dir: Direction.Both).ToArray();
+        var edges8 = matsType.GetEdges(etype: edgeConnectsTo, dir: Direction.In).ToArray();
+        var edges9 = matsType.GetEdges(etype: edgeConnectsTo, dir: Direction.Out).ToArray();
+        PropertyType accountingPropertyType = g.NewEdgeProperty(edgeAccounting, "NAME", DataType.String, PropertyKind.Indexed);
+        PropertyType edgeToPropertyType = g.NewEdgeProperty(edgeConnectsTo, "Age", DataType.Integer, PropertyKind.Indexed);
+        var pValue1 = edge1.GetProperty("Age");
+        var pValue2 = edge1.GetProperty("NAME");
+        var pValue3 = edge1.GetPropertyKeys().ToList();
+        edge1.SetProperty("Age", 61);
+        edge1.SetProperty("NAME", "Gunnel");
+        pValue3 = edge1.GetPropertyKeys().ToList();
+        pValue1 = edge1.GetProperty("Age");
+        pValue2 = edge1.GetProperty("NAME");
+        edge1.SetProperty("Temperature", 97.45);
+        var pValue4 = edge1.GetProperty("Temperature");
+        edge2.SetProperty("NAME", "Kalle");
+        pValue1 = edge2.GetProperty("NAME");
+        edge1.SetProperty("Related", "Kinga");
+        edge2.SetProperty("Related", "Robin");
+        name = edge1.GetProperty("Related");
+        session.Commit();
+      }
+    }
+
+    [Test]
+    public void Semperis4()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session, false);
+        session.Persist(g);
+        VertexType userType = g.NewVertexType("User");
+        PropertyType flagProperty = userType.NewProperty("flag", DataType.Boolean, PropertyKind.Indexed);
+        VertexType powerUserType = g.NewVertexType("PowerUser", userType);
+        powerUserType.NewVertex().SetProperty("flag", true);
+        powerUserType.NewVertex().SetProperty("flag", true);
+        Console.WriteLine(flagProperty.GetPropertyVertices(true, true).Count());
+        var vertices = flagProperty.GetPropertyVertices(true, true);
+        foreach (Vertex v in vertices)
+          v.SetProperty("flag", false);
+        Console.WriteLine(flagProperty.GetPropertyVertices(true, true).Count());
+        session.Commit();
+      }
+    }
+    
+    [Test]
+    public void Semperis5()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session, false);
+        session.Persist(g);
+        EdgeType baseType = g.NewEdgeType("Base", true);
+        EdgeType memberType = g.NewEdgeType("Member", true, baseType);
+        EdgeType ownerType = g.NewEdgeType("Owner", true, baseType);
+        VertexType userType = g.NewVertexType("User");
+        VertexType groupType = g.NewVertexType("UserGroup");
+
+        Vertex igor = userType.NewVertex();
+        Vertex mats = userType.NewVertex();
+        Vertex velocity = groupType.NewVertex();
+        memberType.NewEdge(igor, velocity);
+        ownerType.NewEdge(mats, velocity);
+        Console.WriteLine(velocity.GetNumberOfEdges(baseType, Direction.In));
+        session.Commit();
+      }
+    }
+    
     [Test]
     public void CreateEdges()
     {
@@ -856,15 +1018,15 @@ namespace NUnitTests
       }
       Task taskB = new Task(() => WatchUser());
       taskB.Start();
-      Task taskA = new Task(() => CreateUser());
+      Task taskA = new Task(() => CreateUser(useServerSession));
       taskA.Start();
       taskB.Wait();
       taskA.Wait();
     }
 
-    public static void CreateUser()
+    public static void CreateUser(bool useServerSession)
     {
-      using (ServerClientSession session = new ServerClientSession(systemDir, systemHost))
+      using (var session = useServerSession ? (SessionBase)new ServerClientSession(systemDir) : (SessionBase)new SessionNoServerShared(systemDir))
       {
         session.BeginUpdate();
         Graph g = Graph.Open(session);

@@ -50,8 +50,7 @@
   <ItemGroup>
     <Reference Include="LINQPad, Version=1.0.0.0, Culture=neutral, PublicKeyToken=21353812cd2a2db5, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\LINQPad5\LINQPad.exe</HintPath>
-      <Private>False</Private>
+      <HintPath>C:\Program Files\LINQPad5\LINQPad.exe</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -74,7 +73,6 @@
     </Compile>
     <Compile Include="VelocityDBDynamicDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VelocityDBProperties.cs" />
     <Compile Include="VelocityDBBuilder.cs" />
   </ItemGroup>
   <ItemGroup>

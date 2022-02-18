@@ -6,11 +6,11 @@
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
     <AssemblyName>VelocityGraph</AssemblyName>
     <RootNamespace>VelocityGraph</RootNamespace>
-    <Version>10.1.1</Version>
+    <Version>11.0.0</Version>
     <Company>VelocityDB Inc</Company>
     <Description>Graph Database API</Description>
-    <AssemblyVersion>10.1.1</AssemblyVersion>
-    <FileVersion>10.1.1</FileVersion>
+    <AssemblyVersion>11.0.0</AssemblyVersion>
+    <FileVersion>11.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -52,7 +52,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="VelocityDB" Version="10.2.0" />
+    <PackageReference Include="VelocityDB" Version="11.0.0" />
   </ItemGroup>
 
   <ItemGroup>

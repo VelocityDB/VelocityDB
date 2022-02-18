@@ -216,7 +216,7 @@ namespace VelocityGraph
     public void SetProperty(PropertyType property, IComparable v)
     {
       if (m_edgeType != null)
-        m_edgeType.SetPropertyValue(EdgeId, property, v);
+        m_edgeType.SetPropertyValue(m_edgeType, EdgeId, property, v);
       else
         throw new InvalidTypeIdException();
     }    
@@ -235,10 +235,21 @@ namespace VelocityGraph
         throw new ArgumentException("Property value may not be null");
       if (key.Equals(StringFactory.Id))
         throw ExceptionFactory.PropertyKeyIdIsReserved();
-      PropertyType pt = m_edgeType.FindProperty(key);
+      PropertyType pt = m_edgeType.FindProperty(key, false);
+      var bType = m_edgeType;
       if (pt == null)
-        pt = m_edgeType.NewProperty(key, value, PropertyKind.Indexed);
-      m_edgeType.SetPropertyValue(EdgeId, pt, (IComparable) value);
+      {
+        bType = m_edgeType.m_baseType;
+        while (bType != null && pt == null)
+        {
+          pt = bType.FindProperty(key, false);
+          if (pt == null)
+            bType = bType.m_baseType;
+        }
+        if (pt == null)
+          pt = m_edgeType.MyGraph.NewEdgeProperty(m_edgeType, key, DataType.Object, PropertyKind.Indexed);
+      }
+      m_edgeType.SetPropertyValue(m_edgeType, EdgeId, pt, (IComparable) value);
     }
 
     /// <summary>
@@ -255,7 +266,7 @@ namespace VelocityGraph
       {
         pt = m_edgeType.MyGraph.NewEdgeProperty(m_edgeType, key, DataType.Object, PropertyKind.Indexed);
       }
-      m_edgeType.SetPropertyValue(EdgeId, pt, value);
+      m_edgeType.SetPropertyValue(m_edgeType, EdgeId, pt, value);
     }
 
     /// <inheritdoc />

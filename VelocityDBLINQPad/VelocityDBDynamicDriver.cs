@@ -188,17 +188,9 @@ namespace VelocityDB.LINQPad
       // This function, as well as GetSchemaAndBuildAssembly, runs on a separeted appdomain. But different from 
       // GetSchemaAndBuildAssembly, pCxInfo gets persisted if true is returned. So this is the best (found) place to create
       // a list of dependencies.
-
       // Save already loaded assemblies.
-      SessionInfo lSessionInfo = new SessionInfo()
-      {
-        DBFolder = lProp.DBFolder,
-        Host = lProp.Host,
-        PessimisticLocking = lProp.PessimisticLocking,
-        SessionType = lProp.SessionType,
-        WindowsAuth = lProp.WindowsAuth
-      };
-      SchemaInfo lSchema = SchemaExtractor.Extract(lProp.ClassesFilenamesArray, lProp.DependencyFilesArray, lSessionInfo);
+      SessionInfo lSessionInfo = null;
+      SchemaInfo lSchema = SchemaExtractor.Extract(lProp, ref lSessionInfo);
       VelocityDBAccessBuilder lBuilder = new VelocityDBAccessBuilder(lSchema, lSessionInfo);
       lBuilder.BuildAssembly(new AssemblyName("DummyName"), "DummyName", "DummyName", false);
 
