@@ -154,6 +154,22 @@ namespace VelocityGraph
     }
 
     /// <summary>
+    /// Try to find all <see cref="Vertex"/> with a property value.
+    /// </summary>
+    /// <param name="polymorphic">If true, also look for property value matching vertices of property <see cref="VertexType"/> sub classes</param>
+    /// <returns>Enumeration of matching vertices</returns>
+    override public IEnumerable<Vertex> GetPropertyVertices(bool polymorphic = false)
+    {
+      VertexType vertexType = MyGraph.VertexTypes[TypeId];
+
+      foreach (var eId  in m_propertyValue.Keys)
+      {
+        Vertex vertex = vertexType.GetVertex(eId, polymorphic, false);
+        yield return vertex;
+      }
+    }
+
+    /// <summary>
     /// Try to find all <see cref="Vertex"/> with a given property value.
     /// </summary>
     /// <param name="value">The property value to look for</param>

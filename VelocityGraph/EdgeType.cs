@@ -13,6 +13,7 @@ using VelocityDb.Collection.BTree;
 using VelocityGraph.Frontenac.Blueprints;
 using VelocityGraph.Frontenac.Blueprints.Util;
 using VelocityDb.Collection;
+using VelocityDb.Exceptions;
 using VelocityGraph.Exceptions;
 
 namespace VelocityGraph
@@ -60,9 +61,17 @@ namespace VelocityGraph
       m_typeId = aTypeId;
       m_typeName = aTypeName;
       if (tailType != null)
+      {
         m_tailType = new WeakIOptimizedPersistableReference<VertexType>(tailType);
+        if (headType == null)
+          throw new Exception("Unsupported, tail type specified but not head type");
+      }
       if (headType != null)
+      {
         m_headType = new WeakIOptimizedPersistableReference<VertexType>(headType);
+        if (tailType == null)
+          throw new Exception("Unsupported, head type specified but not tail type");
+      }
       if (Unrestricted)
         m_unrestrictedEdges = new BTreeMap<EdgeId, UnrestrictedEdge>(null, graph.GetSession());
       else

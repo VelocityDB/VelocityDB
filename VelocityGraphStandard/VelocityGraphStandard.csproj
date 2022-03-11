@@ -6,11 +6,11 @@
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
     <AssemblyName>VelocityGraph</AssemblyName>
     <RootNamespace>VelocityGraph</RootNamespace>
-    <Version>11.0.0</Version>
+    <Version>11.0.1</Version>
     <Company>VelocityDB Inc</Company>
     <Description>Graph Database API</Description>
-    <AssemblyVersion>11.0.0</AssemblyVersion>
-    <FileVersion>11.0.0</FileVersion>
+    <AssemblyVersion>11.0.1</AssemblyVersion>
+    <FileVersion>11.0.1</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

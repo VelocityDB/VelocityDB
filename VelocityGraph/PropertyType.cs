@@ -94,7 +94,13 @@ namespace VelocityGraph
     /// <param name="polymorphic">If true, also look for property value matching vertices of property <see cref="VertexType"/> sub classes</param>
     /// <param name="errorIfNotFound">If true, signal an error if no matching <see cref="Vertex"/> found</param>
     /// <returns>A matching Vertex</returns>
+    /// <summary>
     abstract public Vertex GetPropertyVertex(IComparable value, bool polymorphic = false, bool errorIfNotFound = true);
+    /// Find all <see cref="Vertex"/> with a given property.
+    /// </summary>
+    /// <param name="polymorphic">If true, also look for property matching vertices of property <see cref="VertexType"/> sub classes</param>
+    /// <returns>Enumeration of matching vertices</returns>
+    abstract public IEnumerable<Vertex> GetPropertyVertices(bool polymorphic = false);
     /// <summary>
     /// Try to find all <see cref="Vertex"/> with a given property value.
     /// </summary>
