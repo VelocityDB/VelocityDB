@@ -1154,8 +1154,9 @@ namespace VelocityGraph
       foreach (VertexType vt in VertexTypes)
       {
         PropertyType pt = vt.FindProperty(key);
-        foreach (Vertex vertex in pt.GetPropertyVertices((IComparable)value))
-          yield return vertex;
+        if (pt != null)
+          foreach (Vertex vertex in pt.GetPropertyVertices((IComparable)value))
+            yield return vertex;
       }
     }
 

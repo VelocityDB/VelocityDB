@@ -277,6 +277,12 @@ namespace NUnitTests
         mats.SetProperty("Address", 1);
         bestFriend.SetProperty(bestFriendPropertyType, now);
         kinga.SetProperty(userNamePropertyType, "Kinga");
+        chiran.SetProperty("DN", "cn=BuitlIn,dc=child,dc=dsp,dc=com");
+        var v = chiran; // g.GetVertices().First();
+        var dn = "cn=BuitlIn,dc=child,dc=dsp,dc=com";
+        Assert.AreSame(dn, v.GetProperty("DN"));
+        var vs = g.GetVertices("DN", "cn=BuitlIn,dc=child,dc=dsp,dc=com").First(); // Line 174 
+
         if (g.VertexIdSetPerType == false)
           mats.SetProperty(userNamePropertyType, "Mats");
         else
@@ -501,6 +507,14 @@ namespace NUnitTests
         mats.SetProperty(userNamePropertyType, "Mats");
         Vertex findMats = userNamePropertyType.GetPropertyVertex("Mats", true);
         Console.WriteLine(findMats.GetProperty("NAME"));
+        //EdgeType primaryGroup = g.NewEdgeType("PrimaryGroup", true, null, powerUserType);
+       // IEdge edge1 = kinga.AddEdge("PrimaryGroup", mats);
+        foreach (var e in g.GetEdges())
+        {
+          var edgeId = e.Id;
+          var ed = (Edge)g.GetEdge(edgeId);
+          Assert.AreEqual(edgeId, ed.Id);
+        }
         session.Commit();
       }
     }
@@ -588,6 +602,13 @@ namespace NUnitTests
         edge1.SetProperty("Related", "Kinga");
         edge2.SetProperty("Related", "Robin");
         name = edge1.GetProperty("Related");
+
+        foreach (var e in g.GetEdges())
+        {
+          var edgeId = e.Id;
+          var ed = (Edge)g.GetEdge(edgeId);
+          Assert.AreEqual(edgeId, ed.Id);
+        }
         session.Commit();
       }
     }
@@ -602,7 +623,17 @@ namespace NUnitTests
         session.Persist(g);
         VertexType userType = g.NewVertexType("User");
         PropertyType flagProperty = userType.NewProperty("flag", DataType.Boolean, PropertyKind.Indexed);
+        PropertyType prop = userType.NewProperty("other", DataType.Object, PropertyKind.NotIndexed);
         VertexType powerUserType = g.NewVertexType("PowerUser", userType);
+        Vertex user = userType.NewVertex();
+        var propValueOther2 = userType.GetPropertyValue(user.VertexId, prop);
+        propValueOther2 = userType.GetPropertyValue(user.VertexId, null);
+        var propValueOther = prop.GetPropertyValue(user.VertexId);
+        user.SetProperty(prop, "Kinga");
+        propValueOther2 = userType.GetPropertyValue(user.VertexId, prop);
+        var propValue = flagProperty.GetPropertyValue(user.VertexId);
+        user.SetProperty(flagProperty, true);
+        propValue = flagProperty.GetPropertyValue(user.VertexId);
         powerUserType.NewVertex().SetProperty("flag", true);
         powerUserType.NewVertex().SetProperty("flag", true);
         Console.WriteLine(flagProperty.GetPropertyVertices(true, true).Count());
@@ -634,6 +665,52 @@ namespace NUnitTests
         memberType.NewEdge(igor, velocity);
         ownerType.NewEdge(mats, velocity);
         Console.WriteLine(velocity.GetNumberOfEdges(baseType, Direction.In));
+        session.Commit();
+      }
+    }
+    
+    [Test]
+    public void Semperis6()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session, false);
+        session.Persist(g);
+        var vt = g.NewVertexType("ADObject");
+        var t = vt.NewVertex();
+        var h = vt.NewVertex();
+        var et = g.NewEdgeType("Contains", true);
+        var e = et.NewEdge(t, h);
+        h.Remove();
+        var ct = g.GetEdges().Count();
+        Assert.IsTrue(0 == ct);
+        try
+        {
+          h = vt.GetVertex(h.VertexId);
+          Assert.Fail("Vertex not expected");
+        }
+        catch (VertexDoesNotExistException)
+        { }      
+        EdgeType baseType = g.NewEdgeType("Base", true);
+        EdgeType memberType = g.NewEdgeType("Member", true, baseType);
+        EdgeType ownerType = g.NewEdgeType("Owner", true, baseType);
+        VertexType userType = g.NewVertexType("User");
+        VertexType groupType = g.NewVertexType("UserGroup");
+        PropertyType userNamePropertyType = g.NewVertexProperty(userType, "NAME", DataType.String, PropertyKind.Indexed);
+        Vertex kinga = userType.NewVertex();
+        Vertex igor = userType.NewVertex();
+        Vertex mats = userType.NewVertex();
+        Vertex ola = userType.NewVertex();
+        Vertex velocity = groupType.NewVertex();
+        memberType.NewEdge(igor, velocity);
+        ownerType.NewEdge(mats, velocity);
+        kinga.SetProperty(userNamePropertyType, "Kinga");
+        mats.SetProperty(userNamePropertyType, "Mats");
+        igor.SetProperty(userNamePropertyType, "Mats");
+        Vertex findMats = userNamePropertyType.GetPropertyVertex("Mats", true);
+        var list = userNamePropertyType.GetPropertyVertices("Mats", true).ToList();
+        var list2 = userNamePropertyType.GetPropertyVertices(true).ToList();
         session.Commit();
       }
     }
@@ -674,6 +751,14 @@ namespace NUnitTests
         Console.WriteLine("Done importing " + lineNumber + " users with " + fiendsCt + " friends");
         session.Commit();
         session.BeginRead();
+
+        foreach (var e in g.GetEdges())
+        {
+          var edgeId = e.Id;
+          var ed = (Edge)g.GetEdge(edgeId);
+          Assert.AreEqual(edgeId, ed.Id);
+        }
+
         foreach (var x in session.AllObjects<BTreeSet<Range<VertexId>>>(false, true))
           Assert.True(x.ToDoBatchAddCount == 0);
         foreach (var x in session.AllObjects<BTreeSet<EdgeType>>(false, true))

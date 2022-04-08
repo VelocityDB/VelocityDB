@@ -1228,11 +1228,13 @@ namespace VelocityGraph
     {
       BTreeMap<VertexId, BTreeSet<EdgeIdVertexId>> innerMap;
       BTreeSet<EdgeIdVertexId> edgeVertexSet;
+   
       foreach (var m in m_headToTailEdges)
       {
+        List<Edge> edgesToRemove = new List<Edge>();
+
         if (m.Key.TailType != null)
         {
-          List<Edge> edgesToRemove = new List<Edge>();
           if (m.Value.TryGetValue(m.Key.TailType, out innerMap))
             if (innerMap.TryGetValue(vertex.VertexId, out edgeVertexSet))
             {
@@ -1249,11 +1251,25 @@ namespace VelocityGraph
             }
         }
         else
-          throw new NotImplementedException();
+        {
+          foreach (var p in m.Key.m_unrestrictedEdges)
+          {
+            if (p.Value.m_headVertexType == vertex.VertexType && p.Value.m_headVertexId == vertex.VertexId)
+            {
+              var edgeType = MyGraph.GetEdgeType(p.Key);
+              var edge = edgeType.GetEdge(p.Key, true);
+              edgesToRemove.Add(edge);
+            }
+          }
+          foreach (Edge edge in edgesToRemove)
+            m.Key.RemoveEdge(edge);
+        }
       }
 
       foreach (var m in m_headToTailEdges)
       {
+        List<UnrestrictedEdge> unrestrictedToRemove = new List<UnrestrictedEdge>();
+
         if (m.Key.TailType != null)
         {
           if (m.Value.TryGetValue(m.Key.TailType, out innerMap))
@@ -1264,14 +1280,21 @@ namespace VelocityGraph
             }
         }
         else
-          throw new NotImplementedException();
+        {
+          foreach (var p in m.Key.m_unrestrictedEdges)
+            if (p.Value.m_headVertexType == vertex.VertexType && p.Value.m_headVertexId == vertex.VertexId)
+              unrestrictedToRemove.Add(p.Value);
+          foreach (var unrestricted in unrestrictedToRemove)
+            m.Key.m_unrestrictedEdges.Remove(unrestricted.m_headVertexId);
+        }
       }
 
       foreach (var m in m_tailToHeadEdges)
       {
+        List<Edge> edgesToRemove = new List<Edge>();
+
         if (m.Key.HeadType != null)
         {
-          List<Edge> edgesToRemove = new List<Edge>();
           if (m.Value.TryGetValue(m.Key.HeadType, out innerMap))
             if (innerMap.TryGetValue(vertex.VertexId, out edgeVertexSet))
             {
@@ -1288,11 +1311,25 @@ namespace VelocityGraph
             }
         }
         else
-          throw new NotImplementedException();
+        {
+          foreach (var p in m.Key.m_unrestrictedEdges)
+          {
+            if (p.Value.m_tailVertexType == vertex.VertexType && p.Value.m_tailVertexId == vertex.VertexId)
+            {
+              var edgeType = MyGraph.GetEdgeType(p.Key);
+              var edge = edgeType.GetEdge(p.Key, true);
+              edgesToRemove.Add(edge);
+            }
+          }
+          foreach (Edge edge in edgesToRemove)
+            m.Key.RemoveEdge(edge);
+        }
       }
 
       foreach (var m in m_tailToHeadEdges)
       {
+        List<UnrestrictedEdge> unrestrictedToRemove = new List<UnrestrictedEdge>();
+
         if (m.Key.HeadType != null)
         {
           if (m.Value.TryGetValue(m.Key.HeadType, out innerMap))
@@ -1303,7 +1340,13 @@ namespace VelocityGraph
             }
         }
         else
-          throw new NotImplementedException();
+        {
+          foreach (var p in m.Key.m_unrestrictedEdges)
+            if (p.Value.m_headVertexType == vertex.VertexType && p.Value.m_headVertexId == vertex.VertexId)
+              unrestrictedToRemove.Add(p.Value);
+          foreach (var unrestricted in unrestrictedToRemove)
+            m.Key.m_unrestrictedEdges.Remove(unrestricted.m_tailVertexId);
+        }
       }
 
       foreach (PropertyType pt in GetPropertyTypes())
@@ -1321,7 +1364,7 @@ namespace VelocityGraph
     /// <returns></returns>
     public object GetPropertyValue(VertexId vertexId, PropertyType propertyType)
     {
-      return propertyType.GetPropertyValue(vertexId);
+      return propertyType?.GetPropertyValue(vertexId) ?? null;
     }
 
     /// <summary>

@@ -53,11 +53,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VelocityDb, Version=10.2.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityDB.11.0.0\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
+    <Reference Include="VelocityDb, Version=11.1.0.0, Culture=neutral, PublicKeyToken=f050dff7995aa24a, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityDB.11.1.0\lib\.NETStandard,Version=v2.0\VelocityDb.dll</HintPath>
     </Reference>
-    <Reference Include="VelocityGraph, Version=11.0.0.0, Culture=neutral, PublicKeyToken=033a993463f9cfa3, processorArchitecture=MSIL">
-      <HintPath>..\packages\VelocityGraph.11.0.0\lib\.NETStandard,Version=v2.0\VelocityGraph.dll</HintPath>
+    <Reference Include="VelocityGraph, Version=11.1.0.0, Culture=neutral, PublicKeyToken=033a993463f9cfa3, processorArchitecture=MSIL">
+      <HintPath>..\packages\VelocityGraph.11.1.0\lib\.NETStandard,Version=v2.0\VelocityGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

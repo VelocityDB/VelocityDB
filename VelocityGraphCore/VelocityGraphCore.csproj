@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="VelocityDB" Version="11.0.0" />
+    <PackageReference Include="VelocityDB" Version="11.1.0" />
   </ItemGroup>
 
   <ItemGroup>
