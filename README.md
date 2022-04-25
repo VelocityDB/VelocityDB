@@ -12,7 +12,7 @@ Use with .NET 4.0 or higher. All the code in this repository is included in the 
 Licensing
 ---------
              
-VelocityGraph is an open source product but the back end database engine is [VelocityDB](http://www.VelocityDB.com). See [VelocityDB license info](http://www.VelocityDB.com/License.aspx)
+VelocityGraph is an open source product but the back end database engine is [VelocityDB](http://www.VelocityDB.com). See [VelocityDB license info](http://www.VelocityDB.com/Secure/License.aspx)
 
 Building Prerequisites
 ---------
