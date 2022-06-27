@@ -290,28 +290,29 @@ namespace VelocityGraph
           default:
             {
               range = vertecis.First();
-              if (range.Min > 1)
+              switch (range.Min)
               {
+                case 1:
+                  Range<VertexId> nextRange = vertecis[1];
+                  if (range.Max + 2 == nextRange.Min)
+                  {
+                    vertecis.RemoveAt(1);
+                    vId = range.Max + 1;
+                    range = new Range<VertexId>(range.Min, nextRange.Max);
+                    vertecis[0] = range;
+                  }
+                  else
+                  {
+                    vId = range.Max + 1;
+                    range = new Range<VertexId>(range.Min, vId);
+                    vertecis[0] = range;
+                  }
+                  break;
+                default:    
                 vId = range.Min - 1;
                 range = new Range<VertexId>(vId, range.Max);
                 vertecis[0] = range;
-              }
-              else
-              {
-                Range<VertexId> nextRange = vertecis[1];
-                if (range.Max + 2 == nextRange.Min)
-                {
-                  vertecis.RemoveAt(1);
-                  vId = range.Max + 1;
-                  range = new Range<VertexId>(range.Min, nextRange.Max);
-                  vertecis[0] = range;
-                }
-                else
-                {
-                  range = new Range<VertexId>(range.Min, range.Max + 1);
-                  vId = range.Max;
-                  vertecis[0] = range;
-                }
+                break;
               }
             }
             break;

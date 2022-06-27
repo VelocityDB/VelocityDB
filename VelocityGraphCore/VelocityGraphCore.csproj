@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>vg.snk</AssemblyOriginatorKeyFile>
-    <Version>11.0.0</Version>
-    <AssemblyVersion>11.0.0</AssemblyVersion>
+    <Version>11.1.1</Version>
+    <AssemblyVersion>11.1.1</AssemblyVersion>
     <Company>VelocityDB Inc</Company>
     <Description>Graph Database API</Description>
   </PropertyGroup>
@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="VelocityDB" Version="11.1.0" />
+    <PackageReference Include="VelocityDB" Version="11.1.1" />
   </ItemGroup>
 
   <ItemGroup>

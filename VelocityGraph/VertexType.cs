@@ -1419,6 +1419,9 @@ namespace VelocityGraph
       MyGraph.RemoveVertexTypeRef(this);
     }
 
+    /// <summary>
+    /// <see cref="Vertex"/> ids in use in sorted <see cref="Range{ <see cref="VertexId>}"/>"/>
+    /// </summary>
     internal VelocityDbList<Range<VertexId>> Vertices
     {
       get

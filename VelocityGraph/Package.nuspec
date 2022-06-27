@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>VelocityGraph</id>
-    <version>11.1</version>
+    <version>11.1.1</version>
     <authors>VelocityDB, Inc</authors>
     <owners>VelocityDB, Inc</owners>
     <license type="file">Eula.txt</license>
@@ -11,11 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>VelocityGraph is a property graph database for .NET.</summary>
     <description>Pure, fast and scalable .NET property graph and object hybrid database. No new graph language to learn, all accomplished with a .NET API.</description>
-    <releaseNotes>Fix for deleting Unrestricted Head/Tail vertex type.</releaseNotes>
+    <releaseNotes>Fix of VelocityGraph Vertex id allocation.</releaseNotes>
     <copyright>Copyright 2022</copyright>
     <tags>Hybrid Object Property Graph Database .NET Blueprints Distributable Embeddable</tags>
     <dependencies>
-      <dependency id="VelocityDB" version="11.1" />
+      <dependency id="VelocityDB" version="11.1.1" />
       <!--<dependency id="Frontenac.Blueprints" version="2.5.0" />-->
     </dependencies>
   </metadata>

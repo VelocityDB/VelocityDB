@@ -1,4 +1,4 @@
-﻿#if !NET_COREx
+﻿#if !NET_CORE
 using Microsoft.Synchronization;
 using System;
 using System.Collections.Generic;

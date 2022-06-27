@@ -12,7 +12,7 @@ namespace VelocityGraph
   /// <summary>
   /// Base class for Edge and Vertex
   /// </summary>
-  public abstract class Element : DictionaryElement
+  public abstract class Element : DictionaryElement, IEqualityComparer<Element>
   {
     /// <summary>
     /// The id of an element
@@ -27,6 +27,35 @@ namespace VelocityGraph
     protected Element(ElementId id, Graph graph):base(graph)
     {
       m_id = id;
+    }
+
+    /// <inheritdoc /> 
+    public override bool Equals(Object other)
+    {
+      bool isEqual = ReferenceEquals(this, other);
+      if (isEqual)
+        return true;
+      Element otherVertex = other as Element;
+      if (otherVertex != null)
+        return m_id == otherVertex.m_id;
+      return false;
+    }
+
+    /// <inheritdoc />
+    public bool Equals(Element x, Element y)
+    {
+      bool isEqual = ReferenceEquals(x, y);
+      if (isEqual)
+        return true;
+      if (y != null)
+        return x.m_id == y.m_id;
+      return false;
+    }
+
+    /// <inheritdoc />
+    public int GetHashCode(Element obj)
+    {
+      return obj.m_id;
     }
 
     /// <summary>
@@ -55,7 +84,7 @@ namespace VelocityGraph
     /// <returns>The hash code given by id</returns>
     public override int GetHashCode()
     {
-      return m_id.GetHashCode();
+      return m_id;
     }
   }
 }

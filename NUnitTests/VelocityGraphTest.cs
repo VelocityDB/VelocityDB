@@ -714,7 +714,37 @@ namespace NUnitTests
         session.Commit();
       }
     }
-    
+
+    [Test]
+    public void Semperis7()
+    {
+      using (SessionNoServer session = new SessionNoServer(systemDir, 5000, false, true))
+      {
+        session.BeginUpdate();
+        Graph g = new Graph(session, false);
+        session.Persist(g);
+        VertexType vt = g.NewVertexType("default");
+        for (int i = 1; i < 100; i++)
+          g.NewVertex(vt);
+        Vertex vertex = vt.GetVertex(15);
+        g.RemoveVertex(vertex);
+        vertex = vt.GetVertex(5);
+        g.RemoveVertex(vertex);
+        vertex = vt.GetVertex(6);
+        g.RemoveVertex(vertex);
+        vertex = vt.GetVertex(7);
+        g.RemoveVertex(vertex);
+        vertex = vt.GetVertex(25);
+        g.RemoveVertex(vertex);
+
+        vertex = g.NewVertex(vt);
+        Vertex v2 = vt.GetVertex(vertex.VertexId);
+        //Assert.AreSame(v2,vertex);
+        Assert.AreEqual(v2,vertex);
+        session.Commit();
+      }
+    }
+
     [Test]
     public void CreateEdges()
     {

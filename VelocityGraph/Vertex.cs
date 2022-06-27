@@ -223,7 +223,7 @@ namespace VelocityGraph
     /// <inheritdoc />
     public override int GetHashCode()
     {
-      return m_id.GetHashCode();
+      return m_id;
     }
     /// <summary>
     /// Enumerates all outgoing edges of selected edge types
